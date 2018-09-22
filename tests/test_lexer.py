@@ -5,4 +5,4 @@ def test_lexer():
     lexer = Lexer('abc\n  def\n  \nklm\n', None)
     tokens = [t for t in lexer]
     print(tokens)
-    assert len(tokens) == 3
+    assert len(tokens) == 7
