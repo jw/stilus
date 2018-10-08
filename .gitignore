@@ -4,3 +4,4 @@ dist/
 .idea/
 .pytest_cache/
 stilus.egg-info/
+.eggs/
