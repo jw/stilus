@@ -1,6 +1,5 @@
+import copy
 import json
-
-import stilus.utils
 
 
 class CoercionError(Exception):
@@ -9,33 +8,31 @@ class CoercionError(Exception):
 
 class Node:
 
-    def __init__(self, value, filename=None, lineno=1, column=1):
+    def __init__(self, value=None, filename=None, lineno=1, column=1):
         self.value = value
         self.filename = filename
         self.lineno = lineno
         self.column = column
         self.name = self.__class__.__name__.lower()
 
+    def __eq__(self, other):
+        if isinstance(other, Node):
+            return self.value == other.value
+        return False
+
+    def __hash__(self):
+        return hash(self.value)
+
     def first(self):
         return self
 
-    def hash(self):
-        return self.value
-
-    def name(self):
-        return self.name
-
-    @property
-    def hash(self):
-        return self.value
-
-    def toJson(self):
+    def to_json(self):
         return json.dumps([self.lineno, self.column, self.filename])
 
-    def toBoolean(self):
+    def to_boolean(self):
         return True
 
-    def toExpression(self):
+    def to_expression(self):
         from stilus.nodes.expression import Expression
         if self.name == 'expression':
             return self
@@ -50,27 +47,28 @@ class Node:
     def operate(self, op, right):
         from stilus.nodes.boolean import Boolean
         if op == 'is a':
-            if 'string' == right.first.name:
+            if 'string' == right.first().name:
                 return Boolean(self.name == right.value)
             else:
                 raise Exception(f'"is a" expects a string, '
                                 f'got {right.toString}')
         elif op == '==':
-            return Boolean(self.hash == right.hash)
+            return Boolean(hash(self) == hash(right))
         elif op == '!=':
-            return Boolean(self.hash != right.hash)
+            return Boolean(hash(self) != hash(right))
         elif op == '>=':
-            return Boolean(self.hash >= right.hash)
+            return Boolean(hash(self) >= hash(right))
         elif op == '<=':
-            return Boolean(self.hash <= right.hash)
+            return Boolean(hash(self) <= hash(right))
         elif op == '>':
-            return Boolean(self.hash > right.hash)
+            return Boolean(hash(self) > hash(right))
         elif op == '<':
-            return Boolean(self.hash < right.hash)
+            return Boolean(hash(self) < hash(right))
         elif op == '||':
             return self if self.toBoolean().isTrue else right
         elif op == 'in':
-            values = stilus.utils.unwrap(right)
+            from stilus import utils
+            values = utils.unwrap(right)
             if not values:
                 raise Exception('"in" given invalid right-hand operand, '
                                 'expecting an expression')
@@ -92,7 +90,7 @@ class Node:
             raise Exception(f'cannot perform {self} {op} {right}')
 
     def clone(self):
-        return self.clone()
+        return copy.deepcopy(self)
 
     def should_coerce(self, op):
         if op in ['is a', 'in', '||', '&&']:

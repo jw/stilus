@@ -1,12 +1,122 @@
+import copy
+import json
+
 from stilus.nodes.node import Node
 
 
 class Expression(Node):
 
-    def __init__(self):
+    def __init__(self, is_list=False, preserve=False):
+        super().__init__()
         self.nodes = []
+        self.is_list = is_list
+        self.preserve = preserve
+
+    def __str__(self):
+        """
+        :return: "(<a> <b> <c>)" or "(<a>, <b>, <c>)" if the expression
+        represents a list.
+        """
+        separator = ' '
+        if self.is_list:
+            separator = ', '
+        return '(' + separator.join(map(str, self.nodes)) + ')'
+
+    def __repr__(self):
+        return [n.__str__() for n in self.nodes]
+
+    def __eq__(self, other):
+        return self.nodes == other.nodes
+
+    def __hash__(self):
+        return hash(self.nodes)
+
+    def __len__(self):
+        return len(self.nodes)
+
+    def is_empty(self):
+        return len(self.nodes) == 0
+
+    def first(self):
+        if not self.is_empty():
+            return self.nodes[0]
+        else:
+            from stilus.nodes.null import null
+            return null
+
+    def clone(self):
+        return copy.deepcopy(self)
+
+    def to_boolean(self):
+        if not self.is_empty():
+            from stilus.nodes.boolean import true
+            return true
+        else:
+            return self.first().to_boolean()
+
+    def to_json(self):
+        return json.dumps({'__type': 'Expression',
+                           'isList': self.is_list,
+                           'preserve': self.preserve,
+                           'lineno': self.lineno,
+                           'column': self.column,
+                           'filename': self.filename,
+                           'nodes': self.nodes})
+
+    def operate(self, op, right, value):
+        if op == '[]=':
+            from stilus import utils
+            nodes = utils.unwrap(right).nodes
+            value = utils.unwrap(value)
+            for node in nodes:
+                if node.name == 'unit':
+                    i = len(nodes) + value if node.value < 0 else node.value
+                    n = i
+                    while i > len(nodes):
+                        i = i - 1
+                        from stilus.nodes.null import null
+                        self.nodes[i] = null
+                    self.nodes[n] = value
+                elif node.string:
+                    if not self.is_empty() and self.nodes[0].name == 'object':
+                        self.nodes[0].set(node.string, value.clone)
+            return value
+        elif op == '[]':
+            expression = Exception()
+            from stilus import utils
+            values = utils.unwrap(self).nodes
+            nodes = utils.unwrap(right).nodes
+            for node in nodes:
+                if node.name == 'unit':
+                    n = values[len(values) + node.value if node.value < 0 else node.value]
+                elif len(values) > 0 and values[0].name == 'object':
+                    n = values[0].get(node.string)
+                if n:
+                    expression.push(n)
+            from stilus.nodes.null import null
+            return null if expression.is_empty() else utils.unwrap(expression)
+        elif op == '||':
+            return self if self.to_boolean().is_true() else right
+        elif op == 'in':
+            return super().operate(self, op, right)
+        elif op == '!=':
+            return self.operate('==', right, value)
+        elif op == '==':
+            right = right.to_expression()
+            if len(self.nodes) != len(right.nodes):
+                from stilus.nodes.boolean import false
+                return false
+            for i in range(len(self.nodes)):
+                a = self.nodes[i]
+                b = right.nodes[i]
+                if a.operate(op, b).is_true:
+                    continue
+                from stilus.nodes.boolean import false
+                return false
+            from stilus.nodes.boolean import true
+            return true
+        else:
+            return self.first().operate(op, right)
 
     def push(self, node):
         self.nodes.append(node)
-
-

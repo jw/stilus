@@ -1,13 +1,20 @@
 import re
 from collections import deque
 
+from stilus.nodes.color import RGBA
+from .nodes.comment import Comment
+from .nodes.ident import Ident
+from .nodes.literal import Literal
+
 
 class Token:
 
     def __init__(self, type, value=None):
         self.type = type
         self.value = value
+        # extras
         self.space = None
+        self.anonymous = False
 
     def __str__(self):
         space = f', space={self.space}' if self.space else ''
@@ -40,7 +47,8 @@ class Lexer:
         # print(f'Lexing [{self.str}]...')
 
     def clean(self, str):
-        str = str[1:] if "\uFEFF" == str[0] else str  # handle UTF-8 BOM
+        # handle UTF-8 BOM
+        str = str[1:] if len(str) > 1 and "\uFEFF" == str[0] else str
 
         str = re.sub(r'\s+$', '\n', str)
         str = re.sub(r'\r\n', '\n', str)
@@ -78,7 +86,46 @@ class Lexer:
         tok = self.null()
         if tok:
             return tok
+        tok = self.sep()
+        if tok:
+            return tok
+        tok = self.keyword()
+        if tok:
+            return tok
+        tok = self.urlchars()
+        if tok:
+            return tok
+        tok = self.comment()
+        if tok:
+            return tok
         tok = self.newline()
+        if tok:
+            return tok
+        tok = self.escaped()
+        if tok:
+            return tok
+        tok = self.important()
+        if tok:
+            return tok
+        tok = self.literal()
+        if tok:
+            return tok
+        tok = self.anonymous_function()
+        if tok:
+            return tok
+        tok = self.atrule()
+        if tok:
+            return tok
+        tok = self.function()
+        if tok:
+            return tok
+        tok = self.brace()
+        if tok:
+            return tok
+        tok = self.paren()
+        if tok:
+            return tok
+        tok = self.color()
         if tok:
             return tok
         tok = self.op()
@@ -105,6 +152,9 @@ class Lexer:
             return False
 
     def eos(self):
+        """
+        eos | trailing outdents
+        """
         if self.str != '':
             return False
         if self.indent_stack:
@@ -114,6 +164,9 @@ class Lexer:
             return Token('eos')
 
     def null(self):
+        """
+        null
+        """
         match = re.match(r'^(null)\b[ \t]*', self.str)
         if match:
             self._skip_string(match.group())
@@ -221,3 +274,199 @@ class Lexer:
             tok.space = match.group(2)
             self.is_url = False
             return tok
+
+    def sep(self):
+        """
+        ';' [ \t]*
+        """
+        match = re.match(r'^;[ \t]*',self.str)
+        if match:
+            self._skip_string(match.group(1))
+            return Token(';')
+
+    def keyword(self):
+        """
+        'if' | 'else' | 'unless' | 'return' | 'for' | 'in'
+        """
+        match = re.match(r'^(return|if|else|unless|for|in)\b[ \t]*', self.str)
+        if match:
+            keyword = match.group(1)
+            self._skip_string(keyword)
+            if self.is_part_of_selector():
+                tok = Token('ident', Ident(match.group(0)))
+            else:
+                tok = Token(keyword, keyword)
+            return tok
+
+    def urlchars(self):
+        """
+        url char
+        """
+        match = re.match(r'^[\/:@.;?&=*!,<>#%0-9]+', self.str)
+        if match:
+            self._skip_string(match.group(0))
+            return Token('literal', Literal(match.group(0)))
+
+    def comment(self):
+        """
+        '//' *
+        """
+        # single line
+        if '/' == self.str[0] and '/' == self.str[1]:
+            end = self.str.find('\n')
+            if -1 == end:
+                end = len(self.str)
+            self._skip_number(end)
+            return self.advance()
+
+        # multi-line
+        if '/' == self.str[0] and '*' == self.str[1]:
+            end = self.str.find('*/')
+            suppress = True
+            inline = False
+            s = self.str[0:end + 2]
+            lines = len(re.split(r'[\n|\r]', s)) - 1
+            self.lineno += lines
+            self._skip_number(end + 2)
+            # output
+            if '!' == s[2]:
+                s = s.replace('*!', '*')
+                suppress = False
+            if self.prev and ';' == self.prev.type:
+                inline = True
+            return Token('comment', Comment(s, suppress, inline))
+
+    def escaped(self):
+        """
+        '\\' . ' '*
+        """
+        match = re.match(r'^\\(.)[ \t]*', self.str)
+        if match:
+            escape = match.group(1)
+            self._skip_string(escape)
+            return Token('ident', Literal(escape))
+
+    def important(self):
+        """
+        '!important' ' '*
+        """
+        match = re.match(r'^!important[ \t]*', self.str)
+        if match:
+            self._skip_string(match.group(0))
+            return Token('ident', Literal('!important'))
+
+    def literal(self):
+        """
+        '@css' ' '* '{' .* '}' ' '*
+        """
+        match = re.match(r'^@css[ \t]*', self.str)
+        if match:
+            self._skip_string(match.group(0))
+            braces = 1
+            css = ''
+            for c in self.str:
+                print(f'Handling {c} in {self.str}]')
+                if c == '{':
+                    braces += 1
+                elif c == '}':
+                    braces -= 1;
+                elif c in ['\n', '\r']:
+                    self.lineno += 1
+                css += c
+                if not braces:
+                    break
+            css = re.sub(r'\s*}$', '', css)  # hack?
+            return Token('literal', Literal(css, css=True))
+
+    def anonymous_function(self):
+        """
+        '@('
+        """
+        if '@' == self.str[0] and '(' == self.str[1]:
+            self._skip_number(2)
+            tok = Token('function', Ident('anonymous'))
+            tok.anonymous = True
+            return tok
+
+    def atrule(self):
+        """
+        '@' (-(\w+)-)?[a-zA-Z0-9-_]+
+        """
+        match = re.match(r'^@(?:-(\w+)-)?([a-zA-Z0-9-_]+)[ \t]*', self.str)
+        if match:
+            self._skip_number(match.group(0))
+            vendor = match.group(1)
+            type = match.group(2)
+            if type in ['require', 'import', 'charset', 'namespace',
+                        'media', 'scope', 'supports']:
+                return Token(type)
+            elif type == 'document':
+                return Token('-moz-document')
+            elif type == 'block':
+                return Token('atblock')
+            elif type in ['extend', 'extends']:
+                return Token('extend')
+            elif type == 'keyframes':
+                return Token(type, vendor)
+            else:
+                return Token('atrile', f'-{vendor}-{type}' if vendor else type)
+
+    def function(self):
+        """
+        -*[_a-zA-Z$] [-\w\d$]* '('
+        """
+        match = re.match(r'^(-*[_a-zA-Z$][-\w\d$]*)\(([ \t]*)', self.str)
+        if match:
+            name = match.group(1)
+            self._skip_string(match.group(0))
+            self.is_url = 'url' == name
+            tok = Token('function', Ident(name))
+            tok.space = match.group(2)
+            return tok
+
+    def brace(self):
+        """
+        '{' | '}'
+        """
+        match = re.match(r'^([{}])', self.str)
+        if match:
+            self._skip_number(1)
+            brace = match.group(1)
+            return Token(brace, brace)
+
+    def paren(self):
+        """
+        '(' | ')' ' '*
+        """
+        match = re.match(r'^([()])([ \t]*)', self.str)
+        if match:
+            paren = match.group(1)
+            self._skip_string(match.group(0))
+            if ')' == paren:
+                self.is_url = False
+            tok = Token(paren, paren)
+            tok.space = match.group(2)
+            return tok
+
+    def rrggbbaa(self):
+        """
+        #rrggbbaa
+        """
+        match = re.match(r'^#([a-fA-F0-9]{8})[ \t]*', self.str)
+        if match:
+            self._skip_string(match.group(0))
+            rgb = match.group(1)
+            r = int(rgb[0:2], 16)
+            g = int(rgb[2:4], 16)
+            b = int(rgb[4:6], 16)
+            a = int(rgb[6:8], 16)
+            color = RGBA(r, g, b, a/255)
+            color.raw = match.group(0)
+            return Token('color', color)
+
+    def color(self):
+        raise NotImplementedError
+
+
+
+

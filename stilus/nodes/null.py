@@ -1,8 +1,15 @@
+import json
 
-class Null:
+from stilus.nodes.node import Node
+
+
+class Null(Node):
 
     def __init__(self):
-        self.data = {'isNull': True, 'hash': None}
+        super().__init__()
+
+    def is_null(self):
+        return True
 
     def __str__(self):
         return 'null'
@@ -13,5 +20,23 @@ class Null:
     def __bool__(self):
         return False
 
-    def __getattr__(self, attr):
-        return self.data[attr]
+    def __eq__(self, other):
+        if isinstance(other, Null):
+            return True
+        return False
+
+    def __hash__(self):
+        return hash(None)
+
+    def to_boolean(self):
+        from stilus.nodes.boolean import false
+        return false
+
+    def to_json(self):
+        return json.dumps({'__type': 'Null',
+                           'lineno': self.lineno,
+                           'column': self.column,
+                           'filename': self.filename})
+
+
+null = Null()
