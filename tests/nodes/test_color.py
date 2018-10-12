@@ -45,11 +45,9 @@ def test_hsla_adjust_lightness_and_hue():
     hsla = HSLA(100, 42, 10, 0)
     hsla.adjust_lightness(10)
     hsla.adjust_hue(5)
-    print(hsla)
     assert hsla == HSLA(105, 42, 11, 0)
     hsla.adjust_lightness(99)
     hsla.adjust_hue(300)
-    print(hsla)
     assert hsla == HSLA(45, 42, 21.89, 0)
 
 
@@ -97,5 +95,5 @@ def test_rbga_no_clamping():
 
 
 def test_rgba_hsla():
-    rgba = RGBA(152, 125, 62, 0.000)
-    assert rgba.hsla() == HSLA(41.99999999999999, 42, 42, -42.42)
+    rgba = RGBA(152, 125, 62, 0.020)
+    assert rgba.hsla() == HSLA(41.99999999999999, 41.96078431372549, 42.05607476635513, 0.020)
