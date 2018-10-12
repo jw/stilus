@@ -1,3 +1,4 @@
+import colorsys
 import copy
 import json
 
@@ -17,10 +18,16 @@ class HSLA(Node):
         self.hsla = self
 
     def __str__(self):
-        return f'hsla({self.h},{round(self.s)}%,{round(self.l)}%,{self.a})'
+        return f'hsla({self.h}, {round(self.s)}%, {round(self.l)}%, {self.a})'
 
     def __repr__(self):
         return self.__str__()
+
+    def __eq__(self, other):
+        if isinstance(other, HSLA):
+            return self.h == other.h and self.s == other.s and \
+                   self.l == other.l and self.a == other.a
+        return False
 
     def clone(self):
         return copy.deepcopy(self)
@@ -35,12 +42,11 @@ class HSLA(Node):
                            'column': self.column,
                            'filename': self.filename})
 
-    @property
     def rgba(self):
-        return RGBA.from_hsla(self)
+        return RGBA.from_hsla(self.hsla)
 
     def __hash__(self):
-        return self.__str__()
+        return hash(self.__str__())
 
     def add(self, h, s, l):
         return HSLA(self.h + h,
@@ -58,38 +64,12 @@ class HSLA(Node):
         else:
             return self.rgba.operate(op, right).hsla
 
-    def from_rgba(self, rgba):
-        r = rgba.r / 255
-        g = rgba.g / 255
-        b = rgba.b / 255
-        a = rgba.a
-
-        min = min(r, g, b)
-        max = max(r, g, b)
-        l = (max + min) / 2
-        d = max - min
-
-        if max == min:
-            h = 0
-        elif max == r:
-            h = 60 * (g - b) / d
-        elif max == g:
-            h = 60 * (b - r) / d + 120
-        elif max == b:
-            h = 60 * (r - g) / d + 240
-
-        if max == min:
-            s = 0
-        elif l < 5:
-            s = d / (2 * l)
-        else:
-            s = d / (2 - 2 * l)
-
-        h %= 360
-        s *= 100
-        l *= 100
-
-        return HSLA(h, s, l, a)
+    @staticmethod
+    def from_rgba(rgba):
+        (h, s, l) = colorsys.rgb_to_hls(rgba.r / 255,
+                                        rgba.g / 255,
+                                        rgba.b / 255)
+        return HSLA(h * 360, s * 100, l * 100, rgba.a)
 
     def adjust_lightness(self, percent):
         self.l = clamp_percentage(self.l + self.l * (percent / 100))
@@ -108,16 +88,34 @@ class RGBA(Node):
         self.g = clamp(g)
         self.b = clamp(b)
         self.a = clamp_alpha(a)
-        self.name = ''
+        self.colorname = ''
         self.rgba = self
 
     def __str__(self):
-        return f'{self.name}: {self.value}'
+
+        def pad(n):
+            return f'{n:02x}'
+
+        if self.colorname == 'transparent':
+            return self.colorname
+
+        if 1 == self.a:
+            r = pad(self.r)
+            g = pad(self.g)
+            b = pad(self.b)
+
+            if r[0] == r[1] and g[0] == g[1] and b[0] == b[1]:
+                return f'#{r[0]}{g[0]}{b[0]}'
+            else:
+                return f'#{r}{g}{b}'
+        else:
+            return f'rgba({self.r}, {self.g}, {self.b}, {self.a:.3f})'
 
     def __repr__(self):
         return self.__str__()
 
-    def without_clamping(self, r, g, b, a):
+    @staticmethod
+    def without_clamping(r, g, b, a):
         rgba = RGBA(0, 0, 0, 0)
         rgba.r = r
         rgba.g = g
@@ -135,7 +133,7 @@ class RGBA(Node):
                            'b': self.b,
                            'a': self.a,
                            'raw': self.raw,
-                           'name': self.name,
+                           'name': self.colorname,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})
@@ -146,9 +144,8 @@ class RGBA(Node):
     def __hash__(self):
         return self.__str__()
 
-    @property
     def hsla(self):
-        return HSLA.from_rgba(self)
+        return HSLA.from_rgba(self.rgba)
 
     def add(self, r, g, b, a):
         return RGBA(self.r + r,
@@ -174,37 +171,22 @@ class RGBA(Node):
                     self.b / n,
                     self.a)
 
-    def from_hsla(self, hsla: HSLA):
+    def __eq__(self, other):
+        if isinstance(other, RGBA):
+            return self.r == other.r and \
+                   self.g == other.g and \
+                   self.b == other.b
+        return False
 
-        def hue(h):
-            global m1, m2
-            if h < 0:
-                ++h
-            if h > 1:
-                --h
-            if h * 6 < 1:
-                return m1 + (m2 - m1) * h * 6
-            if h * 2 < 1:
-                return m2
-            if h * 3 < 2:
-                return m1 + (m2 - m1) * (2 / 3 - h) * 6
-
-        h = hsla.h / 360
-        s = hsla.s / 100
-        l = hsla.l / 100
-        a = hsla.a
-
-        m2 = l * (s + 1) if l <= .5 else l + s - l * s
-        m1 = l * 2 - m2
-
-        r = hue(h + 1 / 3) * 0xff
-        g = hue(h) * 0xff
-        b = hue(h - 1 / 3) * 0xff
-
-        return RGBA(r, g, b, a)
+    @staticmethod
+    def from_hsla(hsla: HSLA):
+        (r, g, b) = colorsys.hls_to_rgb(hsla.h / 360,
+                                        hsla.l / 100,
+                                        hsla.s / 100)
+        return RGBA(r * 255, g * 255, b * 255, hsla.a)
 
     def operate(self, op, right: Node):
-        """Operate on `right` with geven `op`."""
+        """Operate on `right` with given `op`."""
         if op != 'in':
             right = right.first()
 
