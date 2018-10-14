@@ -4,4 +4,5 @@ python:
   - "3.6"
 
 script:
+  - flake8
   - python setup.py pytest
