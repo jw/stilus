@@ -2,11 +2,16 @@
 __pycache__/
 *.py[cod]
 
+docs/_build/
+
 build/
 dist/
-.idea/
-.pytest_cache/
 stilus.egg-info/
 .eggs/
 
+.idea/
+
+.pytest_cache/
+
 .coverage
+htmlcov/
