@@ -12,6 +12,7 @@ twine = "*"
 pytest-runner = "*"
 "flake8" = "*"
 pytest-cov = "*"
+sphinx = "*"
 
 [requires]
 python_version = "3.6"
