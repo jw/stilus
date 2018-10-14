@@ -1,12 +1,15 @@
+from stilus.functions.component import component
 from stilus.functions.hsla import hsla
+from stilus.nodes.color import Color
+from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 
 
-def hue(color, value):
+def hue(color: Color, value=None):
     if value:
         hsla_color = color.hsla
         return hsla(value,
                     Unit(hsla_color.s),
                     Unit(hsla_color.l),
                     Unit(hsla_color.a))
-    return Component(color, String('hue'))
+    return component(color, String('hue'))

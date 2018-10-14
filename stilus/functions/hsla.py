@@ -3,9 +3,19 @@ from stilus.utils import assert_color, assert_type
 
 
 def hsla(hue, saturation=None, lightness=None, alpha=None):
+    """Convert the given `color` to an `HSLA` node, or h,s,l,a component
+    values.
+    :param hue:
+    :param saturation:
+    :param lightness:
+    :param alpha:
+    :return: :class:HSLA
+    """
+    # color
     if hue and (saturation is lightness is alpha is None):
         assert_color(hue)
         return hue.hsla
+    # alpha
     if hue and saturation and (lightness is alpha is None):
         assert_color(hue)
         color = hue.hsla
@@ -13,7 +23,8 @@ def hsla(hue, saturation=None, lightness=None, alpha=None):
         alpha = saturation.clone()
         if alpha.type == '%':
             alpha.value /= 100
-        return HSLA(color.h, color.s, color.l, color.value)
+        return HSLA(color.h, color.s, color.l, alpha.value)
+    # color
     assert_type(hue, 'unit', 'hue')
     assert_type(saturation, 'unit', 'saturation')
     assert_type(lightness, 'unit', 'lightness')
@@ -25,9 +36,3 @@ def hsla(hue, saturation=None, lightness=None, alpha=None):
                 saturation.value,
                 lightness.value,
                 alpha.value)
-
-
-
-
-if __name__ == '__main__':
-    hsla(5, 10, 20)
