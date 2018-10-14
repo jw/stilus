@@ -391,7 +391,7 @@ class Lexer:
 
     def atrule(self):
         """
-        '@' (-(\w+)-)?[a-zA-Z0-9-_]+
+
         """
         match = re.match(r'^@(?:-(\w+)-)?([a-zA-Z0-9-_]+)[ \t]*', self.str)
         if match:
@@ -414,7 +414,7 @@ class Lexer:
 
     def function(self):
         """
-        -*[_a-zA-Z$] [-\w\d$]* '('
+
         """
         match = re.match(r'^(-*[_a-zA-Z$][-\w\d$]*)\(([ \t]*)', self.str)
         if match:
