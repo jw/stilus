@@ -8,4 +8,3 @@ def test_null():
     from stilus.nodes.boolean import false
     assert Null().to_boolean() == false
     assert Null() == null
-

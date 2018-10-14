@@ -1,5 +1,5 @@
 from stilus.functions.lightness import lightness
-from stilus.nodes.color import RGBA, HSLA
+from stilus.nodes.color import HSLA
 from stilus.nodes.unit import Unit
 
 

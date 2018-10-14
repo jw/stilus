@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+"flake8" = "*"
 
 [dev-packages]
 pytest = "*"

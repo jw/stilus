@@ -15,25 +15,28 @@ class HSLA(Color):
 
     def __init__(self, h, s, l, a):
         super().__init__()
-        self.h = clamp_degrees(h)
-        self.s = clamp_percentage(s)
-        self.l = clamp_percentage(l)
-        self.a = clamp_alpha(a)
+        self.hue = clamp_degrees(h)
+        self.saturation = clamp_percentage(s)
+        self.lightness = clamp_percentage(l)
+        self.alpha = clamp_alpha(a)
         self.hsla = self
 
     def hsla(self):
         return self.hsla
 
     def __str__(self):
-        return f'hsla({self.h}, {round(self.s)}%, {round(self.l)}%, {self.a})'
+        return f'hsla({self.hue}, {round(self.saturation)}%, ' \
+               f'{round(self.lightness)}%, {self.alpha})'
 
     def __repr__(self):
         return self.__str__()
 
     def __eq__(self, other):
         if isinstance(other, HSLA):
-            return self.h == other.h and self.s == other.s and \
-                   self.l == other.l and self.a == other.a
+            return self.hue == other.hue and \
+                   self.saturation == other.saturation and \
+                   self.lightness == other.lightness and \
+                   self.alpha == other.alpha
         return False
 
     def clone(self):
@@ -41,10 +44,10 @@ class HSLA(Color):
 
     def to_json(self):
         return json.dumps({'__type': 'HSLA',
-                           'h': self.h,
-                           's': self.s,
-                           'l': self.l,
-                           'a': self.a,
+                           'h': self.hue,
+                           's': self.saturation,
+                           'l': self.lightness,
+                           'a': self.alpha,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})
@@ -56,10 +59,10 @@ class HSLA(Color):
         return hash(self.__str__())
 
     def add(self, h, s, l):
-        return HSLA(self.h + h,
-                    self.s + s,
-                    self.l + l,
-                    self.a)
+        return HSLA(self.hue + h,
+                    self.saturation + s,
+                    self.lightness + l,
+                    self.alpha)
 
     def sub(self, h, s, l):
         return self.add(-h, -s, -l)
@@ -79,11 +82,12 @@ class HSLA(Color):
         return HSLA(h * 360, s * 100, l * 100, rgba.a)
 
     def adjust_lightness(self, percent):
-        self.l = clamp_percentage(self.l + self.l * (percent / 100))
+        self.lightness = clamp_percentage(self.lightness +
+                                          self.lightness * (percent / 100))
         return self
 
     def adjust_hue(self, degree):
-        self.h = clamp_degrees(self.h + degree)
+        self.hue = clamp_degrees(self.hue + degree)
         return self
 
 
@@ -190,10 +194,10 @@ class RGBA(Color):
 
     @staticmethod
     def from_hsla(hsla: HSLA):
-        (r, g, b) = colorsys.hls_to_rgb(hsla.h / 360,
-                                        hsla.l / 100,
-                                        hsla.s / 100)
-        return RGBA(r * 255, g * 255, b * 255, hsla.a)
+        (r, g, b) = colorsys.hls_to_rgb(hsla.hue / 360,
+                                        hsla.lightness / 100,
+                                        hsla.saturation / 100)
+        return RGBA(r * 255, g * 255, b * 255, hsla.alpha)
 
     def operate(self, op, right: Node):
         """Operate on `right` with given `op`."""
@@ -204,6 +208,5 @@ class RGBA(Color):
             return true
         elif op == '+':
             if right.name == 'unit':
-                n = right.value
                 if right.type == '%':
-                    return adjust
+                    raise NotImplementedError

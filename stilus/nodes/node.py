@@ -81,9 +81,13 @@ class Node:
 
             return Boolean(False)
         elif op == '&&':
-            a = self.toBoolean()
-            b = right.toBoolean()
-            return right if a.isTrue and b.isTrue else self if a.isFalse else right
+            a = self.to_boolean()
+            b = right.to_boolean()
+            if a and b:
+                return right
+            elif a:
+                return self
+            return right
         elif op == '[]':
             raise Exception(f'cannot perform {self}[{right}]')
         else:

@@ -88,7 +88,10 @@ class Expression(Node):
             nodes = utils.unwrap(right).nodes
             for node in nodes:
                 if node.name == 'unit':
-                    n = values[len(values) + node.value if node.value < 0 else node.value]
+                    if node.value < 0:
+                        n = values[len(values) + node.value]
+                    else:
+                        n = values[node.value]
                 elif len(values) > 0 and values[0].name == 'object':
                     n = values[0].get(node.string)
                 if n:
@@ -103,15 +106,14 @@ class Expression(Node):
             return self.operate('==', right, value)
         elif op == '==':
             right = right.to_expression()
+            from stilus.nodes.boolean import false
             if len(self.nodes) != len(right.nodes):
-                from stilus.nodes.boolean import false
                 return false
             for i in range(len(self.nodes)):
                 a = self.nodes[i]
                 b = right.nodes[i]
                 if a.operate(op, b).is_true:
                     continue
-                from stilus.nodes.boolean import false
                 return false
             from stilus.nodes.boolean import true
             return true

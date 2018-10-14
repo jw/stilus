@@ -23,7 +23,7 @@ def hsla(hue, saturation=None, lightness=None, alpha=None):
         alpha = saturation.clone()
         if alpha.type == '%':
             alpha.value /= 100
-        return HSLA(color.h, color.s, color.l, alpha.value)
+        return HSLA(color.hue, color.saturation, color.lightness, alpha.value)
     # color
     assert_type(hue, 'unit', 'hue')
     assert_type(saturation, 'unit', 'saturation')
