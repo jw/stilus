@@ -390,8 +390,8 @@ class Lexer:
             return tok
 
     def atrule(self):
-        """
-
+        r"""
+        # '@' (-(\w+)-)?[a-zA-Z0-9-_]+
         """
         match = re.match(r'^@(?:-(\w+)-)?([a-zA-Z0-9-_]+)[ \t]*', self.str)
         if match:
@@ -413,8 +413,8 @@ class Lexer:
                 return Token('atrile', f'-{vendor}-{type}' if vendor else type)
 
     def function(self):
-        """
-
+        r"""
+         -*[_a-zA-Z$] [-\w\d$]* '('
         """
         match = re.match(r'^(-*[_a-zA-Z$][-\w\d$]*)\(([ \t]*)', self.str)
         if match:
