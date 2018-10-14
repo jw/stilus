@@ -216,7 +216,8 @@ class Lexer:
                 tok = self.stash.pop()
 
             # indent
-            elif indents and (len(self.indent_stack) == 0 or indents != self.indent_stack[0]):
+            elif indents and (len(self.indent_stack) == 0 or
+                              indents != self.indent_stack[0]):
                 self.indent_stack.appendleft(indents)
                 tok = Token('indent')
 
@@ -279,7 +280,7 @@ class Lexer:
         """
         ';' [ \t]*
         """
-        match = re.match(r'^;[ \t]*',self.str)
+        match = re.match(r'^;[ \t]*', self.str)
         if match:
             self._skip_string(match.group(1))
             return Token(';')
@@ -369,7 +370,7 @@ class Lexer:
                 if c == '{':
                     braces += 1
                 elif c == '}':
-                    braces -= 1;
+                    braces -= 1
                 elif c in ['\n', '\r']:
                     self.lineno += 1
                 css += c
@@ -466,7 +467,3 @@ class Lexer:
 
     def color(self):
         raise NotImplementedError
-
-
-
-

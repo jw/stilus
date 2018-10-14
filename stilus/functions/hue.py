@@ -9,7 +9,7 @@ def hue(color: Color, value=None):
     if value:
         hsla_color = color.hsla
         return hsla(value,
-                    Unit(hsla_color.s),
-                    Unit(hsla_color.l),
-                    Unit(hsla_color.a))
+                    Unit(hsla_color.saturation),
+                    Unit(hsla_color.lightness),
+                    Unit(hsla_color.alpha))
     return component(color, String('hue'))

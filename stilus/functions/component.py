@@ -6,10 +6,10 @@ component_map = {
     'red': 'r',
     'green': 'g',
     'blue': 'b',
-    'alpha': 'a',
-    'hue': 'h',
-    'saturation': 's',
-    'lightness': 'l'
+    'alpha': 'alpha',
+    'hue': 'hue',
+    'saturation': 'saturation',
+    'lightness': 'lightness'
 }
 
 unit_map = {

@@ -20,5 +20,5 @@ def test_from_expression():
     arguments = Arguments.from_expression(expression)
     assert arguments.nodes == expression.nodes
     assert arguments.lineno == expression.lineno
-    assert arguments.column== expression.column
+    assert arguments.column == expression.column
     assert arguments.is_list == expression.is_list

@@ -1,4 +1,3 @@
-import pytest
 from pytest import raises
 
 from stilus.functions.component import component
@@ -35,14 +34,14 @@ def test_component_rgba_hue():
     assert unit == Unit(200, 'deg')
 
 
-def test_component_hsla_saturation():
+def test_component_rgba_saturation():
     color = RGBA(100, 100, 100, .5)
     string = String('green')
     unit = component(color, string)
     assert unit == Unit(100, '%')
 
 
-def test_component_hsla_lightness():
+def test_component_rgba_lightness():
     color = RGBA(100, 100, 50, .5)
     string = String('blue')
     unit = component(color, string)
@@ -77,4 +76,3 @@ def test_component_rgba_vs_hsla():
         color = HSLA(100, 100, 100, .5)
         string = String('blue')
         component(color, string)
-
