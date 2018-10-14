@@ -1,8 +1,9 @@
 
 class Evaluator:
 
-    def __init__(self, root):
-        pass
+    def __init__(self, root, options):
+        self.root = root
+        self.options = options
 
     def evaluate(self):
-        pass
+        return self.root
