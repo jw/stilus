@@ -19,6 +19,12 @@ FACTOR_TABLE = {'mm': {'value': 1, 'label': 'mm'},
 class Unit(Node):
 
     def __init__(self, value, type=None):
+        """
+        Initialize a new `Unit` with the given `val` and unit `type` such as
+        "px", "pt", "in", etc.
+        :param value:
+        :param type:
+        """
         super().__init__(value)
         self.type = type
 

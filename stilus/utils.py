@@ -22,7 +22,7 @@ def unwrap(expression: Expression) -> Node:
     return unwrap(expression.first())
 
 
-def assert_present(node: Node, name):
+def assert_present(node: Node, name=None):
     if node:
         return
     if name:
@@ -30,7 +30,7 @@ def assert_present(node: Node, name):
     raise ValueError('argument missing')
 
 
-def assert_color(node: Node, param):
+def assert_color(node: Node, param=Node):
     assert_present(node, param)
     if node.name not in ['rgba', 'hsla']:
         raise TypeError(f'TypeError: expected rgba or hsla, but got '

@@ -7,7 +7,11 @@ from stilus.nodes.node import Node
 from stilus.utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
 
 
-class HSLA(Node):
+class Color(Node):
+    pass
+
+
+class HSLA(Color):
 
     def __init__(self, h, s, l, a):
         super().__init__()
@@ -16,6 +20,9 @@ class HSLA(Node):
         self.l = clamp_percentage(l)
         self.a = clamp_alpha(a)
         self.hsla = self
+
+    def hsla(self):
+        return self.hsla
 
     def __str__(self):
         return f'hsla({self.h}, {round(self.s)}%, {round(self.l)}%, {self.a})'
@@ -80,7 +87,7 @@ class HSLA(Node):
         return self
 
 
-class RGBA(Node):
+class RGBA(Color):
 
     def __init__(self, r, g, b, a):
         super().__init__()
@@ -146,6 +153,9 @@ class RGBA(Node):
 
     def hsla(self):
         return HSLA.from_rgba(self.rgba)
+
+    def rgba(self):
+        return self.rgba
 
     def add(self, r, g, b, a):
         return RGBA(self.r + r,

@@ -1,3 +1,4 @@
+from stilus.nodes.color import Color
 from stilus.utils import assert_color, assert_string
 from stilus.nodes.unit import Unit
 
@@ -28,13 +29,19 @@ type_map = {
 }
 
 
-def component(color, name):
+def component(color: Color, name: str) -> Unit:
+    """Return component `name` for a given `color`.
+    :param color: Color
+    :param name: str
+    :return: Unit
+    """
     assert_color(color, 'color')
     assert_string(name, 'name')
     name = name.string
-    unit = unit_map[name]
+    unit = unit_map.setdefault(name, None)
     type = type_map[name]
     name = component_map[name]
-    if not name:
+    try:
+        return Unit(color.__getattribute__(type).__getattribute__(name), unit)
+    except AttributeError:
         raise TypeError(f'invalid color component "{name}"')
-    return Unit(color[type][name], unit)
