@@ -694,7 +694,7 @@ class Lexer:
             return Token('literal', Literal(match.group(1)))
 
     def ident(self):
-        """
+        r"""
         -*[_a-zA-Z$] [-\w\d$]*
         """
         match = re.match(r'^-*[_a-zA-Z$][-\w\d$]*', self.s)

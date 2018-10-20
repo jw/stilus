@@ -65,9 +65,9 @@ def test_lexer_clean():
     lexer = Lexer('abc\r\n\r\ndef\n\n', {})
     assert lexer.s == 'abc\n\ndef\n'
     # \ * string to \r
-    lexer = Lexer('abc\n   \    \ndef\n', {})
+    lexer = Lexer('abc\n   \\    \ndef\n', {})
     assert lexer.s == 'abc\n   \rdef\n'
-    lexer = Lexer('abc\n   \    \n\  \ndef\n', {})
+    lexer = Lexer('abc\n   \\    \n\\  \ndef\n', {})
     assert lexer.s == 'abc\n   \r\rdef\n'
     # comments
     lexer = Lexer('abc: // some comment\n  color: #FFF\n', {})
