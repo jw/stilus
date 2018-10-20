@@ -2,7 +2,7 @@ from stilus.lexer import Lexer, Token
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import true
 from stilus.nodes.each import Each
-from stilus.nodes.it import If
+from stilus.nodes.ifnode import If
 from stilus.nodes.node import Node
 from stilus.nodes.root import Root
 
