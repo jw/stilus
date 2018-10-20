@@ -17,6 +17,8 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 
+import recommonmark.Parser  # noqa
+
 # -- Project information -----------------------------------------------------
 
 project = 'stilus'
@@ -48,11 +50,14 @@ extensions = [
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
+source_parsers = {
+    '.md': 'recommonmark.parser.CommonMarkParser'
+}
+
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'

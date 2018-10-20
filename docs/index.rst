@@ -12,6 +12,8 @@ Nothing is written yet!
    :maxdepth: 2
    :caption: Contents:
 
+   foo.md
+   bar.rst
 
 
 Indices and tables
