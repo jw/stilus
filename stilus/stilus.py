@@ -6,7 +6,7 @@ from stilus.visitor.normalizer import Normalizer
 
 class Renderer:
 
-    def __init__(self, s, options):
+    def __init__(self, s: str, options: dict):
         self.s = s
         self.options = options
 

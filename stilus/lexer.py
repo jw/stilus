@@ -1,7 +1,10 @@
 import re
 from collections import deque
 
+from stilus.nodes.boolean import Boolean
 from stilus.nodes.color import RGBA
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 from .nodes.comment import Comment
 from .nodes.ident import Ident
 from .nodes.literal import Literal
@@ -9,11 +12,10 @@ from .nodes.literal import Literal
 
 class Token:
 
-    def __init__(self, type, value=None):
+    def __init__(self, type, value=None, space=None):
         self.type = type
         self.value = value
-        # extras
-        self.space = None
+        self.space = space
         self.anonymous = False
 
     def __str__(self):
@@ -22,6 +24,14 @@ class Token:
 
     def __repr__(self):
         return str(self)
+
+    def __eq__(self, other):
+        if isinstance(other, Token):
+            return self.type == other.type and \
+                   self.value == other.value and \
+                   self.space == other.space and \
+                   self.anonymous == other.anonymous
+        return False
 
 
 class Lexer:
@@ -32,43 +42,95 @@ class Lexer:
              'is not': '!=',
              ':=': '?='}
 
-    def __init__(self, str, options=None):
+    def __init__(self, s: str, options: dict):
         self.stash = deque([])
         self.indent_stack = deque([])
         self.indent_re = None
         self.lineno = 1
         self.column = 1
+        self.options = options
 
         self.prev = None
         self.is_url = False
         self.at_eos = False
 
-        self.str = self.clean(str)
-        # print(f'Lexing [{self.str}]...')
+        self.s = self.clean(s)
 
-    def clean(self, str):
+    def __eq__(self, other):
+        if isinstance(other, Lexer):
+            return self.s == other.s and self.options == other.options
+        return False
+
+    def clean(self, s: str) -> str:
         # handle UTF-8 BOM
-        str = str[1:] if len(str) > 1 and "\uFEFF" == str[0] else str
+        s = s[1:] if len(s) > 1 and "\uFEFF" == s[0] else s
 
-        str = re.sub(r'\s+$', '\n', str)
-        str = re.sub(r'\r\n', '\n', str)
+        s = re.sub(r'\s+$', '\n', s)
+        s = re.sub(r'\r\n?', '\n', s)
+        s = re.sub(r'\\ *\n', '\r', s)
 
-        return str
+        def _comment(match):
+            # TODO: this needs a cleanup
+            s = match.group(0)
+            value = match.groups()[0]
+            offset = match.start(0)
+            string = match.string
+            in_comment = s.rfind('/*', offset) > s.rfind('*/', offset)
+            comment_index = s.rfind('//', offset)
+            i = s.rfind('\n', offset)
+            double = 0
+            single = 0
 
-    def _comment(self, str, value, offset, s):
-        pass
+            if comment_index != -1 and comment_index > i:
+                while i != offset:
+                    if "'" == s[i]:
+                        single = single - 1 if single else single + 1
+                    if '"' == s[i]:
+                        double = double - 1 if double else double + 1
+                    if '/' == s[i] and '/' == s[i + 1]:
+                        in_comment = not single and not double
+                        break
+                    i += 1
+
+            return string if in_comment else value + '\r'
+
+        s = re.sub(r'([,(:](?!\/\/[^ ])) *(?:\/\/[^\n]*|\/\*.*?\*\/)?\n\s*',
+                   _comment, s)
+        s = re.sub(r'\s*\n[ \t]*([,)])', _comment, s)
+
+        return s
 
     def _skip_number(self, len):
-        self.str = self.str[len:]
+        self.s = self.s[len:]
 
     def _skip_string(self, str):
-        self.str = self.str[len(str):]
+        self.s = self.s[len(str):]
+
+    def is_part_of_selector(self):
+        tok = self.stash[-1] if self.stash else self.prev
+        if tok and tok.type == 'color':
+            return 2 == tok.value.raw.length
+        elif tok and (tok.type in ['.', '[']):
+            return True
+        else:
+            return False
 
     def next(self) -> Token:
         tok = self.stash.popleft() if len(self.stash) > 0 else self.advance()
         self.prev = tok
         self.at_eos = tok.type == 'eos'
         return tok
+
+    def peek(self):
+        return self.lookahead(1)
+
+    def lookahead(self, n):
+        fetch = n - len(self.stash)
+        while fetch > 0:
+            fetch -= 1
+            self.stash.append(self.advance())
+        n -= 1
+        return self.stash[n]
 
     def __next__(self) -> Token:
         if self.at_eos:
@@ -79,7 +141,6 @@ class Lexer:
         return self
 
     def advance(self):
-        # print(f'advancing: {self.str}')
         tok = self.eos()
         if tok:
             return tok
@@ -128,6 +189,24 @@ class Lexer:
         tok = self.color()
         if tok:
             return tok
+        tok = self.string()
+        if tok:
+            return tok
+        tok = self.unit()
+        if tok:
+            return tok
+        tok = self.namedop()
+        if tok:
+            return tok
+        tok = self.boolean()
+        if tok:
+            return tok
+        tok = self.unicode()
+        if tok:
+            return tok
+        tok = self.ident()
+        if tok:
+            return tok
         tok = self.op()
         if tok:
             return tok
@@ -142,20 +221,11 @@ class Lexer:
             return tok
         return None
 
-    def is_part_of_selector(self):
-        tok = self.stash[-1] if self.stash else self.prev
-        if tok and tok.type == 'color':
-            return 2 == tok.value.raw.length
-        elif tok and (tok.type in ['.', '[']):
-            return True
-        else:
-            return False
-
     def eos(self):
         """
         eos | trailing outdents
         """
-        if self.str != '':
+        if self.s != '':
             return False
         if self.indent_stack:
             self.indent_stack.popleft()
@@ -167,7 +237,7 @@ class Lexer:
         """
         null
         """
-        match = re.match(r'^(null)\b[ \t]*', self.str)
+        match = re.match(r'^(null)\b[ \t]*', self.s)
         if match:
             self._skip_string(match.group())
             if self.isPartOfSelector():
@@ -180,17 +250,17 @@ class Lexer:
         '\n' ' '+
         """
         if self.indent_re:
-            match = re.match(self.indent_re, self.str)
+            match = re.match(self.indent_re, self.s)
 
         # figure out if we are using tabs or spaces
         else:
             # try tabs first
             possible_re = r'^\n([\t]*)[ \t]*'
-            match = re.match(possible_re, self.str)
-            if not match or not match.group(1):
+            match = re.match(possible_re, self.s)
+            if match and not match.group(1):
                 # try spaces next
                 possible_re = r'^\n([ \t]*)'
-                match = re.match(possible_re, self.str)
+                match = re.match(possible_re, self.s)
             # established
             if match and match.group(1):
                 self.indent_re = possible_re
@@ -200,12 +270,12 @@ class Lexer:
 
             self._skip_string(match.group(0))
 
-            if self.str and self.str[0] in [' ', '\t']:
+            if self.s and self.s[0] in [' ', '\t']:
                 raise SyntaxError('Invalid indentation. You can use tabs or '
                                   'spaces to indent, but not both.')
 
             # blank line
-            if self.str and self.str[0] == '\n':
+            if self.s and self.s[0] == '\n':
                 return self.advance()
 
             # outdent
@@ -233,7 +303,7 @@ class Lexer:
         """
         ^|[^\n,;]+
         """
-        match = re.match(r'^\^|.*?(?=\/\/(?![^\[]*\])|[,\n{])', self.str)
+        match = re.match(r'^\^|.*?(?=\/\/(?![^\[]*\])|[,\n{])', self.s)
         if match and match.group(0):
             selector = match.group(0)
             self._skip_string(selector)
@@ -243,16 +313,16 @@ class Lexer:
         """
         ' '+ | '\t'+
         """
-        match = re.match(r'^([ \t]+)', self.str)
+        match = re.match(r'^([ \t]+)', self.s)
         if match:
             self._skip_string(match.group(0))
             return Token('space')
 
     def eol(self):
         """
-        '\n'
+        '\r'
         """
-        if self.str and self.str[0] == '\n':
+        if self.s and self.s[0] == '\r':
             self.lineno += 1
             self._skip_number(1)
             return self.advance()
@@ -266,10 +336,10 @@ class Lexer:
         """
         match = re.match(r'^([.]{1,3}|&&|\|\||[!<>=?:]=|\*\*|[-+*\/%]=?|'
                          r'[,=?:!~<>&\[\]])([ \t]*)',
-                         self.str)
+                         self.s)
         if match:
-            op = match.group(0)
-            self._skip_string(op)
+            op = match.group(1)
+            self._skip_string(match.group())
             op = self.alias.get(op, op)
             tok = Token(op, op)
             tok.space = match.group(2)
@@ -280,16 +350,16 @@ class Lexer:
         """
         ';' [ \t]*
         """
-        match = re.match(r'^;[ \t]*', self.str)
+        match = re.match(r'^;[ \t]*', self.s)
         if match:
-            self._skip_string(match.group(1))
+            self._skip_string(match.group(0))
             return Token(';')
 
     def keyword(self):
         """
         'if' | 'else' | 'unless' | 'return' | 'for' | 'in'
         """
-        match = re.match(r'^(return|if|else|unless|for|in)\b[ \t]*', self.str)
+        match = re.match(r'^(return|if|else|unless|for|in)\b[ \t]*', self.s)
         if match:
             keyword = match.group(1)
             self._skip_string(keyword)
@@ -303,7 +373,9 @@ class Lexer:
         """
         url char
         """
-        match = re.match(r'^[\/:@.;?&=*!,<>#%0-9]+', self.str)
+        match = re.match(r'^[\/:@.;?&=*!,<>#%0-9]+', self.s)
+        if not self.is_url:
+            return
         if match:
             self._skip_string(match.group(0))
             return Token('literal', Literal(match.group(0)))
@@ -313,19 +385,19 @@ class Lexer:
         '//' *
         """
         # single line
-        if '/' == self.str[0] and '/' == self.str[1]:
-            end = self.str.find('\n')
+        if '/' == self.s[0] and '/' == self.s[1]:
+            end = self.s.find('\n')
             if -1 == end:
-                end = len(self.str)
+                end = len(self.s)
             self._skip_number(end)
             return self.advance()
 
         # multi-line
-        if '/' == self.str[0] and '*' == self.str[1]:
-            end = self.str.find('*/')
+        if '/' == self.s[0] and '*' == self.s[1]:
+            end = self.s.find('*/')
             suppress = True
             inline = False
-            s = self.str[0:end + 2]
+            s = self.s[0:end + 2]
             lines = len(re.split(r'[\n|\r]', s)) - 1
             self.lineno += lines
             self._skip_number(end + 2)
@@ -341,7 +413,7 @@ class Lexer:
         """
         '\\' . ' '*
         """
-        match = re.match(r'^\\(.)[ \t]*', self.str)
+        match = re.match(r'^\\(.)[ \t]*', self.s)
         if match:
             escape = match.group(1)
             self._skip_string(escape)
@@ -351,7 +423,7 @@ class Lexer:
         """
         '!important' ' '*
         """
-        match = re.match(r'^!important[ \t]*', self.str)
+        match = re.match(r'^!important[ \t]*', self.s)
         if match:
             self._skip_string(match.group(0))
             return Token('ident', Literal('!important'))
@@ -360,13 +432,13 @@ class Lexer:
         """
         '@css' ' '* '{' .* '}' ' '*
         """
-        match = re.match(r'^@css[ \t]*', self.str)
+        match = re.match(r'^@css[ \t]*', self.s)
         if match:
             self._skip_string(match.group(0))
             braces = 1
             css = ''
-            for c in self.str:
-                print(f'Handling {c} in {self.str}]')
+            for c in self.s:
+                print(f'Handling {c} in {self.s}]')
                 if c == '{':
                     braces += 1
                 elif c == '}':
@@ -383,7 +455,7 @@ class Lexer:
         """
         '@('
         """
-        if '@' == self.str[0] and '(' == self.str[1]:
+        if '@' == self.s[0] and '(' == self.s[1]:
             self._skip_number(2)
             tok = Token('function', Ident('anonymous'))
             tok.anonymous = True
@@ -393,7 +465,7 @@ class Lexer:
         r"""
         # '@' (-(\w+)-)?[a-zA-Z0-9-_]+
         """
-        match = re.match(r'^@(?:-(\w+)-)?([a-zA-Z0-9-_]+)[ \t]*', self.str)
+        match = re.match(r'^@(?:-(\w+)-)?([a-zA-Z0-9-_]+)[ \t]*', self.s)
         if match:
             self._skip_number(match.group(0))
             vendor = match.group(1)
@@ -416,7 +488,7 @@ class Lexer:
         r"""
          -*[_a-zA-Z$] [-\w\d$]* '('
         """
-        match = re.match(r'^(-*[_a-zA-Z$][-\w\d$]*)\(([ \t]*)', self.str)
+        match = re.match(r'^(-*[_a-zA-Z$][-\w\d$]*)\(([ \t]*)', self.s)
         if match:
             name = match.group(1)
             self._skip_string(match.group(0))
@@ -429,7 +501,7 @@ class Lexer:
         """
         '{' | '}'
         """
-        match = re.match(r'^([{}])', self.str)
+        match = re.match(r'^([{}])', self.s)
         if match:
             self._skip_number(1)
             brace = match.group(1)
@@ -439,7 +511,7 @@ class Lexer:
         """
         '(' | ')' ' '*
         """
-        match = re.match(r'^([()])([ \t]*)', self.str)
+        match = re.match(r'^([()])([ \t]*)', self.s)
         if match:
             paren = match.group(1)
             self._skip_string(match.group(0))
@@ -453,7 +525,7 @@ class Lexer:
         """
         #rrggbbaa
         """
-        match = re.match(r'^#([a-fA-F0-9]{8})[ \t]*', self.str)
+        match = re.match(r'^#([a-fA-F0-9]{8})[ \t]*', self.s)
         if match:
             self._skip_string(match.group(0))
             rgb = match.group(1)
@@ -465,5 +537,167 @@ class Lexer:
             color.raw = match.group(0)
             return Token('color', color)
 
+    def rrggbb(self):
+        """
+        #rrggbb
+        """
+        match = re.match(r'^#([a-fA-F0-9]{6})[ \t]*', self.s)
+        if match:
+            self.skip(match.group(0))
+            rgb = match.group(1)
+            r = int(rgb[0:2], 16)
+            g = int(rgb[2:4], 16)
+            b = int(rgb[4:6], 16)
+            color = RGBA(r, g, b, 1)
+            color.raw = match.group(0)
+            return Token('color', color)
+
+    def rgba(self):
+        """
+        #rgba
+        """
+        match = re.match(r'^#([a-fA-F0-9]{4})[ \t]*', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            rgb = match.group(1)
+            r = int(f'{rgb[0]}{rgb[0]}', 16)
+            g = int(f'{rgb[1]}{rgb[1]}', 16)
+            b = int(f'{rgb[2]}{rgb[2]}', 16)
+            a = int(f'{rgb[3]}{rgb[3]}', 16)
+            color = RGBA(r, g, b, a/255)
+            color.raw = match.group(0)
+            return Token('color', color)
+
+    def rgb(self):
+        """
+        #rgb
+        """
+        match = re.match(r'^#([a-fA-F0-9]{3})[ \t]*', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            rgb = match.group(1)
+            r = int(f'{rgb[0]}{rgb[0]}', 16)
+            g = int(f'{rgb[1]}{rgb[1]}', 16)
+            b = int(f'{rgb[2]}{rgb[2]}', 16)
+            color = RGBA(r, g, b, 1)
+            color.raw = match.group(0)
+            return Token('color', color)
+
+    def nn(self):
+        """
+        #nn
+        """
+        match = re.match(r'^#([a-fA-F0-9]{2})[ \t]*', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            n = int(match.group(1), 16)
+            color = RGBA(n, n, n, 1)
+            color.raw = match.group(0)
+            return Token('color', color)
+
+    def n(self):
+        """
+        #n
+        """
+        match = re.match(r'^#([a-fA-F0-9]{1})[ \t]*', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            n = int(f'{match.group(1)}{match.group(1)}', 16)
+            color = RGBA(n, n, n, 1)
+            color.raw = match.group(0)
+            return Token('color', color)
+
     def color(self):
-        raise NotImplementedError
+        tok = self.rrggbbaa()
+        if tok:
+            return tok
+        tok = self.rrggbb()
+        if tok:
+            return tok
+        tok = self.rgba()
+        if tok:
+            return tok
+        tok = self.rgb()
+        if tok:
+            return tok
+        tok = self.nn()
+        if tok:
+            return tok
+        tok = self.n()
+        if tok:
+            return tok
+
+    def string(self):
+        """
+        '"' [^"]+ '"' | "'"" [^']+ "'"
+        """
+        match = re.match(r'^("[^"]*"|\'[^\']*\')[ \t]*', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            string = match.group(0)[1:-1]
+            quote = match.group(0)[0]
+            return Token('string', String(string, quote))
+
+    def unit(self):
+        """
+        '-'? (digit+ | digit* '.' digit+) unit
+        """
+        match = re.match(r'^(-)?(\d+\.\d+|\d+|\.\d+)(%|[a-zA-Z]+)?[ \t]*',
+                         self.s)
+        if match:
+            self._skip_string(match.group(0))
+            n = float(match.group(2))
+            if match.group(1) == '-':
+                n = -n
+            unit = Unit(n, match.group(3))
+            unit.raw = match.group(0)
+            return Token('unit', unit)
+
+    def namedop(self):
+        """
+        'not' | 'and' | 'or' | 'is' | 'is not' | 'isnt' | 'is a' | 'is defined'
+        """
+        match = re.match(r'^(not|and|or|is a|is defined|isnt|is not|is)'
+                         r'(?!-)\b([ \t]*)', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            op = match.group(1)
+            if self.is_part_of_selector():
+                tok = Token('ident', Ident(match.group(0)))
+            else:
+                op = self.alias.get(op, op)
+                tok = Token(op, op)
+            tok.space = match.group(2)
+            return tok
+
+    def boolean(self):
+        """
+        true | false
+        """
+        match = re.match(r'^(true|false)\b([ \t]*)', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            val = Boolean('true' == match.group(1))
+            tok = Token('boolean', val)
+            tok.space = match.group(2)
+            return tok
+
+    def unicode(self):
+        """
+        'U+' [0-9A-Fa-f?]{1,6}(?:-[0-9A-Fa-f]{1,6})?
+        """
+        match = re.match(r'^u\+[0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?',
+                         self.s,
+                         flags=re.IGNORECASE)
+        if match:
+            self._skip_string(match.group(0))
+            return Token('literal', Literal(match.group(1)))
+
+    def ident(self):
+        """
+        -*[_a-zA-Z$] [-\w\d$]*
+        """
+        match = re.match(r'^-*[_a-zA-Z$][-\w\d$]*', self.s)
+        if match:
+            self._skip_string(match.group(0))
+            return Token('ident', Ident(match.group(0)))
