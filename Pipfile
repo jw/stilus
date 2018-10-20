@@ -13,6 +13,7 @@ pytest-runner = "*"
 "flake8" = "*"
 pytest-cov = "*"
 sphinx = "*"
+recommonmark = "*"
 
 [requires]
 python_version = "3.6"
