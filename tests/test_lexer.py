@@ -1,8 +1,12 @@
 from collections import deque
 
 from stilus.lexer import Lexer, Token
+from stilus.nodes.boolean import true
 from stilus.nodes.color import RGBA
 from stilus.nodes.ident import Ident
+from stilus.nodes.literal import Literal
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 
 
 def test_lexer_token():
@@ -35,6 +39,14 @@ def test_lexer_empty_string():
     assert lexer.prev is None
     assert lexer.is_url is False
     assert lexer.at_eos is False
+
+
+def test_lexer_eq():
+    left = Lexer('foobar', {'fizz': 'fuzz'})
+    right = Lexer('foobar', {'fizz': 'fuzz'})
+    assert left == right
+    wrong = Lexer('fizz', {})
+    assert left != wrong
 
 
 def test_lexer_clean():
@@ -86,6 +98,18 @@ def test_lexer_clean():
     assert lexer.s == 'abc:,\rdef\n'
 
 
+def test_lexer_is_part_of_selector():
+    lexer = Lexer('^if.null,[bar],abc  color: black\n', {})
+    assert lexer.next() == Token('selector', '^')
+    assert lexer.next() == Token('if', 'if')
+    assert lexer.next() == Token('.', '.', '')
+    assert lexer.next() == Token('ident', Ident('null'))
+    lexer = Lexer('^#fif: black\n', {})
+    assert lexer.next() == Token('selector', '^')
+    assert lexer.next() == Token('color', RGBA(255, 255, 255, 1))
+    assert lexer.next() == Token('ident', Ident('if'))
+
+
 def test_lexer_next():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
     assert lexer.next() == Token('ident', Ident('abc', 'abc'))
@@ -94,28 +118,139 @@ def test_lexer_next():
 
 def test_lexer_peek():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.peek() == Token('ident', Ident('abc', 'abc'))
-    assert lexer.peek() == Token('ident', Ident('abc', 'abc'))
-    lexer.next()
+    abc = Token('ident', Ident('abc', 'abc'))
+    assert lexer.peek() == abc
+    assert lexer.peek() == abc
+    assert lexer.next() == abc
+    colon = Token(':', ':', '')
     assert lexer.peek() == Token(':', ':', '')
+    assert lexer.next() == colon
 
 
-def test_lexer_rrggbbaa():
-    lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.advance() == Token('ident', Ident('abc', 'abc'))
-    assert lexer.advance() == Token(':', ':', '')
-    assert lexer.advance() == Token('ident', Ident('color', 'color'))
-    assert lexer.advance() == Token(':', ':', ' ')
-    assert lexer.advance() == Token('color', RGBA(17, 34, 51, 0.067))
-    assert lexer.advance() == Token('newline')
-    assert lexer.advance() == Token('eos')
+def test_lexer_indent_outdent():
+    lexer = Lexer('abc, def:\n'
+                  '  color: #12345678\n'
+                  '    foo: null\n', {})
+    tokens = [token for token in lexer]
+    assert tokens[7] == Token('indent')
+    assert tokens[11] == Token('outdent')
+
+
+def test_lexer_ident_colon_null_newline_eos():
+    lexer = Lexer('abc:\n  color: null\n', {})
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('ident', Ident('abc', 'abc'))
+    assert tokens[1] == Token(':', ':', '')
+    assert tokens[2] == Token('ident', Ident('color', 'color'))
+    assert tokens[3] == Token(':', ':', ' ')
+    assert tokens[4] == Token('null')
+    assert tokens[5] == Token('newline')
+    assert tokens[6] == Token('eos')
+
+
+def test_lexer_ident_colon_colors():
+    lexer = Lexer('abc: #11223311, #aabbcc, #abc1, #fff, #dd, #e', {})
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('ident', Ident('abc', 'abc'))
+    assert tokens[1] == Token(':', ':', ' ')
+    assert tokens[2] == Token('color', RGBA(17, 34, 51, 0.67))
+    assert tokens[4] == Token('color', RGBA(170, 187, 204, 1))
+    assert tokens[6] == Token('color', RGBA(170, 187, 204, 0.067))
+    assert tokens[8] == Token('color', RGBA(255, 255, 255, 1))
+    assert tokens[10] == Token('color', RGBA(221, 221, 221, 1))
+    assert tokens[12] == Token('color', RGBA(238, 238, 238, 1))
 
 
 def test_lexer_ident_space():
     lexer = Lexer('abc def klm:\n  xyz abc\n', {})
-    assert lexer.advance() == Token('ident', Ident('abc', 'abc'))
-    assert lexer.advance() == Token('space')
-    assert lexer.advance() == Token('ident', Ident('def', 'def'))
-    assert lexer.advance() == Token('space')
-    assert lexer.advance() == Token('ident', Ident('klm', 'klm'))
-    assert lexer.advance() == Token(':', ':', '')
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('ident', Ident('abc', 'abc'))
+    assert tokens[1] == Token('space')
+    assert tokens[2] == Token('ident', Ident('def', 'def'))
+    assert tokens[3] == Token('space')
+    assert tokens[4] == Token('ident', Ident('klm', 'klm'))
+
+
+def test_lexer_function_paren_braces_sep_unit():
+    lexer = Lexer('bg()\n'
+                  '  background: blue\n'
+                  '\n'
+                  'body {\n'
+                  '  bg(); width: 100px\n'
+                  '}\n',
+                  {})
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('function', Ident('bg', Ident('null')), '')
+    assert tokens[1] == Token(')', ')', '')
+    assert tokens[9] == Token('{', '{')
+    assert tokens[11] == Token('function', Ident('bg', Ident('null')), '')
+    assert tokens[13] == Token(';', None)
+    assert tokens[16] == Token('unit', Unit(100.0, 'px'))
+    assert tokens[18] == Token('}', '}')
+
+
+def test_lexer_keyword_string():
+    lexer = Lexer('if "fizz":\n  return foo;\n', {})
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('if', 'if')
+    assert tokens[1] == Token('string', String('fizz', '"'))
+    assert tokens[3] == Token('return', 'return')
+
+
+def test_lexer_boolean_unicode():
+    lexer = Lexer('if true:\n  return U+abcdef;\n', {})
+    tokens = [token for token in lexer]
+    assert tokens[1] == Token('boolean', true, '')
+    assert tokens[4] == Token('literal', Literal('U+abcdef'))
+
+
+def test_lexer_functions():
+    lexer = Lexer('mixin(add) {\n'
+                  '  mul = @(c, d) {\n'
+                  '    c * d\n'
+                  '  }\n'
+                  '  width: add(2, 3) + mul(4, 5)\n'
+                  '}\n',
+                  {})
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('function', Ident('mixin', Ident('null')), '')
+    anon_fun_token = Token('function', Ident('anonymous'))
+    anon_fun_token.anonymous = True
+    assert tokens[8] == anon_fun_token
+
+
+def test_lexer_atrules():
+    lexer = Lexer('@viewport {\n'
+                  '  color: blue\n'
+                  '}\n'
+                  '\n'
+                  '@namespace svg "http://www.w3.org/2000/svg"\n'
+                  '@-moz-viewport\n',
+                  {})
+    tokens = [token for token in lexer]
+    assert tokens[0] == Token('atrule', 'viewport')
+    assert tokens[9] == Token('namespace')
+    assert tokens[12] == Token('string',
+                               String('http://www.w3.org/2000/svg', '"'))
+    assert tokens[14] == Token('atrule', '-moz-viewport')
+
+
+def test_lexer_namedop():
+    lexer = Lexer('foo is a bar\nfizz isnt a fuzz\n', {})
+    tokens = [token for token in lexer]
+    assert tokens[2] == Token('is a', 'is a', ' ')
+    assert tokens[7] == Token('!=', '!=', ' ')
+
+
+def test_lexer_urlchars_important():
+    lexer = Lexer('url("/images/foo.png")\n'
+                  '!important foo', {})
+    tokens = [token for token in lexer]
+    assert tokens[1] == Token('string', String('/images/foo.png', '"'))
+    assert tokens[4] == Token('ident', Ident('!important', '!important'))
+
+
+def test_lexer_escaped():
+    lexer = Lexer('bar: 1 \\+ 2\n', {})
+    tokens = [token for token in lexer]
+    assert tokens[3] == Token('ident', Literal('+'))

@@ -109,7 +109,7 @@ class Lexer:
     def is_part_of_selector(self):
         tok = self.stash[-1] if self.stash else self.prev
         if tok and tok.type == 'color':
-            return 2 == tok.value.raw.length
+            return 2 == len(tok.value.raw)
         elif tok and (tok.type in ['.', '[']):
             return True
         else:
@@ -240,8 +240,8 @@ class Lexer:
         match = re.match(r'^(null)\b[ \t]*', self.s)
         if match:
             self._skip_string(match.group())
-            if self.isPartOfSelector():
-                return Token('indent', Ident)
+            if self.is_part_of_selector():
+                return Token('ident', Ident(match.group(0)))
             else:
                 return Token('null')
 
@@ -339,7 +339,7 @@ class Lexer:
                          self.s)
         if match:
             op = match.group(1)
-            self._skip_string(match.group())
+            self._skip_string(match.group(0))
             op = self.alias.get(op, op)
             tok = Token(op, op)
             tok.space = match.group(2)
@@ -362,7 +362,7 @@ class Lexer:
         match = re.match(r'^(return|if|else|unless|for|in)\b[ \t]*', self.s)
         if match:
             keyword = match.group(1)
-            self._skip_string(keyword)
+            self._skip_string(match.group(0))
             if self.is_part_of_selector():
                 tok = Token('ident', Ident(match.group(0)))
             else:
@@ -373,9 +373,9 @@ class Lexer:
         """
         url char
         """
-        match = re.match(r'^[\/:@.;?&=*!,<>#%0-9]+', self.s)
         if not self.is_url:
             return
+        match = re.match(r'^[\/:@.;?&=*!,<>#%0-9]+', self.s)
         if match:
             self._skip_string(match.group(0))
             return Token('literal', Literal(match.group(0)))
@@ -467,7 +467,7 @@ class Lexer:
         """
         match = re.match(r'^@(?:-(\w+)-)?([a-zA-Z0-9-_]+)[ \t]*', self.s)
         if match:
-            self._skip_number(match.group(0))
+            self._skip_string(match.group(0))
             vendor = match.group(1)
             type = match.group(2)
             if type in ['require', 'import', 'charset', 'namespace',
@@ -482,7 +482,7 @@ class Lexer:
             elif type == 'keyframes':
                 return Token(type, vendor)
             else:
-                return Token('atrile', f'-{vendor}-{type}' if vendor else type)
+                return Token('atrule', f'-{vendor}-{type}' if vendor else type)
 
     def function(self):
         r"""
@@ -543,7 +543,7 @@ class Lexer:
         """
         match = re.match(r'^#([a-fA-F0-9]{6})[ \t]*', self.s)
         if match:
-            self.skip(match.group(0))
+            self._skip_string(match.group(0))
             rgb = match.group(1)
             r = int(rgb[0:2], 16)
             g = int(rgb[2:4], 16)
@@ -691,7 +691,7 @@ class Lexer:
                          flags=re.IGNORECASE)
         if match:
             self._skip_string(match.group(0))
-            return Token('literal', Literal(match.group(1)))
+            return Token('literal', Literal(match.group(0)))
 
     def ident(self):
         r"""
