@@ -20,6 +20,17 @@ class Root(Node):
     def clone(self):
         return copy.deepcopy(self)
 
+    def __key(self):
+        return self.nodes
+
+    def __eq__(self, other):
+        if isinstance(other, Root):
+            return self.__key() == other.__key()
+        return False
+
+    def __hash__(self):
+        return hash(self.__key())
+
     def __str__(self):
         return f'[Root]'
 
