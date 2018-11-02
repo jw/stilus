@@ -112,13 +112,13 @@ def test_lexer_is_part_of_selector():
 
 def test_lexer_next():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.next() == Token('ident', Ident('abc', 'abc'))
+    assert lexer.next() == Token('ident', Ident('abc', ''))
     assert lexer.next() == Token(':', ':', '')
 
 
 def test_lexer_peek():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    abc = Token('ident', Ident('abc', 'abc'))
+    abc = Token('ident', Ident('abc', ''))
     assert lexer.peek() == abc
     assert lexer.peek() == abc
     assert lexer.next() == abc
@@ -139,9 +139,9 @@ def test_lexer_indent_outdent():
 def test_lexer_ident_colon_null_newline_eos():
     lexer = Lexer('abc:\n  color: null\n', {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('ident', Ident('abc', 'abc'))
+    assert tokens[0] == Token('ident', Ident('abc', ''))
     assert tokens[1] == Token(':', ':', '')
-    assert tokens[2] == Token('ident', Ident('color', 'color'))
+    assert tokens[2] == Token('ident', Ident('color', ''))
     assert tokens[3] == Token(':', ':', ' ')
     assert tokens[4] == Token('null')
     assert tokens[5] == Token('newline')
@@ -151,7 +151,7 @@ def test_lexer_ident_colon_null_newline_eos():
 def test_lexer_ident_colon_colors():
     lexer = Lexer('abc: #11223311, #aabbcc, #abc1, #fff, #dd, #e', {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('ident', Ident('abc', 'abc'))
+    assert tokens[0] == Token('ident', Ident('abc', ''))
     assert tokens[1] == Token(':', ':', ' ')
     assert tokens[2] == Token('color', RGBA(17, 34, 51, 0.67))
     assert tokens[4] == Token('color', RGBA(170, 187, 204, 1))
@@ -164,11 +164,11 @@ def test_lexer_ident_colon_colors():
 def test_lexer_ident_space():
     lexer = Lexer('abc def klm:\n  xyz abc\n', {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('ident', Ident('abc', 'abc'))
+    assert tokens[0] == Token('ident', Ident('abc', ''))
     assert tokens[1] == Token('space')
-    assert tokens[2] == Token('ident', Ident('def', 'def'))
+    assert tokens[2] == Token('ident', Ident('def', ''))
     assert tokens[3] == Token('space')
-    assert tokens[4] == Token('ident', Ident('klm', 'klm'))
+    assert tokens[4] == Token('ident', Ident('klm', ''))
 
 
 def test_lexer_function_paren_braces_sep_unit():
@@ -180,10 +180,10 @@ def test_lexer_function_paren_braces_sep_unit():
                   '}\n',
                   {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('function', Ident('bg', Ident('null')), '')
+    assert tokens[0] == Token('function', Ident('bg', ''), '')
     assert tokens[1] == Token(')', ')', '')
     assert tokens[9] == Token('{', '{')
-    assert tokens[11] == Token('function', Ident('bg', Ident('null')), '')
+    assert tokens[11] == Token('function', Ident('bg', ''), '')
     assert tokens[13] == Token(';', None)
     assert tokens[16] == Token('unit', Unit(100.0, 'px'))
     assert tokens[18] == Token('}', '}')
@@ -213,7 +213,7 @@ def test_lexer_functions():
                   '}\n',
                   {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('function', Ident('mixin', Ident('null')), '')
+    assert tokens[0] == Token('function', Ident('mixin', ''), '')
     anon_fun_token = Token('function', Ident('anonymous'))
     anon_fun_token.anonymous = True
     assert tokens[8] == anon_fun_token
@@ -247,7 +247,7 @@ def test_lexer_urlchars_important():
                   '!important foo', {})
     tokens = [token for token in lexer]
     assert tokens[1] == Token('string', String('/images/foo.png', '"'))
-    assert tokens[4] == Token('ident', Ident('!important', '!important'))
+    assert tokens[4] == Token('ident', Literal('!important'))
 
 
 def test_lexer_escaped():

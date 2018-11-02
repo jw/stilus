@@ -36,6 +36,7 @@ class Parser:
         self.css = 0
         self.parent = None
         self.selector_scope = None
+        self.bracketed = None
 
     #
     # Selector composite tokens.
@@ -223,7 +224,6 @@ class Parser:
         i = 1
         la = self.lookahead(i)
         while True:
-            print(f'la: {la}')
             if la.type in ['indent', 'outdent', 'newline', 'eos']:
                 return False
             if la.type == type:
@@ -232,12 +232,13 @@ class Parser:
             la = self.lookahead(i)
 
     def selector_token(self):
+        """Valid selector tokens"""
         if self.is_selector_token(1):
             if '{' == self.peek().type:
 
                 if not self.line_contains('}'):
                     # unclosed - must be a block
-                    return
+                    return None
 
                 # check if ':' is within the braces.
                 # though not required by Stylus, chances
@@ -251,10 +252,12 @@ class Parser:
                         # check empty block
                         if i == 2 or (i == 3 and
                                       self.lookahead(i - 1).type == 'space'):
-                            return
+                            return None
                         break
                     if la.type == ':':
-                        return
+                        return None
+                    i += 1
+                    la = self.lookahead(i)
 
             return self.next()
         return None
@@ -690,16 +693,14 @@ class Parser:
                     arr.append(Literal(f'{tok.value.name}('))
                 elif tok.type == 'ident':
                     # FIXME: string vs name?
-                    if tok.value.name:
-                        arr.append(Literal(tok.value.name))
-                    else:
-                        arr.append(Literal(tok.value.string))
+                    arr.append(Literal(tok.value.string))
                 else:
                     arr.append(Literal(tok.value))
                     if tok.space:
                         arr.append(Literal(' '))
             else:
                 break
+        print(arr)
         return arr
 
     def stmt_ident(self):

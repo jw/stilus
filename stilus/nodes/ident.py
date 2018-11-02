@@ -19,13 +19,16 @@ class Ident(Node):
     def __repr__(self):
         return self.__str__()
 
+    def __key(self):
+        return self.name, self.value, self.mixin
+
     def __eq__(self, other):
         if isinstance(other, Ident):
-            return self.string == other.string
+            return self.__key() == other.__key()
         return False
 
     def __hash__(self):
-        return hash(self.string)
+        return hash(self.__key())
 
     def clone(self):
         return copy.deepcopy(self)

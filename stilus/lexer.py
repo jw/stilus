@@ -25,12 +25,15 @@ class Token:
     def __repr__(self):
         return str(self)
 
+    def __key(self):
+        return self.type, self.value, self.space, self.anonymous
+
+    def __hash__(self):
+        return hash(self.__key())
+
     def __eq__(self, other):
         if isinstance(other, Token):
-            return self.type == other.type and \
-                   self.value == other.value and \
-                   self.space == other.space and \
-                   self.anonymous == other.anonymous
+            return self.__key() == other.__key()
         return False
 
 
@@ -438,7 +441,6 @@ class Lexer:
             braces = 1
             css = ''
             for c in self.s:
-                print(f'Handling {c} in {self.s}]')
                 if c == '{':
                     braces += 1
                 elif c == '}':
