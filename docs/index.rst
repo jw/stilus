@@ -14,6 +14,7 @@ Nothing is written yet!
 
    foo.md
    bar.rst
+   todo.rst
 
 
 Indices and tables
