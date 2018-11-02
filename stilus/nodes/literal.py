@@ -17,11 +17,16 @@ class Literal(Node):
     def __repr__(self):
         return self.__str__()
 
+    def __key(self):
+        return self.string, self.prefixed
+
     def __hash__(self):
-        return hash(self.value)
+        return hash(self.__key())
 
     def __eq__(self, other):
-        return self.value == other.value
+        if isinstance(other, Literal):
+            return self.__key() == other.__key()
+        return False
 
     def clone(self):
         return copy.deepcopy(self)
