@@ -13,6 +13,10 @@ def test_parser():
     # print(node)
 
 
-# if __name__ == '__main__':
-#     parser = Parser('abc\n  color: red\n', {})
-#     print(parser.parse())
+def test_parser_root():
+    parser = Parser('', {})
+    assert parser.parse() == Root()
+
+
+if __name__ == '__main__':
+    test_parser_root()
