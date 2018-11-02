@@ -220,8 +220,16 @@ class Parser:
             return value.name in self.pseudo_selectors
 
     def line_contains(self, type):
-        # TODO: implement me
-        pass
+        i = 1
+        la = self.lookahead(i)
+        while True:
+            print(f'la: {la}')
+            if la.type in ['indent', 'outdent', 'newline', 'eos']:
+                return False
+            if la.type == type:
+                return True
+            i += 1
+            la = self.lookahead(i)
 
     def selector_token(self):
         if self.is_selector_token(1):
