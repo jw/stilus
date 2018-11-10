@@ -26,7 +26,6 @@ class ParseError(Exception):
     pass
 
 
-# FIXME: clean up and test this class
 class Parser:
 
     def __init__(self, s, options: dict):
@@ -676,7 +675,7 @@ class Parser:
             return group.nodes
 
         self.state.append('selector')
-        group.block = self.block(group)
+        group.set_block(self.block(group))
         self.state.pop()
 
         return group

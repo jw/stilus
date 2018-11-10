@@ -1,5 +1,6 @@
+from stilus import stilus
 
 
 def test_stylus():
-    # assert stilus.render('abc\n\tdef\n\tklm\n', {}) is None
-    assert True
+    first_compile = 'abc {\n  color: red\n}\n'
+    assert stilus.render('abc\n  color: red\n', {}) == first_compile
