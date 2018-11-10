@@ -4,17 +4,22 @@ from stilus.lexer import Lexer, Token
 from stilus.nodes.binop import BinOp
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import true
+from stilus.nodes.call import Call
 from stilus.nodes.each import Each
 from stilus.nodes.expression import Expression
+from stilus.nodes.function import Function
 from stilus.nodes.group import Group
+from stilus.nodes.ident import Ident
 from stilus.nodes.ifnode import If
 from stilus.nodes.literal import Literal
+from stilus.nodes.member import Member
 from stilus.nodes.node import Node
 from stilus.nodes.property import Property
 from stilus.nodes.root import Root
 from stilus.nodes.selector import Selector
 from stilus.nodes.ternary import Ternary
 from stilus.nodes.unaryop import UnaryOp
+from stilus.units import units
 
 
 class ParseError(Exception):
@@ -25,6 +30,7 @@ class ParseError(Exception):
 class Parser:
 
     def __init__(self, s, options: dict):
+        self.cond = None
         self.s = s
         self.options = options
         self.lexer = Lexer(s, options)
@@ -181,8 +187,8 @@ class Parser:
             value = ''
         raise ParseError(message.format(peek='"{}{}"'.format(t, value)))
 
-    def accept(self, type):
-        if self.peek().type == type:
+    def accept(self, types):
+        if self.peek().type in types:
             return self.next()
         return None
 
@@ -202,7 +208,12 @@ class Parser:
     def lookahead(self, n):
         return self.lexer.lookahead(n)
 
-    def is_selector_token(self, n):
+    def is_selector_token(self, n: int) -> bool:
+        """
+        Check if the token at n is a valid selector token.
+        :param n:
+        :return:
+        """
         la = self.lookahead(n).type
         if la == 'for':
             return self.bracketed
@@ -287,6 +298,7 @@ class Parser:
                  'indent' == self.lookahead(i + 2).type):
             return False
 
+        # assume selector when an ident is followed by a selector
         while 'ident' == self.lookahead(i).type and \
                 ('newline' == self.lookahead(i + 1).type or
                  ',' == self.lookahead(i + 1).type):
@@ -644,7 +656,7 @@ class Parser:
         is_root = self.current_state() == 'root'
 
         while True:
-            self.accept('newline')  # clobber newline after ,
+            self.accept('newline')  # clobber newline after ','
             arr = self.selector_parts()
 
             # push the selector
@@ -656,6 +668,7 @@ class Parser:
                 selector.column = arr[0].column
                 group.push(selector)
 
+            # CHECK ME: True or False; huh?
             if (self.accept(',') or self.accept('newline')) is None:
                 break
 
@@ -669,6 +682,7 @@ class Parser:
         return group
 
     def selector_parts(self) -> deque:
+        """Selector candidates, stitched together to form a selector."""
         arr = deque()
         while True:
             tok = self.selector_token()
@@ -684,6 +698,7 @@ class Parser:
                     literal.prefixed = True
                     arr.append(literal)
                 elif tok.type == 'comment':
+                    # ignore comments
                     pass
                 elif tok.type in ['color', 'unit']:
                     arr.append(Literal(tok.value.raw))
@@ -700,7 +715,6 @@ class Parser:
                         arr.append(Literal(' '))
             else:
                 break
-        print(arr)
         return arr
 
     def stmt_ident(self):
@@ -843,12 +857,15 @@ class Parser:
         return segs
 
     def expression(self):
-        # TODO: add lineno and column
+        """negation+"""
         expr = Expression()
         self.state.append('expression')
         while True:
+
             node = self.negation()
             if not node:
+                break
+                # fixme
                 self.error('unexpected token {peek} in expression')
             expr.push(node)
         self.state.pop()
@@ -869,35 +886,35 @@ class Parser:
         return node
 
     def list(self):
+        """expression (',' expression)*"""
         node = self.expression()
 
-        while True:
-            next = self.accept(',')
-            if next:
-                if node.is_list:
-                    list.append(self.expression())
-                else:
-                    list = Expression(true)
-                    list.push(node)
-                    list.push(self.expression())
-                    node = list
+        while self.accept(','):
+            if node.is_list:
+                list.append(self.expression())
             else:
-                break
+                list = Expression(true)
+                list.push(node)
+                list.push(self.expression())
+                node = list
+
+        return node
 
     def logical(self):
         node = self.typecheck()
         while True:
-            if self.peek().type in ['&&', '||']:
-                op = self.next()
+            op = self.accept(['&&', '||'])
+            if op:
                 node = BinOp(op.type, node, self.typecheck())
             else:
                 break
+        return node
 
     def typecheck(self):
         node = self.equality()
         while True:
-            if self.peek().type == 'is a':
-                op = self.next()
+            op = self.accept('is a')
+            if op:
                 self.operand = True
                 if not node:
                     self.error(f'illegal unary "{op}", '
@@ -911,32 +928,204 @@ class Parser:
     def equality(self):
         node = self.inn()
         while True:
-            type = self.peek().type
-            if type in ['==', '!=']:
-                op = self.next()
+            op = self.accept(['==', '!='])
+            if op:
                 self.operand = True
                 if not node:
                     self.error(f'illegal unary "{op}", '
                                f'missing left-hand operand')
                 node = BinOp(op.type, node, self.inn())
+                self.operand = False
             else:
                 break
+        return node
 
     def inn(self):
         node = self.relational()
-        while True:
-            type = self.peek().type
-            if type == 'in':
-                self.next()
-                if not node:
-                    self.error('illegal unary "in", '
-                               'missing left-hand operand')
-                node = BinOp('in', node, self.relational())
-            else:
-                break
+        while self.accept('in'):
+            self.operand = True
+            if not node:
+                self.error('illegal unary "in", '
+                           'missing left-hand operand')
+            node = BinOp('in', node, self.relational())
+            self.operand = False
+        return node
 
     def relational(self):
-        pass
+        node = self.range()
+        op = self.accept(['>=', '<=', '<', '>'])
+        if op:
+            self.operand = True
+            if not node:
+                self.error(f'illegal unary "{op}", '
+                           f'missing left-hand operand')
+            node = BinOp(op.type, self.range())
+            self.operand = False
+        return node
 
     def function_call(self):
-        pass
+        with_block = self.accept('+')
+        if 'url' == self.peek().value.name:
+            return self.url()
+        name = self.expect('function').value.name
+        self.state.append('function arguments')
+        self.parens += 1
+        args = self.args()
+        self.expect(')')
+        self.parems -= 1
+        self.state.pop()
+        call = Call(name, args)
+        if with_block:
+            self.state.append('function')
+            call.block = self.block(call)
+            self.state.pop()
+        return call
+
+    def range(self):
+        node = self.additive()
+        op = self.accept(['...', '..'])
+        if op:
+            self.operand = True
+            if not node:
+                self.error(f'illegal unary "{op}", missing left-hand operand')
+            node = BinOp(op.value, node, self.additive())
+            self.operand = False
+        return node
+
+    def additive(self):
+        node = self.multiplicative()
+        op = self.accept(['+', '-'])
+        if op:
+            self.operand = True
+            node = BinOp(op.type, node, self.multiplicative())
+            self.operand = False
+        return node
+
+    def multiplicative(self):
+        node = self.defined()
+        op = self.accept(['**', '*', '/', '%'])
+        if op:
+            self.operand = True
+            if '/' == op and self.in_property and len(self.parens) < 0:
+                self.stash.append(Token('literal', Literal('/')))
+                self.operand = False
+                return node
+            else:
+                if not node:
+                    self.error(f'illegal unary "{op}", '
+                               f'missing left-hand operand')
+                    node = BinOp(op.type, node, self.defined())
+                    self.operand = False
+        return node
+
+    def defined(self):
+        node = self.unary()
+        if self.accept('is defined'):
+            if not node:
+                self.error(f'illegal unary "is defined", '
+                           f'missing left-hand operand')
+            node = BinOp('is defined', node)
+        return node
+
+    def unary(self):
+        op = self.accept(['!', '~', '+', '-'])
+        if op:
+            self.operand = True
+            node = self.unary()
+            if not node:
+                self.error(f'illegal unary "{op}"')
+            node = UnaryOp(op.type, node)
+            self.operand = False
+            return node
+        return self.subscript()
+
+    def subscript(self):
+        node = self.member()
+        while self.accept('['):
+            node = BinOp('[]', node, self.expression())
+            self.expect(']')
+        if self.accept('='):
+            node.op += '='
+            node.value = self.list()
+            # @block suppprt
+            if node.value.is_empty():
+                self.assign_atblock(node.value)
+        return node
+
+    def member(self):
+        node = self.primary()
+        if node:
+            while self.accept('.'):
+                id = Ident(self.expect('ident').value.string)
+                node = Member(node, id)
+            self.skip_spaces()
+            if self.accept('='):
+                node.value = self.list()
+                # @block support
+                if node.value.is_empty():
+                    self.assign_atblock(node.value)
+        return node
+
+    def primary(self):
+        self.skip_spaces()
+
+        # parenthesis
+        if self.accept('('):
+            self.parens += 1
+            expr = self.expression()
+            paren = self.expect(')')
+            self.parens -= 1
+            if self.accept('%'):
+                expr.push(Ident('%'))
+            tok = self.peek()
+            # (1 + 2)px, (1 + 2)em, etc.
+            if not paren.space and 'ident' == tok.type and \
+                    tok.value.string not in units:
+                self.next()
+            return expr
+
+        tok = self.peek()
+
+        # primitive
+        if tok.type in ['null', 'unit', 'color', 'string', 'literal',
+                        'boolean', 'comment']:
+            return self.next().value
+        elif not self.cond and tok.type == '{':
+            return self.object()
+        elif tok.type == 'atblock':
+            return self.atblock()
+        # property lookup
+        elif tok.type == 'atrule':
+            id = Ident(self.next().value)
+            id.property = True
+            return id
+        elif tok.type == 'ident':
+            return self.ident()
+        elif tok.type == 'function':
+            if tok.anonymous:
+                return self.fuction_definition()
+            else:
+                return self.function_call()
+
+    def fuction_definition(self):
+        name = self.expect('function').value.name
+
+        # params
+        self.state.append('function param')
+        self.skip_whitespace()
+        params = self.params()
+        self.skip_whitespace()
+        self.expect(')')
+        self.state.pop()
+
+        # body
+        self.state.push('function')
+        fn = Function(name, params)
+        fn.block = self.block(fn)
+        self.state.pop()
+        return Ident(name, fn)
+
+    def id(self):
+        tok = self.expect('ident')
+        self.accept('space')
+        return tok.value
