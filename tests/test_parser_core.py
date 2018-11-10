@@ -12,8 +12,6 @@ def test_parser_construct():
     assert parser.css == 0
     assert parser.parens == 0
     assert parser.prefix == ''
-    # node = parser.parse()
-    # print(node)
 
 
 def test_parser_empty_string_to_root():

@@ -2,7 +2,9 @@ from collections import deque
 from unittest.mock import MagicMock
 
 from stilus.lexer import Token
+from stilus.nodes.ident import Ident
 from stilus.nodes.literal import Literal
+from stilus.nodes.null import null
 from stilus.parser import Parser
 
 
@@ -41,3 +43,17 @@ def test_parser_line_contains():
     tokens = [Token('space'), Token('{'), Token('outdent')]
     parser.lexer.lookahead = MagicMock(side_effect=tokens)
     assert parser.line_contains('{') is True
+
+
+def test_parser_list():
+    parser = Parser('color: red\n', {})
+    list = parser.list()
+    assert len(list) == 1
+    assert list.nodes[0] == Ident('color', null, False)
+
+
+def test_parser_property():
+    parser = Parser('color: red\n', {})
+    property = parser.property()
+    assert property.segments[0] == Ident('color', null, False)
+    assert property.expr.nodes[0] == Ident('red', null, False)
