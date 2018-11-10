@@ -14,7 +14,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'stilus'
-DESCRIPTION = 'A Stylus css compile in Python.'
+DESCRIPTION = 'A Stylus css compiler in Python.'
 URL = 'https://github.com/jw/stilus'
 EMAIL = 'jw@elevenbits.com'
 AUTHOR = 'Jan Willems'
