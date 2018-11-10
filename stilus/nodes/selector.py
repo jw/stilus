@@ -11,7 +11,7 @@ class Selector(Node):
         self.inherits = True
         self.segments = segments
         self.optional = False
-        self.block = None  # FIXME: should this be here?
+        self.block = None
 
     def __str__(self):
         string = ''.join(self.segments)

@@ -7,9 +7,9 @@ class Visitor:
         self.root = root
 
     def visit(self, node: Node):
-        method = f'visit{node.name}'
+        method = f'visit{node.name.capitalize()}'
         if self.is_callable(method):
-            return self.method(node)
+            return getattr(self, method)(node)
         return node
 
     def is_callable(self, method: str):
