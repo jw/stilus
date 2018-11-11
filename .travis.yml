@@ -8,3 +8,6 @@ install: "make"
 script:
   - flake8
   - python setup.py pytest
+
+after_success:
+  - codecov
