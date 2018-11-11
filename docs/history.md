@@ -1,13 +1,21 @@
 ## History
 
-### 0.4.0
+### 0.4.0 
 
- - First compile of a very simple app
+The first compile.
+
+ - First compile of a very simple styl: `abc\n  color: red\n`.
+ - Completed the parser for 90% and finalized the lexer.
+ - Created a very basic compiler.
+ - Added more nodes (70% complete) and added the stack.
 
 ### 0.3.0
 
- - Created CI via Travis; Added flake8
+CI and documentation.
+
+ - Created CI via Travis; Added flake8.
  - Created Sphinx documentation.
+ - Completed the lexer.
 
 ### 0.2.0
 
@@ -20,6 +28,8 @@
 
 
 ### 0.0.1
+
+Hello there!
 
  - Basic Python 3.7 setup, using pipenv and a basic setup.py.
  - Created a Stilus hello world.
