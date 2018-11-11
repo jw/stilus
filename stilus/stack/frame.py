@@ -4,7 +4,7 @@ from stilus.stack.scope import Scope
 
 class Frame:
 
-    def __init__(self, block: Block, parent: Block=None):
+    def __init__(self, block: Block, parent: Block = None):
         self._scope = None if block.scope is False else Scope()
         self.block = block
         self.parent = parent
