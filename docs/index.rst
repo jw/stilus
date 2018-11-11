@@ -6,15 +6,13 @@
 Welcome to the stilus documentation!
 ====================================
 
-Nothing is written yet!
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   foo.md
-   bar.rst
-   todo.rst
+   workflow.md
+   history.md
+   todo.md
 
 
 Indices and tables

@@ -17,7 +17,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 
-import recommonmark.Parser  # noqa
+import recommonmark  # noqa
 
 # -- Project information -----------------------------------------------------
 
