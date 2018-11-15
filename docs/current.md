@@ -1,4 +1,4 @@
-### 0.5.0
+### Current tasks (0.5.0)
 
  - [x] Check `poetry`, `pylama` and `radon`: will not use it.
  - [x] Document the history, the todo's, the workflow
@@ -7,5 +7,5 @@
  - [ ] Fix the space problem
  - [ ] Fix the string problem
  - [ ] Fix the stack problem
- - [ ] Improve the compiler
+ - [ ] Finalize the compiler
  
