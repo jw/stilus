@@ -10,8 +10,8 @@ Welcome to the stilus documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   future.md
    current.md
-
    workflow.md
    history.md
    todo.md
