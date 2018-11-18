@@ -7,14 +7,17 @@ from stilus.nodes.boolean import true
 from stilus.nodes.call import Call
 from stilus.nodes.each import Each
 from stilus.nodes.expression import Expression
+from stilus.nodes.feature import Feature
 from stilus.nodes.function import Function
 from stilus.nodes.group import Group
 from stilus.nodes.ident import Ident
 from stilus.nodes.ifnode import If
 from stilus.nodes.literal import Literal
+from stilus.nodes.media import Media
 from stilus.nodes.member import Member
 from stilus.nodes.node import Node
 from stilus.nodes.property import Property
+from stilus.nodes.query_list import QueryList
 from stilus.nodes.root import Root
 from stilus.nodes.selector import Selector
 from stilus.nodes.ternary import Ternary
@@ -23,7 +26,14 @@ from stilus.units import units
 
 
 class ParseError(Exception):
-    pass
+
+    def __init__(self, message, filename=None, lineno=None,
+                 column=None, input=None):
+        self.message = message
+        self.filename = filename
+        self.lineno = lineno
+        self.column = column
+        self.input = input
 
 
 class Parser:
@@ -42,6 +52,7 @@ class Parser:
         self.parent = None
         self.selector_scope = None
         self.bracketed = None
+        self.in_property = None
 
     #
     # Selector composite tokens.
@@ -49,7 +60,7 @@ class Parser:
     selector_tokens = [
         'ident',
         'string',
-        'selector',
+        'stmt_selector',
         'function',
         'comment',
         'boolean',
@@ -209,7 +220,7 @@ class Parser:
 
     def is_selector_token(self, n: int) -> bool:
         """
-        Check if the token at n is a valid selector token.
+        Check if the token at n is a valid stmt_selector token.
         :param n:
         :return:
         """
@@ -242,7 +253,7 @@ class Parser:
             la = self.lookahead(i)
 
     def selector_token(self):
-        """Valid selector tokens"""
+        """Valid stmt_selector tokens"""
         if self.is_selector_token(1):
             if '{' == self.peek().type:
 
@@ -297,7 +308,7 @@ class Parser:
                  'indent' == self.lookahead(i + 2).type):
             return False
 
-        # assume selector when an ident is followed by a selector
+        # assume stmt_selector when an ident is followed by a stmt_selector
         while 'ident' == self.lookahead(i).type and \
                 ('newline' == self.lookahead(i + 1).type or
                  ',' == self.lookahead(i + 1).type):
@@ -305,7 +316,7 @@ class Parser:
 
         while self.is_selector_token(i) or ',' == self.lookahead(i).type:
 
-            if 'selector' == self.lookahead(i).type:
+            if 'stmt_selector' == self.lookahead(i).type:
                 return True
 
             if '&' == self.lookahead(i + 1).type:
@@ -344,7 +355,7 @@ class Parser:
                 return False
 
             # the ':' token within braces signifies
-            # a selector. ex: "foo{bar:'baz'}"
+            # a stmt_selector. ex: "foo{bar:'baz'}"
             if '{' == self.lookahead(i).type:
                 brace = True
             elif '}' == self.lookahead(i).type:
@@ -352,9 +363,9 @@ class Parser:
             if brace and ':' == self.lookahead(i).type:
                 return True
 
-            # '{' preceded by a space is considered a selector.
+            # '{' preceded by a space is considered a stmt_selector.
             # for example "foo{bar}{baz}" may be a property,
-            # however "foo{bar} {baz}" is a selector
+            # however "foo{bar} {baz}" is a stmt_selector
             if 'space' == self.lookahead(i).type and \
                     '{' == self.lookahead(i + 1).type:
                 return True
@@ -428,7 +439,7 @@ class Parser:
                 return 'ident' == type or '{' == type
 
     def state_allows_selector(self):
-        if self.current_state() in ['root', 'atblock', 'selector',
+        if self.current_state() in ['root', 'atblock', 'stmt_selector',
                                     'conditional', 'function', 'atrule',
                                     'for']:
             return True
@@ -473,7 +484,7 @@ class Parser:
             return self.keyframes()
         elif type == '-moz-document':
             return self.mozdocument()
-        elif type in ['comment', 'selector', 'literal', 'charset',
+        elif type in ['comment', 'stmt_selector', 'literal', 'charset',
                       'namespace', 'import', 'require', 'extend',
                       'media', 'atrule', 'ident', 'scope', 'supports',
                       'unless', 'function', 'for', 'if']:
@@ -483,24 +494,24 @@ class Parser:
         elif type == '{':
             return self.property()
         else:
-            if self.state_allows_selectior():
+            if self.state_allows_selector():
                 if type in ['color', '~', '>', '<', ':',
                             '&', '&&', '[', '.', '/']:
-                    return self.selector()
+                    return self.stmt_selector()
                 elif type == '..':
                     # relative reference
                     if '/' == self.lookahead(2).type:
-                        return self.selector()
+                        return self.stmt_selector()
                 elif type == '+':
                     if 'function' == self.lookahead(2).type:
-                        return self.function_call()
+                        return self.stmt_function()
                     else:
-                        return self.selector()
+                        return self.stmt_selector()
                 elif type == '*':
                     return self.property()
                 elif type == 'unit':
                     if self.looks_like_keyframe():
-                        return self.selector()
+                        return self.stmt_selector()
                 elif type == '-':
                     if '{' == self.lookahead(2).type:
                         return self.property()
@@ -510,82 +521,95 @@ class Parser:
             self.error('unexpected {peek}')
         return expr
 
-    def ident(self):
-        i = 2
-        la = self.lookahead(i).type
+    def stmt_comment(self):
+        node = self.next().value
+        self.skip_spaces()
+        return node
 
-        while 'space' == la:
-            i += 1
-            la = self.lookahead(i).type
+    # todo: implement me!
+    def stmt_literal(self):
+        pass
 
-        if la in ['=', '?=', '-=', '+=', '*=', '/=', '%=']:
-            self.assignment()
-        elif la == '.':
-            # member
-            if 'space' == self.lookahead(i - 1).type:
-                return self.selector()
-            if self._ident == self.peek():
-                return self.id()
-            i += 1
-            while '=' != self.lookahead(i) and self.lookahead(i).type \
-                    not in ['[', ',', 'newline', 'indent', 'eos']:
-                pass
-            if '=' == self.lookahead(i).type:
-                self._indent = self.peek()
-                return self.expression()
-            elif self.looks_like_selector() and self.state_allows_selector():
-                return self.selector()
-        elif la == '[':
-            # assignment []=
-            if self._ident == self.peel():
-                return self.id()
-            i += 1
-            while self.lookahead(i).type not in [']', 'selector', 'eos']:
-                pass
-            if '=' == self.lookahead(i).type:
-                self._ident = self.peek()
-                return self.expression()
-            elif self.looks_like_selector() and self.state_allows_selector():
-                return self.selector()
-        elif la in ['-', '+', '/', '*', '%', '**', '&&', '||', '>', '<',
-                    '>=', '<=', '!=', '==', '?', 'in', 'is a', 'is defined']:
-            if self._ident == self.peek():
-                # Prevent cyclic.ident, return literal
-                return self.id()
-            else:
-                self._ident = self.peek()
-                if self.current_state() in ['for', 'selector']:
-                    # unary op or selector in property / for
-                    return self.property()
-                elif self.current_state() in ['root', 'atblock', 'atrule']:
-                    # part of a selector
-                    if la == '[':
-                        self.subscript()
-                    else:
-                        self.selector()
-                elif self.current_state() in ['function', 'conditional']:
-                    if self.looks_like_selector():
-                        return self.selector()
-                    else:
-                        return self.expression()
-                else:
-                    # do not disrupt the ident when an operand
-                    if self.id():
-                        return self.operand
-                    else:
-                        return self.expression()
-        else:
-            # selector or property
-            if self.current_state() == 'root':
-                return self.selector()
-            elif self.current_state() in ['for', 'selector', 'function',
-                                          'conditional', 'atblock', 'atrule']:
-                return self.property()
-            else:
-                id = self.id()
-                if self.previous_state() == 'interpolation':
-                    id.mixin = true
-                return id
+    # todo: implement me!
+    def stmt_charset(self):
+        pass
+
+    # todo: implement me!
+    def stmt_namespace(self):
+        pass
+
+    # todo: implement me!
+    def stmt_import(self):
+        pass
+
+    # todo: implement me!
+    def stmt_require(self):
+        pass
+
+    # todo: implement me!
+    def stmt_extend(self):
+        pass
+
+    def stmt_media(self):
+        self.expect('media')
+        self.state.append('atrule')
+        media = Media(self.queries())
+        media.block(self.block(media))
+        self.state.pop()
+
+    def queries(self):
+        queries = QueryList()
+        while True:
+            self.skip(['comment', 'newline', 'space'])
+            queries.append(self.query())
+            self.skip(['comment', 'newline', 'space'])
+            if not self.accept(','):
+                break
+        return queries
+
+    # todo: implement me!
+    def query(self):
+        pass
+
+    def feature(self):
+        self.skip_spaces_and_comments()
+        self.expect('(')
+        self.skip_spaces_and_comments()
+        node = Feature(self.interpolate())
+        self.skip_spaces_and_comments()
+        self.accept(':')
+        self.skip_spaces_and_comments()
+        self.in_property = True
+        node.expr = self.list()
+        self.in_property = False
+        self.skip_spaces_and_comments()
+        self.expect(')')
+        self.skip_spaces_and_comments()
+        return node
+
+    # todo: implement me!
+    def stmt_atrule(self):
+        pass
+
+    # todo: implement me!
+    def stmt_scope(self):
+        pass
+
+    # todo: implement me!
+    def stmt_supports(self):
+        pass
+
+    # todo: implement me!
+    def stmt_unless(self):
+        pass
+
+    # todo: implement me!
+    def stmt_for(self):
+        pass
+
+    # todo: implement me!
+    def stmt_if(self):
+        pass
 
     def block(self, node, scope=None):
         block = self.parent = Block(self.parent, node)
@@ -640,16 +664,7 @@ class Parser:
         self.parent = block.parent
         return block
 
-    def stmt_comment(self):
-        node = self.next().value
-        self.skip_spaces()
-        return node
-
-    def stmt_for(self):
-        # TODO: implement me!
-        pass
-
-    def selector(self):
+    def stmt_selector(self):
         scope = self.selector_scope
         group = Group()
         is_root = self.current_state() == 'root'
@@ -658,7 +673,7 @@ class Parser:
             self.accept('newline')  # clobber newline after ','
             arr = self.selector_parts()
 
-            # push the selector
+            # push the stmt_selector
             if is_root and scope:
                 arr.appendleft(Literal(f'{scope} '))
             if len(arr) > 0:
@@ -671,17 +686,17 @@ class Parser:
             if (self.accept(',') or self.accept('newline')) is None:
                 break
 
-        if 'selector-parts' == self.current_state():
+        if 'stmt_selector-parts' == self.current_state():
             return group.nodes
 
-        self.state.append('selector')
+        self.state.append('stmt_selector')
         group.set_block(self.block(group))
         self.state.pop()
 
         return group
 
     def selector_parts(self) -> deque:
-        """Selector candidates, stitched together to form a selector."""
+        """Selector candidates, stitched together to form a stmt_selector."""
         arr = deque()
         while True:
             tok = self.selector_token()
@@ -730,7 +745,7 @@ class Parser:
         elif la == '.':
             # member
             if 'space' == self.lookahead(i - 1).type:
-                return self.selector()
+                return self.stmt_selector()
             if self._ident == self.peek():
                 return self.id()
             i += 1
@@ -742,7 +757,7 @@ class Parser:
                 return self.expression()
             elif self.looks_like_attribute_selector() and \
                     self.state_allows_selector():
-                return self.selector()
+                return self.stmt_selector()
             else:
                 # huh?
                 pass
@@ -751,14 +766,14 @@ class Parser:
             if self._indent == self.peek():
                 return self._id()
             while ']' != self.lookahead(i).type and \
-                    'selector' != self.lookahead(i) and \
+                    'stmt_selector' != self.lookahead(i) and \
                     'oes' != self.lookahead(i):
                 i += 1
             if '=' == self.lookahead(i).type:
                 self._indent = self.peek()
                 return self.expression()
             elif self.looks_like_selector() and self.state_allows_selector():
-                return self.selector()
+                return self.stmt_selector()
         elif la in ['-', '+', '/', '*', '%', '**', '&&', '||', '>', '<', '>=',
                     '<=', '!=', '==', '?', 'in', 'is a', 'is defined']:
             # operation
@@ -767,16 +782,16 @@ class Parser:
                 return self.id()
             else:
                 self._ident = self.peek()
-                if self.current_state() in ['for', 'selector']:
+                if self.current_state() in ['for', 'stmt_selector']:
                     return self.property()
                 elif self.current_state() in ['root', 'atblock', 'atrule']:
                     if '[' == la:
                         return self.subscript()
                     else:
-                        return self.selector()
+                        return self.stmt_selector()
                 elif self.current_state() in ['function', 'conditional']:
                     if self.looks_like_selector():
-                        return self.selector()
+                        return self.stmt_selector()
                     else:
                         return self.expression()
                 else:
@@ -787,8 +802,8 @@ class Parser:
                         self.expression()
         else:
             if self.current_state() == 'root':
-                return self.selector()
-            elif self.current_state() in ['for', 'selector', 'function',
+                return self.stmt_selector()
+            elif self.current_state() in ['for', 'stmt_selector', 'function',
                                           'conditional', 'atblock', 'atrule']:
                 return self.property()
             else:
@@ -799,7 +814,7 @@ class Parser:
 
     def property(self):
         if self.looks_like_selector(True):
-            return self.selector()
+            return self.stmt_selector()
 
         # property
         ident = self.interpolate()
@@ -962,7 +977,7 @@ class Parser:
             self.operand = False
         return node
 
-    def function_call(self):
+    def stmt_function(self):
         with_block = self.accept('+')
         if 'url' == self.peek().value.name:
             return self.url()
@@ -1099,12 +1114,12 @@ class Parser:
             id.property = True
             return id
         elif tok.type == 'ident':
-            return self.ident()
+            return self.stmt_ident()
         elif tok.type == 'function':
             if tok.anonymous:
                 return self.fuction_definition()
             else:
-                return self.function_call()
+                return self.stmt_function()
 
     def fuction_definition(self):
         name = self.expect('function').value.name
