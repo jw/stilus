@@ -1,5 +1,6 @@
 from stilus.nodes.expression import Expression
 from stilus.nodes.node import Node
+from stilus.selector_parser import SelectorParser
 
 
 def unwrap(expression: Expression) -> Node:
@@ -69,3 +70,86 @@ def clamp_degrees(n):
 
 def clamp_percentage(n, smallest=0, largest=100):
     return max(smallest, min(n, largest))
+
+
+def compile_selectors(arr, leave_hidden=False):
+    """
+    Compile stmt_selector strings in `arr` from the bottom-up
+    to produce the stmt_selector combinations. For example
+    the following Stylus:
+
+    '''
+    ul
+      li
+      p
+        a
+          color: red
+    '''
+
+    would return:
+
+      [ 'ul li a', 'ul p a' ]
+
+    :param arr:
+    :param leave_hidden:
+    :return:
+    """
+    selectors = []
+    indent = ''  # todo: compiler.indent; move it to utils?
+    buf = []
+
+    def parse(selector, buf):
+        parts = [selector.value]
+        parents = []
+        string = SelectorParser(parts[0], parents, parts).parse()['val']
+
+        if buf:
+            for i, part in enumerate(buf):
+                parts.append(part)
+                parents.append(string)
+                child = SelectorParser(buf[i], parents, parts).parse()
+
+                if child.nested:
+                    string += ' ' + child.value
+                else:
+                    string = child.val
+
+        return string.strip()
+
+    def compile(arr, i):
+        if i:
+            for selector in arr[i]:
+                if not leave_hidden and selector.is_placeholder():
+                    return
+                if selector.inherits:
+                    buf.insert(0, selector.val)
+                    compile(arr, i - 1)
+                    buf.pop(0)
+                else:
+                    selectors.append(indent + parse(selector, buf))
+        else:
+            for selector in arr[0]:
+                if not leave_hidden and selector.is_placeholder():
+                    return
+                string = parse(selector, buf)
+                if string:
+                    selectors.append(indent + string)
+
+    compile(arr, len(arr) - 1)
+
+    return set(selectors)
+
+
+# todo: test me!
+def merge(a, b, deep):
+    for k in b:
+        if deep and k in a and a[k]:
+            node_a = unwrap(a[k]).first()
+            node_b = unwrap(b[k]).first()
+            if node_a.name == 'object' and node_b.name == 'object':
+                a[k].first().value = merge(node_a.values, node_b.values, deep)
+            else:
+                a[k] = b[k]
+        else:
+            a[k] = b[k]
+    return a

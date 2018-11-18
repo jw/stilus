@@ -66,7 +66,7 @@ def test_parser_property():
 
 def test_parser_selector():
     parser = Parser('abc\n  color: red\n', {})
-    selector = parser.selector()
+    selector = parser.stmt_selector()
     assert selector.name == 'group'
     assert type(selector) == Group
     assert len(selector.nodes) == 1

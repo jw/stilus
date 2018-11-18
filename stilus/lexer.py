@@ -143,85 +143,86 @@ class Lexer:
     def __iter__(self):
         return self
 
+    # todo: use a dict to clean this up?
     def advance(self):
         tok = self.eos()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.null()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.sep()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.keyword()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.urlchars()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.comment()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.newline()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.escaped()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.important()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.literal()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.anonymous_function()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.atrule()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.function()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.brace()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.paren()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.color()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.string()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.unit()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.namedop()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.boolean()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.unicode()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.ident()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.op()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.eol()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.space()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         tok = self.selector()
         if tok:
-            return tok
+            return self._tok_with_location(tok)
         return None
 
     def eos(self):
@@ -310,7 +311,7 @@ class Lexer:
         if match and match.group(0):
             selector = match.group(0)
             self._skip_string(selector)
-            return Token('selector', selector)
+            return Token('stmt_selector', selector)
 
     def space(self):
         """
@@ -703,3 +704,8 @@ class Lexer:
         if match:
             self._skip_string(match.group(0))
             return Token('ident', Ident(match.group(0)))
+
+    def _tok_with_location(self, tok):
+        tok.column = self.column
+        tok.lineno = self.lineno
+        return tok

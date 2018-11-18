@@ -14,7 +14,6 @@ def test_scope_lookup():
     scope.add(Ident('one', 1))
     scope.add(Ident('two'))
     scope.add(Ident('three', true))
-    print(scope.locals)
     assert len(scope.locals) == 3
     assert scope.lookup('one') == 1
     assert scope.lookup('two') == null

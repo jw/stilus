@@ -23,6 +23,5 @@ def test_frame_lookup():
     scope = Scope()
     scope.add(Ident('foo', 'bar'))
     frame._scope = scope
-    print(frame.lookup('foo'))
     assert frame.lookup('foo') == 'bar'
     assert frame.lookup('unknown') is None

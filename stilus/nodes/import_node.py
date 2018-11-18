@@ -1,17 +1,19 @@
 import copy
 import json
 
-from stilus.nodes.atrule import Atrule
+from stilus.nodes.node import Node
 
 
-class Media(Atrule):
+class Import(Node):
 
-    def __init__(self, value):
-        super().__init__('media')
-        self.value = value
+    def __init__(self, expr, once=False):
+        super().__init__()
+        self.path = expr
+        self.once = once
+        self.mtime = None
 
     def __str__(self):
-        return f'@media {self.value}'
+        return f'import({self.path}, {self.once}'
 
     def __repr__(self):
         return self.__str__()
@@ -20,10 +22,10 @@ class Media(Atrule):
         return hash(self.__key())
 
     def __key(self):
-        return self.value
+        return self.path, self.once
 
     def __eq__(self, other):
-        if isinstance(other, Media):
+        if isinstance(other, Import):
             return self.__key() == other.__key()
         return False
 
@@ -31,8 +33,10 @@ class Media(Atrule):
         return copy.deepcopy(self)
 
     def to_json(self):
-        return json.dumps({'__type': 'Media',
-                           'val': self.value,
+        return json.dumps({'__type': 'Import',
+                           'path': self.path,
+                           'once': self.once,
+                           'mtime': self.mtime,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})
