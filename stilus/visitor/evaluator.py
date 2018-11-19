@@ -3,7 +3,10 @@ import re
 from distutils import dirname
 
 from stilus import utils, colors
+from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
+from stilus.nodes.boolean import false, true, Boolean
+from stilus.nodes.call import Call
 from stilus.nodes.color import RGBA
 from stilus.nodes.expression import Expression
 from stilus.nodes.function import Function
@@ -14,6 +17,7 @@ from stilus.nodes.literal import Literal
 from stilus.nodes.null import null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 from stilus.parser import Parser, ParseError
 from stilus.stack.frame import Frame
 from stilus.stack.stack import Stack
@@ -45,6 +49,10 @@ class Evaluator(Visitor):
         self.require_history = {}
         self.result = 0
         self.current_block = None
+        self.current_scope = None
+        self.ignore_colors = None
+        self.property = None
+        self.bifs = {}  # todo: implement me!
 
     def import_file(self, node: Import, file, literal):
         import_stack = self.import_stack
@@ -235,6 +243,307 @@ class Evaluator(Visitor):
         # checkme: what is get?
         return obj.get(right.value)
 
+    def visit_keyframe(self, keyframes):
+        if keyframes.fabricated:
+            return keyframes
+        keyframes.value = self.interpolate(keyframes).strip()
+        val = self.lookup(keyframes.value)
+        if val:
+            keyframes.val = val.first().string  # || val.first().name
+        keyframes.set_block(self.visit(keyframes.get_block()))
+
+        if 'official' != keyframes.prefix:
+            return keyframes
+
+        for prefix in self.vendors:
+            # IE never had prefixes for keyframes
+            if 'ms' == prefix:
+                return
+            node = keyframes.clone()
+            node.value = keyframes.value
+            node.prefix = prefix
+            node.set_block(keyframes.get_block())
+            node.fabricated = True
+            self.current_block.append(node)
+
+        return null
+
+    def visit_function(self, fn):
+        # check local
+        local = self.stack.current_frame().scope()
+        if local:
+            self.warn(f'local {local.name} "fn.function_name" '
+                      f'previously defined in this scope')
+
+        # user-defined
+        user = self.functions[fn.function_name]
+        if user:
+            self.warn(f'user-defined function "{fn.function_name}" '
+                      f'is already defined')
+
+        # todo: check if build in function is already defined.
+        self.warn(f'built-in function "{fn.function_name}" '
+                  f'is already defined [NOT IMPLEMENTED YET!]')
+
+        return fn
+
+    def visit_each(self, each):
+        self.result += 1
+        expr = utils.unwrap(self.visit(each.expr))
+        len = len(expr.nodes)
+        val = Ident(each.value)
+        key = Ident(each.key)
+        scope = self.current_scope
+        block = self.current_block
+        vals = []
+        self.result -= 1
+
+        each.get_block().scope = False
+
+        def visit_body(key, value):
+            scope.add(value)
+            scope.add(key)
+            body = self.visit(each.get_block().clone())
+            vals.insert(body.nodes)
+
+        # for prop in obj
+        if len == 1 and 'object' == expr.nodes[0].name:
+            obj = expr.nodes[0]
+            for prop in obj.vals:
+                val.val = String(prop)
+                key.val = obj.get(prop)  # checkme: works?
+                visit_body(key, val)
+        else:
+            for i, n in enumerate(expr.nodes):
+                val.val = n
+                key.val = Unit(i)
+                visit_body(key, val)
+
+        self.mixin(vals, block)
+        if vals[len(vals)]:
+            return vals[len(vals)]
+        else:
+            null
+
+    def visit_call(self, call):
+        fn = self.lookup(call.function_name)
+
+        # url()
+        self.ignore_colors = 'url' == call.function_name
+
+        # variable function
+        if fn and 'expression' == fn.name:
+            fn = fn.nodes[0]
+
+        # not a function? try user-defined or built-ins
+        if fn and 'functuon' != fn.name:
+            fn = self.lookup_function(call.function_name)
+
+        # undefined function? render literal css
+        if not fn or fn.name != 'function':
+            if 'calc' == self.unvendorize(call.function_name):
+                literal = call.args.nodes and call.args.nodes[0]
+                if literal:
+                    ret = Literal(call.function_name + call.args.nodes[0])
+                else:
+                    ret = self.literal_call(call)
+            self.ignore_colors = False
+            return ret
+
+        self.calling.append(call.function_name)
+
+        # massive stack
+        if len(self.calling) > 200:
+            raise ParseError('Maximum stylus call stack size exceeded')
+
+        # first node in expression
+        if 'expression' == fn.function_name:
+            fn = fn.first()
+
+        # evaluate arguments
+        self.result += 1
+        args = self.visit(call.args)
+        for key in args.map:
+            args.map[key] = self.visit(args.map[key].clone())
+        self.result -= 1
+
+        if fn.fn:
+            # built-in
+            ret = self.invoke_builtin(fn.fn, args)
+        elif 'function' == fn.name:
+            # user-defined
+            # evaluate mixin block
+            if call.get_block():
+                call.set_block(self.visit(call.get_block()))
+            ret = self.invoke_fucntion(fn, args, call.get_block())
+
+        self.calling.pop()
+        self.ignore_colors = False
+
+        return ret
+
+    def visit_ident(self, ident):
+        if ident.property:
+            # property lookup
+            prop = self.lookup_property(ident.value)  # checkme: name?
+            if prop:
+                return self.visit(prop.expr.clone())
+            return null
+        elif ident.value.is_null():
+            # lookup
+            val = self.lookup(ident.name)
+            # object or block mixin
+            if val and ident.mixin:
+                self.mixin_node(val)
+        else:
+            # assign
+            self.result += 1
+            ident.val = self.visit(ident.val)
+            self.result -= 1
+            self.current_scope.add(ident)
+            return ident.value
+
+    def visit_binop(self, binop):
+        # special case 'is defined' pseudo binop
+        if 'is defined' == binop.op:
+            return self.is_defined(binop.left)
+
+        self.result -= 1
+        # visit operands
+        op = binop.op
+        left = self.visit(binop.left)
+        if '||' == op or '&&' == op:
+            right = binop.right
+        else:
+            right = self.visit(binop.right)
+
+        # hack (sic): ternary
+        if binop.val:
+            val = self.visit(binop.val)
+        else:
+            val = null
+
+        # operate
+        try:
+            return self.visit(left.operate(op, right, val))
+        except Exception as e:
+            # disregard coercion issues in equality
+            # checks, and simply return false
+            if 'coercionError' == e.name:  # fixme: use exception name
+                if op == '==':
+                    return false
+                elif op == '!=':
+                    return true
+            raise e
+
+    def visit_unaryop(self, unary):
+        op = unary.op
+        node = self.visit(unary.expr)
+
+        if '!' != op:
+            node = node.first().clone()
+            utils.assert_type(node, 'unit')
+
+        if op == '-':
+            node.value = -node.value
+        elif op == '+':
+            node.value = +node.value
+        elif op == '~':
+            node.value = ~node.value
+        elif op == '!':
+            return node.to_boolean().negate()
+
+        return node
+
+    def visit_ternary(self, ternary):
+        ok = self.visit(ternary.cond).to_boolean()
+        if ok.is_true():
+            return self.visit(ternary.true_expr)
+        else:
+            return self.visit(ternary.false_expr)
+
+    def visit_expression(self, expr):
+        for node in expr.nodes:
+            node = self.visit(node)
+
+        # support (n * 5)px etc
+        if self.castable(expr):
+            expr = self.cast(expr)
+
+        return expr
+
+    def visit_arguments(self, args):
+        return self.visit_expression(args)
+
+    def visit_property(self, prop):
+        name = self.interpolate(prop)
+        fn = self.lookup(name)
+        call = fn and 'function' == fn.first().name
+        literal = name in self.calling
+        _prop = self.property
+
+        if call and not literal and not prop.literal:
+            # function of the same name
+            args = Arguments.from_expression(utils.unwrap(prop.expr.clone()))
+            prop.name = name
+            self.property = prop
+            self.result += 1
+            self.property.expr = self.visit(prop.expr)
+            self.result -= 1
+            ret = self.visit(Call(name, args))
+            self.property = _prop
+            return ret
+        else:
+            # regular property
+            self.result += 1
+            prop.name = name
+            prop.literal = True
+            self.property = prop
+            prop.expr = self.visit(prop.expr)
+            self.propery = _prop
+            self.result -= 1
+            return prop
+
+    def visit_root(self, block):
+        if block != self.root:
+            # normalize cached imports
+            return self.visit(Block())
+
+        for i, node in enumerate(block.nodes):
+            block.index = i
+            node = self.visit(node)
+
+        return block
+
+    def invoke_builtin(self, fn, args):
+        """
+
+        :param fn:
+        :param args:
+        :return:
+        """
+        # map arguments to first node
+        # providing a nicer js api for
+        # built-in functions. Functions may specify that
+        # they wish to accept full expressions
+        # via .raw
+        if fn.raw:
+            args = args.nodes
+        else:
+            args = utils.params(fn)
+
+        # todo: implement me
+        raise NotImplementedError
+
+    def lookup(self, name):
+        if self.ignore_colors and name in colors:
+            return
+        val = self.stack.lookup(name)
+        if val:
+            return utils.unwrap(val)
+        else:
+            return self.lookup_function(name)
+
     def interpolate(self, node):
         is_selector = 'stmt_selector' == node.name
 
@@ -267,3 +576,20 @@ class Evaluator(Visitor):
             return ''.join(map(to_string, node.segments))
         else:
             return to_string(node)
+
+    def lookup_function(self, name):
+        fn = self.functions.get(name, self.bifs.get(name, None))
+        if fn:
+            return Function(name, fn)
+
+    def is_defined(self, node):
+        if 'ident' == node.name:
+            return Boolean(self.lookup(node.value))  # checkme: or string?
+        else:
+            raise ParseError(f'invalid "is defined" '
+                             f'check on non-variable {node}')
+
+    def warn(self, message):
+        if not self.warnings:
+            return
+        print(f'Warning: {message}')
