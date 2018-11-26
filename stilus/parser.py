@@ -29,6 +29,7 @@ class ParseError(Exception):
 
     def __init__(self, message, filename=None, lineno=None,
                  column=None, input=None):
+        super().__init__(message)
         self.message = message
         self.filename = filename
         self.lineno = lineno
@@ -778,7 +779,7 @@ class Parser:
                     '<=', '!=', '==', '?', 'in', 'is a', 'is defined']:
             # operation
             # prevent cyclic .ident, return literal
-            if self._ident - - self.peek():
+            if self._ident == self.peek():
                 return self.id()
             else:
                 self._ident = self.peek()

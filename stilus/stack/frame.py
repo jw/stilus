@@ -1,11 +1,16 @@
 from stilus.nodes.block import Block
+from stilus.nodes.null import null
 from stilus.stack.scope import Scope
 
 
+# todo: create getter and setter for scope or at least clean this up!
 class Frame:
 
     def __init__(self, block: Block, parent: Block = None):
-        self._scope = None if block.scope is False else Scope()
+        if callable(getattr(block, 'scope', None)):
+            self._scope = null if block.scope is False else Scope()
+        else:
+            self._scope = Scope()
         self.block = block
         self.parent = parent
 
@@ -26,6 +31,9 @@ class Frame:
         elif self.parent:
             return self.parent.scope
         return None
+
+    def set_scope(self, scope: Scope):
+        self._scope = scope
 
     def lookup(self, name):
         if self._scope:

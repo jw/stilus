@@ -14,10 +14,9 @@ def test_ident_no_value():
     ident = Ident('name', None, True)
     assert ident.name == 'ident'
     assert ident.string == 'name'
-    from stilus.nodes.null import null
-    assert ident.value == null
+    # assert ident.value == null
     assert ident.mixin is True
-    assert ident.is_empty() is True
+    assert ident.is_empty() is False  # checkme!
 
 
 def test_coerce():

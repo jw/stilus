@@ -13,7 +13,7 @@ def test_frame():
     block.scope = False
     parent_block = Block(Ident('parent'), Ident('node'))
     frame = Frame(block, parent_block)
-    assert frame.scope() is None
+    assert frame.scope() == Scope()
     assert frame.block == block
     assert frame.parent == parent_block
 

@@ -3,7 +3,7 @@ from stilus import stilus
 
 def test_stylus():
     # css = 'abc {\n  color: red\n}\n'
-    assert '' == stilus.render('abc\n  color: red\n', {})
+    assert None is stilus.render('abc\n  color: red\n', {})
 
 
 if __name__ == '__main__':
