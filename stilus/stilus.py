@@ -1,6 +1,6 @@
-from stilus.evaluator import Evaluator
 from stilus.parser import Parser
 from stilus.visitor.compiler import Compiler
+from stilus.visitor.evaluator import Evaluator
 
 
 class Renderer:

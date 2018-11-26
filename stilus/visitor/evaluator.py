@@ -2,7 +2,8 @@ import os
 import re
 from distutils import dirname
 
-from stilus import utils, colors
+from stilus import utils
+from stilus.colors import colors
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import false, true, Boolean
@@ -20,7 +21,9 @@ from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 from stilus.parser import Parser, ParseError
 from stilus.stack.frame import Frame
+from stilus.stack.scope import Scope
 from stilus.stack.stack import Stack
+from stilus.units import units
 from stilus.visitor.visitor import Visitor
 
 
@@ -37,13 +40,17 @@ class Evaluator(Visitor):
         self.prefix = options.get('prefix', '')
         self.filename = options.get('filename', None)
         self.include_css = options.get('include css', False)
-        self.resolve_url = self.functions.url and \
-            'resolver' == self.functions.url.name and \
-            self.functions.url.options
-        self.paths.push(dirname(options.get('filename', __file__)))
+
+        # checkme: incomplete
+        self.resolve_url = self.functions.get('url', None)
+
+        self.paths.append(dirname(options.get('filename', __file__)))
+
+        # checkme: where is this created?
         self.common = Frame(root)
-        self.stack.push(self.common)
-        self.warnings = options('warn', False)
+
+        self.stack.append(self.common)
+        self.warnings = options.get('warn', False)
         self.calling = []  # todo: remove, use stack
         self.import_stack = []
         self.require_history = {}
@@ -131,15 +138,18 @@ class Evaluator(Visitor):
         try:
             super().visit(node)
         except Exception as e:
-            if e.filename:
+            # fixme: this is very, very bad
+            if hasattr(e, 'filename'):
                 raise e
             try:
                 with open(e.filename) as f:
-                    e.input = f.read()
+                    f.read()  # fixme: was 'source = '
             except Exception:
                 pass
-            raise ParseError(filename=e.filename, lineno=node.lineno,
-                             column=node.column, input=e.input)
+            raise ParseError('oops', filename=node.filename,
+                             lineno=node.lineno,
+                             column=node.column,
+                             input=None)  # fixme!
 
     def setup(self):
         root = self.root
@@ -149,36 +159,49 @@ class Evaluator(Visitor):
         for file in self.imports:
             expr = Expression()
             expr.push(String(file))
-            imports.push(Import(expr))
+            imports.append(Import(expr))
 
-        root.nodes.insert(imports)
+        root.nodes.extend(imports)
 
     def populate_global_scope(self):
-        scope = self.common.scope()
+        """
+        Populate the global scope with:
+            - css colors
+            - user-defined globals
+        :return:
+        """
+        self.common.set_scope(Scope())
 
         # colors
         for color, value in colors.items():
             rgba = RGBA(value[0], value[1], value[2], value[3])
             ident = Ident(color, rgba)
             rgba.value = color
-            scope.add(ident)
+            self.common.scope().add(ident)
 
         # todo: also expose url javascript function; might be hard >8-(
-        scope.add(Ident('embedurl', Function('embedurl', None, None)))
+        self.common.scope().add(Ident('embedurl',
+                                      Function('embedurl', None, None)))
 
         # user defined globals
         commons = self.commons
         for common, val in commons.items():
             if val.name:
-                scope.add(Ident(common, val))
+                self.common.scope().add(Ident(common, val))
 
     def evaluate(self):
         self.setup()
         return self.visit(self.root)
 
     def visit_group(self, group: Group):
-        group.nodes = map(self.interpolate, group.nodes)
-        group.block = self.visit(group.block)
+        # group.nodes = map(self.interpolate, group.nodes)
+        new_nodes = []
+        for n in group.nodes:
+            n.value = self.interpolate(n)
+            # print(f'ruleset {n.value}')
+            new_nodes.append(n)
+        group.nodes = new_nodes
+        group.block = self.visit(group.get_block())
         return group
 
     def visist_return(self, ret):
@@ -389,18 +412,18 @@ class Evaluator(Visitor):
             if prop:
                 return self.visit(prop.expr.clone())
             return null
-        elif ident.value.is_null():
+        elif not isinstance(ident.name, str) and ident.value.name == 'null':
             # lookup
-            val = self.lookup(ident.name)
+            val = self.lookup(ident.string)
             # object or block mixin
             if val and ident.mixin:
                 self.mixin_node(val)
         else:
             # assign
             self.result += 1
-            ident.val = self.visit(ident.val)
+            ident.value = self.visit(ident.value)
             self.result -= 1
-            self.current_scope.add(ident)
+            self.get_current_scope().add(ident)
             return ident.value
 
     def visit_binop(self, binop):
@@ -515,6 +538,20 @@ class Evaluator(Visitor):
 
         return block
 
+    def visit_block(self, block):
+        self.stack.append(Frame(block))
+        new_nodes = []
+        for index, node in enumerate(block.nodes):
+            try:
+                new_node = self.visit(node)
+                new_nodes.append(new_node)
+            except Exception as e:
+                # fixme
+                raise e
+        block.nodes = new_nodes
+        self.stack.pop()
+        return block
+
     def invoke_builtin(self, fn, args):
         """
 
@@ -545,7 +582,7 @@ class Evaluator(Visitor):
             return self.lookup_function(name)
 
     def interpolate(self, node):
-        is_selector = 'stmt_selector' == node.name
+        is_selector = 'selector' == node.name
 
         def to_string(node):
             if node.name in ['function', 'ident']:
@@ -573,7 +610,11 @@ class Evaluator(Visitor):
                 return ret
 
         if node.segments:
-            return ''.join(map(to_string, node.segments))
+            s = ''
+            for segment in node.segments:
+                s += str(to_string(segment))
+            return s
+            # return ''.join(map(to_string, node.segments))
         else:
             return to_string(node)
 
@@ -589,7 +630,21 @@ class Evaluator(Visitor):
             raise ParseError(f'invalid "is defined" '
                              f'check on non-variable {node}')
 
+    def cast(self, expr: Expression):
+        return Unit(expr.first().value, expr.nodes[1].name)
+
+    def castable(self, expr: Expression):
+        return len(expr.nodes) == 2 and \
+               expr.first().name == 'unit' and \
+               expr.nodes[1].name in units
+
     def warn(self, message):
         if not self.warnings:
             return
         print(f'Warning: {message}')
+
+    def get_current_scope(self):
+        return self.stack.current_frame().scope()
+
+    def get_current_frame(self):
+        return self.stack.current_frame()

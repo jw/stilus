@@ -9,9 +9,10 @@ class Ident(Node):
     def __init__(self, name, value=None, mixin=False):
         super().__init__(value)
         self.string = name
-        from stilus.nodes.null import null
-        self.value = value if value else null
+        # from stilus.nodes.null import null
+        self.value = value if value else name  # FIXME: is name, was null
         self.mixin = mixin
+        self.property = None
 
     def __str__(self):
         return f'{self.string}'

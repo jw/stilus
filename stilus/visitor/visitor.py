@@ -16,11 +16,13 @@ class Visitor:
         self.root = root
 
     def visit(self, node: Node):
-        method = f'visit_{node.name}'
-        if self.is_callable(method):
-            log.debug(f'{method} is callable.')
-            return getattr(self, method)(node)
-        log.info(f'{method} is NOT a callable!')
+        if hasattr(node, 'name'):
+            method = f'visit_{node.name}'
+            if self.is_callable(method):
+                log.debug(f'{method} is callable. {node.name}')
+                return getattr(self, method)(node)
+            log.info(f'{method} is NOT a callable! {node.name}')
+        log.info(f'{node} has no name attribute!')
         return node
 
     def is_callable(self, method: str):

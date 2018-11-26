@@ -22,7 +22,7 @@ class Stack(list):
         frame.parent = self.current_frame
         return super().append(frame)
 
-    def current_frame(self):
+    def current_frame(self: Frame):
         return self[self.__len__() - 1]
 
     def get_block_frame(self, block):
