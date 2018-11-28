@@ -1,4 +1,5 @@
 from stilus.nodes.ident import Ident
+from stilus.nodes.null import null
 
 
 def test_ident():
@@ -6,17 +7,17 @@ def test_ident():
     assert ident.string == 'string'
     assert ident.value == 'value'
     assert ident.mixin is True
-    assert ident.name == 'ident'
+    assert ident.node_name == 'ident'
     assert ident.is_empty() is False
 
 
 def test_ident_no_value():
-    ident = Ident('name', None, True)
-    assert ident.name == 'ident'
-    assert ident.string == 'name'
-    # assert ident.value == null
+    ident = Ident('node_name', None, True)
+    assert ident.node_name == 'ident'
+    assert ident.string == 'node_name'
+    assert ident.value == null
     assert ident.mixin is True
-    assert ident.is_empty() is False  # checkme!
+    assert ident.is_empty() is True
 
 
 def test_coerce():

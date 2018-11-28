@@ -1,3 +1,4 @@
+from stilus.nodes.null import null
 from stilus.nodes.boolean import true
 from stilus.nodes.ident import Ident
 from stilus.stack.scope import Scope
@@ -15,6 +16,6 @@ def test_scope_lookup():
     scope.add(Ident('three', true))
     assert len(scope.commons) == 3
     assert scope.lookup('one') == 1
-    assert scope.lookup('two') == 'two'  # checkme!
+    assert scope.lookup('two') == null
     assert scope.lookup('three') == true
     assert scope.lookup('four') is None

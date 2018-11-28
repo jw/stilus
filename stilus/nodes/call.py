@@ -18,7 +18,7 @@ class Call(Node):
         return self.__str__()
 
     def __key(self):
-        return self.name, self.function_name, self.args
+        return self.node_name, self.function_name, self.args
 
     def __eq__(self, other):
         if isinstance(other, Call):
@@ -33,7 +33,7 @@ class Call(Node):
 
     def to_json(self):
         return json.dumps({'__type': 'Call',
-                           'name': self.name,
+                           'node_name': self.node_name,
                            'args': self.args,
                            'lineno': self.lineno,
                            'column': self.column,

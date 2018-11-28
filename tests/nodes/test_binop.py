@@ -6,7 +6,7 @@ def test_binop():
     left = Expression()
     right = Expression()
     binop = BinOp('+', left, right)
-    assert binop.name == 'binop'
+    assert binop.node_name == 'binop'
     assert binop.op == '+'
     assert binop.left == left
     assert binop.left == right

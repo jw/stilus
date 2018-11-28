@@ -1,13 +1,14 @@
 from stilus.nodes.node import Node
-import logging
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-fh = logging.FileHandler('/tmp/stilus.log')
-formatter = logging.Formatter('[%(asctime)s] [%(name)s] '
-                              '[%(levelname)s] %(message)s')
-fh.setFormatter(formatter)
-log.addHandler(fh)
+# import logging
+
+# log = logging.getLogger(__name__)
+# log.setLevel(logging.DEBUG)
+# fh = logging.FileHandler('/tmp/stilus.log')
+# formatter = logging.Formatter('[%(asctime)s] [%(node_name)s] '
+#                               '[%(levelname)s] %(message)s')
+# fh.setFormatter(formatter)
+# log.addHandler(fh)
 
 
 class Visitor:
@@ -16,13 +17,13 @@ class Visitor:
         self.root = root
 
     def visit(self, node: Node):
-        if hasattr(node, 'name'):
-            method = f'visit_{node.name}'
+        if hasattr(node, 'node_name'):
+            method = f'visit_{node.node_name}'
             if self.is_callable(method):
-                log.debug(f'{method} is callable. {node.name}')
+                print(f'{method} is callable. {node.node_name}')
                 return getattr(self, method)(node)
-            log.info(f'{method} is NOT a callable! {node.name}')
-        log.info(f'{node} has no name attribute!')
+            print(f'{method} is NOT a callable! {node.node_name}')
+        print(f'{node} has no node_name attribute!')
         return node
 
     def is_callable(self, method: str):

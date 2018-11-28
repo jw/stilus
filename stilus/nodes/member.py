@@ -18,7 +18,7 @@ class Member(Node):
         return self.__str__()
 
     def __key(self):
-        return self.name, self.left, self.right
+        return self.node_name, self.left, self.right
 
     def __eq__(self, other):
         if isinstance(other, Member):

@@ -1,6 +1,8 @@
 import copy
 import json
 
+from deprecated import deprecated
+
 from stilus.nodes.node import Node
 
 
@@ -32,13 +34,13 @@ class Block(Node):
 
     def has_properties(self):
         for node in self.nodes:
-            if node.name == 'property':
+            if node.node_name == 'property':
                 return True
         return False
 
     def has_media(self):
         for node in self.nodes:
-            if node.name == 'media':
+            if node.node_name == 'media':
                 return True
         return False
 
@@ -51,7 +53,11 @@ class Block(Node):
     def clone(self):
         return copy.deepcopy(self)
 
+    @deprecated(reason='use append')
     def push(self, node):
+        self.nodes.append(node)
+
+    def append(self, node):
         self.nodes.append(node)
 
     def to_json(self):

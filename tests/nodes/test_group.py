@@ -5,7 +5,7 @@ from stilus.nodes.selector import Selector
 
 def test_group():
     group = Group()
-    assert group.name == 'group'
+    assert group.node_name == 'group'
     assert len(group.nodes) == 0
     assert len(group.extends) == 0
     assert f'{group}' == f'{group.nodes}:{group.extends}'

@@ -41,7 +41,7 @@ class Literal(Node):
                            'filename': self.filename})
 
     def coerce(self, other):
-        if other.name in ['ident', 'string', 'literal']:
+        if other.node_name in ['ident', 'string', 'literal']:
             return Literal(other.string)
         else:
             super().coerce(other)

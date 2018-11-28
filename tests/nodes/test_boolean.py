@@ -29,4 +29,4 @@ def test_false():
 
 def test_name():
     boolean = Boolean(False)
-    assert boolean.name == 'boolean'
+    assert boolean.node_name == 'boolean'

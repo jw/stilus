@@ -172,11 +172,11 @@ class Compiler(Visitor):
 
     def visit_features(self, node: Node):
         if not node.expr:
-            return node.name
+            return node.node_name
         elif node.expr.is_empty():
-            return '(' + node.name + ')'
+            return '(' + node.node_name + ')'
         else:
-            return '(' + node.name + (':' if self.compress else ': ') + \
+            return '(' + node.node_name + (':' if self.compress else ': ') + \
                    self.visit(node.expr) + ')'
 
     def visit_import(self, imported):

@@ -8,7 +8,7 @@ def test_property():
     expression = Expression()
     block = Block('parent', Node)
     eachh = Eachh('foo', 'fizz', expression, block)
-    assert eachh.name == 'eachh'
+    assert eachh.node_name == 'eachh'
     assert eachh.value == 'foo'
     assert eachh.key == 'fizz'
     assert eachh.expression == expression
