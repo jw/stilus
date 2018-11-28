@@ -20,7 +20,7 @@ class Function(Node):
         return self.__str__()
 
     def __key(self):
-        return self.name, self.function_name, self.params, self.body
+        return self.node_name, self.function_name, self.params, self.body
 
     def __eq__(self, other):
         if isinstance(other, Function):
@@ -41,7 +41,7 @@ class Function(Node):
 
     def to_json(self):
         return json.dumps({'__type': 'Function',
-                           'name': self.function_name,
+                           'node_name': self.function_name,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename,

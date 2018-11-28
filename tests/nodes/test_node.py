@@ -31,7 +31,7 @@ def test_node():
 
 def test_name():
     node = Node()
-    assert node.name == 'node'
+    assert node.node_name == 'node'
 
 
 def test_to_boolean():

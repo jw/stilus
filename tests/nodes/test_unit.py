@@ -5,7 +5,7 @@ def test_unit():
     unit = Unit(1000, 'mm')
     assert unit.value == 1000
     assert unit.type == 'mm'
-    assert unit.name == 'unit'
+    assert unit.node_name == 'unit'
 
 
 def test_boolean():

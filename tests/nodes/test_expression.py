@@ -15,7 +15,7 @@ def test_expression_creation():
     expression = Expression()
     assert not expression.is_list
     assert not expression.preserve
-    assert expression.name == 'expression'
+    assert expression.node_name == 'expression'
 
 
 def test_expression_creation_with_is_list_and_preserve():
@@ -32,14 +32,14 @@ def test_expression_make_is_list_and_preserve():
     assert expression.preserve
 
 
-def test_expression_push():
+def test_expression_append():
     from stilus.nodes.null import null
     from stilus.nodes.boolean import true
     from stilus.nodes.boolean import false
     expression = Expression()
-    expression.push(null)
-    expression.push(true)
-    expression.push(false)
+    expression.append(null)
+    expression.append(true)
+    expression.append(false)
     assert len(expression) == 3
 
 
@@ -48,9 +48,9 @@ def test_expression_string_first_boolean():
     from stilus.nodes.boolean import false
     from stilus.nodes.null import null
     expression = Expression()
-    expression.push(true)
-    expression.push(false)
-    expression.push(null)
+    expression.append(true)
+    expression.append(false)
+    expression.append(null)
     assert str(expression) == '(true false null)'
     expression.is_list = True
     assert str(expression) == '(true, false, null)'

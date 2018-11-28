@@ -651,7 +651,7 @@ class Parser:
                 self.accept(';')
             if not stmt:
                 self.error('unexpected token {peek} in block')
-            block.push(stmt)
+            block.append(stmt)
 
         # css-style
         if self.css:
@@ -720,9 +720,9 @@ class Parser:
                 elif tok.type == 'space':
                     arr.append(Literal(' '))
                 elif tok.type == 'function':
-                    arr.append(Literal(f'{tok.value.name}('))
+                    arr.append(Literal(f'{tok.value.node_name}('))
                 elif tok.type == 'ident':
-                    # FIXME: string vs name?
+                    # FIXME: string vs node_name?
                     arr.append(Literal(tok.value.string))
                 else:
                     arr.append(Literal(tok.value))
@@ -882,7 +882,7 @@ class Parser:
                 break
                 # fixme
                 self.error('unexpected token {peek} in expression')
-            expr.push(node)
+            expr.append(node)
         self.state.pop()
         return expr
 

@@ -1,19 +1,22 @@
 import copy
 import json
+from typing import Type
 
 
 class CoercionError(Exception):
+    """CoercionError"""
     pass
 
 
 class Node:
+    """Node is the root class of all nodes."""
 
     def __init__(self, value=None, filename=None, lineno=1, column=1):
         self.value = value
         self.filename = filename
         self.lineno = lineno
         self.column = column
-        self.name = self.__class__.__name__.lower()
+        self.node_name = self.__class__.__name__.lower()
 
     def __eq__(self, other):
         if isinstance(other, Node):
@@ -24,31 +27,45 @@ class Node:
         return hash(self.value)
 
     def first(self):
+        """
+        Return this node.
+        :return: This node.
+        """
         return self
 
-    def to_json(self):
-        return json.dumps([self.lineno, self.column, self.filename])
-
     def to_boolean(self):
+        """
+        Return True
+        :return: True
+        """
         return True
 
     def to_expression(self):
+        """
+        Return expression or wrap this node in an expression
+        :return:
+        """
         from stilus.nodes.expression import Expression
-        if self.name == 'expression':
+        if self.node_name == 'expression':
             return self
         expression = Expression()
-        expression.push(self)
+        expression.append(self)
         return expression
 
     def evaluate(self):
-        from stilus.evaluator import Evaluator
+        """
+        Nodes by default evaulate to themselves.
+        :return: A Node.
+        """
+        from stilus.visitor.evaluator import Evaluator
         return Evaluator(self).evaluate()
 
-    def operate(self, op, right):
+    def operate(self, op: str, right: Type['Node']) -> 'Node':
+        """Operate on `right` with the given `op`."""
         from stilus.nodes.boolean import Boolean
         if op == 'is a':
             if 'string' == right.first().name:
-                return Boolean(self.name == right.value)
+                return Boolean(self.node_name == right.value)
             else:
                 raise Exception(f'"is a" expects a string, '
                                 f'got {right.toString}')
@@ -93,15 +110,20 @@ class Node:
         else:
             raise Exception(f'cannot perform {self} {op} {right}')
 
-    def clone(self):
-        return copy.deepcopy(self)
-
-    def should_coerce(self, op):
+    def should_coerce(self, op: str) -> bool:
+        """Return False if `op` is generally not coerced."""
         if op in ['is a', 'in', '||', '&&']:
             return False
         return True
 
-    def coerce(self, other):
-        if other.name == self.name:
+    def coerce(self, other: Type['Node']) -> Type['Node']:
+        """Default coercion raises."""
+        if other.node_name == self.node_name:
             return other
-        raise CoercionError(f'cannot coerce {other} to {self.name}')
+        raise CoercionError(f'cannot coerce {other} to {self.node_name}')
+
+    def clone(self):
+        return copy.deepcopy(self)
+
+    def to_json(self):
+        return json.dumps([self.lineno, self.column, self.filename])

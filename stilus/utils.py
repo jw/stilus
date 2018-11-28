@@ -12,9 +12,9 @@ def unwrap(expression: Expression) -> Node:
     :param expression:
     :return:
     """
-    if expression.name not in ['arguments', 'expression']:
+    if expression.node_name not in ['arguments', 'expression']:
         return expression
-    if expression.first().name not in ['arguments', 'expression']:
+    if expression.first().node_name not in ['arguments', 'expression']:
         return expression
     if len(expression) != 1:
         return expression
@@ -33,26 +33,26 @@ def assert_present(node: Node, name=None):
 
 def assert_color(node: Node, param=Node):
     assert_present(node, param)
-    if node.name not in ['rgba', 'hsla']:
+    if node.node_name not in ['rgba', 'hsla']:
         raise TypeError(f'TypeError: expected rgba or hsla, but got '
-                        f'{node.name}:{node}')
+                        f'{node.node_name}:{node}')
 
 
 def assert_string(node: Node, param):
     assert_present(node, param)
-    if node.name in ['string', 'ident', 'literal']:
+    if node.node_name in ['string', 'ident', 'literal']:
         return
     else:
         raise TypeError(f'TypeError: expected string, ident or literal, '
-                        f'but got {node.name}:{node}')
+                        f'but got {node.node_name}:{node}')
 
 
 def assert_type(node: Node, type, param):
     assert_present(node, param)
-    if node.name == type:
+    if node.node_name == type:
         return
     p = f'{param} to be a ' if param else ''
-    raise TypeError(f'expected {p}{type}, but got {node.name}:{node}')
+    raise TypeError(f'expected {p}{type}, but got {node.node_name}:{node}')
 
 
 def clamp(n, smallest=0, largest=255):

@@ -39,9 +39,9 @@ class String(Node):
         return Boolean(len(self.value))
 
     def coerce(self, other):
-        if other.name == 'string':
+        if other.node_name == 'string':
             return other
-        elif other.name == 'expression':
+        elif other.node_name == 'expression':
             node_values = [self.coerce(node).value for node in other.nodes]
             return String(' '.join(node_values))
         else:

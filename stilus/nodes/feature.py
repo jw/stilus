@@ -34,7 +34,7 @@ class Feature(Node):
     def clone(self):
         return copy.deepcopy(self)
 
-    # todo: add expr and name
+    # todo: add expr and node_name
     def to_json(self):
         return json.dumps({'__type': 'Feature',
                            'segment': self.segments,

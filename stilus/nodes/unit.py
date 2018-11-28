@@ -53,7 +53,7 @@ class Unit(Node):
         type = self.type if self.type else right.first().type
 
         # swap color
-        if right.name in ['rgba', 'hsla']:
+        if right.node_name in ['rgba', 'hsla']:
             return right.operate(op, self)
 
         # operate

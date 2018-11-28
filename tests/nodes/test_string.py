@@ -7,7 +7,7 @@ from stilus.nodes.boolean import Boolean
 
 
 def test_string():
-    assert String('hello', 'there').name == 'string'
+    assert String('hello', 'there').node_name == 'string'
     assert str(String('hello', null)) == '\'hello\''
     assert str(String('hello', 'there')) == 'therehellothere'
     assert str(String('hello')) == '\'hello\''
@@ -21,9 +21,9 @@ def test_coerce():
     other = String('there')
     assert first.coerce(other) == other
     expression = Expression()
-    expression.push(String('one'))
-    expression.push(String('two'))
-    expression.push(String('three'))
+    expression.append(String('one'))
+    expression.append(String('two'))
+    expression.append(String('three'))
     assert first.coerce(expression) == String('one two three')
     assert first.coerce(null) == String('null')
     assert first.coerce(Ident('foobar')) == String('foobar')

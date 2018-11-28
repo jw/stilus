@@ -8,9 +8,10 @@ class Ident(Node):
 
     def __init__(self, name, value=None, mixin=False):
         super().__init__(value)
+        self.name = name
         self.string = name
-        # from stilus.nodes.null import null
-        self.value = value if value else name  # FIXME: is name, was null
+        from stilus.nodes.null import null
+        self.value = value if value else null
         self.mixin = mixin
         self.property = None
 
@@ -40,7 +41,7 @@ class Ident(Node):
 
     def to_json(self):
         return json.dumps({'__type': 'Ident',
-                           'name': self.name,
+                           'node_name': self.node_name,
                            'val': self.val,
                            'mixin': self.mixin,
                            'property': self.property,
@@ -50,9 +51,9 @@ class Ident(Node):
                            'filename': self.filename})
 
     def coerce(self, other):
-        if other.name in ['ident', 'string', 'literal']:
+        if other.node_name in ['ident', 'string', 'literal']:
             return Ident(other.string)
-        elif other.name == 'unit':
+        elif other.node_name == 'unit':
             return Ident(other.__str__())
         else:
             return super().coerce(other)

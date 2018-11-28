@@ -2,7 +2,7 @@ from stilus.nodes.null import Null, null
 
 
 def test_null():
-    assert Null().name == 'null'
+    assert Null().node_name == 'null'
     assert Null().is_null() is True
     assert hash(Null()) == hash(None)
     from stilus.nodes.boolean import false

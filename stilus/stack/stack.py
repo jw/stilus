@@ -12,7 +12,7 @@ class Stack(list):
             node = frame.block.node
             location = f'({node.filename}:{node.lineno}:{node.column})'
             if node.name == 'function':
-                buffer.append(f'    at {node.name}() {location}')
+                buffer.append(f'    at {node.node_name}() {location}')
             elif node.name == 'group':
                 buffer.append(f'    at "{node.nodes[0].value}" {location}')
         return '\n'.join(buffer)

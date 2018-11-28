@@ -3,7 +3,7 @@ from stilus.nodes.selector import Selector
 
 def test_selector():
     selector = Selector(['segment1', 'segment2'])
-    assert selector.name == 'selector'
+    assert selector.node_name == 'selector'
     assert len(selector.segments) == 2
     assert selector.inherits is True
     assert selector.optional is False

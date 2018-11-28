@@ -144,7 +144,7 @@ class RGBA(Color):
                            'b': self.b,
                            'a': self.a,
                            'raw': self.raw,
-                           'name': self.colorname,
+                           'node_name': self.colorname,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})
@@ -199,14 +199,15 @@ class RGBA(Color):
                                         hsla.saturation / 100)
         return RGBA(r * 255, g * 255, b * 255, hsla.alpha)
 
+    # todo: implement me!
     def operate(self, op, right: Node):
         """Operate on `right` with given `op`."""
         if op != 'in':
             right = right.first()
-
-        if op == 'is a' and right.name == 'string' and right.string == 'color':
+        if op == 'is a' and right.node_name == 'string' \
+                and right.string == 'color':
             return true
         elif op == '+':
-            if right.name == 'unit':
+            if right.node_name == 'unit':
                 if right.type == '%':
                     raise NotImplementedError

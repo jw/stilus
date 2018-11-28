@@ -3,7 +3,7 @@ from stilus.nodes.color import HSLA, RGBA
 
 def test_hsla():
     hsla = HSLA(100, 100, 100, 0)
-    assert hsla.name == 'hsla'
+    assert hsla.node_name == 'hsla'
     assert hsla.hue == 100
     assert hsla.saturation == 100
     assert hsla.lightness == 100
@@ -12,21 +12,21 @@ def test_hsla():
 
 def test_hsla_clamping_string():
     hsla = HSLA(500, 120, 90, 3)
-    assert hsla.name == 'hsla'
+    assert hsla.node_name == 'hsla'
     assert hsla.hue == 140  # 500 - 360
     assert hsla.saturation == 100
     assert hsla.lightness == 90
     assert hsla.alpha == 1
     assert str(hsla) == 'hsla(140, 100%, 90%, 1)'
     hsla = HSLA(-10, -20, 0, 0.3)
-    assert hsla.name == 'hsla'
+    assert hsla.node_name == 'hsla'
     assert hsla.hue == 350  # 360 - 10
     assert hsla.saturation == 0
     assert hsla.lightness == 0
     assert hsla.alpha == 0.3
     assert str(hsla) == 'hsla(350, 0%, 0%, 0.3)'
     hsla = HSLA(42, 42, 42, -42.42)
-    assert hsla.name == 'hsla'
+    assert hsla.node_name == 'hsla'
     assert hsla.hue == 42
     assert hsla.saturation == 42
     assert hsla.lightness == 42
@@ -62,7 +62,7 @@ def test_rgba():
     assert rgba.g == 100
     assert rgba.b == 100
     assert rgba.a == 0
-    assert rgba.name == 'rgba'
+    assert rgba.node_name == 'rgba'
 
 
 def test_rbga_clamping_and_string():

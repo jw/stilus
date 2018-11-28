@@ -272,7 +272,7 @@ class Evaluator(Visitor):
         keyframes.value = self.interpolate(keyframes).strip()
         val = self.lookup(keyframes.value)
         if val:
-            keyframes.val = val.first().string  # || val.first().name
+            keyframes.val = val.first().string  # || val.first().node_name
         keyframes.set_block(self.visit(keyframes.get_block()))
 
         if 'official' != keyframes.prefix:
@@ -295,7 +295,7 @@ class Evaluator(Visitor):
         # check local
         local = self.stack.current_frame().scope()
         if local:
-            self.warn(f'local {local.name} "fn.function_name" '
+            self.warn(f'local {local.node_name} "fn.function_name" '
                       f'previously defined in this scope')
 
         # user-defined
@@ -355,15 +355,15 @@ class Evaluator(Visitor):
         self.ignore_colors = 'url' == call.function_name
 
         # variable function
-        if fn and 'expression' == fn.name:
+        if fn and 'expression' == fn.node_name:
             fn = fn.nodes[0]
 
         # not a function? try user-defined or built-ins
-        if fn and 'functuon' != fn.name:
+        if fn and 'functuon' != fn.node_name:
             fn = self.lookup_function(call.function_name)
 
         # undefined function? render literal css
-        if not fn or fn.name != 'function':
+        if not fn or fn.node_name != 'function':
             if 'calc' == self.unvendorize(call.function_name):
                 literal = call.args.nodes and call.args.nodes[0]
                 if literal:
@@ -393,7 +393,7 @@ class Evaluator(Visitor):
         if fn.fn:
             # built-in
             ret = self.invoke_builtin(fn.fn, args)
-        elif 'function' == fn.name:
+        elif 'function' == fn.node_name:
             # user-defined
             # evaluate mixin block
             if call.get_block():
@@ -408,13 +408,13 @@ class Evaluator(Visitor):
     def visit_ident(self, ident):
         if ident.property:
             # property lookup
-            prop = self.lookup_property(ident.value)  # checkme: name?
+            prop = self.lookup_property(ident.name)
             if prop:
                 return self.visit(prop.expr.clone())
             return null
-        elif not isinstance(ident.name, str) and ident.value.name == 'null':
+        elif ident.value.node_name == 'null':
             # lookup
-            val = self.lookup(ident.string)
+            val = self.lookup(ident.name)
             # object or block mixin
             if val and ident.mixin:
                 self.mixin_node(val)
@@ -452,7 +452,7 @@ class Evaluator(Visitor):
         except Exception as e:
             # disregard coercion issues in equality
             # checks, and simply return false
-            if 'coercionError' == e.name:  # fixme: use exception name
+            if 'coercionError' == e.name:  # fixme: use exception node_name
                 if op == '==':
                     return false
                 elif op == '!=':
@@ -501,12 +501,12 @@ class Evaluator(Visitor):
     def visit_property(self, prop):
         name = self.interpolate(prop)
         fn = self.lookup(name)
-        call = fn and 'function' == fn.first().name
+        call = fn and 'function' == fn.first().node_name
         literal = name in self.calling
         _prop = self.property
 
         if call and not literal and not prop.literal:
-            # function of the same name
+            # function of the same node_name
             args = Arguments.from_expression(utils.unwrap(prop.expr.clone()))
             prop.name = name
             self.property = prop
@@ -582,23 +582,23 @@ class Evaluator(Visitor):
             return self.lookup_function(name)
 
     def interpolate(self, node):
-        is_selector = 'selector' == node.name
+        is_selector = 'selector' == node.node_name
 
         def to_string(node):
-            if node.name in ['function', 'ident']:
+            if node.node_name in ['function', 'ident']:
                 return node.value
-            elif node.name in ['literal', 'string']:
+            elif node.node_name in ['literal', 'string']:
                 # huh?
                 if self.prefix and not node.prefixed and not node.value.name:
                     node.val = re.sub(r'\.', f'.{self.prefix}', node.val)
                     node.prefixed = True
                 return node.value
-            elif node.name == 'unit':
+            elif node.node_name == 'unit':
                 # interpolation inside keyframes
                 return f'{node.value}%' if '%' == node.type else node.value
-            elif node.name == 'member':
+            elif node.node_name == 'member':
                 return to_string(self.visit(node))
-            elif node.name == 'expression':
+            elif node.node_name == 'expression':
                 # prevent cyclic 'stmt_selector()' calls
                 if self.calling and 'stmt_selector' in self.calling and \
                         self._selector:
@@ -624,7 +624,7 @@ class Evaluator(Visitor):
             return Function(name, fn)
 
     def is_defined(self, node):
-        if 'ident' == node.name:
+        if 'ident' == node.node_name:
             return Boolean(self.lookup(node.value))  # checkme: or string?
         else:
             raise ParseError(f'invalid "is defined" '

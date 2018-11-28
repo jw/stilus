@@ -35,7 +35,7 @@ class Property(Node):
         # FIXME: add expr and literal to this dict
         return json.dumps({'__type': 'Property',
                            'segments': self.segments,
-                           'name': self.name,
+                           'node_name': self.node_name,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})

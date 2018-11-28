@@ -32,7 +32,7 @@ class Arguments(Expression):
         arguments.column = expression.column
         arguments.is_list = expression.is_list
         for node in expression.nodes:
-            arguments.push(node)
+            arguments.append(node)
         return arguments
 
     def clone(self):

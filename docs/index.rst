@@ -16,6 +16,10 @@ Welcome to the stilus documentation!
    history.md
    todo.md
 
+   architecture.md
+   codeguidelines.md
+   migration.md
+
 
 Indices and tables
 ==================

@@ -6,7 +6,7 @@ def test_literal():
     assert literal.value == 'value'
     assert literal.string == 'value'
     assert literal.prefixed == 'prefixed'
-    assert literal.name == 'literal'
+    assert literal.node_name == 'literal'
     clone = literal.clone()
     assert clone == literal
 
