@@ -1,5 +1,6 @@
+from deprecated import deprecated
+
 from stilus.nodes.block import Block
-from stilus.nodes.null import null
 from stilus.stack.scope import Scope
 
 
@@ -7,8 +8,8 @@ from stilus.stack.scope import Scope
 class Frame:
 
     def __init__(self, block: Block, parent: Block = None):
-        if callable(getattr(block, 'scope', None)):
-            self._scope = null if block.scope is False else Scope()
+        if hasattr(block, 'scope') and block.scope is False:
+            self._scope = None
         else:
             self._scope = Scope()
         self.block = block
@@ -25,17 +26,36 @@ class Frame:
             return self.__key() == other.__key()
         return False
 
+    def __str__(self):
+        if self.block.scope is False:
+            scope = 'scope-less'
+        else:
+            scope = f'{self.scope()}'
+        return f'[Frame {scope}]'
+
+    def __repr__(self):
+        return self.__str__()
+
     def scope(self):
+        """Return this frame's scope or the parent scope
+        for scope-less blocks.
+        :return:
+        """
         if self._scope:
             return self._scope
-        elif self.parent:
+        try:
             return self.parent.scope
-        return None
+        except AttributeError:
+            raise TypeError('Cannot read property \'scope\' of undefined')
 
+    @deprecated
     def set_scope(self, scope: Scope):
         self._scope = scope
 
     def lookup(self, name):
-        if self._scope:
-            return self._scope.lookup(name)
-        return None
+        """
+        Lookup the given local variable `name`.
+        :param name:
+        :return:
+        """
+        return self.scope().lookup(name)

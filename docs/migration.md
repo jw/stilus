@@ -4,6 +4,10 @@
 
  - Often `push` is used to add an element to a list in Stylus; in Stilus an append needs to be used.
 
+### Stack
+
+ - A `scope` has `commons`, not `globals`
+
 ### Nodes
 
  - All `node` types are set via the `node_name` attribute.

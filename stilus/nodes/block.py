@@ -8,12 +8,12 @@ from stilus.nodes.node import Node
 
 class Block(Node):
 
-    def __init__(self, parent, node):
+    def __init__(self, parent, node, scope=True):
         super().__init__()
         self.nodes = []
         self.parent = parent
         self.node = node
-        self.scope = True
+        self.scope = scope
 
     def __str__(self):
         return f'{self.parent}:{self.node}:{self.nodes}:{self.scope}'

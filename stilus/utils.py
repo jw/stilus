@@ -12,15 +12,15 @@ def unwrap(expression: Expression) -> Node:
     :param expression:
     :return:
     """
-    if expression.node_name not in ['arguments', 'expression']:
+    if hasattr(expression, 'preserve') and expression.preserve:
         return expression
-    if expression.first().node_name not in ['arguments', 'expression']:
+    if expression.node_name not in ['arguments', 'expression']:
         return expression
     if len(expression) != 1:
         return expression
-    if expression.preserve:
+    if expression.nodes[0].node_name not in ['arguments', 'expression']:
         return expression
-    return unwrap(expression.first())
+    return unwrap(expression.nodes[0])
 
 
 def assert_present(node: Node, name=None):
@@ -141,12 +141,13 @@ def compile_selectors(arr, leave_hidden=False):
 
 
 # todo: test me!
-def merge(a, b, deep):
+def merge(a, b, deep: bool):
     for k in b:
         if deep and k in a and a[k]:
             node_a = unwrap(a[k]).first()
             node_b = unwrap(b[k]).first()
-            if node_a.name == 'object' and node_b.name == 'object':
+            if node_a.node_name == 'object_node' and \
+                    node_b.node_name == 'object_node':
                 a[k].first().value = merge(node_a.values, node_b.values, deep)
             else:
                 a[k] = b[k]

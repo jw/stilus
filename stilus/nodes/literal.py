@@ -23,6 +23,10 @@ class Literal(Node):
     def __hash__(self):
         return hash(self.__key())
 
+    # checkme: really no need - just call super()?
+    def hash(self):
+        return self.value
+
     def __eq__(self, other):
         if isinstance(other, Literal):
             return self.__key() == other.__key()

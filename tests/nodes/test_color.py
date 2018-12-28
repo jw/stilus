@@ -56,6 +56,15 @@ def test_hsla_rgba():
     assert hsla.rgba() == RGBA(152, 125, 62, 0.000)
 
 
+def test_hsla_hash():
+    hsla = HSLA(500, 120, 90, 3)
+    assert hsla.hash() == 'hsla(140, 100%, 90%, 1)'
+    hsla = HSLA(-10, -20, 0, 0.3)
+    assert hsla.hash() == 'hsla(350, 0%, 0%, 0.3)'
+    hsla = HSLA(42, 42, 42, -42.42)
+    assert hsla.hash() == 'hsla(42, 42%, 42%, 0)'
+
+
 def test_rgba():
     rgba = RGBA(100, 100, 100, 0)
     assert rgba.r == 100
@@ -92,6 +101,13 @@ def test_rbga_no_clamping():
     assert rgba.b == 300
     assert rgba.a == 0.003
     assert str(rgba) == 'rgba(300, 300, 300, 0.003)'
+
+
+def test_rgba_hash():
+    rgba = RGBA.without_clamping(300, 300, 300, 0.003)
+    assert rgba.hash() == 'rgba(300, 300, 300, 0.003)'
+    rgba = RGBA(300, 300, 300, 42)
+    assert rgba.hash() == '#fff'
 
 
 def test_rgba_hsla():

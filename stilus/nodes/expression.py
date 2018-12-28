@@ -27,14 +27,26 @@ class Expression(Node):
     def __repr__(self):
         return [n.__str__() for n in self.nodes]
 
+    def __key(self):
+        return self.nodes
+
     def __eq__(self, other):
-        return self.nodes == other.nodes
+        if isinstance(other, Expression):
+            return self.__key() == other.__key()
+        return False
 
     def __hash__(self):
-        return hash(self.nodes)
+        return id(self)
+
+    def hash(self):
+        hashes = [str(node.hash()) for node in self.nodes]
+        return '::'.join(hashes)
 
     def __len__(self):
         return len(self.nodes)
+
+    def __iter__(self):
+        return iter(self.nodes)
 
     def is_empty(self):
         return len(self.nodes) == 0
@@ -65,7 +77,7 @@ class Expression(Node):
                            'filename': self.filename,
                            'nodes': self.nodes})
 
-    def operate(self, op, right, value):
+    def operate(self, op, right, value=None):
         if op == '[]=':
             from stilus import utils
             nodes = utils.unwrap(right).nodes
@@ -103,7 +115,7 @@ class Expression(Node):
         elif op == '||':
             return self if self.to_boolean().is_true() else right
         elif op == 'in':
-            return super().operate(self, op, right)
+            return super().operate(op, right)
         elif op == '!=':
             return self.operate('==', right, value)
         elif op == '==':

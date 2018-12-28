@@ -1,3 +1,8 @@
+from typing import Type
+
+from stilus.nodes.ident import Ident
+from stilus.nodes.node import Node
+
 
 class Scope:
 
@@ -12,8 +17,24 @@ class Scope:
             return self.commons == other.commons
         return False
 
-    def add(self, ident):
+    def __str__(self):
+        if not self.commons:
+            return '[Scope]'
+        else:
+            commons = ', '.join(f'@{key}' for key in self.commons.keys())
+            return f'[Scope {commons}]'
+
+    def __repr__(self):
+        return self.__str__()
+
+    def add(self, ident: Ident):
+        """Add ident node to the current scope."""
         self.commons[ident.string] = ident.value
 
-    def lookup(self, name):
+    def lookup(self, name) -> Type[Node]:
+        """
+        Lookup the given local variable name
+        :param name:
+        :return:
+        """
         return self.commons.get(name, None)

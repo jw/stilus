@@ -30,14 +30,14 @@ class Function(Node):
     def __hash__(self):
         return hash(self.__key())
 
+    def hash(self):
+        return f'function {self.function_name}'
+
     def clone(self):
         return copy.deepcopy(self)
 
     def arity(self):
         return len(self.params)
-
-    def hash(self):
-        return f'function {self.function_name}'
 
     def to_json(self):
         return json.dumps({'__type': 'Function',

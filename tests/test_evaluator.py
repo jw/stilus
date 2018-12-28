@@ -7,12 +7,15 @@ def test_evaluator_create():
     root = parser.parse()
     evaluator = Evaluator(root, {})
     result = evaluator.evaluate()
-    assert result is None
-
-
-if __name__ == '__main__':
-    parser = Parser('abc\n  color: red\n', {})
-    root = parser.parse()
-    evaluator = Evaluator(root, {})
-    result = evaluator.evaluate()
-    assert result is None
+    assert result.node_name == 'root'
+    assert result.nodes[0].node_name == 'group'
+    assert result.nodes[0].nodes[0].node_name == 'selector'
+    assert result.nodes[0].nodes[0].block.node_name == 'block'
+    assert result.nodes[0].nodes[0].block.nodes[0].node_name == 'property'
+    property = result.nodes[0].nodes[0].block.nodes[0]
+    assert property.expr.node_name == 'expression'
+    assert property.expr.nodes[0].r == 255
+    # assert property.expr.nodes[0].name == 'red'  # fixme!
+    assert property.expr.nodes[0].a == 1
+    assert property.expr.nodes[0].b == 0
+    assert property.expr.nodes[0].g == 0
