@@ -17,6 +17,7 @@ class Node:
         self.lineno = lineno
         self.column = column
         self.node_name = self.__class__.__name__.lower()
+        self.bubbled = False
 
     def __eq__(self, other):
         if isinstance(other, Node):
@@ -25,6 +26,9 @@ class Node:
 
     def __hash__(self):
         return hash(self.value)
+
+    def hash(self):
+        return self.value
 
     def first(self):
         """
@@ -86,14 +90,18 @@ class Node:
         elif op == 'in':
             from stilus import utils
             values = utils.unwrap(right)
-            if not values:
+            # fixme: this expression check should not be there!
+            from stilus.nodes.expression import Expression
+            if not values and not isinstance(values, Expression):
                 raise Exception('"in" given invalid right-hand operand, '
                                 'expecting an expression')
-            if len(values) == 1:
-                return Boolean(values[0].has(self.hash))
+
+            # 'prop' in object
+            if len(values) == 1 and values[0].node_name == 'object':
+                return Boolean(values[0].has(self.hash()))  # todo: has?
 
             for value in values:
-                if value.hash == self.hash:
+                if value.hash() == self.hash():
                     return Boolean(True)
 
             return Boolean(False)

@@ -21,3 +21,8 @@ def test_operate():
     literal_1 = Literal('foo')
     literal_2 = Literal('bar')
     assert literal_1.operate('+', literal_2).string == 'foobar'
+
+
+def test_hash():
+    literal = Literal('foo')
+    assert literal.hash() == 'foo'

@@ -32,6 +32,9 @@ class Ident(Node):
     def __hash__(self):
         return hash(self.__key())
 
+    def hash(self):
+        return self.name
+
     def clone(self):
         return copy.deepcopy(self)
 

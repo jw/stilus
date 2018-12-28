@@ -50,7 +50,7 @@ class ObjectNode(Node):
             return self.get(right.hash())
         elif op == '==':
             values = self.values
-            if right.name != 'object' or len(self) != len(right):
+            if right.node_name != 'objectNode' or len(self) != len(right):
                 return false
             for key in values:
                 a = values[key]

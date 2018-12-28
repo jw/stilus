@@ -28,6 +28,9 @@ class Null(Node):
     def __hash__(self):
         return hash(None)
 
+    def hash(self):
+        return None
+
     def to_boolean(self):
         from stilus.nodes.boolean import false
         return false

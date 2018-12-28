@@ -1,4 +1,6 @@
+from stilus.nodes.boolean import Boolean
 from stilus.nodes.expression import Expression
+from stilus.nodes.ident import Ident
 
 
 def test_empty_expression():
@@ -56,3 +58,57 @@ def test_expression_string_first_boolean():
     assert str(expression) == '(true, false, null)'
     assert expression.first() is true
     assert expression.to_boolean() is true
+
+
+def test_expression_operate_in():
+    # empty expression
+    expression = Expression()
+    other_expression = Expression()
+    other_expression.append(Ident('foo'))
+    other_expression.append(Ident('bar'))
+    assert expression.operate('in', other_expression) == Boolean(False)
+    assert other_expression.operate('in', expression) == Boolean(False)
+
+    # same expression
+    expression = Expression()
+    expression.append(Ident('foo'))
+    expression.append(Ident('bar'))
+    assert expression.operate('in', expression) == Boolean(False)
+
+    # other expression
+    expression = Expression()
+    expression.append(Ident('foo'))
+    expression.append(Ident('bar'))
+    other_expression = Expression()
+    other_expression.append(Ident('bar'))
+    assert other_expression.operate('in', expression) == Boolean(True)
+
+
+def test_expression_hash():
+    expression = Expression()
+    assert expression.hash() == ''
+    expression = Expression()
+    expression.append(Ident('foo'))
+    assert expression.hash() == 'foo'
+    other_expression = Expression()
+    other_expression.append(Ident('foo'))
+    other_expression.append(Ident('bar'))
+    assert other_expression.hash() == 'foo::bar'
+    from stilus.nodes.null import null
+    from stilus.nodes.boolean import true
+    from stilus.nodes.boolean import false
+    expression = Expression()
+    expression.append(null)
+    expression.append(true)
+    expression.append(false)
+    # in stylus null::true::false is returned; stilus returns the Python types
+    assert expression.hash() == 'None::True::False'
+
+
+if __name__ == '__main__':
+    expression = Expression()
+    other_expression = Expression()
+    other_expression.append(Ident('foo'))
+    other_expression.append(Ident('bar'))
+    assert expression.operate('in', other_expression) == Boolean(False)
+    assert other_expression.operate('in', expression) == Boolean(False)

@@ -2,6 +2,8 @@ import copy
 import json
 from collections import deque
 
+from deprecated import deprecated
+
 from stilus.nodes.node import Node
 
 
@@ -11,7 +13,11 @@ class Root(Node):
         super().__init__()
         self.nodes = deque([])
 
+    @deprecated(reason='use append')
     def push(self, node):
+        self.nodes.append(node)
+
+    def append(self, node):
         self.nodes.append(node)
 
     def unshift(self, node):

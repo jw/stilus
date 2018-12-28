@@ -24,3 +24,10 @@ def test_coerce():
     ident_1 = Ident('first', None, True)
     ident_2 = Ident('second', None, True)
     assert ident_1.coerce(ident_2).string == 'second'
+
+
+def test_hash():
+    ident_1 = Ident('first', None, True)
+    ident_2 = Ident('second', None, True)
+    assert ident_1.hash() == 'first'
+    assert ident_2.hash() == 'second'

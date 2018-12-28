@@ -20,10 +20,13 @@ class Visitor:
         if hasattr(node, 'node_name'):
             method = f'visit_{node.node_name}'
             if self.is_callable(method):
-                print(f'{method} is callable. {node.node_name}')
+                print(f'{method} is callable. [{node.node_name}]')
                 return getattr(self, method)(node)
-            print(f'{method} is NOT a callable! {node.node_name}')
-        print(f'{node} has no node_name attribute!')
+            else:
+                print(f'{method} is NOT a callable! [{node.node_name}]')
+        else:
+            print(f'{node} has no node_name attribute!')
+        print(f'returning {node} {type(node)} {node.r}')
         return node
 
     def is_callable(self, method: str):

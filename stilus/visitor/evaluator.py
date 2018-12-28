@@ -136,7 +136,7 @@ class Evaluator(Visitor):
 
     def visit(self, node):
         try:
-            super().visit(node)
+            return super().visit(node)
         except Exception as e:
             # fixme: this is very, very bad
             if hasattr(e, 'filename'):
@@ -418,6 +418,7 @@ class Evaluator(Visitor):
             # object or block mixin
             if val and ident.mixin:
                 self.mixin_node(val)
+            return self.visit(val) if val else ident
         else:
             # assign
             self.result += 1
@@ -486,8 +487,8 @@ class Evaluator(Visitor):
             return self.visit(ternary.false_expr)
 
     def visit_expression(self, expr):
-        for node in expr.nodes:
-            node = self.visit(node)
+        for i, node in enumerate(expr.nodes):
+            expr.nodes[i] = self.visit(node)
 
         # support (n * 5)px etc
         if self.castable(expr):
@@ -534,21 +535,18 @@ class Evaluator(Visitor):
 
         for i, node in enumerate(block.nodes):
             block.index = i
-            node = self.visit(node)
+            block.nodes[i] = self.visit(node)
 
         return block
 
     def visit_block(self, block):
         self.stack.append(Frame(block))
-        new_nodes = []
-        for index, node in enumerate(block.nodes):
+        for i, node in enumerate(block.nodes):
             try:
-                new_node = self.visit(node)
-                new_nodes.append(new_node)
+                block.nodes[i] = self.visit(node)
             except Exception as e:
-                # fixme
+                # fixme: could get a 'return' value type and take action?
                 raise e
-        block.nodes = new_nodes
         self.stack.pop()
         return block
 
@@ -573,6 +571,7 @@ class Evaluator(Visitor):
         raise NotImplementedError
 
     def lookup(self, name):
+        # fixme: this is handled differently on stylus!
         if self.ignore_colors and name in colors:
             return
         val = self.stack.lookup(name)

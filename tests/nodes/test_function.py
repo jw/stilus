@@ -10,3 +10,8 @@ def test_function():
     assert function.function_name == 'find_it_all'
     clone = function.clone()
     assert clone == function
+
+
+def test_hash():
+    function = Function('find_it_all', ['element_1', 'element_2'], 'body')
+    assert function.hash() == 'function find_it_all'

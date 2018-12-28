@@ -1,6 +1,7 @@
 from stilus.parser import Parser
 from stilus.visitor.compiler import Compiler
 from stilus.visitor.evaluator import Evaluator
+from stilus.visitor.normalizer import Normalizer
 
 
 class Renderer:
@@ -17,13 +18,13 @@ class Renderer:
         self.evaluator = Evaluator(ast, self.options)
         ast = self.evaluator.evaluate()
 
-        # self.normalizer = Normalizer(ast, self.options)
-        # ast = self.normalizer.normalize()
+        self.normalizer = Normalizer(ast, self.options)
+        ast = self.normalizer.normalize()
 
         self.compiler = Compiler(ast, self.options)
-        css = self.compiler.compile()
+        ast = self.compiler.compile()
 
-        return css
+        return ast
 
 
 def render(s, options) -> str:

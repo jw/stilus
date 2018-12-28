@@ -58,6 +58,9 @@ class HSLA(Color):
     def __hash__(self):
         return hash(self.__str__())
 
+    def hash(self):
+        return str(self)
+
     def add(self, h, s, l):
         return HSLA(self.hue + h,
                     self.saturation + s,
@@ -99,7 +102,7 @@ class RGBA(Color):
         self.g = clamp(g)
         self.b = clamp(b)
         self.a = clamp_alpha(a)
-        self.colorname = ''
+        self.name = ''
         self.rgba = self
 
     def __str__(self):
@@ -107,8 +110,8 @@ class RGBA(Color):
         def pad(n):
             return f'{n:02x}'
 
-        if self.colorname == 'transparent':
-            return self.colorname
+        if self.name == 'transparent':
+            return self.name
 
         if 1 == self.a:
             r = pad(self.r)
@@ -144,7 +147,7 @@ class RGBA(Color):
                            'b': self.b,
                            'a': self.a,
                            'raw': self.raw,
-                           'node_name': self.colorname,
+                           'node_name': self.name,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})
@@ -154,6 +157,9 @@ class RGBA(Color):
 
     def __hash__(self):
         return self.__str__()
+
+    def hash(self):
+        return str(self)
 
     def hsla(self):
         return HSLA.from_rgba(self.rgba)

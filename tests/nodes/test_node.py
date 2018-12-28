@@ -29,6 +29,13 @@ def test_node():
     assert node.column == 42
 
 
+def test_hash():
+    node = Node()
+    assert node.hash() is None
+    node = Node(42)
+    assert node.hash() == 42
+
+
 def test_name():
     node = Node()
     assert node.node_name == 'node'
