@@ -180,13 +180,56 @@ class Normalizer(Visitor):
         return null
 
     def visit_media(self, media):
-        # medias = []
-        # group = self.closest_group(media.block)
+        medias = []
+        group = self.closest_group(media.block)
 
         def merge_queries(block):
-            for node in block.nodes:
+            for i, node in enumerate(block.nodes):
                 if node.node_name == 'media':
-                    node.value = media.value.merge
+                    # fixme: what does this do?
+                    node.value = media.value.merge(node.value)
+                    medias.append(node)
+                    block.nodes[i] = null
+                elif node.node_name == 'block':
+                    merge_queries(node)
+                else:
+                    if node.block and node.block.nodes:
+                        merge_queries(node.block)
+
+        merge_queries(media.block)
+        self.bubble(media)
+
+        # fixme: node is changed while enumerating the media list! :-(
+        for node in medias:
+            if group:
+                group.block.append(node)
+            else:
+                self.root_index -= 1
+                self.root.nodes.splice(self.root_index, 0, node)
+            node = self.visit(node)
+            parent = node.block.parent
+            if node.bubbled and \
+                    (not group or parent.node.node_name == 'group'):
+                node.group.block = node.block.nodes[0].block
+                node.block.nodes[0] = node.group
+
+        return media
+
+    def visist_supports(self, node):
+        self.bubble(node)
+        return node
+
+    def visit_atrule(self, node):
+        if node.block:
+            node.block = self.visit(node.block)
+        return node
+
+    def visit_keyframes(self, node):
+        frames = filter(lambda frame: frame.block and
+                        frame.block.has_properties(),
+                        node.block.nodes)
+        node.frames = len(frames)  # checkme: weird
+        return node
 
     def extend(self, group, selectors):
         pass
