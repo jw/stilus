@@ -24,7 +24,7 @@ CI and documentation.
  
 ### 0.1.0
 
- - Basic lexer and some nodes with pytests
+ - Basic lexer and some nodes with pytests.
 
 
 ### 0.0.1
