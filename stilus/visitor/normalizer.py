@@ -71,7 +71,7 @@ class Normalizer(Visitor):
                 block.append(prop)
 
             group.append(selector)
-            group.block = block
+            group.set_block(block)
 
             node.block.nodes = []
             node.block.append(group)
@@ -87,7 +87,7 @@ class Normalizer(Visitor):
     # fixme: this is a terrible conversion form stylus
     def closest_group(self, block: Block) -> Group:
         parent = block.parent
-        while parent and parent.node:
+        while parent and hasattr(parent, 'node') and parent.node:
             node = parent.node
             if node.node_name == 'group':
                 return node
@@ -143,25 +143,26 @@ class Normalizer(Visitor):
         stack = self.stack
         normalized = []
         for selector in group.nodes:
-            # do nothing
-            if ',' not in selector.value:
-                normalized = group.nodes
-                break
-            # replace '\,' with ','
-            if '\\' in selector.value:
-                re.sub(r'\\,', ',')
-                normalized = group.nodes
-                break
-            parts = selector.value.split(',')
-            root = True if selector.value[0] == '/' else False
-            for i, part in enumerate(parts):
-                part = part.trim()
-                if root and '&' not in part:
-                    part = '/' + part
-                s = Selector([Literal(part)])
-                s.value = part
-                s.block = group.get_block()
-                normalized[i] = s
+            if selector.value:
+                # do nothing
+                if ',' not in selector.value:
+                    normalized = group.nodes
+                    break
+                # replace '\,' with ','
+                if '\\' in selector.value:
+                    re.sub(r'\\,', ',')
+                    normalized = group.nodes
+                    break
+                parts = selector.value.split(',')
+                root = True if selector.value[0] == '/' else False
+                for i, part in enumerate(parts):
+                    part = part.trim()
+                    if root and '&' not in part:
+                        part = '/' + part
+                    s = Selector([Literal(part)])
+                    s.value = part
+                    s.block = group.get_block()
+                    normalized[i] = s
         stack.append(normalized)
 
         selectors = utils.compile_selectors(stack, True)
@@ -231,5 +232,35 @@ class Normalizer(Visitor):
         node.frames = len(frames)  # checkme: weird
         return node
 
-    def extend(self, group, selectors):
-        pass
+    def visit_import(self, node):
+        self.imports.append(node)
+        return null if self.hoist else node
+
+    def visit_charset(self, node):
+        self.charset = node
+        return null if self.hoist else node
+
+    def extend(self, group: Group, selectors):
+        selector_map = self.selector_map
+        parent = self.closest_group(group.get_block())
+
+        for extend in group.extends:
+            groups = selector_map[extend.selector]
+            if not group:
+                if extend.optional:
+                    break
+                err = TypeError(f'Failed to @extend "{extend.selector}"')
+                err.lineno = extend.lineno
+                err.column = extend.column
+                raise TypeError
+            for selector in selectors:
+                node = Selector()
+                node.value = selector
+                node.inherits = False
+                for group in groups:
+                    # prevent recursive extend
+                    if not parent or parent != group:
+                        self.extend(group, selectors)
+                    group.append(node)
+
+        group.set_block(self.visit(group.get_block()))
