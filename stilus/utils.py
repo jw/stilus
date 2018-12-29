@@ -140,17 +140,6 @@ def compile_selectors(arr, leave_hidden=False):
     return set(selectors)
 
 
-# todo: test me!
 def merge(a, b, deep: bool):
-    for k in b:
-        if deep and k in a and a[k]:
-            node_a = unwrap(a[k]).first()
-            node_b = unwrap(b[k]).first()
-            if node_a.node_name == 'object_node' and \
-                    node_b.node_name == 'object_node':
-                a[k].first().value = merge(node_a.values, node_b.values, deep)
-            else:
-                a[k] = b[k]
-        else:
-            a[k] = b[k]
-    return a
+    """Merges two dicts.  How weird."""
+    return a.update(b)
