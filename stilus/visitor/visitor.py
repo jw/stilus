@@ -25,8 +25,8 @@ class Visitor:
             else:
                 print(f'{method} is NOT a callable! [{node.node_name}]')
         else:
-            print(f'{node} has no node_name attribute!')
-        print(f'returning {node} {type(node)} {node.r}')
+            print(f'{type(node)} has no node_name attribute!')
+        print(f'returning {type(node)}')
         return node
 
     def is_callable(self, method: str):

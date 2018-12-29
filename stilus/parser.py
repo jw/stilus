@@ -186,7 +186,7 @@ class Parser:
             if not stmt:
                 self.error('unexpected token {peek}, not '
                            'allowed at the root level')
-            block.push(stmt)
+            block.append(stmt)
         return block
 
     def error(self, message: str):
