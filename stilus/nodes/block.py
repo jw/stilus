@@ -14,6 +14,7 @@ class Block(Node):
         self.parent = parent
         self.node = node
         self.scope = scope
+        self.lacks_rendered_selectors = False  # for compiler
 
     def __str__(self):
         return f'{self.parent}:{self.node}:{self.nodes}:{self.scope}'

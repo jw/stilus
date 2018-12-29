@@ -26,7 +26,7 @@ class Compiler(Visitor):
         self.compress = options.get('compress', False)
         self.linenos = options.get('linenos', False)
         self.spaces = options.get('indent spaces', 2)
-        self.indents = 1
+        self.indents = 0
         self.buf = None
         self.last = None
         self.keyframe = None
@@ -47,9 +47,12 @@ class Compiler(Visitor):
 
     def need_brackets(self, node):
         if 1 == self.indents:
-            return 'atrule' == node.name
-        else:
-            return node.has_only_properties()
+            return True
+        if 'atrule' != node.node_name:
+            return True
+        if node.has_only_properties():
+            return True
+        return False
 
     def visit_root(self, root: Root):
         self.buf = ''
@@ -83,15 +86,15 @@ class Compiler(Visitor):
 
             for i, node in enumerate(block.nodes):
                 self.last = last_property_index == i
-                if node.name in ['null', 'expression', 'function', 'group',
-                                 'block', 'unit', 'media', 'keyframes',
-                                 'atrule', 'supports']:
+                if node.node_name in ['null', 'expression', 'function',
+                                      'group', 'block', 'unit', 'media',
+                                      'keyframes', 'atrule', 'supports']:
                     continue
-                elif node.name == 'comment' and node.inline and \
+                elif node.node_name == 'comment' and node.inline and \
                         not self.compress:
                     self.buf = self.buf[0:-1]
                     self.buf += self.out(f' {self.visit(node)}\n', node)
-                elif node.name == 'property':
+                elif node.node_name == 'property':
                     ret = self.visit(node) + separator
                     self.buf += ret if self.compress else self.out(ret, node)
                 else:
@@ -99,7 +102,7 @@ class Compiler(Visitor):
 
             if needs_brackets:
                 self.indents -= 1
-                self.buf += self.out(self.indent() + '}' + separator)
+                self.buf += self.out(' ' * self.indent() + '}' + separator)
 
         # nesting
         for node in block.nodes:
@@ -305,6 +308,9 @@ class Compiler(Visitor):
             else:
                 group.get_block().lacks_rendered_selectors = True
 
+        self.visit(group.get_block())
+        stack.pop()
+
     def visit_ident(self, ident: Ident):
         return ident.value
 
@@ -327,18 +333,19 @@ class Compiler(Visitor):
 
     def visit_expression(self, expr: Expression):
         buf = []
-        len = len(expr.nodes)
-        nodes = map(self.visit, expr.nodes)
+        length = len(expr.nodes)
+        nodes = list(map(lambda node: self.visit(node), expr.nodes))
 
-        for i, node in enumerate(nodes):
-            last = i == len - 1
-            if '/' == nodes[i + 1] or '/' == node:
-                return
+        for i, (node, next) in enumerate(zip(nodes, nodes[1:] + ['end'])):
+            last = i == length - 1
+            buf.append(node)
+            if '/' == next or '/' == node:
+                break
             if last:
-                return
+                break
 
             if self.is_url or (self.is_condition and
-                               (')' == nodes[i + 1] or '(' == node)):
+                               (')' == next or '(' == node)):
                 space = ''
             else:
                 space = ' '
@@ -358,12 +365,12 @@ class Compiler(Visitor):
 
     def visit_property(self, property: Property):
         val = self.visit(property.expr).strip()
-        if property.value:
-            name = property.value
+        if property.name:
+            name = property.name
         else:
             name = ''.join(property.segments)
         arr = []
-        arr.append(self.out(self.indent()))
+        arr.append(self.out(' ' * self.indent()))
         arr.append(self.out(name + (':' if self.compress else ': ')))
         arr.append(self.out(val, property.expr))
         if self.last:

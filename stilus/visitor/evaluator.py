@@ -585,7 +585,7 @@ class Evaluator(Visitor):
 
         def to_string(node):
             if node.node_name in ['function', 'ident']:
-                return node.value
+                return node.name
             elif node.node_name in ['literal', 'string']:
                 # huh?
                 if self.prefix and not node.prefixed and not node.value.name:
