@@ -26,6 +26,10 @@ from stilus.stack.stack import Stack
 from stilus.units import units
 from stilus.visitor.visitor import Visitor
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 class Evaluator(Visitor):
 
@@ -198,7 +202,6 @@ class Evaluator(Visitor):
         new_nodes = []
         for n in group.nodes:
             n.value = self.interpolate(n)
-            # print(f'ruleset {n.value}')
             new_nodes.append(n)
         group.nodes = new_nodes
         group.block = self.visit(group.get_block())
@@ -640,7 +643,9 @@ class Evaluator(Visitor):
     def warn(self, message):
         if not self.warnings:
             return
-        print(f'Warning: {message}')
+        msg = f'Warning: {message}'
+        print(msg)
+        log.info(msg)
 
     def get_current_scope(self):
         return self.stack.current_frame().scope()

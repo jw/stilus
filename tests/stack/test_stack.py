@@ -21,12 +21,3 @@ def test_empty_stack():
     assert stack.current_frame() is None
     block = Block(Ident('hello', 'there'), Ident('foo', 'bar'))
     assert stack.get_block_frame(block) is None
-
-
-if __name__ == '__main__':
-    stack = Stack()
-    block = Block(Ident('hello', 'there'), Ident('foo', 'bar'))
-    print(f'ddd {stack.get_block_frame(block)}')
-    frame = Frame(block)
-    stack.append(frame)
-    print(f'stack {stack}.')
