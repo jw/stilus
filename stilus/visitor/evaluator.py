@@ -180,7 +180,7 @@ class Evaluator(Visitor):
         for color, value in colors.items():
             rgba = RGBA(value[0], value[1], value[2], value[3])
             ident = Ident(color, rgba)
-            rgba.value = color
+            rgba.name = color
             self.common.scope().add(ident)
 
         # todo: also expose url javascript function; might be hard >8-(

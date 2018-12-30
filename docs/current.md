@@ -8,9 +8,9 @@
  - [x] Create and complete the Normalizer
  - [x] Compile `abc\n  color: red\n` successfully
  - [x] Fix the `type` problem
+ - [x] Add logging to the project
  - [ ] Fix the `stack` problem (I think it is done; tests needed)
  - [ ] Fix the `val` problem (I think it is done; tests needed)
- - [ ] Add debug logging to file
  - [ ] Add column, filename and lineno to tokens (lexer and parser and compiler)
  - [ ] Fix the `space` problem
  - [ ] Fix the `string` problem
