@@ -1,6 +1,7 @@
 from collections import deque
 
 from stilus.lexer import Lexer, Token
+from stilus.nodes.atblock import Atblock
 from stilus.nodes.binop import BinOp
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import true
@@ -54,6 +55,8 @@ class Parser:
         self.selector_scope = None
         self.bracketed = None
         self.in_property = None
+        self._ident = None
+        self.operand = None
 
     #
     # Selector composite tokens.
@@ -357,6 +360,7 @@ class Parser:
 
             # the ':' token within braces signifies
             # a stmt_selector. ex: "foo{bar:'baz'}"
+            brace = None
             if '{' == self.lookahead(i).type:
                 brace = True
             elif '}' == self.lookahead(i).type:
@@ -731,6 +735,28 @@ class Parser:
             else:
                 break
         return arr
+
+    def assignment(self):
+        name = self.id().name
+        op = self.accept(['=', '?=', '+=', '-=', '*=', '/=', '%='])
+        if op:
+            self.state.append('assignment')
+            expr = self.list()
+            # @block support
+            if expr.is_empty():
+                self.assign_atblock(expr)
+            node = Ident(name, expr)
+            self.state.pop()
+
+            if op.type == '?=':
+                defined = BinOp('is defined', node)
+                lookup = Expression()
+                lookup.append(Ident(name))
+                node = Ternary(defined, lookup, node)
+            elif op in ['+=', '-=', '*=', '/=', '%=']:
+                node.value = BinOp(op.type[0], Ident(name), expr)
+
+        return node
 
     def stmt_ident(self):
         i = 2
@@ -1144,3 +1170,9 @@ class Parser:
         tok = self.expect('ident')
         self.accept('space')
         return tok.value
+
+    def atblock(self, node):
+        if not node:
+            self.expect('atblock')
+        node = Atblock()
+        self.state.append('atblock')
