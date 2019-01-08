@@ -601,8 +601,8 @@ class Evaluator(Visitor):
             elif node.node_name == 'member':
                 return to_string(self.visit(node))
             elif node.node_name == 'expression':
-                # prevent cyclic 'stmt_selector()' calls
-                if self.calling and 'stmt_selector' in self.calling and \
+                # prevent cyclic 'selector()' calls
+                if self.calling and 'selector' in self.calling and \
                         self._selector:
                     return self.selector
                 self.result += 1

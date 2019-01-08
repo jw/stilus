@@ -311,7 +311,7 @@ class Lexer:
         if match and match.group(0):
             selector = match.group(0)
             self._skip_string(selector)
-            return Token('stmt_selector', selector)
+            return Token('selector', selector)
 
     def space(self):
         """

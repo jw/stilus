@@ -19,3 +19,10 @@ def test_parser_parse_basic():
     assert property.segments[0] == Ident('color', null)
     assert len(property.expr.nodes) == 1
     assert property.expr.nodes[0] == Ident('red', null)
+
+
+if __name__ == '__main__':
+    source = '\nsize = 12px\n\nbody\n  font-size size\n\n'
+    parser = Parser(source, {})
+    block = parser.parse()
+    print(f'block: {block}')

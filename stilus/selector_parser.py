@@ -181,7 +181,7 @@ class SelectorParser:
         return char
 
     def parse(self):
-        r"""Parses the stmt_selector."""
+        r"""Parses the selector."""
         val = ''
         while self.string:
             val += self.advance()
