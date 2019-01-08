@@ -1,5 +1,6 @@
 from collections import deque
 
+from nodes.return_node import ReturnNode
 from stilus.lexer import Lexer, Token
 from stilus.nodes.atblock import Atblock
 from stilus.nodes.binop import BinOp
@@ -57,6 +58,7 @@ class Parser:
         self.in_property = None
         self._ident = None
         self.operand = None
+        self.allow_postfix = None
 
     #
     # Selector composite tokens.
@@ -64,7 +66,7 @@ class Parser:
     selector_tokens = [
         'ident',
         'string',
-        'stmt_selector',
+        'selector',
         'function',
         'comment',
         'boolean',
@@ -224,7 +226,7 @@ class Parser:
 
     def is_selector_token(self, n: int) -> bool:
         """
-        Check if the token at n is a valid stmt_selector token.
+        Check if the token at n is a valid selector token.
         :param n:
         :return:
         """
@@ -257,7 +259,7 @@ class Parser:
             la = self.lookahead(i)
 
     def selector_token(self):
-        """Valid stmt_selector tokens"""
+        """Valid selector tokens"""
         if self.is_selector_token(1):
             if '{' == self.peek().type:
 
@@ -312,7 +314,7 @@ class Parser:
                  'indent' == self.lookahead(i + 2).type):
             return False
 
-        # assume stmt_selector when an ident is followed by a stmt_selector
+        # assume selector when an ident is followed by a selector
         while 'ident' == self.lookahead(i).type and \
                 ('newline' == self.lookahead(i + 1).type or
                  ',' == self.lookahead(i + 1).type):
@@ -320,7 +322,7 @@ class Parser:
 
         while self.is_selector_token(i) or ',' == self.lookahead(i).type:
 
-            if 'stmt_selector' == self.lookahead(i).type:
+            if 'selector' == self.lookahead(i).type:
                 return True
 
             if '&' == self.lookahead(i + 1).type:
@@ -359,7 +361,7 @@ class Parser:
                 return False
 
             # the ':' token within braces signifies
-            # a stmt_selector. ex: "foo{bar:'baz'}"
+            # a selector. ex: "foo{bar:'baz'}"
             brace = None
             if '{' == self.lookahead(i).type:
                 brace = True
@@ -368,9 +370,9 @@ class Parser:
             if brace and ':' == self.lookahead(i).type:
                 return True
 
-            # '{' preceded by a space is considered a stmt_selector.
+            # '{' preceded by a space is considered a selector.
             # for example "foo{bar}{baz}" may be a property,
-            # however "foo{bar} {baz}" is a stmt_selector
+            # however "foo{bar} {baz}" is a selector
             if 'space' == self.lookahead(i).type and \
                     '{' == self.lookahead(i + 1).type:
                 return True
@@ -378,10 +380,10 @@ class Parser:
             # assume pseudo selectors are NOT properties
             # as 'td:th-child(1)' may look like a property
             # and function call to the parser otherwise
-            i += 1
-            if ':' == self.lookahead(i).type and \
-                    not self.lookahead(i - 1).space and \
-                    self.is_pseudo_selector(i):
+            if ':' == self.lookahead(i + 1).type and \
+                    not self.lookahead(i).space and \
+                    self.is_pseudo_selector(i - 1):
+                i += 1
                 return True
 
             # trailing space
@@ -444,7 +446,7 @@ class Parser:
                 return 'ident' == type or '{' == type
 
     def state_allows_selector(self):
-        if self.current_state() in ['root', 'atblock', 'stmt_selector',
+        if self.current_state() in ['root', 'atblock', 'selector',
                                     'conditional', 'function', 'atrule',
                                     'for']:
             return True
@@ -459,6 +461,16 @@ class Parser:
     def statement(self):
         stmt = self.stmt()
         state = self.previous_state
+
+        # special-case statements since it
+        # is not an expression. We could
+        # implement postfix conditionals at
+        # the expression level, however they
+        # would then fail to enclose properties
+        if self.allow_postfix:
+            self.allow_postfix = False
+            state = 'stmt_expression'
+
         if state in ['assignment', 'expression', 'function arguments']:
             op = self.accept('if')
             if not op:
@@ -489,13 +501,13 @@ class Parser:
             return self.keyframes()
         elif type == '-moz-document':
             return self.mozdocument()
-        elif type in ['comment', 'stmt_selector', 'literal', 'charset',
+        elif type in ['comment', 'selector', 'literal', 'charset',
                       'namespace', 'import', 'require', 'extend',
                       'media', 'atrule', 'ident', 'scope', 'supports',
                       'unless', 'function', 'for', 'if']:
             return self.__getattribute__(f'stmt_{type}')()
         elif type in 'return':
-            return self.resturn()
+            return self.return_expression()
         elif type == '{':
             return self.property()
         else:
@@ -678,7 +690,7 @@ class Parser:
             self.accept('newline')  # clobber newline after ','
             arr = self.selector_parts()
 
-            # push the stmt_selector
+            # push the selector
             if is_root and scope:
                 arr.appendleft(Literal(f'{scope} '))
             if len(arr) > 0:
@@ -691,17 +703,17 @@ class Parser:
             if (self.accept(',') or self.accept('newline')) is None:
                 break
 
-        if 'stmt_selector-parts' == self.current_state():
+        if 'selector-parts' == self.current_state():
             return group.nodes
 
-        self.state.append('stmt_selector')
+        self.state.append('selector')
         group.set_block(self.block(group))
         self.state.pop()
 
         return group
 
     def selector_parts(self) -> deque:
-        """Selector candidates, stitched together to form a stmt_selector."""
+        """Selector candidates, stitched together to form a selector."""
         arr = deque()
         while True:
             tok = self.selector_token()
@@ -726,8 +738,10 @@ class Parser:
                 elif tok.type == 'function':
                     arr.append(Literal(f'{tok.value.node_name}('))
                 elif tok.type == 'ident':
-                    # FIXME: string vs node_name?
-                    arr.append(Literal(tok.value.string))
+                    if tok.value.name:
+                        arr.append(Literal(f'{tok.value.name}'))
+                    else:
+                        arr.append(Literal(f'{tok.value.string}'))
                 else:
                     arr.append(Literal(tok.value))
                     if tok.space:
@@ -793,7 +807,7 @@ class Parser:
             if self._indent == self.peek():
                 return self._id()
             while ']' != self.lookahead(i).type and \
-                    'stmt_selector' != self.lookahead(i) and \
+                    'selector' != self.lookahead(i) and \
                     'oes' != self.lookahead(i):
                 i += 1
             if '=' == self.lookahead(i).type:
@@ -809,7 +823,7 @@ class Parser:
                 return self.id()
             else:
                 self._ident = self.peek()
-                if self.current_state() in ['for', 'stmt_selector']:
+                if self.current_state() in ['for', 'selector']:
                     return self.property()
                 elif self.current_state() in ['root', 'atblock', 'atrule']:
                     if '[' == la:
@@ -830,7 +844,7 @@ class Parser:
         else:
             if self.current_state() == 'root':
                 return self.stmt_selector()
-            elif self.current_state() in ['for', 'stmt_selector', 'function',
+            elif self.current_state() in ['for', 'selector', 'function',
                                           'conditional', 'atblock', 'atrule']:
                 return self.property()
             else:
@@ -1176,3 +1190,12 @@ class Parser:
             self.expect('atblock')
         node = Atblock()
         self.state.append('atblock')
+
+    def return_expression(self):
+        self.expect('return')
+        expr = self.expression()
+        if expr.is_empty():
+            return ReturnNode()
+        else:
+            return ReturnNode(expr)
+        pass

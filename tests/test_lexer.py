@@ -10,8 +10,8 @@ from stilus.nodes.unit import Unit
 
 
 def test_lexer_token():
-    left = Token('stmt_selector', 'abc: def')
-    right = Token('stmt_selector', 'abc: def')
+    left = Token('selector', 'abc: def')
+    right = Token('selector', 'abc: def')
     assert left == right
     assert left.anonymous is False
     assert left.space is None
@@ -100,12 +100,12 @@ def test_lexer_clean():
 
 def test_lexer_is_part_of_selector():
     lexer = Lexer('^if.null,[bar],abc  color: black\n', {})
-    assert lexer.next() == Token('stmt_selector', '^')
+    assert lexer.next() == Token('selector', '^')
     assert lexer.next() == Token('if', 'if')
     assert lexer.next() == Token('.', '.', '')
     assert lexer.next() == Token('ident', Ident('null'))
     lexer = Lexer('^#fif: black\n', {})
-    assert lexer.next() == Token('stmt_selector', '^')
+    assert lexer.next() == Token('selector', '^')
     assert lexer.next() == Token('color', RGBA(255, 255, 255, 1))
     assert lexer.next() == Token('ident', Ident('if'))
 
@@ -254,3 +254,11 @@ def test_lexer_escaped():
     lexer = Lexer('bar: 1 \\+ 2\n', {})
     tokens = [token for token in lexer]
     assert tokens[3] == Token('ident', Literal('+'))
+
+
+# todo: add lineno and column to lexer
+if __name__ == '__main__':
+    source = '\nsize = 12px\n\nbody\n  font-size size\n\n'
+    lexer = Lexer(source, {})
+    for token in lexer:
+        print(f'token: {token}')

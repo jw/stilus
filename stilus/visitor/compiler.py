@@ -298,8 +298,8 @@ class Compiler(Visitor):
 
                     # keyframe bocks (10%, 20% { ... })
                     # checkme: if (this.keyframe)
-                    # checkme:   stmt_selector = i ? stmt_selector.trim() :
-                    # checkme:                   stmt_selector;
+                    # checkme:   selector = i ? selector.trim() :
+                    # checkme:                   selector;
                     if self.keyframe:
                         selector.strip()
 

@@ -74,8 +74,8 @@ def clamp_percentage(n, smallest=0, largest=100):
 
 def compile_selectors(arr, leave_hidden=False):
     """
-    Compile stmt_selector strings in `arr` from the bottom-up
-    to produce the stmt_selector combinations. For example
+    Compile selector strings in `arr` from the bottom-up
+    to produce the selector combinations. For example
     the following Stylus:
 
     '''

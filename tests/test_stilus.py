@@ -8,6 +8,6 @@ def test_stylus():
 
 
 if __name__ == '__main__':
-    source = 'abc\n  color: transparent\n'
-    css = 'abc {\n  color: transparent;\n}\n'
+    source = '\nsize = 12px\n\nbody\n  font-size size\n\n'
+    css = 'body {\n  front-size: 12px;\n}'
     assert stilus.render(source, {}) == css
