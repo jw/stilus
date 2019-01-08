@@ -1,7 +1,7 @@
 import copy
 import json
 
-from nodes.expression import Expression
+from stilus.nodes.expression import Expression
 from stilus.nodes.node import Node
 
 
