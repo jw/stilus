@@ -1,6 +1,5 @@
 from collections import deque
 
-from nodes.return_node import ReturnNode
 from stilus.lexer import Lexer, Token
 from stilus.nodes.atblock import Atblock
 from stilus.nodes.binop import BinOp
@@ -20,6 +19,7 @@ from stilus.nodes.member import Member
 from stilus.nodes.node import Node
 from stilus.nodes.property import Property
 from stilus.nodes.query_list import QueryList
+from stilus.nodes.return_node import ReturnNode
 from stilus.nodes.root import Root
 from stilus.nodes.selector import Selector
 from stilus.nodes.ternary import Ternary
