@@ -174,7 +174,7 @@ class Evaluator(Visitor):
             - user-defined globals
         :return:
         """
-        self.common.set_scope(Scope())
+        self.common._scope = Scope()
 
         # colors
         for color, value in colors.items():

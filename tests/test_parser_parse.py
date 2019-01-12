@@ -23,6 +23,7 @@ def test_parser_parse_basic():
 
 if __name__ == '__main__':
     source = '\nsize = 12px\n\nbody\n  font-size size\n\n'
+    source = 'body\n  color red\n\n'
     parser = Parser(source, {})
     block = parser.parse()
     print(f'block: {block}')

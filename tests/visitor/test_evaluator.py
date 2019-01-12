@@ -15,7 +15,7 @@ def test_evaluator_create():
     property = result.nodes[0].nodes[0].block.nodes[0]
     assert property.expr.node_name == 'expression'
     assert property.expr.nodes[0].r == 255
-    # assert property.expr.nodes[0].name == 'red'  # fixme!
+    assert property.expr.nodes[0].name == 'red'
     assert property.expr.nodes[0].a == 1
     assert property.expr.nodes[0].b == 0
     assert property.expr.nodes[0].g == 0

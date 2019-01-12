@@ -8,11 +8,11 @@ from stilus.nodes.root import Root
 def test_root():
     root = Root()
     assert root.node_name == 'root'
-    root.push(null)
+    root.append(null)
     assert root.nodes == deque([null])
     root.unshift(true)
     assert root.nodes == deque([true, null])
     root.unshift(false)
     assert root.nodes == deque([false, true, null])
-    root.push(false)
+    root.append(false)
     assert root.nodes == deque([false, true, null, false])
