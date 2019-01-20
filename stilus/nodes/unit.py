@@ -49,7 +49,7 @@ class Unit(Node):
     def clone(self):
         return copy.deepcopy(self)
 
-    def operate(self, op, right: Node):
+    def operate(self, op, right: Node, value=None):
         type = self.type if self.type else right.first().type
 
         # swap color
@@ -60,7 +60,7 @@ class Unit(Node):
         if self.should_coerce(op):
             right = right.first()
 
-            if self.type != '%' and op in ['-', '+'] and self.type == '%':
+            if self.type != '%' and op in ['-', '+'] and right.type == '%':
                 right = Unit(self.value * (right.value / 100), '%')
             else:
                 right = self.coerce(right)
@@ -69,10 +69,10 @@ class Unit(Node):
                 return Unit(self.value - right.value, type)
             elif op == '+':
                 # keyframes interpolation
-                if self.type:
+                if type:
                     type = type
                 else:
-                    type = right.type == '%' and right.type
+                    type = right.type if right.type == '%' else None
                 return Unit(self.value + right.value, type)
             elif op == '/':
                 return Unit(self.value / right.value, type)
@@ -102,14 +102,24 @@ class Unit(Node):
         return super().operate(op, right)
 
     def coerce(self, other):
-        if other.name == 'unit':
+        if other.node_name == 'unit':
             a = self
             b = other
-            factor_a = FACTOR_TABLE[a.type]
-            factor_b = FACTOR_TABLE[b.type]
 
-            if factor_a and factor_b and factor_a.label == factor_b.label:
-                b_value = b.value * (factor_b.value / factor_a.value)
+            if a.type:
+                factor_a = FACTOR_TABLE.get(a.type, {'value': 1,
+                                                     'label': a.type})
+            else:
+                factor_a = None
+            if b.type:
+                factor_b = FACTOR_TABLE.get(b.type, {'value': 1,
+                                                     'label': b.type})
+            else:
+                factor_b = None
+
+            if factor_a and factor_b and \
+                    factor_a['label'] == factor_b['label']:
+                b_value = b.value * (factor_b['value'] / factor_a['value'])
                 return Unit(b_value, a.type)
             else:
                 return Unit(b.value, a.type)

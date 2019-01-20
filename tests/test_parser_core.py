@@ -90,3 +90,14 @@ def test_parser_peek_lookahead_and_next():
     assert parser.peek().type == 'outdent'
     parser.next()
     assert parser.peek().type == 'eos'
+
+
+def test_parser_iterator():
+    parser = Parser('abc\n  color: red\n', {})
+    tokens = [token for token in parser]
+    assert len(tokens) == 6
+    assert tokens[3].type == ':'
+    parser = Parser('abc\n  color red\n', {})
+    tokens = [token for token in parser]
+    assert len(tokens) == 6
+    assert tokens[3].type == 'space'
