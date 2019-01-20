@@ -106,17 +106,17 @@ class Compiler(Visitor):
 
         # nesting
         for node in block.nodes:
-            if node.name in ['group', 'block', 'keyframes']:
+            if node.node_name in ['group', 'block', 'keyframes']:
                 if self.linenos:
                     self.debug_info(node)
                 self.visit(node)
-            elif node.name in ['media', 'import', 'atrule', 'supports']:
+            elif node.node_name in ['media', 'import', 'atrule', 'supports']:
                 self.visit(node)
-            elif node.name == 'comment':
+            elif node.node_name == 'comment':
                 if not node.suppress:
                     self.buf += self.out(self.indent() +
                                          self.visit(node) + '\n', node)
-            elif node.name in ['charset', 'literal', 'namespace']:
+            elif node.node_name in ['charset', 'literal', 'namespace']:
                 self.buf += self.out(self.visit(node) + '\n', node)
 
     def visit_keyframes(self, node: Node):
@@ -255,19 +255,18 @@ class Compiler(Visitor):
         return str(hsla.rgba)
 
     def visit_unit(self, unit: Unit):
-        type = unit.type
+        t = unit.type if unit.type else ''
         n = unit.value
-        float = type(n) == 'float'
+        f = isinstance(n, float)
         if self.compress:
             # always return '0' unless the unit is a percentage or time
-            if '%' != type and 's' != type and \
-                    'ms' != type and 0 == n:
+            if '%' != t and 's' != t and 'ms' != t and 0 == n:
                 return 0
             # omit leading '0' on floats
-            if float and n < 1 and n > -1:
+            if f and n < 1 and n > -1:
                 return n.replace('0.', '.')
         else:
-            return f'{n:.15f}{type}'
+            return f'{n:g}{t}'
 
     def visit_group(self, group: Group):
         if self.keyframe:

@@ -59,6 +59,7 @@ class Parser:
         self._ident = None
         self.operand = None
         self.allow_postfix = None
+        self.prev_state = None
 
     #
     # Selector composite tokens.
@@ -175,10 +176,16 @@ class Parser:
         'selection']
 
     def current_state(self):
+        # print(f'current state: {self.state}')
         return self.state[-1]
 
     def previous_state(self):
-        return self.state[-2]
+        # print(f'previous state: {self.state}')
+        try:
+            return self.state[-2]
+        except Exception as e:
+            # todo: handle this properly
+            raise e
 
     def parse(self) -> Node:
         block = self.parent = self.root
@@ -216,6 +223,15 @@ class Parser:
     def next(self) -> Token:
         # FIXME: add noline and column and co
         tok = self.lexer.next()
+        return tok
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        tok = self.next()
+        if tok.type == 'eos':
+            raise StopIteration
         return tok
 
     def peek(self) -> Token:
@@ -380,10 +396,10 @@ class Parser:
             # assume pseudo selectors are NOT properties
             # as 'td:th-child(1)' may look like a property
             # and function call to the parser otherwise
-            if ':' == self.lookahead(i + 1).type and \
-                    not self.lookahead(i).space and \
-                    self.is_pseudo_selector(i - 1):
-                i += 1
+            i += 1
+            if ':' == self.lookahead(i - 1).type and \
+                    not self.lookahead(i - 1).space and \
+                    self.is_pseudo_selector(i):
                 return True
 
             # trailing space
@@ -392,7 +408,7 @@ class Parser:
                     '{' == self.lookahead(i + 2).type:
                 return True
 
-            if '.' == self.lookahead(i).type and \
+            if ',' == self.lookahead(i).type and \
                     'newline' == self.lookahead(i + 1).type:
                 return True
 
@@ -412,8 +428,8 @@ class Parser:
             return False
 
         # trailing separators
-        while self.lookahead(i).type in ['indent', 'outdent', 'newline', 'for',
-                                         'if', ';', '}', 'eos']:
+        while self.lookahead(i).type not in ['indent', 'outdent', 'newline',
+                                             'for', 'if', ';', '}', 'eos']:
             i += 1
 
         if 'indent' == self.lookahead(i).type:
@@ -453,14 +469,14 @@ class Parser:
 
     def assign_atblock(self, expr):
         try:
-            expr.push(self.atblock(expr))
+            expr.append(self.atblock(expr))
         except Exception:
             self.error(
                 'invalid right-hand side operand in assignment, got {peek}')
 
     def statement(self):
         stmt = self.stmt()
-        state = self.previous_state
+        state = self.prev_state
 
         # special-case statements since it
         # is not an expression. We could
@@ -472,27 +488,23 @@ class Parser:
             state = 'stmt_expression'
 
         if state in ['assignment', 'expression', 'function arguments']:
-            op = self.accept('if')
-            if not op:
-                op = self.accept('unless')
-            if not op:
-                op = self.accept('for')
-
-            if op.type in ['if', 'unless']:
-                stmt = If(self.expression(), stmt)
-                stmt.postfix = true
-                stmt.negate = 'unless' == op.type
-                self.accept(';')
-            elif op.type == 'for':
-                val = self.id().name
-                if self.accept(','):
-                    key = self.id().name
-                self.expect('in')
-                each = Each(val, key, self.expression())
-                block = Block(self.parent, each)
-                block.push(stmt)
-                each.block = block
-                stmt = each
+            op = self.accept(['if', 'unless', 'for'])
+            if op:
+                if op.type in ['if', 'unless']:
+                    stmt = If(self.expression(), stmt)
+                    stmt.postfix = true
+                    stmt.negate = 'unless' == op.type
+                    self.accept(';')
+                elif op.type == 'for':
+                    val = self.id().name
+                    if self.accept(','):
+                        key = self.id().name
+                    self.expect('in')
+                    each = Each(val, key, self.expression())
+                    block = Block(self.parent, each)
+                    block.push(stmt)
+                    each.block = block
+                    stmt = each
         return stmt
 
     def stmt(self):
@@ -572,6 +584,7 @@ class Parser:
         self.state.append('atrule')
         media = Media(self.queries())
         media.block(self.block(media))
+        self.prev_state = self.state[-1]
         self.state.pop()
 
     def queries(self):
@@ -708,6 +721,7 @@ class Parser:
 
         self.state.append('selector')
         group.set_block(self.block(group))
+        self.prev_state = self.state[-1]
         self.state.pop()
 
         return group
@@ -760,6 +774,7 @@ class Parser:
             if expr.is_empty():
                 self.assign_atblock(expr)
             node = Ident(name, expr)
+            self.prev_state = self.state[-1]
             self.state.pop()
 
             if op.type == '?=':
@@ -838,9 +853,9 @@ class Parser:
                 else:
                     # do not disrupt the ident when an operand
                     if self.operand:
-                        self.id()
+                        return self.id()
                     else:
-                        self.expression()
+                        return self.expression()
         else:
             if self.current_state() == 'root':
                 return self.stmt_selector()
@@ -874,6 +889,7 @@ class Parser:
             ret = ident[0]
         self.in_property = False
         self.allow_postfix = True
+        self.prev_state = self.state[-1]
         self.state.pop()
 
         # optional ';'
@@ -916,13 +932,13 @@ class Parser:
         expr = Expression()
         self.state.append('expression')
         while True:
-
             node = self.negation()
             if not node:
                 break
                 # fixme
                 self.error('unexpected token {peek} in expression')
             expr.append(node)
+        self.prev_state = self.state[-1]
         self.state.pop()
         return expr
 
@@ -1027,12 +1043,14 @@ class Parser:
         self.parens += 1
         args = self.args()
         self.expect(')')
-        self.parems -= 1
+        self.parens -= 1
+        self.prev_state = self.state[-1]
         self.state.pop()
         call = Call(name, args)
         if with_block:
             self.state.append('function')
             call.block = self.block(call)
+            self.prev_state = self.state[-1]
             self.state.pop()
         return call
 
@@ -1069,8 +1087,8 @@ class Parser:
                 if not node:
                     self.error(f'illegal unary "{op}", '
                                f'missing left-hand operand')
-                    node = BinOp(op.type, node, self.defined())
-                    self.operand = False
+                node = BinOp(op.type, node, self.defined())
+                self.operand = False
         return node
 
     def defined(self):
@@ -1171,12 +1189,14 @@ class Parser:
         params = self.params()
         self.skip_whitespace()
         self.expect(')')
+        self.prev_state = self.state[-1]
         self.state.pop()
 
         # body
         self.state.push('function')
         fn = Function(name, params)
         fn.block = self.block(fn)
+        self.prev_state = self.state[-1]
         self.state.pop()
         return Ident(name, fn)
 

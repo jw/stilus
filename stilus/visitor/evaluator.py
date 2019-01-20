@@ -435,7 +435,7 @@ class Evaluator(Visitor):
         if 'is defined' == binop.op:
             return self.is_defined(binop.left)
 
-        self.result -= 1
+        self.result += 1
         # visit operands
         op = binop.op
         left = self.visit(binop.left)
@@ -445,14 +445,16 @@ class Evaluator(Visitor):
             right = self.visit(binop.right)
 
         # hack (sic): ternary
-        if binop.val:
-            val = self.visit(binop.val)
+        if binop.value:
+            value = self.visit(binop.val)
         else:
-            val = null
+            value = null
+
+        self.result -= 1
 
         # operate
         try:
-            return self.visit(left.operate(op, right, val))
+            return self.visit(left.operate(op, right, value))
         except Exception as e:
             # disregard coercion issues in equality
             # checks, and simply return false
@@ -637,7 +639,8 @@ class Evaluator(Visitor):
 
     def castable(self, expr: Expression):
         return len(expr.nodes) == 2 and \
-               expr.first().name == 'unit' and \
+               expr.first().node_name == 'unit' and \
+               expr.nodes[1] and \
                expr.nodes[1].name in units
 
     def warn(self, message):
