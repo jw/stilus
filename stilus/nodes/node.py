@@ -64,7 +64,7 @@ class Node:
         from stilus.visitor.evaluator import Evaluator
         return Evaluator(self).evaluate()
 
-    def operate(self, op: str, right: Type['Node']) -> 'Node':
+    def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
         """Operate on `right` with the given `op`."""
         from stilus.nodes.boolean import Boolean
         if op == 'is a':
@@ -86,7 +86,7 @@ class Node:
         elif op == '<':
             return Boolean(hash(self) < hash(right))
         elif op == '||':
-            return self if self.toBoolean().isTrue else right
+            return self if self.to_boolean() is True else right
         elif op == 'in':
             from stilus import utils
             values = utils.unwrap(right)

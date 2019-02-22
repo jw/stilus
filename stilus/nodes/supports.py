@@ -4,25 +4,23 @@ import json
 from stilus.nodes.node import Node
 
 
-class BinOp(Node):
+class Supports(Node):
 
-    def __init__(self, op, left, right=None):
-        super().__init__()
-        self.op = op
-        self.left = left
-        self.right = right
+    def __init__(self, condition):
+        super().__init__('supports')
+        self.condition = condition
 
     def __str__(self):
-        return f'({self.left} {self.op} {self.right})'
+        return f'@supports {self.condition}'
 
     def __repr__(self):
         return self.__str__()
 
     def __key(self):
-        return self.op, self.left, self.right
+        return self.node_name, self.condition
 
     def __eq__(self, other):
-        if isinstance(other, BinOp):
+        if isinstance(other, Supports):
             return self.__key() == other.__key()
         return False
 
@@ -33,10 +31,8 @@ class BinOp(Node):
         return copy.deepcopy(self)
 
     def to_json(self):
-        return json.dumps({'__type': 'BinOp',
-                           'left': self.left,
-                           'right': self.right,
-                           'op': self.op,
+        return json.dumps({'__type': 'Supports',
+                           'condition': self.condition,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})

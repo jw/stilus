@@ -6,7 +6,7 @@ from stilus.nodes.node import Node
 
 class Function(Node):
 
-    def __init__(self, function_name, params, body):
+    def __init__(self, function_name, params, body=None):
         super().__init__()
         self.function_name = function_name
         self.params = params

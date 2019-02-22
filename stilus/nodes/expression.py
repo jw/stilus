@@ -53,7 +53,7 @@ class Expression(Node):
 
     def first(self):
         if not self.is_empty():
-            return self.nodes[0]
+            return self.nodes[0].first()
         else:
             from stilus.nodes.null import null
             return null

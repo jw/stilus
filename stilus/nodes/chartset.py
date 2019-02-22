@@ -4,26 +4,22 @@ import json
 from stilus.nodes.node import Node
 
 
-class Each(Node):
+class Charset(Node):
 
-    def __init__(self, value, key, expr, block=None):
-        super().__init__()
-        self.value = value
-        self.key = key
-        self.expr = expr
-        self.block = block
+    def __init__(self, value):
+        super().__init__(value)
 
     def __str__(self):
-        return f'{self.value}: {self.key} [{self.expr}] {self.block}'
+        return f'@charset {self.value}'
 
     def __repr__(self):
         return self.__str__()
 
     def __key(self):
-        return self.node_name, self.value, self.key, self.expr, self.block
+        return self.node_name, self.value
 
     def __eq__(self, other):
-        if isinstance(other, Each):
+        if isinstance(other, Charset):
             return self.__key() == other.__key()
         return False
 
@@ -34,11 +30,8 @@ class Each(Node):
         return copy.deepcopy(self)
 
     def to_json(self):
-        return json.dumps({'__type': 'Each',
+        return json.dumps({'__type': 'Charset',
                            'val': self.value,
-                           'key': self.key,
-                           'expr': self.expr,
-                           'block': self.block,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})

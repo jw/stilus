@@ -12,21 +12,25 @@ from .nodes.literal import Literal
 
 class Token:
 
-    def __init__(self, type, value=None, space=None):
+    def __init__(self, type, value=None, space=None, lineno=None, column=None):
         self.type = type
         self.value = value
         self.space = space
         self.anonymous = False
+        self.lineno = lineno
+        self.column = column
 
     def __str__(self):
         space = f', space={self.space}' if self.space else ''
-        return f'Token({self.type}, {self.value}{space})'
+        return f'Token({self.type}, {self.value}{space}) ' \
+            f'[{self.lineno}:{self.column}]'
 
     def __repr__(self):
         return str(self)
 
     def __key(self):
-        return self.type, self.value, self.space, self.anonymous
+        return self.type, self.value, self.space, self.anonymous, \
+               self.lineno, self.column
 
     def __hash__(self):
         return hash(self.__key())
@@ -105,9 +109,20 @@ class Lexer:
 
     def _skip_number(self, len):
         self.s = self.s[len:]
+        self.column += len
 
     def _skip_string(self, str):
         self.s = self.s[len(str):]
+        self.move(str)
+
+    def move(self, str):
+        lines = str.count('\n')
+        self.lineno += lines
+        idx = str.rfind('\n')
+        if idx == -1:
+            self.column += len(str)
+        else:
+            self.column = len(str) - idx
 
     def is_part_of_selector(self):
         tok = self.stash[-1] if self.stash else self.prev
@@ -145,84 +160,86 @@ class Lexer:
 
     # todo: use a dict to clean this up?
     def advance(self):
+        lineno = self.lineno
+        column = self.column
         tok = self.eos()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.null()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.sep()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.keyword()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.urlchars()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.comment()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.newline()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.escaped()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.important()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.literal()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.anonymous_function()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.atrule()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.function()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.brace()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.paren()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.color()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.string()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.unit()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.namedop()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.boolean()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.unicode()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.ident()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.op()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.eol()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.space()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         tok = self.selector()
         if tok:
-            return self._tok_with_location(tok)
+            return self._tok_with_location(tok, lineno, column)
         return None
 
     def eos(self):
@@ -637,7 +654,7 @@ class Lexer:
         match = re.match(r'^("[^"]*"|\'[^\']*\')[ \t]*', self.s)
         if match:
             self._skip_string(match.group(0))
-            string = match.group(0)[1:-1]
+            string = match.group(0).strip()[1:-1]
             quote = match.group(0)[0]
             return Token('string', String(string, quote))
 
@@ -705,7 +722,7 @@ class Lexer:
             self._skip_string(match.group(0))
             return Token('ident', Ident(match.group(0)))
 
-    def _tok_with_location(self, tok):
-        tok.column = self.column
-        tok.lineno = self.lineno
+    def _tok_with_location(self, tok, lineno, column):
+        tok.lineno = lineno
+        tok.column = column
         return tok

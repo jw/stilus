@@ -61,7 +61,7 @@ def test_parser_peek_lookahead_and_next():
     # next
     node = parser.next()
     assert node.type == 'ident'
-    assert node.value == Ident('abc')
+    assert node.value == Ident('abc', lineno=1, column=1)
     node = parser.next()
     assert node.type == 'indent'
     assert node.value is None

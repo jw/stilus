@@ -311,7 +311,7 @@ class Compiler(Visitor):
         stack.pop()
 
     def visit_ident(self, ident: Ident):
-        return ident.value
+        return ident.name
 
     def visit_string(self, string: String):
         return string.value if self.is_url else str(string)

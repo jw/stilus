@@ -23,7 +23,7 @@ class Root(Node):
     def unshift(self, node):
         self.nodes.appendleft(node)
 
-    def clone(self):
+    def clone(self, parent=None, node=None):
         return copy.deepcopy(self)
 
     def __key(self):

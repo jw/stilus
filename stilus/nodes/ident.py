@@ -6,7 +6,8 @@ from stilus.nodes.node import Node
 
 class Ident(Node):
 
-    def __init__(self, name, value=None, mixin=False):
+    def __init__(self, name, value=None, mixin=False,
+                 lineno=None, column=None):
         super().__init__(value)
         self.name = name
         self.string = name
@@ -14,6 +15,8 @@ class Ident(Node):
         self.value = value if value else null
         self.mixin = mixin
         self.property = None
+        self.lineno = lineno
+        self.column = column
 
     def __str__(self):
         return f'{self.string}'
@@ -22,7 +25,8 @@ class Ident(Node):
         return self.__str__()
 
     def __key(self):
-        return self.name, self.value, self.mixin
+        return self.name, self.value, self.mixin, self.property, \
+               self.lineno, self.column
 
     def __eq__(self, other):
         if isinstance(other, Ident):

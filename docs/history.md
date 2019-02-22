@@ -1,5 +1,13 @@
 ## History
 
+### 0.5.0 
+
+The first evaluate.
+
+ - First compile and evauation of a very simple styl: `abc\n  color: red\n`.
+ - Parsed and evaluated the `index.styl`.
+ - Ran some `cases` tests 
+
 ### 0.4.0 
 
 The first compile.

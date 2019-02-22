@@ -7,9 +7,9 @@ def test_selector():
     assert len(selector.segments) == 2
     assert selector.inherits is True
     assert selector.optional is False
-    assert f'{selector}' == f'segment1segment2'
+    assert f'{selector}' == f"['segment1', 'segment2']"
     selector.optional = True
-    assert f'{selector}' == f'segment1segment2 !optional'
+    assert f'{selector}' == f"['segment1', 'segment2'] !optional"
     assert selector.is_placeholder() is False
 
 

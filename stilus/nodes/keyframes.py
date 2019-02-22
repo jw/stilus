@@ -10,6 +10,8 @@ class Keyframes(Atrule):
         super().__init__('keyframes')
         self.segments = segments
         self.prefix = prefix
+        self.frames = []
+        self.fabricated = False
 
     def __str__(self):
         return f'@keyframes {"".join(self.segments)}'

@@ -1,3 +1,7 @@
+from os.path import join
+from pathlib import Path
+from typing import List
+
 from stilus.nodes.expression import Expression
 from stilus.nodes.node import Node
 from stilus.selector_parser import SelectorParser
@@ -140,6 +144,48 @@ def compile_selectors(arr, leave_hidden=False):
     return set(selectors)
 
 
-def merge(a, b, deep: bool):
+# todo: check deep parameter; check why this method exists
+def merge(a, b):
     """Merges two dicts.  How weird."""
     return a.update(b)
+
+
+def lookup(path, paths: List, ignore):
+    p = Path(path)
+    if p.is_absolute() and p.exists():
+        return str(path)
+
+    for a_path in paths:
+        lookup = join(a_path, path)
+        if ignore == lookup:
+            continue
+        p = Path(lookup)
+        if p.exists():
+            return str(lookup)
+
+    return None
+
+
+def find(path, paths, ignore):
+    # first see if path exists
+    p = Path(path)
+    if p.is_absolute() and p.exists():
+        return [str(p)]
+
+    # if not see if it is in paths
+    for a_path in paths:
+        lookup = Path(join(a_path, path))
+        if lookup == ignore:
+            continue
+        if lookup.exists():
+            return [str(p)]
+
+    return None
+
+
+def lookup_index(name, paths, filename):
+
+    found = find(join(name, 'index.styl'), paths, filename)
+    # todo: check basename replacement?
+    # todo: check node modules?
+    return found

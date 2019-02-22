@@ -44,7 +44,8 @@ class Frame:
         if self._scope:
             return self._scope
         try:
-            return self.parent.scope
+            # print(f'{self.parent}; type: {type(self.parent)}')
+            return self.parent.scope()
         except AttributeError:
             raise TypeError('Cannot read property \'scope\' of undefined')
 
