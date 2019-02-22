@@ -14,7 +14,7 @@ class Selector(Node):
         self.block = None
 
     def __str__(self):
-        string = ''.join(self.segments)
+        string = ''.join(str(self.segments))
         if self.optional:
             string += ' !optional'
         return string

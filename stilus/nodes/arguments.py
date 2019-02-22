@@ -12,7 +12,7 @@ class Arguments(Expression):
         self.is_list = False
 
     def __str__(self):
-        return self.map
+        return str(self.map)
 
     def __repr__(self):
         return self.__str__()
@@ -42,7 +42,7 @@ class Arguments(Expression):
         return json.dumps({'__type': 'Arguments',
                            'value': self.value,
                            'map': self.map,
-                           'isList': self.isList,
+                           'isList': self.is_list,
                            'preserve': self.preserve,
                            'lineno': self.lineno,
                            'column': self.column,

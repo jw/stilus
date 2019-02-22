@@ -16,6 +16,6 @@ def test_parser_parse_basic():
     property = selector.block.nodes[0]
     assert property.node_name == 'property'
     assert len(property.segments) == 1
-    assert property.segments[0] == Ident('color', null)
+    assert property.segments[0] == Ident('color', null, lineno=2, column=3)
     assert len(property.expr.nodes) == 1
-    assert property.expr.nodes[0] == Ident('red', null)
+    assert property.expr.nodes[0] == Ident('red', null, lineno=2, column=10)

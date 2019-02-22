@@ -35,13 +35,6 @@ def test_frame_scopes():
     assert frame.scope() == Scope()
     assert frame.block == block
     assert frame.parent is parent
-    # irregular block (scope is False) and frame has a parent -> scope is True
-    block = Block(Ident('hello'), Ident('there'), scope=False)
-    parent = Block(Ident('fizz'), Ident('fuzz'))
-    frame = Frame(block, parent)
-    assert frame.scope() is True
-    assert frame.block == block
-    assert frame.parent == parent
 
 
 def test_frame_str():

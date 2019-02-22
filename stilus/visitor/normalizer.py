@@ -226,10 +226,8 @@ class Normalizer(Visitor):
         return node
 
     def visit_keyframes(self, node):
-        frames = filter(lambda frame: frame.block and
-                        frame.block.has_properties(),
-                        node.block.nodes)
-        node.frames = len(frames)  # checkme: weird
+        node.frames = [group for group in node.block.nodes
+                       if node.block and node.block.has_properties()]
         return node
 
     def visit_import(self, node):

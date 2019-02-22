@@ -54,14 +54,16 @@ def test_parser_list():
     parser = Parser('color: red\n', {})
     list = parser.list()
     assert len(list) == 1
-    assert list.nodes[0] == Ident('color', null, False)
+    assert list.nodes[0] == Ident('color', null, False, lineno=1, column=1)
 
 
 def test_parser_property():
     parser = Parser('color: red\n', {})
     property = parser.property()
-    assert property.segments[0] == Ident('color', null, False)
-    assert property.expr.nodes[0] == Ident('red', null, False)
+    assert property.segments[0] == Ident('color', null, False,
+                                         lineno=1, column=1)
+    assert property.expr.nodes[0] == Ident('red', null, False,
+                                           lineno=1, column=8)
 
 
 def test_parser_selector():
@@ -79,6 +81,6 @@ def test_parser_selector():
     property = block.nodes[0]
     assert property.node_name == 'property'
     assert len(property.segments) == 1
-    assert property.segments[0] == Ident('color', null)
+    assert property.segments[0] == Ident('color', null, lineno=2, column=3)
     assert len(property.expr.nodes) == 1
-    assert property.expr.nodes[0] == Ident('red', null)
+    assert property.expr.nodes[0] == Ident('red', null, lineno=2, column=10)

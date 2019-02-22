@@ -1,4 +1,3 @@
-import copy
 import json
 
 from deprecated import deprecated
@@ -51,8 +50,21 @@ class Block(Node):
     def is_empty(self):
         return len(self.nodes) == 0
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        p = parent
+        n = node
+        if not p:
+            p = self.parent
+        if not n:
+            n = self.node
+        clone = Block(p, n)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        clone.scope = self.scope
+        for node in self.nodes:
+            clone.append(node.clone())
+        return clone
 
     @deprecated(reason='use append')
     def push(self, node):

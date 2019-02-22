@@ -1,27 +1,40 @@
 from collections import deque
 
 from stilus.lexer import Lexer, Token
+from stilus.nodes.arguments import Arguments
 from stilus.nodes.atblock import Atblock
+from stilus.nodes.atrule import Atrule
 from stilus.nodes.binop import BinOp
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import true
 from stilus.nodes.call import Call
+from stilus.nodes.chartset import Charset
 from stilus.nodes.each import Each
 from stilus.nodes.expression import Expression
+from stilus.nodes.extend import Extend
 from stilus.nodes.feature import Feature
 from stilus.nodes.function import Function
 from stilus.nodes.group import Group
 from stilus.nodes.ident import Ident
 from stilus.nodes.ifnode import If
+from stilus.nodes.import_node import Import
+from stilus.nodes.keyframes import Keyframes
 from stilus.nodes.literal import Literal
 from stilus.nodes.media import Media
 from stilus.nodes.member import Member
+from stilus.nodes.namespace import Namespace
 from stilus.nodes.node import Node
+from stilus.nodes.nothing import Nothing
+from stilus.nodes.null import null
+from stilus.nodes.object_node import ObjectNode
+from stilus.nodes.params import Params
 from stilus.nodes.property import Property
+from stilus.nodes.query import Query
 from stilus.nodes.query_list import QueryList
 from stilus.nodes.return_node import ReturnNode
 from stilus.nodes.root import Root
 from stilus.nodes.selector import Selector
+from stilus.nodes.supports import Supports
 from stilus.nodes.ternary import Ternary
 from stilus.nodes.unaryop import UnaryOp
 from stilus.units import units
@@ -223,6 +236,10 @@ class Parser:
     def next(self) -> Token:
         # FIXME: add noline and column and co
         tok = self.lexer.next()
+        if tok.value and isinstance(tok.value, Node):
+            tok.value.lineno = tok.lineno
+            tok.value.column = tok.column
+        # print(tok)
         return tok
 
     def __iter__(self):
@@ -319,7 +336,7 @@ class Parser:
         self.skip(['space', 'comment'])
 
     def looks_like_function_definition(self, i):
-        return self.lookahead(i).type in ['indent', '}']
+        return self.lookahead(i).type in ['indent', '{']
 
     def looks_like_selector(self, from_property=False):
         i = 1
@@ -423,7 +440,7 @@ class Parser:
             return True
 
         # css-style mode, false on ; }
-        if self.css and ';' == self.lookahead(i).type and \
+        if self.css > 0 and ';' == self.lookahead(i).type and \
                 '}' == self.lookahead(i - 1).type:
             return False
 
@@ -453,13 +470,11 @@ class Parser:
         if self.lookahead(i).type in ['{', 'indent', ',']:
             return True
         elif self.lookahead(i).type == 'newline':
-            # FIXME: bad code
-            is_unit = 'unit' == self.lookahead(i).type
-            is_newline = 'newline' == self.lookahead(i).type
-            while is_unit or is_newline:
+            i += 1
+            while self.lookahead(i).type in ['unit', 'newline']:
                 i += 1
-                type = self.lookahead(i).type
-                return 'ident' == type or '{' == type
+            type = self.lookahead(i).type
+            return 'ident' == type or '{' == type
 
     def state_allows_selector(self):
         if self.current_state() in ['root', 'atblock', 'selector',
@@ -485,7 +500,7 @@ class Parser:
         # would then fail to enclose properties
         if self.allow_postfix:
             self.allow_postfix = False
-            state = 'stmt_expression'
+            state = 'expression'
 
         if state in ['assignment', 'expression', 'function arguments']:
             op = self.accept(['if', 'unless', 'for'])
@@ -497,12 +512,13 @@ class Parser:
                     self.accept(';')
                 elif op.type == 'for':
                     val = self.id().name
+                    key = None
                     if self.accept(','):
                         key = self.id().name
                     self.expect('in')
                     each = Each(val, key, self.expression())
                     block = Block(self.parent, each)
-                    block.push(stmt)
+                    block.append(stmt)
                     each.block = block
                     stmt = each
         return stmt
@@ -533,7 +549,7 @@ class Parser:
                         return self.stmt_selector()
                 elif type == '+':
                     if 'function' == self.lookahead(2).type:
-                        return self.stmt_function()
+                        return self.function_call()
                     else:
                         return self.stmt_selector()
                 elif type == '*':
@@ -555,35 +571,80 @@ class Parser:
         self.skip_spaces()
         return node
 
-    # todo: implement me!
     def stmt_literal(self):
-        pass
+        return self.expect('literal').value
 
-    # todo: implement me!
     def stmt_charset(self):
-        pass
+        self.expect('charset')
+        str = self.expect('string').value
+        self.allow_postfix = True
+        return Charset(str)
 
-    # todo: implement me!
     def stmt_namespace(self):
-        pass
+        self.expect('namespace')
+        self.skip_spaces_and_comments()
+        prefix = self.accept('ident')
+        if prefix:
+            prefix = prefix.value
+        self.skip_spaces_and_comments()
 
-    # todo: implement me!
+        str = self.accept('string')
+        if str is not None:
+            str = self.url()
+        self.allow_postfix = True
+        return Namespace(str, prefix)
+
     def stmt_import(self):
-        pass
+        self.expect('import')
+        self.allow_postfix = True
+        return Import(self.expression(), False)
 
-    # todo: implement me!
     def stmt_require(self):
-        pass
+        self.expect('require')
+        self.allow_postfix = True
+        return Import(self.expression(), True)
 
-    # todo: implement me!
     def stmt_extend(self):
-        pass
+        tok = self.expect('extend')
+        selectors = []
+        try:
+            while True:
+                arr = self.selector_parts()
+                if arr is None:
+                    if self.accept(';'):
+                        continue
+                    else:
+                        raise TypeError
+                sel = Selector(arr)
+                selectors.append(sel)
+
+                if self.peek().type != '!':
+                    if self.accept(';'):
+                        continue
+                    else:
+                        raise TypeError
+
+                tok = self.lookahead(2)
+                if tok.type not in ['ident', 'optional']:
+                    continue
+                self.skip(['!', 'ident'])
+                sel.optional = True
+                token = self.accept(',')
+                if token is None:
+                    break
+        except TypeError:
+            pass
+
+        node = Extend(selectors)
+        node.lineno = tok.lineno
+        node.column = tok.column
+        return node
 
     def stmt_media(self):
         self.expect('media')
         self.state.append('atrule')
         media = Media(self.queries())
-        media.block(self.block(media))
+        media.block = self.block(media)
         self.prev_state = self.state[-1]
         self.state.pop()
 
@@ -597,9 +658,44 @@ class Parser:
                 break
         return queries
 
-    # todo: implement me!
     def query(self):
-        pass
+        query = Query()
+
+        # hash values support
+        if self.peek().type == 'ident' and \
+                (self.lookahead(2).type == '.' or
+                 self.lookahead(2).type == '['):
+            self.cond = True
+            expr = self.expression()
+            self.cond = False
+            query.append(Feature(expr.nodes))
+            return query
+
+        pred = self.accept(['ident', 'not'])
+        if pred:
+            if pred.value.string:
+                pred = Literal(pred.value.string)
+            else:
+                pred = pred.value
+
+            self.skip_spaces_and_comments()
+            id = self.accept('ident')
+            if id:
+                query.type = id.value
+                query.predicate = pred
+            else:
+                query.type = pred
+            self.skip_spaces_and_comments()
+
+            if self.accept('&&') is None:
+                return query
+
+        while True:
+            query.append(self.feature())
+            if self.accept('&&') is None:
+                break
+
+        return query
 
     def feature(self):
         self.skip_spaces_and_comments()
@@ -617,29 +713,132 @@ class Parser:
         self.skip_spaces_and_comments()
         return node
 
-    # todo: implement me!
     def stmt_atrule(self):
-        pass
+        type = self.expect('atrule')
+        node = Atrule(type)
+        self.skip_spaces_and_comments()
+        node.segments = self.selector_parts()
+        self.skip_spaces_and_comments()
+        tok = self.peek().type
+        if tok in ['indent', '{', 'newline'] and self.lookahead(2).type == '{':
+            self.state.append('atrule')
+            node.block = self.block(node)
+            self.prev_state = self.state[-1]
+            self.state.pop()
+        return node
 
-    # todo: implement me!
     def stmt_scope(self):
-        pass
+        self.expect('scope')
+        selector = ''.join(map(lambda s: s.value, self.selector_parts()))
+        self.selector_scope = selector.strip()
+        return null
 
-    # todo: implement me!
     def stmt_supports(self):
-        pass
+        self.expect('supports')
+        node = Supports(self.supports_condition())
+        self.state.append('atrule')
+        node.block = self.block(node)
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return node
 
-    # todo: implement me!
+    def supports_condition(self):
+        node = self.supports_negation()
+        if node is None:
+            node = self.supports_op()
+        if not node:
+            self.cond = True
+            node = self.expression()
+            self.cond = False
+        return node
+
+    def supports_op(self):
+        feature = self.supports_feature()
+        if feature:
+            expr = Expression()
+            expr.append(feature)
+            op = self.accept(['&&', '||'])
+            while op:
+                expr.append(Literal('and' if op.value == '&&' else '||'))
+                expr.append(self.supports_feature())
+                op = self.accept(['&&', '||'])
+            return expr
+        return None
+
+    def supports_negation(self):
+        tok = self.accept('not')
+        if tok:
+            node = Expression()
+            node.append(Literal('not'))
+            node.append(self.supports_feature())
+            return node
+        return None
+
+    def supports_feature(self):
+        self.skip_spaces_and_comments()
+        if self.peek().type == '(':
+            la = self.lookahead(2).type
+            if la in ['ident', '{']:
+                return self.feature()
+            else:
+                self.expect('{')
+                node = Expression()
+                node.append(Literal('{'))
+                node.append(self.supports_condition())
+                self.expect(')')
+                self.skip_spaces_and_comments()
+                return node
+        return None
+
     def stmt_unless(self):
-        pass
+        self.expect('unless')
+        self.state.append('conditional')
+        self.cond = True
+        node = If(self.expression(), True)
+        self.cond = False
+        node.block = self.block(node, False)
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return node
 
-    # todo: implement me!
     def stmt_for(self):
-        pass
+        self.expect('for')
+        value = self.id().name
+        key = None
+        if self.accept(','):
+            key = self.id().name
+        self.expect('in')
+        self.state.append('for')
+        self.cond = True
+        each = Each(value, key, self.expression())
+        self.cond = False
+        each.block = self.block(each, False)
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return each
 
-    # todo: implement me!
     def stmt_if(self):
-        pass
+        self.expect('if')
+        self.state.append('conditional')
+        self.cond = True
+        node = If(self.expression())
+        self.cond = False
+        node.block = self.block(node, False)
+        self.skip(['newline', 'comment'])
+        while self.accept('else'):
+            if self.accept('if'):
+                self.cond = True
+                cond = self.expression()
+                self.cond = False
+                block = self.block(node, False)
+                node.elses.append(If(cond, block))
+            else:
+                node.elses.append(self.block(node, False))
+                break
+            self.skip(['newline', 'comment'])
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return node
 
     def block(self, node, scope=None):
         block = self.parent = Block(self.parent, node)
@@ -660,8 +859,8 @@ class Parser:
 
         while delim != self.peek().type:
             # css-style
-            if self.css:
-                if self.accept('newline') or self.accept('indent'):
+            if self.css > 0:
+                if self.accept(['newline', 'indent']):
                     continue
                 stmt = self.statement()
                 self.accept(';')
@@ -674,6 +873,7 @@ class Parser:
                 if 'indent' == self.peek().type and \
                         next in ['outdent', 'newline', 'comment']:
                     self.skip(['indent', 'outdent'])
+                    continue
                 if 'eos' == self.peek().type:
                     return block
                 stmt = self.statement()
@@ -683,7 +883,7 @@ class Parser:
             block.append(stmt)
 
         # css-style
-        if self.css:
+        if self.css > 0:
             self.skip_whitespace()
             self.expect('}')
             self.skip_spaces()
@@ -712,8 +912,7 @@ class Parser:
                 selector.column = arr[0].column
                 group.push(selector)
 
-            # CHECK ME: True or False; huh?
-            if (self.accept(',') or self.accept('newline')) is None:
+            if self.accept([',', 'newline']) is None:
                 break
 
         if 'selector-parts' == self.current_state():
@@ -736,7 +935,7 @@ class Parser:
                     self.skip_spaces()
                     expr = self.expression()
                     self.skip_spaces()
-                    self.expect(';')
+                    self.expect('}')
                     arr.append(expr)
                 elif tok.type == self.prefix and '.':
                     literal = Literal(tok.value + self.prefix)
@@ -819,43 +1018,22 @@ class Parser:
                 pass
         elif la == '[':
             # assignment []=
-            if self._indent == self.peek():
-                return self._id()
+            if self._ident == self.peek():
+                return self.id()
             while ']' != self.lookahead(i).type and \
-                    'selector' != self.lookahead(i) and \
-                    'oes' != self.lookahead(i):
+                    'selector' != self.lookahead(i + 1) and \
+                    'oes' != self.lookahead(i + 1):
                 i += 1
+            i += 1
             if '=' == self.lookahead(i).type:
-                self._indent = self.peek()
+                self._ident = self.peek()
                 return self.expression()
             elif self.looks_like_selector() and self.state_allows_selector():
                 return self.stmt_selector()
+            return self._operation(la)
         elif la in ['-', '+', '/', '*', '%', '**', '&&', '||', '>', '<', '>=',
                     '<=', '!=', '==', '?', 'in', 'is a', 'is defined']:
-            # operation
-            # prevent cyclic .ident, return literal
-            if self._ident == self.peek():
-                return self.id()
-            else:
-                self._ident = self.peek()
-                if self.current_state() in ['for', 'selector']:
-                    return self.property()
-                elif self.current_state() in ['root', 'atblock', 'atrule']:
-                    if '[' == la:
-                        return self.subscript()
-                    else:
-                        return self.stmt_selector()
-                elif self.current_state() in ['function', 'conditional']:
-                    if self.looks_like_selector():
-                        return self.stmt_selector()
-                    else:
-                        return self.expression()
-                else:
-                    # do not disrupt the ident when an operand
-                    if self.operand:
-                        return self.id()
-                    else:
-                        return self.expression()
+            return self._operation(la)
         else:
             if self.current_state() == 'root':
                 return self.stmt_selector()
@@ -906,40 +1084,44 @@ class Parser:
             segs.append(Literal('*'))
 
         while True:
-            peek = self.peek()
-            if peek.type == '{':
-                self.next()
+            if self.accept('{'):
                 self.state.append('interpolation')
                 segs.append(self.expression())
                 self.expect('}')
-            elif peek.type == '-':
-                self.next()
+                self.prev_state = self.state[-1]
+                self.state.pop()
+            elif self.accept('-'):
                 segs.append(Literal('-'))
-            elif peek.type == 'ident':
-                node = self.next()
-                segs.append(node.value)
             else:
-                break
+                node = self.accept('ident')
+                if node:
+                    segs.append(node.value)
+                else:
+                    break
 
         # empty segment list
-        if len(segs) == 0:
+        if len(segs) != 1:
             self.expect('ident')
 
         return segs
 
+    # fixme!
     def expression(self):
         """negation+"""
         expr = Expression()
         self.state.append('expression')
         while True:
             node = self.negation()
-            if not node:
-                break
-                # fixme
+            if node is None:
                 self.error('unexpected token {peek} in expression')
+            if node.node_name == 'nothing':
+                break
             expr.append(node)
         self.prev_state = self.state[-1]
         self.state.pop()
+        if len(expr.nodes) > 0:
+            expr.lineno = expr.nodes[0].lineno
+            expr.column = expr.nodes[0].column
         return expr
 
     def negation(self):
@@ -965,8 +1147,8 @@ class Parser:
                 list.append(self.expression())
             else:
                 list = Expression(true)
-                list.push(node)
-                list.push(self.expression())
+                list.append(node)
+                list.append(self.expression())
                 node = list
 
         return node
@@ -1030,29 +1212,43 @@ class Parser:
             if not node:
                 self.error(f'illegal unary "{op}", '
                            f'missing left-hand operand')
-            node = BinOp(op.type, self.range())
+            node = BinOp(op.type, node, self.range())
             self.operand = False
         return node
 
     def stmt_function(self):
-        with_block = self.accept('+')
-        if 'url' == self.peek().value.name:
-            return self.url()
-        name = self.expect('function').value.name
-        self.state.append('function arguments')
-        self.parens += 1
-        args = self.args()
-        self.expect(')')
-        self.parens -= 1
-        self.prev_state = self.state[-1]
-        self.state.pop()
-        call = Call(name, args)
-        if with_block:
-            self.state.append('function')
-            call.block = self.block(call)
-            self.prev_state = self.state[-1]
-            self.state.pop()
-        return call
+        parens = 1
+        i = 2
+
+        # Lookahead and determine if we are dealing
+        # with a function call or definition. Here
+        # we pair parens to prevent false negatives
+
+        try:
+            tok = self.lookahead(i)
+            i += 1
+            while tok:
+                if tok.type in ['function', '(']:
+                    parens += 1
+                    break
+                elif tok.type == ')':
+                    if parens - 1 == 0:
+                        raise TypeError
+                    break
+                elif tok.type == 'oes':
+                    self.error('failed to find closing paren ")"')
+                tok = self.lookahead(i)
+                i += 1
+        except TypeError:
+            pass
+
+        if self.current_state() == 'expression':
+            return self.function_call()
+        else:
+            if self.looks_like_function_definition(i):
+                return self.function_definition()
+            else:
+                return self.expression()
 
     def range(self):
         node = self.additive()
@@ -1068,10 +1264,11 @@ class Parser:
     def additive(self):
         node = self.multiplicative()
         op = self.accept(['+', '-'])
-        if op:
+        while op:
             self.operand = True
             node = BinOp(op.type, node, self.multiplicative())
             self.operand = False
+            op = self.accept(['+', '-'])
         return node
 
     def multiplicative(self):
@@ -1176,15 +1373,17 @@ class Parser:
             return self.stmt_ident()
         elif tok.type == 'function':
             if tok.anonymous:
-                return self.fuction_definition()
+                return self.function_definition()
             else:
-                return self.stmt_function()
+                return self.function_call()
 
-    def fuction_definition(self):
+        return Nothing()
+
+    def function_definition(self):
         name = self.expect('function').value.name
 
         # params
-        self.state.append('function param')
+        self.state.append('function params')
         self.skip_whitespace()
         params = self.params()
         self.skip_whitespace()
@@ -1193,7 +1392,7 @@ class Parser:
         self.state.pop()
 
         # body
-        self.state.push('function')
+        self.state.append('function')
         fn = Function(name, params)
         fn.block = self.block(fn)
         self.prev_state = self.state[-1]
@@ -1219,3 +1418,143 @@ class Parser:
         else:
             return ReturnNode(expr)
         pass
+
+    def keyframes(self):
+        tok = self.expect('keyframes')
+        self.skip_spaces_and_comments()
+        keyframes = Keyframes(self.selector_parts(), tok.value)
+        self.skip_spaces_and_comments()
+
+        # block
+        self.state.append('atrule')
+        keyframes.block = self.block(keyframes)
+        self.prev_state = self.state[-1]
+        self.state.pop()
+
+        return keyframes
+
+    def args(self):
+        args = Arguments()
+        while True:
+            if self.peek().type == 'ident' and self.lookahead(2).type == ':':
+                keyword = self.next().value.string
+                self.expect(':')
+                args.map[keyword] = self.expression()
+            else:
+                args.append(self.expression())
+            if self.accept(',') is None:
+                break
+        return args
+
+    def url(self):
+        self.expect('function')
+        self.state.append('function')
+        args = self.args()
+        self.expect(')')
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return Call('url', args)
+
+    def mozdocument(self):
+        self.expect('-moz-document')
+        mozdocument = Atrule('-moz-document')
+        calls = []
+        while True:
+            self.skip_spaces_and_comments()
+            calls.append(self.function_call())
+            self.skip_spaces_and_comments()
+            if self.accept(',') is None:
+                break
+        mozdocument.segments = [Literal(', '.join(calls))]
+        self.state.append('atrule')
+        mozdocument.block = self.block(mozdocument, False)
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return mozdocument
+
+    def function_call(self):
+        with_block = self.accept('+')
+        if self.peek().value.name == 'url':
+            return self.url()
+        name = self.expect('function').value.name
+        self.state.append('function arguments')
+        self.parens += 1
+        args = self.args()
+        self.expect(')')
+        self.parens -= 1
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        call = Call(name, args)
+        if with_block:
+            self.state.append('function')
+            call.block = self.block(call)
+            self.prev_state = self.state[-1]
+            self.state.pop()
+        return call
+
+    def params(self):
+        params = Params()
+        tok = self.accept('ident')
+        while tok:
+            self.accept('space')
+            node = tok.value
+            params.append(node)
+            if self.accept('...'):
+                node.rest = True
+            elif self.accept('='):
+                node.value = self.expression()
+            self.skip_whitespace()
+            self.accept(',')
+            self.skip_whitespace()
+            tok = self.accept('ident')
+        return params
+
+    def object(self):
+        comma = None
+        obj = ObjectNode({})
+        self.expect('{')
+        self.skip_whitespace()
+
+        while self.accept('}').type != '}':
+            if self.accept(['comment', 'newline']):
+                continue
+            if not comma:
+                self.accept(',')
+            id = self.accept(['ident', 'string'])
+            if id is None:
+                self.error('expected "ident" or "string", got {peek}')
+            id = id.value.hash()
+            self.skip_spaces_and_comments()
+            self.expect(':')
+            value = self.expression()
+            obj.set(id, value)
+            comma = self.accept(',')
+            self.skip_whitespace()
+
+        return obj
+
+    def _operation(self, la):
+        # operation
+        # prevent cyclic .ident, return literal
+        if self._ident == self.peek():
+            return self.id()
+        else:
+            self._ident = self.peek()
+            if self.current_state() in ['for', 'selector']:
+                return self.property()
+            elif self.current_state() in ['root', 'atblock', 'atrule']:
+                if '[' == la:
+                    return self.subscript()
+                else:
+                    return self.stmt_selector()
+            elif self.current_state() in ['function', 'conditional']:
+                if self.looks_like_selector():
+                    return self.stmt_selector()
+                else:
+                    return self.expression()
+            else:
+                # do not disrupt the ident when an operand
+                if self.operand:
+                    return self.id()
+                else:
+                    return self.expression()

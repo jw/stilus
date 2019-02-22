@@ -1,12 +1,14 @@
+import logging
 import os
 import re
 from distutils import dirname
+from pathlib import Path
 
 from stilus import utils
 from stilus.colors import colors
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
-from stilus.nodes.boolean import false, true, Boolean
+from stilus.nodes.boolean import Boolean
 from stilus.nodes.call import Call
 from stilus.nodes.color import RGBA
 from stilus.nodes.expression import Expression
@@ -26,8 +28,6 @@ from stilus.stack.stack import Stack
 from stilus.units import units
 from stilus.visitor.visitor import Visitor
 
-import logging
-
 log = logging.getLogger(__name__)
 
 
@@ -38,35 +38,40 @@ class Evaluator(Visitor):
         self.options = options
         self.functions = options.get('functions', {})
         self.stack = Stack()
-        self.imports = options.get('imports', {})
+        self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
         self.paths = options.get('paths', [])
         self.prefix = options.get('prefix', '')
         self.filename = options.get('filename', None)
         self.include_css = options.get('include css', False)
 
-        # checkme: incomplete
-        self.resolve_url = self.functions.get('url', None)
+        self.resolve_url = False
+        if 'url' in self.functions:
+            url = self.functions['url']
+            if url.name == 'resolver' and url.options:
+                self.resolve_url = True
 
-        self.paths.append(dirname(options.get('filename', __file__)))
+        filename = Path(options.get('filename', '.'))
+        self.paths.append(str(filename.parent))
 
-        # checkme: where is this created?
         self.common = Frame(root)
-
         self.stack.append(self.common)
+
         self.warnings = options.get('warn', False)
         self.calling = []  # todo: remove, use stack
         self.import_stack = []
         self.require_history = {}
         self.result = 0
-        self.current_block = None
         self.current_scope = None
         self.ignore_colors = None
         self.property = None
         self.bifs = {}  # todo: implement me!
 
+    def vendors(self):
+        return self.lookup('vendors')
+
     def import_file(self, node: Import, file, literal):
-        import_stack = self.import_stack
+        # print(f'importing {file}; {self.import_stack}')
 
         # handling 'require'
         if node.once:
@@ -78,7 +83,7 @@ class Evaluator(Visitor):
                 return node
 
         # avoid overflows from reimporting the same file
-        if file in import_stack:
+        if file in self.import_stack:
             raise ImportError('import loop has been found')
 
         with open(file) as f:
@@ -99,8 +104,8 @@ class Evaluator(Visitor):
             self.options['_imports'].append(node.clone())
 
         # parse the file
-        import_stack.append(file)
-        # todo: nodes.filename = file
+        self.import_stack.append(file)
+        # todo?: nodes.filename = file
 
         if literal:
             re.sub('\n\n?', '\n', source)
@@ -110,9 +115,17 @@ class Evaluator(Visitor):
             if not self.resolve_url:
                 return literal
 
+        # create block
+        block: Block = Block(None, None)
+        block.lineno = node.lineno
+        block.column = node.column
+        block.filename = file
+
         # parse
-        block = Block()
-        parser = Parser(source, utils.merge({'root': block}, self.options))
+        merged = {}
+        merged.update(self.options)
+        merged.update({'root': block})
+        parser = Parser(source, merged)
 
         try:
             block = parser.parse()
@@ -124,14 +137,16 @@ class Evaluator(Visitor):
                           f'This file is included as-is')
                 return literal
             else:
-                raise ParseError(file, line, column, source)
+                raise ParseError('Issue when parsing an imported file',
+                                 filename=file, lineno=line, column=column,
+                                 input=source)
 
         # evaluate imported 'root'
-        block = block.clone(self.current_block)
-        block.parent = self.current_block
+        block = block.clone(self.get_current_block())
+        block.parent = self.get_current_block()
         block.scope = False
         ret = self.visit(block)
-        import_stack.pop()
+        self.import_stack.pop()
 
         if not self.resolve_url or not self.resolve_url:
             self.paths.pop()
@@ -142,30 +157,26 @@ class Evaluator(Visitor):
         try:
             return super().visit(node)
         except Exception as e:
-            # fixme: this is very, very bad
             if hasattr(e, 'filename'):
                 raise e
+            input = '[unknown]'
             try:
-                with open(e.filename) as f:
-                    f.read()  # fixme: was 'source = '
+                with open(node.filename) as f:
+                    input = f.read()
             except Exception:
                 pass
-            raise ParseError('oops', filename=node.filename,
+            raise ParseError(str(self.stack),
+                             filename=node.filename,
                              lineno=node.lineno,
                              column=node.column,
-                             input=None)  # fixme!
+                             input=input)
 
     def setup(self):
-        root = self.root
-        imports = []
-
         self.populate_global_scope()
-        for file in self.imports:
+        for file in reversed(self.imports):
             expr = Expression()
-            expr.push(String(file))
-            imports.append(Import(expr))
-
-        root.nodes.extend(imports)
+            expr.append(String(file))
+            self.root.nodes.insert(0, Import(expr))
 
     def populate_global_scope(self):
         """
@@ -207,7 +218,7 @@ class Evaluator(Visitor):
         group.block = self.visit(group.get_block())
         return group
 
-    def visist_return(self, ret):
+    def visit_return(self, ret):
         ret.expr = self.visit(ret.expr)
         raise ret
 
@@ -269,14 +280,14 @@ class Evaluator(Visitor):
         # checkme: what is get?
         return obj.get(right.value)
 
-    def visit_keyframe(self, keyframes):
+    def visit_keyframes(self, keyframes):
         if keyframes.fabricated:
             return keyframes
         keyframes.value = self.interpolate(keyframes).strip()
         val = self.lookup(keyframes.value)
         if val:
             keyframes.val = val.first().string  # || val.first().node_name
-        keyframes.set_block(self.visit(keyframes.get_block()))
+        keyframes.block = self.visit(keyframes.block)
 
         if 'official' != keyframes.prefix:
             return keyframes
@@ -294,15 +305,15 @@ class Evaluator(Visitor):
 
         return null
 
-    def visit_function(self, fn):
+    def visit_function(self, fn, args=None, content=None):
         # check local
-        local = self.stack.current_frame().scope()
+        local = self.stack.current_frame().scope().lookup(fn.function_name)
         if local:
             self.warn(f'local {local.node_name} "fn.function_name" '
                       f'previously defined in this scope')
 
         # user-defined
-        user = self.functions[fn.function_name]
+        user = self.functions.get(fn.function_name, None)
         if user:
             self.warn(f'user-defined function "{fn.function_name}" '
                       f'is already defined')
@@ -362,17 +373,18 @@ class Evaluator(Visitor):
             fn = fn.nodes[0]
 
         # not a function? try user-defined or built-ins
-        if fn and 'functuon' != fn.node_name:
+        if fn and 'function' != fn.node_name:
             fn = self.lookup_function(call.function_name)
 
         # undefined function? render literal css
-        if not fn or fn.node_name != 'function':
+        if fn is None or fn.node_name != 'function':
+            ret = None
             if 'calc' == self.unvendorize(call.function_name):
                 literal = call.args.nodes and call.args.nodes[0]
                 if literal:
                     ret = Literal(call.function_name + call.args.nodes[0])
-                else:
-                    ret = self.literal_call(call)
+            else:
+                ret = self.literal_call(call)
             self.ignore_colors = False
             return ret
 
@@ -383,7 +395,7 @@ class Evaluator(Visitor):
             raise ParseError('Maximum stylus call stack size exceeded')
 
         # first node in expression
-        if 'expression' == fn.function_name:
+        if fn and 'expression' == fn.function_name:
             fn = fn.first()
 
         # evaluate arguments
@@ -393,7 +405,7 @@ class Evaluator(Visitor):
             args.map[key] = self.visit(args.map[key].clone())
         self.result -= 1
 
-        if fn.fn:
+        if hasattr(fn, 'fn') and fn.fn:
             # built-in
             ret = self.invoke_builtin(fn.fn, args)
         elif 'function' == fn.node_name:
@@ -458,11 +470,11 @@ class Evaluator(Visitor):
         except Exception as e:
             # disregard coercion issues in equality
             # checks, and simply return false
-            if 'coercionError' == e.name:  # fixme: use exception node_name
-                if op == '==':
-                    return false
-                elif op == '!=':
-                    return true
+            # if 'coercionError' == e:  # fixme: use exception node_name
+            #     if op == '==':
+            #         return false
+            #     elif op == '!=':
+            #         return true
             raise e
 
     def visit_unaryop(self, unary):
@@ -536,6 +548,8 @@ class Evaluator(Visitor):
     def visit_root(self, block):
         if block != self.root:
             # normalize cached imports
+            # fixme: add constructors
+            # stylus: block.constructor = nodes.Block;
             return self.visit(Block())
 
         for i, node in enumerate(block.nodes):
@@ -555,9 +569,45 @@ class Evaluator(Visitor):
         self.stack.pop()
         return block
 
+    def visit_atblock(self, atblock):
+        atblock.block = self.visit(atblock.block)
+        return atblock
+
+    def visit_atrule(self, atrule):
+        atrule.value = self.interpolate(atrule)
+        if atrule.block:
+            atrule.block = self.visit(atrule.block)
+        return atrule
+
+    def visit_supports(self, node):
+        pass
+
+    def visit_if(self, node):
+        pass
+
+    def visit_extend(self, extend):
+        pass
+
+    def invoke(self, body, staxk, filename):
+        pass
+
+    def mixin(self, nodes, block):
+        pass
+
+    def _mixin(self, items, dest, block):
+        pass
+
+    def mixin_node(self, node):
+        pass
+
+    def mixin_objecy(self, object):
+        pass
+
+    def eval(vals):
+        pass
+
     def invoke_builtin(self, fn, args):
         """
-
         :param fn:
         :param args:
         :return:
@@ -575,7 +625,75 @@ class Evaluator(Visitor):
         # todo: implement me
         raise NotImplementedError
 
+    def visit_import(self, imported):
+        self.result += 1
+
+        path = self.visit(imported.path).first()
+
+        node_name = 'required' if imported.once else 'import'
+
+        self.result -= 1
+
+        # print(f'import {path}')
+
+        # todo: implement me!
+        # url() passed
+        # if path.name == 'url':
+        #     if imported.once:
+        #         raise TypeError('You cannot @require a url')
+        #     return imported
+
+        # ensure string
+        # if not path.string:
+        #     raise TypeError(f'@{node_name} string expected')
+
+        name = path = path.string
+
+        # todo: absolute URL or hash
+
+        # todo: literal
+        literal = False
+
+        # support optional .styl
+        if not literal and not path.endswith('.styl'):
+            path += '.styl'
+
+        # lookup
+        found = utils.find(path, self.paths, self.filename)
+        if not found:
+            found = utils.lookup_index(name, self.paths, self.filename)
+
+        # throw if import failed
+        if not found:
+            raise TypeError(f'failed to locate @{node_name} file {path}')
+
+        block = Block(imported, imported)
+        for f in found:
+            block.append(self.import_file(imported, f, literal))
+
+        return block
+
+    def lookup_property(self, name):
+        pass
+
+    def closest_block(self):
+        pass
+
+    def closest_group(self):
+        pass
+
+    def selector_stack(self):
+        pass
+
+    def property_expression(self, procp, name):
+        pass
+
     def lookup(self, name):
+        """
+        Lookup `name`, with support for JavaScript functions, and BIFs.
+        :param name:
+        :return:
+        """
         # fixme: this is handled differently on stylus!
         if self.ignore_colors and name in colors:
             return
@@ -655,3 +773,22 @@ class Evaluator(Visitor):
 
     def get_current_frame(self):
         return self.stack.current_frame()
+
+    def get_current_block(self):
+        current_frame = self.get_current_frame()
+        if current_frame:
+            b = current_frame.block
+            return b
+        return None
+
+    def unvendorize(self, prop: str):
+        for vendor in self.vendors():
+            if vendor != 'official':
+                vendor = f'-{vendor}-'
+            if prop in vendor:
+                return prop.replace(vendor, '')
+        return prop
+
+    def literal_call(self, call):
+        call.args = self.visit(call.args)
+        return call
