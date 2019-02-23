@@ -1,21 +1,10 @@
-### Current tasks (0.5.0)
+### Current tasks (0.6.0)
 
- - [x] Check `poetry`, `pylama` and `radon`: will not use it.
- - [x] Document the history, the todo's, the workflow
- - [x] Add contribution data: code of conduct, issue template, pull request template
- - [x] Finalize the compiler
- - [x] Create and complete the Evaluator (in progress... at 50%)
- - [x] Create and complete the Normalizer
- - [x] Compile `abc\n  color: red\n` successfully
- - [x] Fix the `type` problem
- - [x] Add logging to the project
- - [x] Add the same tests as in Stylus; two are green!
- - [x] Complete the parser
- - [x] Fix the `stack` problem; completed
- - [x] Fix the `val` problem; completed (almost all `val`s are `value`s now)
- - [x] Compile the complete `index.styl`
- - [x] Add column and lineno to tokens (lexer and parser and compiler)
- - [x] Fix the `space` problem
- - [x] Fix the `string` problem
- - [x] Pass a Stylus 'cases' test
- - [x] Evaluator: Fix the multiple imports problem.
+ - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.
+ - [ ] Add all remaining nodes.
+ - [ ] Add `to_json`, `equal`, `coerce` and `operate` test to the nodes.
+ - [ ] Finalize the compiler.
+ - [ ] Finalize the evaluator.
+ - [ ] Finalize the parser.
+ - [ ] Pass 10 Stylus test cases
+ 

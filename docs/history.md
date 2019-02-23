@@ -2,11 +2,33 @@
 
 ### 0.5.0 
 
-The first evaluate.
+The first evaluate a.k.a. the `lets lever commit` release.
 
- - First compile and evauation of a very simple styl: `abc\n  color: red\n`.
+ - Created the evaluate class.
  - Parsed and evaluated the `index.styl`.
- - Ran some `cases` tests 
+ - Ran some Stylus `cases` tests.
+
+Issues:
+ 
+ - [x] Check `poetry`, `pylama` and `radon`: will not use it.
+ - [x] Document the history, the todo's, the workflow
+ - [x] Add contribution data: code of conduct, issue template, pull request template
+ - [x] Finalize the compiler
+ - [x] Create and complete the Evaluator (in progress... at 50%)
+ - [x] Create and complete the Normalizer
+ - [x] Compile `abc\n  color: red\n` successfully
+ - [x] Fix the `type` problem
+ - [x] Add logging to the project
+ - [x] Add the same tests as in Stylus; two are green!
+ - [x] Complete the parser
+ - [x] Fix the `stack` problem; completed
+ - [x] Fix the `val` problem; completed (almost all `val`s are `value`s now)
+ - [x] Compile the complete `index.styl`
+ - [x] Add column and lineno to tokens (lexer and parser and compiler)
+ - [x] Fix the `space` problem
+ - [x] Fix the `string` problem
+ - [x] Pass a Stylus 'cases' test
+ - [x] Evaluator: Fix the multiple imports problem.
 
 ### 0.4.0 
 
@@ -33,7 +55,6 @@ CI and documentation.
 ### 0.1.0
 
  - Basic lexer and some nodes with pytests.
-
 
 ### 0.0.1
 
