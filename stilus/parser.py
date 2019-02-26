@@ -239,7 +239,7 @@ class Parser:
         if tok.value and isinstance(tok.value, Node):
             tok.value.lineno = tok.lineno
             tok.value.column = tok.column
-        # print(tok)
+        print(tok)
         return tok
 
     def __iter__(self):
@@ -951,7 +951,7 @@ class Parser:
                 elif tok.type == 'function':
                     arr.append(Literal(f'{tok.value.node_name}('))
                 elif tok.type == 'ident':
-                    if tok.value.name:
+                    if hasattr(tok.value, 'name') and tok.value.name:
                         arr.append(Literal(f'{tok.value.name}'))
                     else:
                         arr.append(Literal(f'{tok.value.string}'))

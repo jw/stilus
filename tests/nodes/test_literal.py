@@ -2,9 +2,10 @@ from stilus.nodes.literal import Literal
 
 
 def test_literal():
-    literal = Literal('value', 'prefixed')
+    literal = Literal('value', True, 'prefixed')
     assert literal.value == 'value'
     assert literal.string == 'value'
+    assert literal.css is True
     assert literal.prefixed == 'prefixed'
     assert literal.node_name == 'literal'
     clone = literal.clone()
