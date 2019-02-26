@@ -6,9 +6,10 @@ from stilus.nodes.node import Node
 
 class Literal(Node):
 
-    def __init__(self, string, prefixed=''):
+    def __init__(self, string, css=False, prefixed=''):
         super().__init__(string)
         self.string = string
+        self.css = css
         self.prefixed = prefixed
 
     def __str__(self):

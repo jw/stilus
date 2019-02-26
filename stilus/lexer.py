@@ -75,6 +75,7 @@ class Lexer:
         s = re.sub(r'\s+$', '\n', s)
         s = re.sub(r'\r\n?', '\n', s)
         s = re.sub(r'\\ *\n', '\r', s)
+        # s = re.sub('\\[+]')
 
         def _comment(match):
             # TODO: this needs a cleanup
@@ -437,7 +438,9 @@ class Lexer:
         match = re.match(r'^\\(.)[ \t]*', self.s)
         if match:
             escape = match.group(1)
-            self._skip_string(escape)
+            self._skip_string(match.group(0))
+            if match.group(0).startswith('\\.'):
+                escape = '\\.'
             return Token('ident', Literal(escape))
 
     def important(self):
@@ -468,7 +471,7 @@ class Lexer:
                 css += c
                 if not braces:
                     break
-            css = re.sub(r'\s*}$', '', css)  # hack?
+            css = re.sub(r'\s*}$', '', css)
             return Token('literal', Literal(css, css=True))
 
     def anonymous_function(self):
