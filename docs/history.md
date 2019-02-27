@@ -2,11 +2,11 @@
 
 ### 0.5.0 
 
-The first evaluate a.k.a. the `lets lever commit` release.
+The first evaluate a.k.a. the `let's lever commit` release.
 
  - Created the evaluate class.
  - Parsed and evaluated the `index.styl`.
- - Ran some Stylus `cases` tests.
+ - Ran some Stylus `cases` tests successfully.
 
 Issues:
  
@@ -49,16 +49,16 @@ CI and documentation.
 
 ### 0.2.0
 
- - Added some extra nodes and updated the lexer; and added tests.
+ - Added some extra nodes and updated the lexer.
  - Checked the `black` tool; do not like it.
  
 ### 0.1.0
 
- - Basic lexer and some nodes with pytests.
+ - Basic lexer and some pytested nodes.
 
 ### 0.0.1
 
 Hello there!
 
- - Basic Python 3.7 setup, using pipenv and a basic setup.py.
+ - Basic Python 3.6 setup, using pipenv and a basic setup.py.
  - Created a Stilus hello world.
