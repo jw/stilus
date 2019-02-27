@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 
-from stilus.parser import Parser
 from stilus.stilus import Renderer
 
 log = logging.getLogger(__name__)
