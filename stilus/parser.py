@@ -239,7 +239,7 @@ class Parser:
         if tok.value and isinstance(tok.value, Node):
             tok.value.lineno = tok.lineno
             tok.value.column = tok.column
-        print(tok)
+        # print(tok)
         return tok
 
     def __iter__(self):
