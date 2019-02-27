@@ -1,7 +1,8 @@
+import logging
 from pathlib import Path
 
+from stilus.parser import Parser
 from stilus.stilus import Renderer
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -20,3 +21,17 @@ def test_stylus_cases():
         assert destination == Renderer(source, {}).render()
         # print('.', end='')
     # print()
+
+
+# if __name__ == '__main__':
+#     source_file = Path('./cases/units.styl')
+#     with open(source_file, 'r') as f:
+#         source = f.read()
+#     with open(source_file.with_suffix('.css'), 'r') as f:
+#         destination = f.read()
+#     print('Parser')
+#     print(Parser(source, {}).parse())
+#     print('Render')
+#     print(Renderer(source, {}).render())
+#     print(source)
+#     assert destination == Renderer(source, {}).render()
