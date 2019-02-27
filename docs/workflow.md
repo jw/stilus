@@ -33,5 +33,7 @@ Patch releases don't need their own `rc` branches, as they could be released fro
 First you want to make sure to run the below commands
 
 ```
-python setup test
+python setup.py test
 ```
+
+and add tests as fit.
