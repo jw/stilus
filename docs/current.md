@@ -1,8 +1,8 @@
 ### Current tasks (0.6.0)
 
-The first cases release, a.k.a. `committers, committers, committers`
+The first cases release, a.k.a. `committers, committers, committers!`
 
- - [ ] Pass 50 Stylus test cases.
+ - [ ] Pass 50 Stylus test cases.  4/50 done, or 8% :)
  - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.
  - [ ] Add all remaining nodes.
  - [ ] Recreate the `.clone()` method for all nodes; the current one is far too slow.
