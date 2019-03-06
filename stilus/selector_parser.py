@@ -3,6 +3,7 @@ COMBINATORS = ['>', '+', '~']
 
 # TODO: this class is badly migrated - needs work!
 # TODO: this class needs tests!
+# TODO: this class needs proper getter and setters annotations!
 class SelectorParser:
 
     def __init__(self, string: str, stack: list, parts):
@@ -137,12 +138,12 @@ class SelectorParser:
         if '..' == self.string[0:2]:
             self.skip(2)
             end = self.number()
-            len = len(self.parts)
+            length = len(self.parts)
 
             if start < 0:
-                start = len + start - 1
+                start = length + start - 1
             if end < 0:
-                end = len + end - 1
+                end = length + end - 1
 
             if start > end:
                 start, end = end, start
@@ -158,7 +159,7 @@ class SelectorParser:
                 selector.raw = True
                 return selector.parse()
 
-            if end < len - 1:
+            if end < length - 1:
                 ret = map(selector_value,
                           map(selector, self.parts[start:end + 1]))
                 return ''.join(ret).strip()

@@ -440,8 +440,8 @@ class Parser:
             return True
 
         # css-style mode, false on ; }
-        if self.css > 0 and ';' == self.lookahead(i).type and \
-                '}' == self.lookahead(i - 1).type:
+        if self.css > 0 and (';' == self.lookahead(i).type or
+                             '}' == self.lookahead(i - 1).type):
             return False
 
         # trailing separators
@@ -647,6 +647,7 @@ class Parser:
         media.block = self.block(media)
         self.prev_state = self.state[-1]
         self.state.pop()
+        return media
 
     def queries(self):
         queries = QueryList()
@@ -883,6 +884,7 @@ class Parser:
             block.append(stmt)
 
         # css-style
+        # print(f'css: {self.css}; state: {self.state}')
         if self.css > 0:
             self.skip_whitespace()
             self.expect('}')
@@ -1144,7 +1146,8 @@ class Parser:
 
         while self.accept(','):
             if node.is_list:
-                list.append(self.expression())
+                # todo: fixme was list, now node
+                node.append(self.expression())
             else:
                 list = Expression(true)
                 list.append(node)

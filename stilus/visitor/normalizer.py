@@ -194,7 +194,8 @@ class Normalizer(Visitor):
                 elif node.node_name == 'block':
                     merge_queries(node)
                 else:
-                    if node.block and node.block.nodes:
+                    if hasattr(node, 'block') and \
+                            node.block and node.block.nodes:
                         merge_queries(node.block)
 
         merge_queries(media.block)
@@ -216,7 +217,7 @@ class Normalizer(Visitor):
 
         return media
 
-    def visist_supports(self, node):
+    def visit_supports(self, node):
         self.bubble(node)
         return node
 
