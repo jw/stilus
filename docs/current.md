@@ -2,10 +2,11 @@
 
 The first cases release, a.k.a. `committers, committers, committers`
 
- - [ ] Pass 10 Stylus test cases.
+ - [ ] Pass 50 Stylus test cases.
  - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.
  - [ ] Add all remaining nodes.
- - [ ] Add `to_json`, `equal`, `coerce` and `operate` test to the nodes.
+ - [ ] Recreate the `.clone()` method for all nodes; the current one is far too slow.
+ - [ ] Add tests for `to_json()`, `equal()`, `coerce()` and `operate()` in all nodes.
  - [ ] Finalize the compiler.
  - [ ] Finalize the evaluator.
  - [ ] Finalize the parser.
