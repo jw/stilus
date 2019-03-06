@@ -113,8 +113,9 @@ def compile_selectors(arr, leave_hidden=False):
                 parents.append(string)
                 child = SelectorParser(buf[i], parents, parts).parse()
 
-                if child.nested:
-                    string += ' ' + child.value
+                # todo: fix this
+                if child['nested']:
+                    string += ' ' + child['val']
                 else:
                     string = child.val
 
@@ -126,7 +127,7 @@ def compile_selectors(arr, leave_hidden=False):
                 if not leave_hidden and selector.is_placeholder():
                     return
                 if selector.inherits:
-                    buf.insert(0, selector.val)
+                    buf.insert(0, selector.value)
                     compile(arr, i - 1)
                     buf.pop(0)
                 else:

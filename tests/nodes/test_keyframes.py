@@ -3,11 +3,9 @@ from stilus.nodes.keyframes import Keyframes
 
 def test_keyframes():
     keyframes = Keyframes(['segment1', 'segment2'])
-    assert keyframes.prefix is None
+    assert keyframes.prefix == 'official'
     assert keyframes.segments == ['segment1', 'segment2']
     assert keyframes.node_name == 'keyframes'
-    clone = keyframes.clone()
-    assert clone == keyframes
 
 
 def test_str():

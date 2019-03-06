@@ -68,7 +68,7 @@ class Evaluator(Visitor):
         self.bifs = {}  # todo: implement me!
 
     def vendors(self):
-        return self.lookup('vendors')
+        return [node.string for node in self.lookup('vendors').nodes]
 
     def import_file(self, node: Import, file, literal):
         # print(f'importing {file}; {self.import_stack}')
@@ -224,7 +224,7 @@ class Evaluator(Visitor):
 
     def visit_media(self, media):
         media.block = self.visit(media.block)
-        media.val = self.visit(media.val)
+        media.value = self.visit(media.value)
         return media
 
     def visit_queryList(self, queries):
@@ -292,16 +292,16 @@ class Evaluator(Visitor):
         if 'official' != keyframes.prefix:
             return keyframes
 
-        for prefix in self.vendors:
+        for prefix in self.vendors():
             # IE never had prefixes for keyframes
             if 'ms' == prefix:
-                return
+                continue
             node = keyframes.clone()
             node.value = keyframes.value
             node.prefix = prefix
-            node.set_block(keyframes.get_block())
+            node.block = keyframes.block
             node.fabricated = True
-            self.current_block.append(node)
+            self.get_current_block().append(node)
 
         return null
 
@@ -327,11 +327,11 @@ class Evaluator(Visitor):
     def visit_each(self, each):
         self.result += 1
         expr = utils.unwrap(self.visit(each.expr))
-        len = len(expr.nodes)
+        length = len(expr.nodes)
         val = Ident(each.value)
         key = Ident(each.key)
-        scope = self.current_scope
-        block = self.current_block
+        scope = self.get_current_scope()
+        block = self.get_current_block()
         vals = []
         self.result -= 1
 
@@ -344,7 +344,7 @@ class Evaluator(Visitor):
             vals.insert(body.nodes)
 
         # for prop in obj
-        if len == 1 and 'object' == expr.nodes[0].name:
+        if length == 1 and 'object' == expr.nodes[0].name:
             obj = expr.nodes[0]
             for prop in obj.vals:
                 val.val = String(prop)
@@ -552,7 +552,7 @@ class Evaluator(Visitor):
             # stylus: block.constructor = nodes.Block;
             return self.visit(Block())
 
-        for i, node in enumerate(block.nodes):
+        for i, node in enumerate(list(block.nodes)):
             block.index = i
             block.nodes[i] = self.visit(node)
 
@@ -600,10 +600,10 @@ class Evaluator(Visitor):
     def mixin_node(self, node):
         pass
 
-    def mixin_objecy(self, object):
+    def mixin_object(self, object):
         pass
 
-    def eval(vals):
+    def eval(self, vals):
         pass
 
     def invoke_builtin(self, fn, args):

@@ -29,20 +29,22 @@ class Atrule(Node):
             return self.__key() == other.__key()
         return False
 
-    def has_output(self, block=None):
-        if not block:
-            return self.block and self.has_output(block)
+    def has_output(self):
+        return self.block and self._has_output(self.block)
 
+    def _has_output(self, block):
         # only placeholder selectors
-        if all(node.name == 'group' and node.has_only_placeholder
-               for node in block.nodes):
+        if hasattr(block, 'nodes') and \
+                all(node.node_name == 'group' and node.has_only_placeholders()
+                    for node in block.nodes):
             return False
 
         # something visible
-        return any(node.name in ['property', 'literal', 'import'] or
-                   self.has_output(node) or
-                   self.has_output(node.block)
-                   for node in block.nodes)
+        return hasattr(block, 'nodes') and \
+            any(node.node_name in ['property', 'literal', 'import'] or
+                self._has_output(node) or
+                self._has_output(node.block)
+                for node in block.nodes)
 
     def has_only_properties(self):
         if not self.block:

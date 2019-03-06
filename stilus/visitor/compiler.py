@@ -143,7 +143,7 @@ class Compiler(Visitor):
 
     def visit_media(self, media: Media):
         val = media.value
-        if not media.has_output():
+        if not media.has_output() or len(val.nodes) == 0:
             return
 
         self.buf += self.out('@media ', media)
@@ -152,25 +152,24 @@ class Compiler(Visitor):
         self.indents += 1
         self.visit(media.block)
         self.indents -= 1
-        self.bug += self.out('}' if self.compress else '}\n')
+        self.buf += self.out('}' if self.compress else '}\n')
 
-    # checkme: how is this called?
-    # checkme: is this a join?
-    def visit_queryList(self, queries):
+    def visit_querylist(self, queries):
         for i, node in enumerate(queries.nodes):
             self.visit(node)
             if len(queries.nodes) - 1 != i:
                 self.buf += self.out(',' if self.compress else ', ')
 
     def visit_query(self, node):
-        len = len(node.nodes)
+        length = len(node.nodes)
         if node.predicate:
             self.buf += self.out(node.predicate + ' ')
         if node.type:
-            self.buf += self.out(node.type + (' and ' if len > 0 else ''))
+            self.buf += self.out(str(node.type) +
+                                 (' and ' if length > 0 else ''))
         for node in node.nodes:
             self.buf += self.out(self.visit(node))
-            if len - 1 != 1:
+            if length - 1 != 1:
                 self.buf += self.out(' and ')
 
     def visit_features(self, node: Node):
@@ -225,9 +224,9 @@ class Compiler(Visitor):
             if comment.suppress:
                 return ''
             else:
-                return comment.string
+                return comment.value
         else:
-            comment.str
+            return comment.value
 
     def visit_function(self, fn):
         return fn.name

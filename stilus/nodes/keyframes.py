@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.atrule import Atrule
@@ -6,12 +5,16 @@ from stilus.nodes.atrule import Atrule
 
 class Keyframes(Atrule):
 
-    def __init__(self, segments, prefix=None):
+    def __init__(self, segments, prefix='official'):
         super().__init__('keyframes')
         self.segments = segments
-        self.prefix = prefix
-        self.frames = []
+        if prefix:
+            self.prefix = prefix
+        else:
+            self.prefix = 'official'
+        self.frames = None
         self.fabricated = False
+        self.block = None
 
     def __str__(self):
         return f'@keyframes {"".join(self.segments)}'
@@ -30,8 +33,15 @@ class Keyframes(Atrule):
             return self.__key() == other.__key()
         return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None):
+        clone = Keyframes([])
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        clone.segments = [segment for segment in self.segments]
+        clone.prefix = self.prefix
+        clone.block = self.block.clone(parent, clone)
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Keyframes',

@@ -10,6 +10,8 @@ log = logging.getLogger(__name__)
 #  https://docs.pytest.org/en/latest/example/parametrize.html#paramexamples
 def test_stylus_cases():
     path = Path('./stylus/cases')
+    # source_files = path.glob('*.styl')
+    # print(list(source_files))
     source_files = path.glob('*.styl')
     for source_file in source_files:
         # print(f'Handling {source_file}...', end='')
@@ -17,20 +19,16 @@ def test_stylus_cases():
             source = f.read()
         with open(source_file.with_suffix('.css'), 'r') as f:
             destination = f.read()
-        assert destination == Renderer(source, {}).render()
+        assert destination.strip() == Renderer(source, {}).render().strip()
         # print('.', end='')
     # print()
 
 
-# if __name__ == '__main__':
-#     source_file = Path('./cases/units.styl')
-#     with open(source_file, 'r') as f:
-#         source = f.read()
-#     with open(source_file.with_suffix('.css'), 'r') as f:
-#         destination = f.read()
-#     print('Parser')
-#     print(Parser(source, {}).parse())
-#     print('Render')
-#     print(Renderer(source, {}).render())
-#     print(source)
-#     assert destination == Renderer(source, {}).render()
+if __name__ == '__main__':
+    source_file = Path('./cases/parse.styl.later')
+    with open(source_file, 'r') as f:
+        source = f.read()
+    with open(source_file.with_suffix('.css'), 'r') as f:
+        destination = f.read()
+    print(Renderer(source, {}).render())
+    assert destination == Renderer(source, {}).render()
