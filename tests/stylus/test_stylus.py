@@ -19,13 +19,13 @@ def test_stylus_cases():
             source = f.read()
         with open(source_file.with_suffix('.css'), 'r') as f:
             destination = f.read()
-        assert destination.strip() == Renderer(source, {}).render().strip()
+        assert destination == Renderer(source, {}).render()
         # print('.', end='')
     # print()
 
 
 if __name__ == '__main__':
-    source_file = Path('./cases/parse.styl.later')
+    source_file = Path('./cases/variables.styl.latest')
     with open(source_file, 'r') as f:
         source = f.read()
     with open(source_file.with_suffix('.css'), 'r') as f:

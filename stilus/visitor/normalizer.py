@@ -93,9 +93,10 @@ class Normalizer(Visitor):
                 return node
             if not node.block:
                 parent = False
-            if not node.block.parent:
+            elif not node.block.parent:
                 parent = False
-            parent = node.block.parent
+            else:
+                parent = node.block.parent
 
     def visit_root(self, block):
         ret = Root()
@@ -113,16 +114,20 @@ class Normalizer(Visitor):
         return property
 
     def visit_expression(self, expression):
-        visited = []
-        for node in expression.nodes:
+
+        def handle(node):
+            # returns `block` literal if mixin's block
+            # is used as part of a property value
             if node.node_name == 'block':
                 literal = Literal('block')
                 literal.lineno = node.lineno
                 literal.column = node.column
-                visited.append(literal)
+                return literal
             else:
-                visited.append(node)
-        return visited
+                return node
+
+        expression.nodes = [handle(node) for node in expression.nodes]
+        return expression
 
     def visit_block(self, block):
         if block.has_properties():
@@ -134,8 +139,7 @@ class Normalizer(Visitor):
                     node = self.visit(node)
 
         # nesting
-        for node in block.nodes:
-            node = self.visit(node)
+        block.nodes = [self.visit(node) for node in block.nodes]
 
         return block
 

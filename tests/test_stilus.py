@@ -28,9 +28,10 @@ if __name__ == '__main__':
 }
 """
 
-    source = """// Last line in this file has 4 spaces.
-.myclass
-  display block
-  color black
-    """
-    print(f'[{stilus.render(source, {}).strip()}]')
+#     source = """// Last line in this file has 4 spaces.
+# .myclass
+#   display block
+#   color black
+#     """
+    css = stilus.render(source, {})
+    print(f'[{css.strip()}]')
