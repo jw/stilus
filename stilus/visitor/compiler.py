@@ -43,7 +43,7 @@ class Compiler(Visitor):
     def indent(self):
         if self.compress:
             return ''
-        return self.spaces * self.indents
+        return ' ' * (self.spaces * self.indents)
 
     def need_brackets(self, node):
         if 1 == self.indents:
@@ -102,7 +102,7 @@ class Compiler(Visitor):
 
             if needs_brackets:
                 self.indents -= 1
-                self.buf += self.out(' ' * self.indent() + '}' + separator)
+                self.buf += self.out(self.indent() + '}' + separator)
 
         # nesting
         for node in block.nodes:
@@ -128,9 +128,9 @@ class Compiler(Visitor):
         else:
             prefix = f'-{node.prefix}-'
 
-        brace = '{{' if self.compress else ' {{\n'
-        self.buf += self.out(f'@{prefix}keyframes {self.visit(node)}{brace}',
-                             node)
+        brace = '{' if self.compress else ' {\n'
+        self.buf += self.out(f'@{prefix}keyframes '
+                             f'{self.visit(node.value)}{brace}', node)
 
         self.keyframe = True
         self.indents += 1
@@ -282,7 +282,7 @@ class Compiler(Visitor):
 
         # selectors
         if group.get_block().has_properties():
-            selectors = utils.compile_selectors(stack)
+            selectors = utils.compile_selectors(stack, indent=self.indent())
 
             if selectors:
                 if self.keyframe:
@@ -332,7 +332,7 @@ class Compiler(Visitor):
     def visit_expression(self, expr: Expression):
         buf = []
         length = len(expr.nodes)
-        nodes = list(map(lambda node: self.visit(node), expr.nodes))
+        nodes = [self.visit(node) for node in expr.nodes]
 
         for i, (node, next) in enumerate(zip(nodes, nodes[1:] + ['end'])):
             last = i == length - 1
@@ -348,8 +348,8 @@ class Compiler(Visitor):
             else:
                 space = ' '
 
-            if self.compress:
-                if expr.is_list:
+            if expr.is_list:
+                if self.compress:
                     buf.append(',')
                 else:
                     buf.append(', ')
@@ -368,7 +368,7 @@ class Compiler(Visitor):
         else:
             name = ''.join(property.segments)
         arr = []
-        arr.append(self.out(' ' * self.indent()))
+        arr.append(self.out(self.indent()))
         arr.append(self.out(name + (':' if self.compress else ': ')))
         arr.append(self.out(val, property.expr))
         if self.last:

@@ -76,7 +76,7 @@ def clamp_percentage(n, smallest=0, largest=100):
     return max(smallest, min(n, largest))
 
 
-def compile_selectors(arr, leave_hidden=False):
+def compile_selectors(arr, leave_hidden=False, indent=''):
     """
     Compile selector strings in `arr` from the bottom-up
     to produce the selector combinations. For example
@@ -99,7 +99,7 @@ def compile_selectors(arr, leave_hidden=False):
     :return:
     """
     selectors = []
-    indent = ''  # todo: compiler.indent; move it to utils?
+    indent = indent
     buf = []
 
     def parse(selector, buf):
