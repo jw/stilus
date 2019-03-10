@@ -2,7 +2,7 @@
 
 The first cases release, a.k.a. `committers, committers, committers!`
 
- - [ ] Pass 50 Stylus test cases.  4/50 done, or 8% :)
+ - [ ] Pass 50 Stylus test cases.  7/50 done, or 14% :)
  - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.
  - [ ] Add all remaining nodes.
  - [ ] Recreate the `.clone()` method for all nodes; the current one is far too slow.
@@ -11,4 +11,5 @@ The first cases release, a.k.a. `committers, committers, committers!`
  - [ ] Finalize the evaluator.
  - [ ] Finalize the parser.
  - [ ] Add 3.7 and 3.8 Python.
+ - [ ] Create all builtin functions. 0/62 done, or 0% ;-)
  
