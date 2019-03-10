@@ -320,14 +320,14 @@ class Compiler(Visitor):
 
     def visit_call(self, call: Call):
         self.is_url = 'url' == call.value
-        args = map(self.visit, call.args.nodes)
+        args = [self.visit(node) for node in call.args.nodes]
         if self.compress:
             args = ','.join(args)
         else:
             args = ', '.join(args)
         if self.is_url:
             args = f'"{args}"'
-        return f'{call.value}({args})'
+        return f'{call.function_name}({args})'
 
     def visit_expression(self, expr: Expression):
         buf = []
