@@ -8,7 +8,7 @@ class Arguments(Expression):
 
     def __init__(self):
         super().__init__()
-        self.map = []
+        self.map = {}
         self.is_list = False
 
     def __str__(self):

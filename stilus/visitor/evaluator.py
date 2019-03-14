@@ -6,6 +6,7 @@ from pathlib import Path
 
 from stilus import utils
 from stilus.colors import colors
+from stilus.functions.bifs import bifs
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import Boolean
@@ -65,7 +66,7 @@ class Evaluator(Visitor):
         self.current_scope = None
         self.ignore_colors = None
         self.property = None
-        self.bifs = {}  # todo: implement me!
+        self.bifs = bifs
 
     def vendors(self):
         return [node.string for node in self.lookup('vendors').nodes]
@@ -318,9 +319,9 @@ class Evaluator(Visitor):
             self.warn(f'user-defined function "{fn.function_name}" '
                       f'is already defined')
 
-        # todo: check if build in function is already defined.
-        self.warn(f'built-in function "{fn.function_name}" '
-                  f'is already defined [NOT IMPLEMENTED YET!]')
+        if fn.function_name in bifs:
+            self.warn(f'built-in function "{fn.function_name}" '
+                      f'is already defined [NOT IMPLEMENTED YET!]')
 
         return fn
 
@@ -588,8 +589,25 @@ class Evaluator(Visitor):
     def visit_extend(self, extend):
         pass
 
-    def invoke(self, body, staxk, filename):
-        pass
+    def invoke(self, body, stack=None, filename=None):
+        if filename:
+            self.paths.append(dirname(filename))
+
+        if self.result:
+            ret = self.eval(body.nodes)
+            if stack:
+                self.stack.pop()
+        else:
+            body = self.visit(body)
+            if stack:
+                self.stack.pop()
+            self.mixin(body.nodes, self.get_current_block())
+            ret = null
+
+        if filename:
+            self.paths.pop()
+
+        return ret
 
     def mixin(self, nodes, block):
         pass
@@ -603,8 +621,25 @@ class Evaluator(Visitor):
     def mixin_object(self, object):
         pass
 
-    def eval(self, vals):
-        pass
+    def eval(self, vals=None):
+        if vals is None:
+            return null
+        n = null
+        try:
+            for node in vals:
+                if node.node_name == 'if':
+                    if node.block.node_name != 'block':
+                        n = self.visit(node)
+                elif node.node_name in ['each', 'block']:
+                    n = self.visit(node)
+                    if node.nodes:
+                        n = self.eval(node.nodes)
+                else:
+                    n = self.visit(node)
+        except Exception as e:
+            raise e
+
+        return n
 
     def invoke_builtin(self, fn, args):
         """
@@ -617,13 +652,30 @@ class Evaluator(Visitor):
         # built-in functions. Functions may specify that
         # they wish to accept full expressions
         # via .raw
-        if fn.raw:
+        if hasattr(fn, 'raw') and fn.raw:
             args = args.nodes
         else:
-            args = utils.params(fn)
+            ret = []
+            # todo: add args.map handling
+            args = [utils.unwrap(arg) for arg in args]
+            for arg in args:
+                if len(arg.nodes) > 1:
+                    for i, a in enumerate(arg):
+                        ret.append(utils.unwrap(a.nodes[i].first()))
+                else:
+                    ret.append(arg.first())
 
-        # todo: implement me
-        raise NotImplementedError
+            # invoke builtin function
+            body = utils.coerce(fn(*ret), False)
+
+            # Always wrapping allows js functions
+            # to return several values with a single
+            # Expression node
+            expr = Expression()
+            expr.append(body)
+            body = expr
+
+            return self.invoke(body)
 
     def visit_import(self, imported):
         self.result += 1
@@ -759,7 +811,7 @@ class Evaluator(Visitor):
         return len(expr.nodes) == 2 and \
                expr.first().node_name == 'unit' and \
                expr.nodes[1] and \
-               expr.nodes[1].name in units
+               expr.nodes[1].node_name in units
 
     def warn(self, message):
         if not self.warnings:

@@ -8,7 +8,9 @@ from stilus.utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
 
 
 class Color(Node):
-    pass
+
+    def rgba(self):
+        pass
 
 
 class HSLA(Color):

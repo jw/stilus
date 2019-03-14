@@ -34,4 +34,4 @@ if __name__ == '__main__':
 #   color black
 #     """
     css = stilus.render(source, {})
-    print(f'[{css.strip()}]')
+    print(f'[{css}]')

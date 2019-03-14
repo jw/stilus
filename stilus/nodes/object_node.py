@@ -8,7 +8,7 @@ from stilus.nodes.null import null
 
 class ObjectNode(Node):
 
-    def __init__(self, values: dict):
+    def __init__(self, values: dict = {}):
         super().__init__()
         self.values = values
 

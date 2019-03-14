@@ -25,7 +25,7 @@ def test_stylus_cases():
 
 
 if __name__ == '__main__':
-    source_file = Path('./cases/variables.styl.later')
+    source_file = Path('./cases/variables.styl')
     with open(source_file, 'r') as f:
         source = f.read()
     with open(source_file.with_suffix('.css'), 'r') as f:

@@ -1,9 +1,15 @@
+import types
 from os.path import join
 from pathlib import Path
 from typing import List
 
+from stilus.nodes.boolean import Boolean
 from stilus.nodes.expression import Expression
 from stilus.nodes.node import Node
+from stilus.nodes.null import null
+from stilus.nodes.object_node import ObjectNode
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 from stilus.selector_parser import SelectorParser
 
 
@@ -190,3 +196,41 @@ def lookup_index(name, paths, filename):
     # todo: check basename replacement?
     # todo: check node modules?
     return found
+
+
+def coerce_list(value, raw):
+    expr = Expression()
+    for v in value:
+        expr.append(coerce(v, raw))
+    return expr
+
+
+def coerce_object(object, raw):
+    # todo: this needs tests!
+    node = ObjectNode() if raw else Expression()
+    for key in object:
+        value = coerce(object[key], raw)
+        if raw:
+            node[key] = value
+        else:
+            node.append(coerce_list([key, value], False))
+    return node
+
+
+def coerce(value, raw: bool):
+    if isinstance(value, types.FunctionType):
+        return value
+    elif isinstance(value, str):
+        return String(value)
+    elif isinstance(value, bool):
+        return Boolean(value)
+    elif isinstance(value, int):
+        return Unit(value)
+    elif isinstance(value, list):
+        return coerce_list(value, raw)
+    elif value is None:
+        return null
+    elif hasattr(value, 'node_name'):
+        return value
+    else:
+        coerce_object(value, raw)
