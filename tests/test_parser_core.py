@@ -107,7 +107,6 @@ def test_parser_iterator():
     assert tokens[3].type == 'space'
 
 
-
 if __name__ == '__main__':
     parser = Parser('abc\n  color: red\n', {})
     assert parser.root == Root()

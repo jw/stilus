@@ -118,7 +118,8 @@ def test_lexer_is_part_of_selector():
 
 def test_lexer_next():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.next() == Token('ident', Ident('abc', null), lineno=1, column=1)
+    assert lexer.next() == Token('ident', Ident('abc', null),
+                                 lineno=1, column=1)
     assert lexer.next() == Token(':', ':', '', lineno=1, column=4)
 
 
@@ -146,7 +147,8 @@ def test_lexer_ident_colon_null_newline_eos():
     from stilus.nodes.null import null
     assert tokens[0] == Token('ident', Ident('abc', null), lineno=1, column=1)
     assert tokens[1] == Token(':', ':', '', lineno=1, column=4)
-    assert tokens[2] == Token('ident', Ident('color', null), lineno=1, column=5)
+    assert tokens[2] == Token('ident', Ident('color', null),
+                              lineno=1, column=5)
     assert tokens[3] == Token(':', ':', ' ', lineno=2, column=11)
     assert tokens[4] == Token('null', value=null, lineno=2, column=13)
     assert tokens[5] == Token('newline', lineno=2, column=17)
@@ -283,5 +285,6 @@ def test_lexer_escaped():
 
 if __name__ == '__main__':
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.next() == Token('ident', Ident('abc', null), lineno=1, column=1)
+    assert lexer.next() == Token('ident', Ident('abc', null),
+                                 lineno=1, column=1)
     assert lexer.next() == Token(':', ':', '', lineno=1, column=4)

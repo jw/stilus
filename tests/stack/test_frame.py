@@ -40,10 +40,10 @@ def test_frame_scopes():
 def test_frame_str():
     block = Block('hello', 'there')
     frame = Frame(block)
-    # assert str(frame) == '[Frame [Scope]]'
+    assert str(frame) == '[Frame [Empty scope]]'
     block.scope = False
     frame = Frame(block)
-    # assert str(frame) == '[Frame scope-less]'
+    assert str(frame) == '[Frame scope-less]'
 
 
 def test_frame_lookup():
