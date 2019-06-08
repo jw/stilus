@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus import utils
@@ -9,8 +8,8 @@ from stilus.nodes.node import Node
 
 class String(Node):
 
-    def __init__(self, value, quote=None):
-        super().__init__(value)
+    def __init__(self, value, quote=None, lineno=1, column=1):
+        super().__init__(value, lineno=lineno, column=column)
         self.string = value
         self.prefixed = False
         if not isinstance(quote, str):
@@ -24,8 +23,11 @@ class String(Node):
     def __repr__(self):
         return self.__str__()
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = String(self.value, self.quote,
+                       lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Boolean',
@@ -38,7 +40,7 @@ class String(Node):
     def to_boolean(self):
         return Boolean(len(self.value))
 
-    def coerce(self, other):
+    def coerce(self, other: Node):
         if other.node_name == 'string':
             return other
         elif other.node_name == 'expression':
@@ -61,6 +63,7 @@ class String(Node):
             return s(expr.join(args))
         if op == '+':
             expr = Expression()
-            expr.push(String(self.value + self.coerce(right).value))
+            expr.push(String(self.value + self.coerce(right).value,
+                             lineno=self.lineno, column=self.column))
         else:
             super().operate(op, right)

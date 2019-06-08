@@ -1,21 +1,14 @@
-import copy
 import json
 from collections import deque
-
-from deprecated import deprecated
 
 from stilus.nodes.node import Node
 
 
 class Root(Node):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.nodes = deque([])
-
-    @deprecated(reason='use append')
-    def push(self, node):
-        self.nodes.append(node)
 
     def append(self, node):
         self.nodes.append(node)
@@ -23,15 +16,14 @@ class Root(Node):
     def unshift(self, node):
         self.nodes.appendleft(node)
 
-    def clone(self, parent=None, node=None):
-        return copy.deepcopy(self)
-
     def __key(self):
         return self.nodes
 
     def __eq__(self, other):
+        # print(f'ROOT: {other} vs {self} ({id(other)} vs {id(self)})')
         if isinstance(other, Root):
-            return self.__key() == other.__key()
+            # return self.__key() == other.__key()
+            return id(self) == id(other)
         return False
 
     def __hash__(self):
@@ -42,6 +34,12 @@ class Root(Node):
 
     def __repr__(self):
         return self.__str__()
+
+    def clone(self, parent=None, node=None):
+        clone = Root(lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        clone.nodes = [node.clone(clone, clone) for node in self.nodes]
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Root',

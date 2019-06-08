@@ -5,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Boolean(Node):
 
-    def __init__(self, value: bool):
-        super().__init__(bool(value))
+    def __init__(self, value: bool, lineno=1, column=1):
+        super().__init__(bool(value), lineno=lineno, column=column)
 
     def __str__(self):
         return str(self.value).lower()

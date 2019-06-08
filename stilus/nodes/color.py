@@ -1,5 +1,4 @@
 import colorsys
-import copy
 import json
 
 from stilus.nodes.boolean import true
@@ -41,8 +40,12 @@ class HSLA(Color):
                    self.alpha == other.alpha
         return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=Node):
+        clone = HSLA(self.hue, self.saturation, self.lightness, self.alpha)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'HSLA',
@@ -106,6 +109,7 @@ class RGBA(Color):
         self.a = clamp_alpha(a)
         self.name = ''
         self.rgba = self
+        self.raw = None
 
     def __str__(self):
 
@@ -139,8 +143,14 @@ class RGBA(Color):
         rgba.a = a
         return rgba
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = RGBA(self.r, self.g, self.b, self.a)
+        clone.raw = self.raw
+        clone.name = self.name
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'RGBA',

@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -7,16 +6,15 @@ from stilus.nodes.node import Node
 class Ident(Node):
 
     def __init__(self, name, value=None, mixin=False,
-                 lineno=None, column=None):
-        super().__init__(value)
+                 lineno=1, column=1):
+        super().__init__(value, lineno=lineno, column=column)
         self.name = name
         self.string = name
         from stilus.nodes.null import null
-        self.value = value if value else null
+        self.value = null if value is None else value
         self.mixin = mixin
         self.property = None
-        self.lineno = lineno
-        self.column = column
+        self.rest = False
 
     def __str__(self):
         return f'{self.string}'
@@ -39,8 +37,16 @@ class Ident(Node):
     def hash(self):
         return self.name
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Ident(self.name)
+        clone.value = self.value.clone(parent, clone)
+        clone.mixin = self.mixin
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        clone.property = self.property
+        clone.rest = self.rest
+        return clone
 
     def is_empty(self):
         from stilus.nodes.null import null
@@ -49,7 +55,7 @@ class Ident(Node):
     def to_json(self):
         return json.dumps({'__type': 'Ident',
                            'node_name': self.node_name,
-                           'val': self.val,
+                           'val': self.value,
                            'mixin': self.mixin,
                            'property': self.property,
                            'rest': self.rest,

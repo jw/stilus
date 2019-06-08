@@ -1,4 +1,3 @@
-import copy
 import json
 from typing import Type
 
@@ -28,25 +27,24 @@ class Node:
         return hash(self.value)
 
     def hash(self):
+        """Return hash."""
         return self.value
 
     def first(self):
-        """
-        Return this node.
+        """Return this node.
         :return: This node.
         """
         return self
 
     def to_boolean(self):
-        """
-        Return True
+        """Return True.
         :return: True
         """
-        return True
+        from stilus.nodes.boolean import true
+        return true
 
     def to_expression(self):
-        """
-        Return expression or wrap this node in an expression
+        """Return expression or wrap this node in an expression
         :return:
         """
         from stilus.nodes.expression import Expression
@@ -57,15 +55,14 @@ class Node:
         return expression
 
     def evaluate(self):
-        """
-        Nodes by default evaulate to themselves.
+        """Nodes by default evaulate to themselves.
         :return: A Node.
         """
         from stilus.visitor.evaluator import Evaluator
         return Evaluator(self).evaluate()
 
     def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
-        """Operate on `right` with the given `op`."""
+        """Operate on ``right`` with the given ``op``."""
         from stilus.nodes.boolean import Boolean
         if op == 'is a':
             if 'string' == right.first().name:
@@ -130,8 +127,10 @@ class Node:
             return other
         raise CoercionError(f'cannot coerce {other} to {self.node_name}')
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        """Return this node."""
+        return self
 
     def to_json(self):
+        """Return a JSON representation of this node."""
         return json.dumps([self.lineno, self.column, self.filename])

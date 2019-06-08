@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,13 +5,16 @@ from stilus.nodes.node import Node
 
 class Property(Node):
 
-    def __init__(self, segments, expr=None):
-        super().__init__()
+    def __init__(self, segments, expr=None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.segments = segments
         self.expr = expr
+        self.name = None
+        self.literal = None
 
     def __str__(self):
-        return f'property({"".join(self.segments)}, {self.expr})'
+        strings = [str(item) for item in self.segments]
+        return f'property({"".join(strings)}, {self.expr})'
 
     def __repr__(self):
         return self.__str__()
@@ -28,14 +30,24 @@ class Property(Node):
             return self.__key() == other.__key()
         return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, clone=None):
+        clone = Property(self.segments)
+        clone.name = self.name
+        if self.literal:
+            clone.literal = self.literal
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        clone.segments = [node.clone(parent, clone) for node in self.segments]
+        if self.expr:
+            clone.expr = self.expr.clone(parent, clone)
+        return clone
 
     def to_json(self):
         # FIXME: add expr and literal to this dict
         return json.dumps({'__type': 'Property',
                            'segments': self.segments,
-                           'node_name': self.node_name,
+                           'name': self.name,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})

@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Charset(Node):
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, value, lineno=1, column=1):
+        super().__init__(value, lineno=lineno, column=column)
 
     def __str__(self):
         return f'@charset {self.value}'
@@ -25,9 +24,6 @@ class Charset(Node):
 
     def __hash__(self):
         return hash(self.__key())
-
-    def clone(self):
-        return copy.deepcopy(self)
 
     def to_json(self):
         return json.dumps({'__type': 'Charset',

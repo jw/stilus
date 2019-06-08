@@ -5,8 +5,9 @@ from stilus.nodes.node import Node
 
 class Comment(Node):
 
-    def __init__(self, value: str, suppress: bool, inline: bool):
-        super().__init__(value)
+    def __init__(self, value: str, suppress: bool, inline: bool,
+                 lineno=1, column=1):
+        super().__init__(value, lineno=lineno, column=column)
         self.suppress = suppress
         self.inline = inline
 

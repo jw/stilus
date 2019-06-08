@@ -1,4 +1,3 @@
-import copy
 import json
 from math import isnan
 
@@ -46,8 +45,12 @@ class Unit(Node):
                            'column': self.column,
                            'filename': self.filename})
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Unit(self.value, self.type)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def operate(self, op, right: Node, value=None):
         type = self.type if self.type else right.first().type

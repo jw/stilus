@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Atrule(Node):
 
-    def __init__(self, type):
-        super().__init__()
+    def __init__(self, type, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.type = type
         self.block = None
         self.segments = None
@@ -56,8 +55,15 @@ class Atrule(Node):
                 return False
         return True
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Atrule(self.type)
+        if self.block:
+            clone.block = self.block.clone(parent, node)
+        clone.segments = [node.clone(parent, clone) for node in self.segments]
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Atrule',

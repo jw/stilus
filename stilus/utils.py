@@ -198,18 +198,18 @@ def lookup_index(name, paths, filename):
     return found
 
 
-def coerce_list(value, raw):
-    expr = Expression()
+def coerce_list(value, raw, lineno=1, column=1):
+    expr = Expression(lineno=lineno, column=column)
     for v in value:
-        expr.append(coerce(v, raw))
+        expr.append(coerce(v, raw, lineno=lineno, column=column))
     return expr
 
 
-def coerce_object(object, raw):
+def coerce_object(object, raw, lineno=1, column=1):
     # todo: this needs tests!
     node = ObjectNode() if raw else Expression()
     for key in object:
-        value = coerce(object[key], raw)
+        value = coerce(object[key], raw, lineno=lineno, column=column)
         if raw:
             node[key] = value
         else:
@@ -217,20 +217,20 @@ def coerce_object(object, raw):
     return node
 
 
-def coerce(value, raw: bool):
+def coerce(value, raw: bool, lineno=1, column=1):
     if isinstance(value, types.FunctionType):
         return value
     elif isinstance(value, str):
-        return String(value)
+        return String(value, lineno=lineno, column=column)
     elif isinstance(value, bool):
-        return Boolean(value)
+        return Boolean(value, lineno=lineno, column=column)
     elif isinstance(value, int):
-        return Unit(value)
+        return Unit(value, lineno=lineno, column=column)
     elif isinstance(value, list):
-        return coerce_list(value, raw)
+        return coerce_list(value, raw, lineno=lineno, column=column)
     elif value is None:
         return null
     elif hasattr(value, 'node_name'):
         return value
     else:
-        coerce_object(value, raw)
+        coerce_object(value, raw, lineno=lineno, column=column)

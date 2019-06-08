@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Member(Node):
 
-    def __init__(self, left, right):
-        super().__init__()
+    def __init__(self, left, right, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.right = right
         self.left = left
 
@@ -28,8 +27,14 @@ class Member(Node):
     def __hash__(self):
         return hash(self.__key())
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Member(lineno=self.lineno, column=self.column)
+        clone.left = self.left.clone(parent, clone)
+        clone.right = self.right.clone(parent, clone)
+        if clone.value:
+            clone.value = self.value.clone(parent, clone)
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Member',

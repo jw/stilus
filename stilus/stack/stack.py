@@ -8,9 +8,10 @@ from stilus.stack.frame import Frame
 
 
 class Stack(list):
+    """A stack of Frames."""
 
     def __init__(self):
-        """Create a stack"""
+        """Create an empty ``Frame`` stack"""
         super().__init__()
 
     def __str__(self):
@@ -27,6 +28,9 @@ class Stack(list):
     def __repr__(self):
         return self.__str__()
 
+    def __next__(self):
+        return super(next())
+
     @deprecated(reason='use append')
     def push(self, frame: Frame):
         return self.append(frame)
@@ -42,13 +46,15 @@ class Stack(list):
         if len(self) == 0:
             return None
         else:
-            return self[self.__len__() - 1]
+            return self[self.__len__() - 1]  # todo: [-1]
 
     def get_block_frame(self, block: Block):
         """Lookup stack frame for a given block"""
-        for i in range(self.__len__()):
-            if block == self[i].block:
-                return self[i]
+        for frame in self:
+            # print(f'Checking equality between {block} and {frame.block}...')
+            if block == frame.block:
+                # print('equal!')
+                return frame
         return None
 
     def lookup(self, name) -> Type[Node]:
@@ -59,6 +65,7 @@ class Stack(list):
         :param name: local variable
         :return:
         """
+        # print(f'lookup: {name}...')
         block = None
         if self.current_frame():
             block = self.current_frame().block
@@ -66,11 +73,13 @@ class Stack(list):
             frame = self.get_block_frame(block)
             if frame:
                 val = frame.lookup(name)
-                if val:
+                if val is not None:  # fixme: use val: (fix __len__)
+                    # print(f'returning {val}!')
                     return val
             if hasattr(block, 'parent'):
                 block = block.parent
             else:
                 block = None
             if block is None:
+                # print(f'Not found.')
                 return

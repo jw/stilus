@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class If(Node):
 
-    def __init__(self, cond, negate=None):
-        super().__init__()
+    def __init__(self, cond=None, negate=None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.cond = cond
         self.elses = []
         self.postfix = None
@@ -18,7 +17,7 @@ class If(Node):
             self.negate = negate
 
     def __str__(self):
-        return f'if {self.cond} else ({", ".join(self.elses)})'
+        return f'if {self.cond} else ({", ".join(str(self.elses))})'
 
     def __repr__(self):
         return self.__str__()
@@ -34,8 +33,17 @@ class If(Node):
     def __hash__(self):
         return hash(self.__key())
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = If()
+        clone.cond = self.cond.clone(parent)
+        clone.block = self.block.clone(parent, clone)
+        clone.elses = [node.clone(parent, clone) for node in self.elses]
+        clone.negate = self.negate
+        clone.postfix = self.postfix
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'If',

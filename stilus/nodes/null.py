@@ -31,6 +31,9 @@ class Null(Node):
     def hash(self):
         return None
 
+    def clone(self, parent=None, node=None):
+        return Null()
+
     def to_boolean(self):
         from stilus.nodes.boolean import false
         return false

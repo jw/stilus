@@ -43,7 +43,8 @@ def test_name():
 
 def test_to_boolean():
     node = Node()
-    assert node.to_boolean() is True
+    from stilus.nodes.boolean import true
+    assert node.to_boolean() is true
 
 
 def test_first():

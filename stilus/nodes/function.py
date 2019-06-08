@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,21 +5,26 @@ from stilus.nodes.node import Node
 
 class Function(Node):
 
-    def __init__(self, function_name, params, body=None):
-        super().__init__()
+    def __init__(self, function_name, params, body=None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
         self.params = params
-        self.fn = params
-        self.body = body
+        self.builtin = callable(params)
+        self.block = body
 
     def __str__(self):
-        return f'{self.function_name}({", ".join(self.params.nodes)})'
+        if self.params:
+            strings = [str(node if node else 'None')
+                       for node in self.params.nodes]
+            return f'{self.function_name}({", ".join(strings)})'
+        else:
+            return f'{self.function_name}()'
 
     def __repr__(self):
         return self.__str__()
 
     def __key(self):
-        return self.node_name, self.function_name, self.params, self.body
+        return self.node_name, self.function_name, self.params, self.block
 
     def __eq__(self, other):
         if isinstance(other, Function):
@@ -33,8 +37,17 @@ class Function(Node):
     def hash(self):
         return f'function {self.function_name}'
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        if self.function_name:
+            clone = Function(self.function_name, self.params)
+        else:
+            clone = Function(self.node_name)
+            clone.params = self.params.clone(parent, clone)
+            clone.block = self.block.clone(parent, clone)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def arity(self):
         return len(self.params)

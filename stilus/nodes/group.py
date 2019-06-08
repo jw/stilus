@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.block import Block
@@ -8,8 +7,8 @@ from stilus.nodes.selector import Selector
 
 class Group(Node):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.nodes = []
         self.extends = []
 
@@ -43,8 +42,12 @@ class Group(Node):
     def has_only_placeholders(self):
         return all(s.is_placeholder() for s in self.nodes)
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, noe=None):
+        clone = Group(lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        clone.nodes = [node.clone(parent, clone) for node in self.nodes]
+        clone.block = self.block.clone(parent, clone)
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Group',

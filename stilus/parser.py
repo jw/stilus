@@ -73,6 +73,8 @@ class Parser:
         self.operand = None
         self.allow_postfix = None
         self.prev_state = None
+        self.lineno = 1
+        self.column = 1
 
     #
     # Selector composite tokens.
@@ -239,6 +241,8 @@ class Parser:
         if tok.value and isinstance(tok.value, Node):
             tok.value.lineno = tok.lineno
             tok.value.column = tok.column
+        self.lineno = tok.lineno
+        self.column = tok.column
         # print(tok)
         return tok
 
@@ -506,7 +510,8 @@ class Parser:
             op = self.accept(['if', 'unless', 'for'])
             if op:
                 if op.type in ['if', 'unless']:
-                    stmt = If(self.expression(), stmt)
+                    stmt = If(self.expression(), stmt, lineno=self.lineno,
+                              column=self.column)
                     stmt.postfix = true
                     stmt.negate = 'unless' == op.type
                     self.accept(';')
@@ -517,7 +522,8 @@ class Parser:
                         key = self.id().name
                     self.expect('in')
                     each = Each(val, key, self.expression())
-                    block = Block(self.parent, each)
+                    block = Block(self.parent, each,
+                                  lineno=self.lineno, column=self.column)
                     block.append(stmt)
                     each.block = block
                     stmt = each
@@ -597,12 +603,14 @@ class Parser:
     def stmt_import(self):
         self.expect('import')
         self.allow_postfix = True
-        return Import(self.expression(), False)
+        return Import(self.expression(), False,
+                      lineno=self.lineno, column=self.column)
 
     def stmt_require(self):
         self.expect('require')
         self.allow_postfix = True
-        return Import(self.expression(), True)
+        return Import(self.expression(), True,
+                      lineno=self.lineno, column=self.column)
 
     def stmt_extend(self):
         tok = self.expect('extend')
@@ -675,7 +683,9 @@ class Parser:
         pred = self.accept(['ident', 'not'])
         if pred:
             if pred.value.string:
-                pred = Literal(pred.value.string)
+                pred = Literal(pred.value.string,
+                               lineno=self.lineno,
+                               column=self.lineno)
             else:
                 pred = pred.value
 
@@ -756,11 +766,13 @@ class Parser:
     def supports_op(self):
         feature = self.supports_feature()
         if feature:
-            expr = Expression()
+            expr = Expression(lineno=self.lineno, column=self.column)
             expr.append(feature)
             op = self.accept(['&&', '||'])
             while op:
-                expr.append(Literal('and' if op.value == '&&' else '||'))
+                expr.append(Literal('and' if op.value == '&&' else '||',
+                                    lineno=self.lineno,
+                                    column=self.column))
                 expr.append(self.supports_feature())
                 op = self.accept(['&&', '||'])
             return expr
@@ -769,8 +781,8 @@ class Parser:
     def supports_negation(self):
         tok = self.accept('not')
         if tok:
-            node = Expression()
-            node.append(Literal('not'))
+            node = Expression(lineno=self.lineno, column=self.column)
+            node.append(Literal('not', lineno=self.lineno, column=self.column))
             node.append(self.supports_feature())
             return node
         return None
@@ -783,8 +795,10 @@ class Parser:
                 return self.feature()
             else:
                 self.expect('{')
-                node = Expression()
-                node.append(Literal('{'))
+                node = Expression(lineno=self.lineno, column=self.column)
+                node.append(Literal('{',
+                                    lineno=self.lineno,
+                                    column=self.column))
                 node.append(self.supports_condition())
                 self.expect(')')
                 self.skip_spaces_and_comments()
@@ -795,7 +809,8 @@ class Parser:
         self.expect('unless')
         self.state.append('conditional')
         self.cond = True
-        node = If(self.expression(), True)
+        node = If(self.expression(), True, lineno=self.lineno,
+                  column=self.column)
         self.cond = False
         node.block = self.block(node, False)
         self.prev_state = self.state[-1]
@@ -822,7 +837,7 @@ class Parser:
         self.expect('if')
         self.state.append('conditional')
         self.cond = True
-        node = If(self.expression())
+        node = If(self.expression(), lineno=self.lineno, column=self.column)
         self.cond = False
         node.block = self.block(node, False)
         self.skip(['newline', 'comment'])
@@ -832,7 +847,8 @@ class Parser:
                 cond = self.expression()
                 self.cond = False
                 block = self.block(node, False)
-                node.elses.append(If(cond, block))
+                node.elses.append(If(cond, block,
+                                     lineno=self.lineno, column=self.column))
             else:
                 node.elses.append(self.block(node, False))
                 break
@@ -842,7 +858,8 @@ class Parser:
         return node
 
     def block(self, node, scope=None):
-        block = self.parent = Block(self.parent, node)
+        block = self.parent = Block(self.parent, node,
+                                    lineno=self.lineno, column=self.column)
 
         if scope is False:
             block.scope = False
@@ -884,7 +901,6 @@ class Parser:
             block.append(stmt)
 
         # css-style
-        # print(f'css: {self.css}; state: {self.state}')
         if self.css > 0:
             self.skip_whitespace()
             self.expect('}')
@@ -894,11 +910,12 @@ class Parser:
             self.expect('outdent')
 
         self.parent = block.parent
+
         return block
 
     def stmt_selector(self):
         scope = self.selector_scope
-        group = Group()
+        group = Group(lineno=self.lineno, column=self.column)
         is_root = self.current_state() == 'root'
 
         while True:
@@ -907,7 +924,9 @@ class Parser:
 
             # push the selector
             if is_root and scope:
-                arr.appendleft(Literal(f'{scope} '))
+                arr.appendleft(Literal(f'{scope} ',
+                                       lineno=self.lineno,
+                                       column=self.column))
             if len(arr) > 0:
                 selector = Selector(arr)
                 selector.lineno = arr[0].lineno
@@ -940,25 +959,39 @@ class Parser:
                     self.expect('}')
                     arr.append(expr)
                 elif tok.type == self.prefix and '.':
-                    literal = Literal(tok.value + self.prefix)
+                    literal = Literal(tok.value + self.prefix,
+                                      lineno=self.lineno,
+                                      column=self.column)
                     literal.prefixed = True
                     arr.append(literal)
                 elif tok.type == 'comment':
                     # ignore comments
                     pass
                 elif tok.type in ['color', 'unit']:
-                    arr.append(Literal(tok.value.raw))
+                    arr.append(Literal(tok.value.raw,
+                                       lineno=self.lineno,
+                                       column=self.column))
                 elif tok.type == 'space':
-                    arr.append(Literal(' '))
+                    arr.append(Literal(' ',
+                                       lineno=self.lineno,
+                                       column=self.column))
                 elif tok.type == 'function':
-                    arr.append(Literal(f'{tok.value.node_name}('))
+                    arr.append(Literal(f'{tok.value.node_name}(',
+                                       lineno=self.lineno,
+                                       column=self.column))
                 elif tok.type == 'ident':
                     if hasattr(tok.value, 'name') and tok.value.name:
-                        arr.append(Literal(f'{tok.value.name}'))
+                        arr.append(Literal(f'{tok.value.name}',
+                                           lineno=self.lineno,
+                                           column=self.column))
                     else:
-                        arr.append(Literal(f'{tok.value.string}'))
+                        arr.append(Literal(f'{tok.value.string}',
+                                           lineno=self.lineno,
+                                           column=self.column))
                 else:
-                    arr.append(Literal(tok.value))
+                    arr.append(Literal(tok.value,
+                                       lineno=self.lineno,
+                                       column=self.column))
                     if tok.space:
                         arr.append(Literal(' '))
             else:
@@ -980,7 +1013,7 @@ class Parser:
 
             if op.type == '?=':
                 defined = BinOp('is defined', node)
-                lookup = Expression()
+                lookup = Expression(lineno=self.lineno, column=self.column)
                 lookup.append(Ident(name))
                 node = Ternary(defined, lookup, node)
             elif op in ['+=', '-=', '*=', '/=', '%=']:
@@ -1054,7 +1087,7 @@ class Parser:
 
         # property
         ident = self.interpolate()
-        prop = Property(ident)
+        prop = Property(ident, lineno=self.lineno, column=self.column)
         ret = prop
 
         # optional ':'
@@ -1083,7 +1116,7 @@ class Parser:
 
         star = self.accept('*')
         if star:
-            segs.append(Literal('*'))
+            segs.append(Literal('*', lineno=self.lineno, column=self.column))
 
         while True:
             if self.accept('{'):
@@ -1093,7 +1126,9 @@ class Parser:
                 self.prev_state = self.state[-1]
                 self.state.pop()
             elif self.accept('-'):
-                segs.append(Literal('-'))
+                segs.append(Literal('-',
+                                    lineno=self.lineno,
+                                    column=self.column))
             else:
                 node = self.accept('ident')
                 if node:
@@ -1110,7 +1145,7 @@ class Parser:
     # fixme!
     def expression(self):
         """negation+"""
-        expr = Expression()
+        expr = Expression(lineno=self.lineno, column=self.column)
         self.state.append('expression')
         while True:
             node = self.negation()
@@ -1149,7 +1184,7 @@ class Parser:
                 # todo: fixme was list, now node
                 node.append(self.expression())
             else:
-                list = Expression(true)
+                list = Expression(true, lineno=self.lineno, column=self.column)
                 list.append(node)
                 list.append(self.expression())
                 node = list
@@ -1280,7 +1315,10 @@ class Parser:
         if op:
             self.operand = True
             if '/' == op and self.in_property and len(self.parens) < 0:
-                self.stash.append(Token('literal', Literal('/')))
+                self.stash.append(Token('literal',
+                                        Literal('/',
+                                                lineno=self.lineno,
+                                                column=self.column)))
                 self.operand = False
                 return node
             else:
@@ -1327,7 +1365,7 @@ class Parser:
 
     def member(self):
         node = self.primary()
-        if node:
+        if node or node.node_name == 'null':  # todo: this seems not right
             while self.accept('.'):
                 id = Ident(self.expect('ident').value.string)
                 node = Member(node, id)
@@ -1396,7 +1434,7 @@ class Parser:
 
         # body
         self.state.append('function')
-        fn = Function(name, params)
+        fn = Function(name, params, lineno=self.lineno, column=self.column)
         fn.block = self.block(fn)
         self.prev_state = self.state[-1]
         self.state.pop()
@@ -1456,7 +1494,7 @@ class Parser:
         self.expect(')')
         self.prev_state = self.state[-1]
         self.state.pop()
-        return Call('url', args)
+        return Call('url', args, lineno=self.lineno, column=self.column)
 
     def mozdocument(self):
         self.expect('-moz-document')
@@ -1468,7 +1506,9 @@ class Parser:
             self.skip_spaces_and_comments()
             if self.accept(',') is None:
                 break
-        mozdocument.segments = [Literal(', '.join(calls))]
+        mozdocument.segments = [Literal(', '.join(calls),
+                                        lineno=self.lineno,
+                                        column=self.column)]
         self.state.append('atrule')
         mozdocument.block = self.block(mozdocument, False)
         self.prev_state = self.state[-1]
@@ -1487,7 +1527,7 @@ class Parser:
         self.parens -= 1
         self.prev_state = self.state[-1]
         self.state.pop()
-        call = Call(name, args)
+        call = Call(name, args, lineno=self.lineno, column=self.column)
         if with_block:
             self.state.append('function')
             call.block = self.block(call)
@@ -1510,6 +1550,8 @@ class Parser:
             self.accept(',')
             self.skip_whitespace()
             tok = self.accept('ident')
+        params.lineno = self.lineno
+        params.column = self.column
         return params
 
     def object(self):

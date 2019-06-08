@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Literal(Node):
 
-    def __init__(self, string, css=False, prefixed=''):
-        super().__init__(string)
+    def __init__(self, string, css=False, prefixed='', lineno=1, column=1):
+        super().__init__(string, lineno=lineno, column=column)
         self.string = string
         self.css = css
         self.prefixed = prefixed
@@ -32,9 +31,6 @@ class Literal(Node):
         if isinstance(other, Literal):
             return self.__key() == other.__key()
         return False
-
-    def clone(self):
-        return copy.deepcopy(self)
 
     def to_json(self):
         return json.dumps({'__type': 'Literal',

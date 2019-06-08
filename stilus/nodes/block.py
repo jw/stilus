@@ -1,22 +1,24 @@
 import json
 
-from deprecated import deprecated
-
 from stilus.nodes.node import Node
 
 
 class Block(Node):
 
-    def __init__(self, parent, node, scope=True):
-        super().__init__()
+    def __init__(self, parent, node, scope=True, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.nodes = []
         self.parent = parent
         self.node = node
         self.scope = scope
         self.lacks_rendered_selectors = False  # for compiler
+        self.index = 0
 
     def __str__(self):
-        return f'{self.parent}:{self.node}:{self.nodes}:{self.scope}'
+        # strings = [str(node) for node in self.nodes]
+        return \
+            f'{self.parent}:{self.node}:{self.scope} ' \
+            f'[{self.lineno}:{self.column}]'
 
     def __repr__(self):
         return self.__str__()
@@ -29,7 +31,7 @@ class Block(Node):
 
     def __eq__(self, other):
         if isinstance(other, Block):
-            return self.__key() == other.__key()
+            return id(self) == id(other)
         return False
 
     def has_properties(self):
@@ -53,22 +55,16 @@ class Block(Node):
     def clone(self, parent=None, node=None):
         p = parent
         n = node
-        if not p:
+        if p is None:
             p = self.parent
-        if not n:
+        if n is None:
             n = self.node
-        clone = Block(p, n)
-        clone.lineno = self.lineno
-        clone.column = self.column
+        clone = Block(p, n, lineno=self.lineno, column=self.column)
         clone.filename = self.filename
         clone.scope = self.scope
         for node in self.nodes:
-            clone.append(node.clone())
+            clone.append(node.clone(clone, clone))
         return clone
-
-    @deprecated(reason='use append')
-    def push(self, node):
-        self.nodes.append(node)
 
     def append(self, node):
         self.nodes.append(node)

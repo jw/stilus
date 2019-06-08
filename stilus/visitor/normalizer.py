@@ -14,8 +14,9 @@ from stilus.visitor.visitor import Visitor
 
 class Normalizer(Visitor):
 
-    def __init__(self, root, options):
+    def __init__(self, root, parser, options):
         super().__init__(root)
+        self.parser = parser
         self.hoist = options.get('hoist atrules', False)
         self.stack = []
         self.selector_map = defaultdict(list)
@@ -57,7 +58,7 @@ class Normalizer(Visitor):
             selector.filename = node.filename
             selector.value = '&'
 
-            group = Group()
+            group = Group(lineno=self.parser.lineno, column=self.parser.column)
             group.lineno = node.lineno
             group.column = node.column
             group.filename = node.filename

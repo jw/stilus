@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Namespace(Node):
 
-    def __init__(self, value, prefix=None):
-        super().__init__(value)
+    def __init__(self, value, prefix=None, lineno=1, column=1):
+        super().__init__(value, lineno=lineno, column=column)
         self.prefix = prefix
 
     def __str__(self):
@@ -27,9 +26,6 @@ class Namespace(Node):
 
     def __hash__(self):
         return hash(self.__key())
-
-    def clone(self):
-        return copy.deepcopy(self)
 
     def to_json(self):
         return json.dumps({'__type': 'Charset',

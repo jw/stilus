@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Params(Node):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.nodes = []
 
     def __str__(self):
@@ -33,8 +32,11 @@ class Params(Node):
     def append(self, node):
         self.nodes.append(node)
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=Node):
+        clone = Params(lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        self.nodes = [node.clone(parent, clone) for node in self.nodes]
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Params',

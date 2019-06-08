@@ -27,7 +27,7 @@ class Frame:
         return False
 
     def __str__(self):
-        if self.block.scope is False:
+        if hasattr(self.block, 'scope') and self.block.scope is False:
             scope = 'scope-less'
         else:
             scope = f'{self.scope()}'
@@ -59,4 +59,5 @@ class Frame:
         :param name:
         :return:
         """
+        # print(f'FRAME: Lookup of {name} in {self.scope()}...')
         return self.scope().lookup(name)

@@ -1,19 +1,20 @@
-import copy
 import json
 
-from stilus.nodes.expression import Expression
+from stilus.nodes.arguments import Arguments
 from stilus.nodes.node import Node
 
 
 class Call(Node):
 
-    def __init__(self, function_name, args=None):
-        super().__init__()
+    def __init__(self, function_name, args: Arguments = None,
+                 lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
+        self.block = None
         if args:
             self.args = args
         else:
-            self.args = Expression()
+            self.args = Arguments()
 
     def __str__(self):
         return f'{self.function_name}({", ".join(str(self.args))})'
@@ -32,8 +33,15 @@ class Call(Node):
     def __hash__(self):
         return hash(self.__key())
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, clone=None):
+        clone = Call(self.function_name)
+        clone.args = self.args.clone(parent, clone)
+        if self.block:
+            clone.block = self.block.clone(parent, clone)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Call',

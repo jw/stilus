@@ -16,8 +16,6 @@ def test_block():
     assert block.node == true
     assert block.parent == null
     assert block.node_name == 'block'
-    clone = block.clone()
-    assert clone == block
     assert block.is_empty() is True
 
 

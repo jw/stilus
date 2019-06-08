@@ -19,7 +19,7 @@ class Scope:
 
     def __str__(self):
         if not self.commons:
-            return '[Scope]'
+            return '[Empty scope]'
         else:
             commons = ', '.join(f'@{key}' for key in self.commons.keys())
             return f'[Scope {commons}]'
@@ -37,4 +37,5 @@ class Scope:
         :param name:
         :return:
         """
+        # print(f'SCOPE: Lookup of {str(name)} in {str(list(self.commons))}.')
         return self.commons.get(name, None)

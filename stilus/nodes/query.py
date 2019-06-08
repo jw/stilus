@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Query(Node):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.nodes = []
         self.type = ''
         self.predicate = ''
@@ -92,8 +91,13 @@ class Query(Node):
         query.nodes = self.nodes.extend(other.nodes)
         return query
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Query(lineno=self.lineno, column=self.column)
+        clone.predicate = self.predicate
+        clone.type = self.type
+        clone.nodes = [node.clone(parent, clone) for node in self.nodes]
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Query',

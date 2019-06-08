@@ -5,6 +5,7 @@ from stilus.nodes.boolean import true
 from stilus.nodes.color import RGBA
 from stilus.nodes.ident import Ident
 from stilus.nodes.literal import Literal
+from stilus.nodes.null import null
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 
@@ -117,13 +118,13 @@ def test_lexer_is_part_of_selector():
 
 def test_lexer_next():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.next() == Token('ident', Ident('abc', ''), lineno=1, column=1)
+    assert lexer.next() == Token('ident', Ident('abc', null), lineno=1, column=1)
     assert lexer.next() == Token(':', ':', '', lineno=1, column=4)
 
 
 def test_lexer_peek():
     lexer = Lexer('abc:\n  color: #11223311\n', {})
-    abc = Token('ident', Ident('abc', ''), lineno=1, column=1)
+    abc = Token('ident', Ident('abc', null), lineno=1, column=1)
     assert lexer.peek() == abc
     assert lexer.peek() == abc
     assert lexer.next() == abc
@@ -142,11 +143,12 @@ def test_lexer_indent_outdent():
 def test_lexer_ident_colon_null_newline_eos():
     lexer = Lexer('abc:\n  color: null\n', {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('ident', Ident('abc', ''), lineno=1, column=1)
+    from stilus.nodes.null import null
+    assert tokens[0] == Token('ident', Ident('abc', null), lineno=1, column=1)
     assert tokens[1] == Token(':', ':', '', lineno=1, column=4)
-    assert tokens[2] == Token('ident', Ident('color', ''), lineno=1, column=5)
+    assert tokens[2] == Token('ident', Ident('color', null), lineno=1, column=5)
     assert tokens[3] == Token(':', ':', ' ', lineno=2, column=11)
-    assert tokens[4] == Token('null', lineno=2, column=13)
+    assert tokens[4] == Token('null', value=null, lineno=2, column=13)
     assert tokens[5] == Token('newline', lineno=2, column=17)
     assert tokens[6] == Token('eos', lineno=3, column=1)
 
@@ -154,7 +156,8 @@ def test_lexer_ident_colon_null_newline_eos():
 def test_lexer_ident_colon_colors():
     lexer = Lexer('abc: #11223311, #aabbcc, #abc1, #fff, #dd, #e', {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('ident', Ident('abc', ''), lineno=1, column=1)
+    from stilus.nodes.null import null
+    assert tokens[0] == Token('ident', Ident('abc', null), lineno=1, column=1)
     assert tokens[1] == Token(':', ':', ' ', lineno=1, column=4)
     assert tokens[2] == Token('color', RGBA(17, 34, 51, 0.67),
                               lineno=1, column=6)
@@ -173,11 +176,12 @@ def test_lexer_ident_colon_colors():
 def test_lexer_ident_space():
     lexer = Lexer('abc def klm:\n  xyz abc\n', {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('ident', Ident('abc', ''), lineno=1, column=1)
+    from stilus.nodes.null import null
+    assert tokens[0] == Token('ident', Ident('abc', null), lineno=1, column=1)
     assert tokens[1] == Token('space', lineno=1, column=4)
-    assert tokens[2] == Token('ident', Ident('def', ''), lineno=1, column=5)
+    assert tokens[2] == Token('ident', Ident('def', null), lineno=1, column=5)
     assert tokens[3] == Token('space', lineno=1, column=8)
-    assert tokens[4] == Token('ident', Ident('klm', ''), lineno=1, column=9)
+    assert tokens[4] == Token('ident', Ident('klm', null), lineno=1, column=9)
 
 
 def test_lexer_function_paren_braces_sep_unit():
@@ -189,11 +193,12 @@ def test_lexer_function_paren_braces_sep_unit():
                   '}\n',
                   {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('function', Ident('bg', ''), '',
+    from stilus.nodes.null import null
+    assert tokens[0] == Token('function', Ident('bg', null), '',
                               lineno=1, column=1)
     assert tokens[1] == Token(')', ')', '', lineno=1, column=4)
     assert tokens[9] == Token('{', '{', lineno=4, column=6)
-    assert tokens[11] == Token('function', Ident('bg', ''), '',
+    assert tokens[11] == Token('function', Ident('bg', null), '',
                                lineno=5, column=3)
     assert tokens[13] == Token(';', None, lineno=5, column=7)
     assert tokens[16] == Token('unit', Unit(100.0, 'px'), lineno=5, column=16)
@@ -226,7 +231,7 @@ def test_lexer_functions():
                   '}\n',
                   {})
     tokens = [token for token in lexer]
-    assert tokens[0] == Token('function', Ident('mixin', ''), '',
+    assert tokens[0] == Token('function', Ident('mixin', null), '',
                               lineno=1, column=1)
     anon_fun_token = Token('function', Ident('anonymous'),
                            lineno=2, column=9)
@@ -274,3 +279,9 @@ def test_lexer_escaped():
     lexer = Lexer('bar: 1 \\+ 2\n', {})
     tokens = [token for token in lexer]
     assert tokens[3] == Token('ident', Literal('+'), lineno=1, column=8)
+
+
+if __name__ == '__main__':
+    lexer = Lexer('abc:\n  color: #11223311\n', {})
+    assert lexer.next() == Token('ident', Ident('abc', null), lineno=1, column=1)
+    assert lexer.next() == Token(':', ':', '', lineno=1, column=4)

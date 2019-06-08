@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.expression import Expression
@@ -7,8 +6,8 @@ from stilus.nodes.node import Node
 
 class ReturnNode(Node):
 
-    def __init__(self, expression: Expression = None):
-        super().__init__()
+    def __init__(self, expression: Expression = None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.expression = expression
 
     def __str__(self):
@@ -28,8 +27,11 @@ class ReturnNode(Node):
             return self.__key() == other.__key()
         return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = ReturnNode(lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        clone.expression = self.expression.clone(parent, clone)
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Return',

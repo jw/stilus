@@ -29,10 +29,10 @@ class Renderer:
         self.parser = Parser(self.s, self.options)
         ast = self.parser.parse()
 
-        self.evaluator = Evaluator(ast, self.options)
+        self.evaluator = Evaluator(ast, self.parser, self.options)
         ast = self.evaluator.evaluate()
 
-        self.normalizer = Normalizer(ast, self.options)
+        self.normalizer = Normalizer(ast, self.parser, self.options)
         ast = self.normalizer.normalize()
 
         self.compiler = Compiler(ast, self.options)

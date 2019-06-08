@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Atblock(Node):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.block = None
 
     def __str__(self):
@@ -33,8 +32,13 @@ class Atblock(Node):
         else:
             return []
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Atblock()
+        clone.block = self.block.clone(parent, clone)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Atblock',

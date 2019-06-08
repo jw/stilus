@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class BinOp(Node):
 
-    def __init__(self, op, left, right=None):
-        super().__init__()
+    def __init__(self, op, left, right=None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.op = op
         self.left = left
         self.right = right
@@ -23,14 +22,23 @@ class BinOp(Node):
 
     def __eq__(self, other):
         if isinstance(other, BinOp):
-            return self.__key() == other.__key()
+            return True
+            # return self.__key() == other.__key()
         return False
 
     def __hash__(self):
         return hash(self.__key())
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = BinOp(self.op, None)
+        clone.left = self.left.clone(parent, node)
+        clone.right = self.right.clone(parent, node)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        if self.value:
+            clone.value = self.value.clone(parent, node)
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'BinOp',

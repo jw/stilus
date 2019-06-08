@@ -3,6 +3,7 @@ from collections import deque
 
 from stilus.nodes.boolean import Boolean
 from stilus.nodes.color import RGBA
+from stilus.nodes.null import null
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 from .nodes.comment import Comment
@@ -37,6 +38,10 @@ class Token:
 
     def __eq__(self, other):
         if isinstance(other, Token):
+            # print()
+            # print(self.__key()[1].__dict__)
+            # print(type(self.__key()[1].value))
+            # print(other.__key()[1].__dict__)
             return self.__key() == other.__key()
         return False
 
@@ -265,7 +270,7 @@ class Lexer:
             if self.is_part_of_selector():
                 return Token('ident', Ident(match.group(0)))
             else:
-                return Token('null')
+                return Token('null', value=null)
 
     def newline(self):
         """

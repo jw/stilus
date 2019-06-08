@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,18 +5,21 @@ from stilus.nodes.node import Node
 
 class Selector(Node):
 
-    def __init__(self, segments):
-        super().__init__()
+    def __init__(self, segments=None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.inherits = True
         self.segments = segments
         self.optional = False
         self.block = None
 
     def __str__(self):
-        string = ''.join(str(self.segments))
-        if self.optional:
-            string += ' !optional'
-        return string
+        try:
+            string = ''.join(str(self.segments))
+            if self.optional:
+                string += ' !optional'
+            return string
+        except TypeError:
+            return 'n/a'
 
     def __repr__(self):
         return self.__str__()
@@ -37,8 +39,14 @@ class Selector(Node):
         else:
             return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Selector(lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        clone.inherits = self.inherits
+        clone.value = self.value
+        clone.segments = [node.clone(parent, clone) for node in self.segments]
+        clone.optional = self.optional
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Selector',

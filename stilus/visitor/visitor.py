@@ -21,6 +21,7 @@ class Visitor:
 
         if hasattr(node, 'node_name'):
             method = f'visit_{node.node_name}'
+            # print(f'VISITING {method}({node})')
             if self.is_callable(method):
                 log.debug(f'{method} is callable. [{node.node_name}]')
                 return getattr(self, method)(node)

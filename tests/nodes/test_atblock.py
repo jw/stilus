@@ -16,9 +16,3 @@ def test_atblock():
     block.append(true)
     atblock.block = block
     assert atblock.nodes() == [null, Node(), true]
-
-
-def test_atrule_clone():
-    atblock = Atblock()
-    clone = atblock.clone()
-    assert clone == atblock

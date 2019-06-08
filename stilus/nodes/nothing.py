@@ -1,10 +1,10 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
 
 
 class Nothing(Node):
+    """Empty object; used to end the visiting tree."""
 
     def __init__(self):
         super().__init__()
@@ -25,9 +25,6 @@ class Nothing(Node):
 
     def __hash__(self):
         return hash(self.__key())
-
-    def clone(self):
-        return copy.deepcopy(self)
 
     def to_json(self):
         return json.dumps({'__type': 'Nothing',

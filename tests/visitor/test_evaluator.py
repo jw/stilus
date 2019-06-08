@@ -5,7 +5,7 @@ from stilus.visitor.evaluator import Evaluator
 def test_evaluator_create():
     parser = Parser('abc\n  color: red\n', {})
     root = parser.parse()
-    evaluator = Evaluator(root, {})
+    evaluator = Evaluator(root, parser=parser, options={})
     result = evaluator.evaluate()
     assert result.node_name == 'root'
     assert result.nodes[0].node_name == 'group'

@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Import(Node):
 
-    def __init__(self, expr, once=False):
-        super().__init__()
+    def __init__(self, expr, once=False, lineno=1, column=1):
+        super().__init__(lineno, column)
         self.path = expr
         self.once = once
         self.mtime = None
@@ -29,8 +28,13 @@ class Import(Node):
             return self.__key() == other.__key()
         return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Import(lineno=self.lineno, column=self.column)
+        clone.path = self.path.clome(parent, clone)
+        clone.once = self.once
+        clone.mtime = self.mtime
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Import',

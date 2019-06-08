@@ -1,4 +1,3 @@
-import copy
 import json
 
 from deprecated import deprecated
@@ -8,8 +7,9 @@ from stilus.nodes.node import Node
 
 class Expression(Node):
 
-    def __init__(self, is_list=False, preserve=False):
-        super().__init__()
+    def __init__(self, is_list=False, preserve=False,
+                 lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.nodes = []
         self.is_list = is_list
         self.preserve = preserve
@@ -58,8 +58,14 @@ class Expression(Node):
             from stilus.nodes.null import null
             return null
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Expression(self.is_list,
+                           lineno=self.lineno,
+                           column=self.column)
+        clone.preserve = self.preserve
+        clone.filename = self.filename
+        clone.nodes = [node.clone(parent, clone) for node in self.nodes]
+        return clone
 
     def to_boolean(self):
         if not self.is_empty():
@@ -96,20 +102,20 @@ class Expression(Node):
                         self.nodes[0].set(node.string, value.clone)
             return value
         elif op == '[]':
-            expression = Exception()
+            expression = Expression()
             from stilus import utils
             values = utils.unwrap(self).nodes
             nodes = utils.unwrap(right).nodes
             for node in nodes:
-                if node.name == 'unit':
+                if node.node_name == 'unit':
                     if node.value < 0:
                         n = values[len(values) + node.value]
                     else:
-                        n = values[node.value]
+                        n = values[int(node.value)]
                 elif len(values) > 0 and values[0].name == 'object':
                     n = values[0].get(node.string)
                 if n:
-                    expression.push(n)
+                    expression.append(n)
             from stilus.nodes.null import null
             return null if expression.is_empty() else utils.unwrap(expression)
         elif op == '||':

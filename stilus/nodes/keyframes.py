@@ -5,8 +5,8 @@ from stilus.nodes.atrule import Atrule
 
 class Keyframes(Atrule):
 
-    def __init__(self, segments, prefix='official'):
-        super().__init__('keyframes')
+    def __init__(self, segments, prefix='official', lineno=1, column=1):
+        super().__init__('keyframes', lineno=lineno, column=column)
         self.segments = segments
         if prefix:
             self.prefix = prefix
@@ -33,10 +33,8 @@ class Keyframes(Atrule):
             return self.__key() == other.__key()
         return False
 
-    def clone(self, parent=None):
-        clone = Keyframes([])
-        clone.lineno = self.lineno
-        clone.column = self.column
+    def clone(self, parent=None, node=None):
+        clone = Keyframes([], lineno=self.lineno, column=self.column)
         clone.filename = self.filename
         clone.segments = [segment for segment in self.segments]
         clone.prefix = self.prefix

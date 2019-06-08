@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.node import Node
@@ -6,8 +5,8 @@ from stilus.nodes.node import Node
 
 class Each(Node):
 
-    def __init__(self, value, key, expr, block=None):
-        super().__init__()
+    def __init__(self, value, key, expr, block=None, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.value = value
         self.key = key
         self.expr = expr
@@ -30,8 +29,14 @@ class Each(Node):
     def __hash__(self):
         return hash(self.__key())
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = Each(self.value, self.key)
+        clone.expr = self.expr.clone(parent, clone)
+        clone.block = self.block.clone(parent, clone)
+        clone.lineno = self.lineno
+        clone.column = self.column
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Each',

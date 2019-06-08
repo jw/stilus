@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.expression import Expression
@@ -6,8 +5,8 @@ from stilus.nodes.expression import Expression
 
 class Arguments(Expression):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.map = {}
         self.is_list = False
 
@@ -27,16 +26,22 @@ class Arguments(Expression):
 
     @staticmethod
     def from_expression(expression: Expression):
-        arguments = Arguments()
-        arguments.lineno = expression.lineno
-        arguments.column = expression.column
+        arguments = Arguments(lineno=expression.lineno,
+                              column=expression.column)
         arguments.is_list = expression.is_list
         for node in expression.nodes:
             arguments.append(node)
         return arguments
 
-    def clone(self):
-        return copy.deepcopy()
+    def clone(self, parent=None, node=None):
+        clone = Arguments.from_expression(Expression.clone(self, parent))
+        clone.is_list = self.is_list
+        # todo: this is not python!
+        for key in self.map:
+            clone.map[key] = self.map[key].clone(parent, clone)
+        clone.is_list = self.is_list
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Arguments',

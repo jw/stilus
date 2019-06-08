@@ -9,7 +9,7 @@ from stilus.colors import colors
 from stilus.functions.bifs import bifs
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
-from stilus.nodes.boolean import Boolean
+from stilus.nodes.boolean import Boolean, false, true
 from stilus.nodes.call import Call
 from stilus.nodes.color import RGBA
 from stilus.nodes.expression import Expression
@@ -18,7 +18,7 @@ from stilus.nodes.group import Group
 from stilus.nodes.ident import Ident
 from stilus.nodes.import_node import Import
 from stilus.nodes.literal import Literal
-from stilus.nodes.null import null
+from stilus.nodes.null import null, Null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
@@ -27,6 +27,7 @@ from stilus.stack.frame import Frame
 from stilus.stack.scope import Scope
 from stilus.stack.stack import Stack
 from stilus.units import units
+from stilus.utils import unwrap
 from stilus.visitor.visitor import Visitor
 
 log = logging.getLogger(__name__)
@@ -34,8 +35,9 @@ log = logging.getLogger(__name__)
 
 class Evaluator(Visitor):
 
-    def __init__(self, root, options: dict):
+    def __init__(self, root, parser, options: dict):
         super().__init__(root)
+        self.parser = parser
         self.options = options
         self.functions = options.get('functions', {})
         self.stack = Stack()
@@ -71,7 +73,7 @@ class Evaluator(Visitor):
     def vendors(self):
         return [node.string for node in self.lookup('vendors').nodes]
 
-    def import_file(self, node: Import, file, literal):
+    def import_file(self, node: Import, file, literal, lineno=1, column=1):
         # print(f'importing {file}; {self.import_stack}')
 
         # handling 'require'
@@ -110,16 +112,15 @@ class Evaluator(Visitor):
 
         if literal:
             re.sub('\n\n?', '\n', source)
-            literal = Literal(source)
+            literal = Literal(source, lineno=self.parser.lineno,
+                              column=self.parser.column)
             literal.lineno = 1
             literal.column = 1
             if not self.resolve_url:
                 return literal
 
         # create block
-        block: Block = Block(None, None)
-        block.lineno = node.lineno
-        block.column = node.column
+        block = Block(None, None, lineno=lineno, column=column)
         block.filename = file
 
         # parse
@@ -176,8 +177,11 @@ class Evaluator(Visitor):
         self.populate_global_scope()
         for file in reversed(self.imports):
             expr = Expression()
-            expr.append(String(file))
-            self.root.nodes.insert(0, Import(expr))
+            expr.append(String(file, lineno=self.parser.lineno,
+                               column=self.parser.column))
+            self.root.nodes.insert(0, Import(expr,
+                                             lineno=self.parser.lineno,
+                                             column=self.parser.column))
 
     def populate_global_scope(self):
         """
@@ -197,7 +201,9 @@ class Evaluator(Visitor):
 
         # todo: also expose url javascript function; might be hard >8-(
         self.common.scope().add(Ident('embedurl',
-                                      Function('embedurl', None, None)))
+                                      Function('embedurl', None, None,
+                                               lineno=self.parser.lineno,
+                                               column=self.parser.column)))
 
         # user defined globals
         commons = self.commons
@@ -348,7 +354,8 @@ class Evaluator(Visitor):
         if length == 1 and 'object' == expr.nodes[0].name:
             obj = expr.nodes[0]
             for prop in obj.vals:
-                val.val = String(prop)
+                val.val = String(prop, lineno=self.parser.lineno,
+                                 column=self.parser.column)
                 key.val = obj.get(prop)  # checkme: works?
                 visit_body(key, val)
         else:
@@ -383,7 +390,9 @@ class Evaluator(Visitor):
             if 'calc' == self.unvendorize(call.function_name):
                 literal = call.args.nodes and call.args.nodes[0]
                 if literal:
-                    ret = Literal(call.function_name + call.args.nodes[0])
+                    ret = Literal(call.function_name + call.args.nodes[0],
+                                  lineno=self.parser.lineno,
+                                  column=self.parser.column)
             else:
                 ret = self.literal_call(call)
             self.ignore_colors = False
@@ -406,15 +415,17 @@ class Evaluator(Visitor):
             args.map[key] = self.visit(args.map[key].clone())
         self.result -= 1
 
-        if hasattr(fn, 'fn') and fn.fn:
+        if fn.builtin:
             # built-in
-            ret = self.invoke_builtin(fn.fn, args)
+            ret = self.invoke_builtin(fn.params, args)
         elif 'function' == fn.node_name:
             # user-defined
             # evaluate mixin block
-            if call.get_block():
-                call.set_block(self.visit(call.get_block()))
-            ret = self.invoke_fucntion(fn, args, call.get_block())
+            block = None
+            if hasattr(call, 'block') and call.block:
+                call.block = self.visit(call.block)
+                block = call.block
+            ret = self.invoke_function(fn, args, block)
 
         self.calling.pop()
         self.ignore_colors = False
@@ -432,9 +443,9 @@ class Evaluator(Visitor):
             # lookup
             val = self.lookup(ident.name)
             # object or block mixin
-            if val and ident.mixin:
+            if val is not None and ident.mixin:
                 self.mixin_node(val)
-            return self.visit(val) if val else ident
+            return self.visit(val) if val is not None else ident
         else:
             # assign
             self.result += 1
@@ -505,8 +516,7 @@ class Evaluator(Visitor):
             return self.visit(ternary.false_expr)
 
     def visit_expression(self, expr):
-        for i, node in enumerate(expr.nodes):
-            expr.nodes[i] = self.visit(node)
+        expr.nodes = [self.visit(node) for node in expr.nodes]
 
         # support (n * 5)px etc
         if self.castable(expr):
@@ -524,15 +534,18 @@ class Evaluator(Visitor):
         literal = name in self.calling
         _prop = self.property
 
-        if call and not literal and not prop.literal:
+        prop_lit = True if hasattr(prop, 'literal') and prop.literal else False
+        if call and not literal and not prop_lit:
             # function of the same node_name
-            args = Arguments.from_expression(utils.unwrap(prop.expr.clone()))
+            clone = prop.expr.clone(None, None)
+            args = Arguments.from_expression(utils.unwrap(clone))
             prop.name = name
             self.property = prop
             self.result += 1
             self.property.expr = self.visit(prop.expr)
             self.result -= 1
-            ret = self.visit(Call(name, args))
+            ret = self.visit(Call(name, args, lineno=self.parser.lineno,
+                                  column=self.parser.column))
             self.property = _prop
             return ret
         else:
@@ -541,8 +554,8 @@ class Evaluator(Visitor):
             prop.name = name
             prop.literal = True
             self.property = prop
-            prop.expr = self.visit(prop.expr)
-            self.propery = _prop
+            prop.expr = self.visit(prop.expr)  # <---
+            self.property = _prop
             self.result -= 1
             return prop
 
@@ -553,20 +566,29 @@ class Evaluator(Visitor):
             # stylus: block.constructor = nodes.Block;
             return self.visit(Block())
 
-        for i, node in enumerate(list(block.nodes)):
+        # for i, node in enumerate(list(block.nodes)):
+        i = 0
+        while i < len(block.nodes):
             block.index = i
-            block.nodes[i] = self.visit(node)
+            block.nodes[i] = self.visit(block.nodes[i])
+            i += 1
 
         return block
 
     def visit_block(self, block):
         self.stack.append(Frame(block))
-        for i, node in enumerate(block.nodes):
+
+        # for i, node in enumerate(block.nodes):
+        i = 0
+        while i < len(block.nodes):
+            block.index = i
             try:
-                block.nodes[i] = self.visit(node)
-            except Exception as e:
-                # fixme: could get a 'return' value type and take action?
+                block.nodes[block.index] = self.visit(block.nodes[block.index])
+                i += 1
+            except Expression as e:
+                # fixme: could get a 'return' value type in e and take action!
                 raise e
+
         self.stack.pop()
         return block
 
@@ -581,13 +603,77 @@ class Evaluator(Visitor):
         return atrule
 
     def visit_supports(self, node):
-        pass
+        condition = node.condition
+        self.result += 1
+        node.condition = self.visit(condition)
+        self.result -= 1
+        value = condition.first()
+        if len(condition.nodes) == 1 and value.node_name == 'string':
+            node.condition = value.string
+        node.block = self.visit(node.block)
+        return node
 
     def visit_if(self, node):
-        pass
+        block = self.get_current_block()
+        negate = node.negate
+        self.result += 1
+        ok = self.visit(node.cond).first()
+        # todo: fix this!
+        if isinstance(ok, Null):
+            ok = false
+        if not isinstance(ok, Boolean):
+            ok = true
+        self.result -= 1
+
+        node.block.scope = node.block.has_media()
+
+        # evaluate body
+        ret = None
+        if negate:
+            # unless
+            if ok.is_false():
+                ret = self.visit(node.block)
+        else:
+            # if
+            if ok.is_true():
+                ret = self.visit(node.block)
+            # else
+            elif node.elses:
+                for block in node.elses:
+                    # else if
+                    if block.cond:
+                        block.block.scope = block.block.has_media()
+                        self.result += 1
+                        cond = self.visit(block.cond).first.to_boolean()
+                        self.result -= 1
+                        if cond.is_true():
+                            ret = self.visit(block)
+                            break
+                    # else:
+                    else:
+                        block.scope = block.has_media()
+                        ret = self.visit(block)
+
+        # mixin conditional statements within
+        # a selector group or at-rule
+        if ret and not node.postfix and block.node and \
+                block.node.node_name in ['group', 'atrule', 'media',
+                                         'supports', 'keyframes']:
+            self.mixin(ret.nodes, block)
+            return null
+
+        if ret:
+            return ret
+        return null
 
     def visit_extend(self, extend):
-        pass
+        block = self.get_current_block()
+        if block.node.node_name == 'group':
+            block = self.closest_group()
+        for selector in extend.selectors:
+            # todo: implement me
+            block.node.extends.append(None)
+        return null
 
     def invoke(self, body, stack=None, filename=None):
         if filename:
@@ -598,7 +684,7 @@ class Evaluator(Visitor):
             if stack:
                 self.stack.pop()
         else:
-            body = self.visit(body)
+            body = self.visit(body)  # <---
             if stack:
                 self.stack.pop()
             self.mixin(body.nodes, self.get_current_block())
@@ -609,11 +695,39 @@ class Evaluator(Visitor):
 
         return ret
 
+    # todo: rewrite this; this is not Python >:-(
     def mixin(self, nodes, block):
-        pass
+        if len(nodes) == 0:
+            return None
+        head = block.nodes[:block.index]
+        tail = block.nodes[block.index + 1:]
+        self._mixin(nodes, head, block)
+        block.index = 0
+        head.extend(tail)
+        block.nodes = head
+        # self.set_current_block(block)
 
+    # todo: rewrite this; this is not Python >:-(
     def _mixin(self, items, dest, block):
-        pass
+        for item in items:
+            if item.node_name == 'return':
+                return
+            elif item.node_name == 'block':
+                self._mixin(item.nodes, dest, block)
+            elif item.node_name == 'media':
+                # fix link to the parent block
+                # fixme: implement me
+                raise NotImplementedError()
+            elif item.node_name == 'property':
+                value = item.expr
+                # prevent `block mixin recursion
+                if item.literal and hasattr(value, 'first') and \
+                        value.first().node_name == 'block':
+                    value = unwrap(value)
+                    value.nodes[0] = Literal('block',
+                                             lineno=self.parser.lineno,
+                                             column=self.parser.column)
+            dest.append(item)
 
     def mixin_node(self, node):
         pass
@@ -624,22 +738,44 @@ class Evaluator(Visitor):
     def eval(self, vals=None):
         if vals is None:
             return null
-        n = null
-        try:
-            for node in vals:
-                if node.node_name == 'if':
-                    if node.block.node_name != 'block':
-                        n = self.visit(node)
-                elif node.node_name in ['each', 'block']:
-                    n = self.visit(node)
-                    if node.nodes:
-                        n = self.eval(node.nodes)
-                else:
-                    n = self.visit(node)
-        except Exception as e:
-            raise e
 
-        return n
+        def update(node):
+            do_visit = True
+            skip_next = False
+            if node.node_name == 'if':
+                if node.block.node_name != 'block':
+                    node = self.visit(node)
+                    do_visit = False
+                    skip_next = True
+            if not skip_next and node.node_name in ['if', 'each', 'block']:
+                node = self.visit(node)
+                if hasattr(node, 'nodes') and node.nodes:
+                    node = self.eval(node.nodes)
+                do_visit = False
+            if do_visit:
+                node = self.visit(node)
+            return node
+
+        nodes = [update(node) for node in vals]
+
+        # try:
+        #     for i, node in enumerate(vals):
+        #         do_visit = True
+        #         if node.node_name == 'if':
+        #             if node.block.node_name != 'block':
+        #                 vals[i] = self.visit(node)
+        #                 do_visit = False
+        #         if node.node_name in ['if', 'each', 'block']:
+        #             n = self.visit(node)
+        #             if hasattr(node, 'nodes') and node.nodes:
+        #                 n = self.eval(node.nodes)
+        #             do_visit = False
+        #         if do_visit:
+        #             n = self.visit(node)
+        # except Exception as e:
+        #     raise e
+
+        return nodes[-1] if nodes else null
 
     def invoke_builtin(self, fn, args):
         """
@@ -659,6 +795,8 @@ class Evaluator(Visitor):
             # todo: add args.map handling
             args = [utils.unwrap(arg) for arg in args]
             for arg in args:
+                # if not hasattr(args, 'nodes'):
+                #     ret.append(arg)
                 if len(arg.nodes) > 1:
                     for i, a in enumerate(arg):
                         ret.append(utils.unwrap(a.nodes[i].first()))
@@ -666,7 +804,8 @@ class Evaluator(Visitor):
                     ret.append(arg.first())
 
             # invoke builtin function
-            body = utils.coerce(fn(*ret), False)
+            body = utils.coerce(fn(*ret), False, lineno=self.parser.lineno,
+                                column=self.parser.column)
 
             # Always wrapping allows js functions
             # to return several values with a single
@@ -719,9 +858,12 @@ class Evaluator(Visitor):
         if not found:
             raise TypeError(f'failed to locate @{node_name} file {path}')
 
-        block = Block(imported, imported)
+        block = Block(None, None, lineno=self.parser.lineno,
+                      column=self.parser.column)
         for f in found:
-            block.append(self.import_file(imported, f, literal))
+            block.append(self.import_file(imported, f, literal,
+                                          lineno=self.parser.lineno,
+                                          column=self.parser.column))
 
         return block
 
@@ -737,8 +879,29 @@ class Evaluator(Visitor):
     def selector_stack(self):
         pass
 
-    def property_expression(self, procp, name):
-        pass
+    def property_expression(self, prop, name):
+        expr = Expression(lineno=self.parser.lineno,
+                          column=self.parser.column)
+        value = prop.expr.clone(None)
+
+        # name
+        expr.append(String(prop.name, lineno=self.parser.lineno,
+                           column=self.parser.column))
+
+        # replace cyclic call with __CALL__
+        def replace(node):
+            if node.node_name == 'call' and hasattr(node, 'function_name') \
+                    and name == node.function_name:
+                return Literal('__CALL__',
+                               lineno=self.parser.lineno,
+                               column=self.parser.column)
+            if hasattr(node, 'nodes') and node.nodes:
+                node.nodes = [replace(n) for n in node.nodes]
+            return node
+
+        replace(value)
+        expr.append(value)
+        return expr
 
     def lookup(self, name):
         """
@@ -749,8 +912,8 @@ class Evaluator(Visitor):
         # fixme: this is handled differently on stylus!
         if self.ignore_colors and name in colors:
             return
-        val = self.stack.lookup(name)
-        if val:
+        val = self.stack.lookup(name)  # <--- oops!
+        if val is not None:  # fixme!
             return utils.unwrap(val)
         else:
             return self.lookup_function(name)
@@ -793,9 +956,12 @@ class Evaluator(Visitor):
             return to_string(node)
 
     def lookup_function(self, name):
-        fn = self.functions.get(name, self.bifs.get(name, None))
-        if fn:
-            return Function(name, fn)
+        function = self.functions.get(name, self.bifs.get(name, None))
+        if function:
+            return Function(name, function, lineno=self.parser.lineno,
+                            column=self.parser.column)
+        else:
+            return None
 
     def is_defined(self, node):
         if 'ident' == node.node_name:
@@ -833,6 +999,13 @@ class Evaluator(Visitor):
             return b
         return None
 
+    def set_current_block(self, block):
+        current_frame = self.get_current_frame()
+        if current_frame:
+            current_frame.block = block
+        else:
+            raise TypeError
+
     def unvendorize(self, prop: str):
         for vendor in self.vendors():
             if vendor != 'official':
@@ -844,3 +1017,95 @@ class Evaluator(Visitor):
     def literal_call(self, call):
         call.args = self.visit(call.args)
         return call
+
+    def invoke_function(self, fn, args, content):
+        block = Block(fn.block.parent, None, lineno=self.parser.lineno,
+                      column=self.parser.column)
+
+        # clone the function body to prevent mutation of subsequent calls
+        body = fn.block.clone(block)
+
+        mixin_block = self.stack.current_frame().block
+
+        # new block scope
+        self.stack.append(Frame(block))
+        scope = self.get_current_scope()
+
+        # normalize arguments
+        if args.node_name != 'arguments':
+            expr = Expression()
+            expr.append(args)
+            args = Arguments.from_expression(expr)
+
+        # arguments loca
+        scope.add(Ident('arguments', args))
+
+        # mixin scope introspection
+        bn = mixin_block.node_name
+        if self.result:
+            scope.add(Ident('mixin', false))
+        else:
+            scope.add(Ident('mixin', String(bn,
+                                            lineno=self.parser.lineno,
+                                            column=self.parser.column)))
+
+        # current property
+        if self.property:
+            prop = self.property_expression(self.property, fn.function_name)
+            scope.add(Ident('current-property', prop,
+                            lineno=self.parser.lineno,
+                            column=self.parser.column))
+        else:
+            scope.add(Ident('current-property', null,
+                            lineno=self.parser.lineno,
+                            column=self.parser.column))
+
+        # current call stack
+        expr = Expression(lineno=self.parser.lineno, column=self.parser.column)
+        for call in self.calling[:-1]:
+            expr.append(Literal(call, lineno=self.parser.lineno,
+                                column=self.parser.column))
+        scope.add(Ident('called-from', expr,
+                        lineno=self.parser.lineno,
+                        column=self.parser.column))
+
+        # inject arguments as locals
+        for i, node in enumerate(fn.params.nodes):
+            # rest param support
+            if node.rest:
+                node.value = Expression(lineno=self.parser.lineno,
+                                        column=self.parser.column)
+                for n in args.nodes[i:]:
+                    node.value.append(n)
+                node.value.preserve = True
+                node.value.is_list = args.is_list
+            else:
+                # argument default support
+
+                # in dict?
+                arg = args.map.get(node.name)
+                # next node?
+                if not arg and hasattr(args, 'nodes') and i < len(args.nodes):
+                    arg = args.nodes[i]
+
+                node = node.clone()
+                if arg:
+                    if hasattr(arg, 'is_empty') and arg.is_empty():
+                        args.nodes[i-1] = self.visit(node)  # todo: fixme!
+                    else:
+                        node.value = arg
+                else:
+                    args.append(node.value)
+
+                # required argument not satisfied
+                if not node.value:
+                    raise TypeError(f'argument "{node}" required for {fn}')
+
+            scope.add(node)
+
+        # mixin block
+        if content:
+            scope.add(Ident('block', content, True))
+
+        # invoke
+        return self.invoke(body, True, fn.filename)

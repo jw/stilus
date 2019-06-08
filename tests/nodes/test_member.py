@@ -6,5 +6,3 @@ def test_member():
     assert member.node_name == 'member'
     assert member.left == 'left'
     assert member.right == 'right'
-    clone = member.clone()
-    assert clone == member

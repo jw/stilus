@@ -6,9 +6,9 @@ from stilus.visitor.normalizer import Normalizer
 def test_evaluator_create():
     parser = Parser('abc\n  color: red\n', {})
     root = parser.parse()
-    evaluator = Evaluator(root, {})
+    evaluator = Evaluator(root, parser=parser, options={})
     result = evaluator.evaluate()
-    normalizer = Normalizer(result, {})
+    normalizer = Normalizer(result, parser=parser, options={})
     result = normalizer.normalize()
     assert result.node_name == 'root'
     assert result.nodes[0].node_name == 'group'

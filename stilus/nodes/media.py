@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.atrule import Atrule
@@ -6,8 +5,8 @@ from stilus.nodes.atrule import Atrule
 
 class Media(Atrule):
 
-    def __init__(self, value):
-        super().__init__('media')
+    def __init__(self, value, lineno=1, column=1):
+        super().__init__('media', lineno=lineno, column=column)
         self.value = value
 
     def __str__(self):
@@ -27,8 +26,12 @@ class Media(Atrule):
             return self.__key() == other.__key()
         return False
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, noe=None):
+        clone = Media(lineno=self.lineno, column=self.column)
+        clone.value = self.value.clone(parent, clone)
+        clone.block = self.block.clone(parent, clone)
+        clone.filename = self.filename
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Media',

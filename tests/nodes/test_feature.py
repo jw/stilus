@@ -13,5 +13,3 @@ def test_feature():
     expression = Expression()
     feature.expr = expression
     assert feature.expr == expression
-    clone = feature.clone()
-    assert clone == feature

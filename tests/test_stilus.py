@@ -15,23 +15,15 @@ def test_stylus():
 
 if __name__ == '__main__':
     source = """
-@keyframes foo
-{
-  from
-  {
-    color: red;
-  }
-  to
-  {
-    color: blue;
-  }
-}
-"""
+padding(y, rest...)
+  y y
+  if rest
+    padding rest
 
-#     source = """// Last line in this file has 4 spaces.
-# .myclass
-#   display block
-#   color black
-#     """
+body
+  padding 1px 2px 3px
+"""
+    print('Hello!')
     css = stilus.render(source, {})
+    print('There!')
     print(f'[{css}]')

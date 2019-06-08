@@ -1,4 +1,3 @@
-import copy
 import json
 
 from stilus.nodes.boolean import false, true, Boolean
@@ -8,8 +7,8 @@ from stilus.nodes.null import null
 
 class ObjectNode(Node):
 
-    def __init__(self, values: dict = {}):
-        super().__init__()
+    def __init__(self, values: dict = {}, lineno=1, column=1):
+        super().__init__(lineno=lineno, column=column)
         self.values = values
 
     def __str__(self):
@@ -89,8 +88,11 @@ class ObjectNode(Node):
         string += '}'
         return string
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def clone(self, parent=None, node=None):
+        clone = ObjectNode(lineno=self.lineno, column=self.column)
+        clone.filename = self.filename
+        clone.values = [node.clone(parent, clone) for node in self.values]
+        return clone
 
     def to_json(self):
         return json.dumps({'__type': 'Object',
