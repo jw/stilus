@@ -2,7 +2,7 @@
 
 ### 0.5.0 
 
-The first evaluate a.k.a. the `let's lever commit` release.
+The first evaluate a.k.a. the `let's never commit` release.
 
  - Created the evaluate class.
  - Parsed and evaluated the `index.styl`.

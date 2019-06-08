@@ -2,7 +2,7 @@
 
 ### General
 
- - Often `push` is used to add an element to a list in Stylus; in Stilus an append needs to be used.
+ - Often `push` is used to add an element to an array in Stylus; in Stilus an `append` needs to be used.
 
 ### Stack
 
