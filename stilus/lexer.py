@@ -38,10 +38,6 @@ class Token:
 
     def __eq__(self, other):
         if isinstance(other, Token):
-            # print()
-            # print(self.__key()[1].__dict__)
-            # print(type(self.__key()[1].value))
-            # print(other.__key()[1].__dict__)
             return self.__key() == other.__key()
         return False
 

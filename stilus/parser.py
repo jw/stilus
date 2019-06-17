@@ -191,11 +191,9 @@ class Parser:
         'selection']
 
     def current_state(self):
-        # print(f'current state: {self.state}')
         return self.state[-1]
 
     def previous_state(self):
-        # print(f'previous state: {self.state}')
         try:
             return self.state[-2]
         except Exception as e:

@@ -15,10 +15,8 @@ class Block(Node):
         self.index = 0
 
     def __str__(self):
-        # strings = [str(node) for node in self.nodes]
-        return \
-            f'{self.parent}:{self.node}:{self.scope} ' \
-            f'[{self.lineno}:{self.column}]'
+        return f'block [{self.lineno}:{self.column}] | scope: {self.scope}; ' \
+               f'node: {self.node}; nodes: {self.nodes}'
 
     def __repr__(self):
         return self.__str__()

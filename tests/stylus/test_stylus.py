@@ -29,6 +29,7 @@ if __name__ == '__main__':
         source = f.read()
     with open(source_file.with_suffix('.css'), 'r') as f:
         destination = f.read()
+    print(f'source: {source}')
     result = Renderer(source, {}).render()
     print(f'result: [{result}].')
     print(Renderer(source, {}).render())

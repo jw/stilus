@@ -17,7 +17,11 @@ class If(Node):
             self.negate = negate
 
     def __str__(self):
-        return f'if {self.cond} else ({", ".join(str(self.elses))})'
+        if self.elses:
+            else_string = f' else ({", ".join(self.elses)})'
+        else:
+            else_string = ' [no else]'
+        return f'if {self.cond}{else_string}'
 
     def __repr__(self):
         return self.__str__()

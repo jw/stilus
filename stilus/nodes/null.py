@@ -7,6 +7,8 @@ class Null(Node):
 
     def __init__(self):
         super().__init__()
+        self.lineno = 0
+        self.column = 0
 
     def is_null(self):
         return True

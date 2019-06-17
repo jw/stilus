@@ -421,11 +421,9 @@ class Evaluator(Visitor):
         elif 'function' == fn.node_name:
             # user-defined
             # evaluate mixin block
-            block = None
-            if hasattr(call, 'block') and call.block:
-                call.block = self.visit(call.block)
-                block = call.block
-            ret = self.invoke_function(fn, args, block)
+            if call.block:
+                call.block = self.visit(call.block, id=id)
+            ret = self.invoke_function(fn, args, call.block)
 
         self.calling.pop()
         self.ignore_colors = False
@@ -554,7 +552,7 @@ class Evaluator(Visitor):
             prop.name = name
             prop.literal = True
             self.property = prop
-            prop.expr = self.visit(prop.expr)  # <---
+            prop.expr = self.visit(prop.expr)
             self.property = _prop
             self.result -= 1
             return prop
@@ -578,16 +576,31 @@ class Evaluator(Visitor):
     def visit_block(self, block):
         self.stack.append(Frame(block))
 
-        # for i, node in enumerate(block.nodes):
-        i = 0
-        while i < len(block.nodes):
-            block.index = i
+        block.index = 0
+        while block.index < len(block.nodes):
             try:
-                block.nodes[block.index] = self.visit(block.nodes[block.index])
-                i += 1
+                # print(f'block: {id(block)} | Called by [{block.lineno}:'
+                #       f'{block.column}] | index is {block.index}; block has '
+                #       f'{len(block.nodes)} nodes.')
+                # print(f'block.nodes[{block.index}]: '
+                #       f'{block.nodes[block.index]}')
+                # print(f'--> before: {block.nodes[block.index]}')
+                # block.nodes[block.index] =
+                # self.visit(block.nodes[block.index])
+                v = self.visit(block.nodes[block.index])
+                # print(f'-->  after: {block.nodes[block.index]}')
+                block.nodes[block.index] = v
+                # type_message = type(block.nodes[block.index])
+                # print(f'block: {id(block)} | Called by [{block.lineno}:'
+                #       f'{block.column}] | updated '
+                #       f'node {block.index}: ['
+                #       f'{block.nodes[block.index].lineno}'
+                #       f':{block.nodes[block.index].column}]: '
+                #       f'{block.nodes[block.index]}')
             except Expression as e:
-                # fixme: could get a 'return' value type in e and take action!
+                # fixme: when a 'return' value type in e and take action!
                 raise e
+            block.index += 1
 
         self.stack.pop()
         return block
@@ -617,7 +630,7 @@ class Evaluator(Visitor):
         block = self.get_current_block()
         negate = node.negate
         self.result += 1
-        ok = self.visit(node.cond).first()
+        ok = self.visit(node.cond).first()  # .to_boolean()
         # todo: fix this!
         if isinstance(ok, Null):
             ok = false
@@ -666,7 +679,7 @@ class Evaluator(Visitor):
             return ret
         return null
 
-    def visit_extend(self, extend):
+    def visit_extend(self, extend, id=None):
         block = self.get_current_block()
         if block.node.node_name == 'group':
             block = self.closest_group()
@@ -705,6 +718,7 @@ class Evaluator(Visitor):
         block.index = 0
         head.extend(tail)
         block.nodes = head
+        print(f'Mixin result: {block.nodes}')
         # self.set_current_block(block)
 
     # todo: rewrite this; this is not Python >:-(
@@ -714,6 +728,7 @@ class Evaluator(Visitor):
                 return
             elif item.node_name == 'block':
                 self._mixin(item.nodes, dest, block)
+                break
             elif item.node_name == 'media':
                 # fix link to the parent block
                 # fixme: implement me
