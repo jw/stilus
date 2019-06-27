@@ -1,10 +1,6 @@
-import logging
 from pathlib import Path
 
-# from stilus.parser import Parser
 from stilus.stilus import Renderer
-
-log = logging.getLogger(__name__)
 
 
 # todo: add dot per styl -> css compilation
@@ -79,13 +75,13 @@ if __name__ == '__main__':
     # head
     #   padding add(10, 3)
     # """
-    source = """
-body
-  foo unit(20, 'px')
-  foo unit(20, px)
-  foo unit(20%, px)
-  foo unit(20, '%')
-"""
+    #     source = """
+    # body
+    #   foo unit(20, 'px')
+    #   foo unit(20, px)
+    #   foo unit(20%, px)
+    #   foo unit(20, '%')
+    # """
     result = Renderer(source, {}).render()
     print(f'result: {result}.')
     # parser = Parser(source, {})

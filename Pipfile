@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 deprecated = "*"
+pyyaml = "*"
+click = "*"
 
 [dev-packages]
 pytest = "*"
