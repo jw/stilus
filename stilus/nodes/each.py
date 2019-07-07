@@ -5,7 +5,7 @@ from stilus.nodes.node import Node
 
 class Each(Node):
 
-    def __init__(self, value, key, expr, block=None, lineno=1, column=1):
+    def __init__(self, value, key, expr=None, block=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.value = value
         self.key = key

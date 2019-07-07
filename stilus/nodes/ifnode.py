@@ -11,7 +11,8 @@ class If(Node):
         self.elses = []
         self.postfix = None
         self.block = None
-        if negate and isinstance(negate, bool):
+        self.negate = None
+        if negate:  # and isinstance(negate, bool):
             self.block = negate
         else:
             self.negate = negate

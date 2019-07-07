@@ -36,9 +36,8 @@ class Arguments(Expression):
     def clone(self, parent=None, node=None):
         clone = Arguments.from_expression(Expression.clone(self, parent))
         clone.is_list = self.is_list
-        # todo: this is not python!
-        for key in self.map:
-            clone.map[key] = self.map[key].clone(parent, clone)
+        clone.map = {key: value.clone(parent, clone)
+                     for (key, value) in self.map.items()}
         clone.is_list = self.is_list
         clone.filename = self.filename
         return clone

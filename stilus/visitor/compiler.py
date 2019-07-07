@@ -64,7 +64,7 @@ class Compiler(Visitor):
                 self.buf += self.out(ret + '\n', node)
         return self.buf
 
-    def visit_block(self, block: Block):
+    def visit_block(self, block: Block, index=None):
         if self.compress:
             separator = ''
         else:

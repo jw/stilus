@@ -31,7 +31,7 @@ class Call(Node):
         return False
 
     def __hash__(self):
-        return hash(self.__key())
+        return hash(self.value)
 
     def clone(self, parent=None, clone=None):
         clone = Call(self.function_name)

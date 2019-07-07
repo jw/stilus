@@ -20,6 +20,7 @@ class Boolean(Node):
         return False
 
     def __hash__(self):
+        # todo: fix this!
         return hash(self.value)
 
     def is_true(self):

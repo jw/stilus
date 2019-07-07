@@ -15,6 +15,7 @@ def test_stylus_cases():
         with open(source_file.with_suffix('.css'), 'r') as f:
             destination = f.read()
         assert destination == Renderer(source, {}).render()
+        # print('.')
         # print('.', end='')
     # print()
 
@@ -82,6 +83,79 @@ if __name__ == '__main__':
     #   foo unit(20%, px)
     #   foo unit(20, '%')
     # """
+    source = """body
+  foo dark(black) == true
+  foo dark(#005716) == true
+  foo dark(white) == false
+"""
+    source = """
+// padding(n)
+//   padding n
+//
+// body
+//   padding 5px
+//   padding 5px 10px
+//
+// padding(y, x = null)
+//   padding y x
+//
+// body
+//   padding 5px
+//   padding 5px 10px
+//
+// padding(args...)
+//   padding args
+//
+// body
+//   padding 5px
+//   padding 5px 10px
+//   padding 5px 10px 0 2px
+//
+padding(y, rest...)
+  test-y y
+  if rest
+    padding rest
+
+body
+  padding 1px
+  padding 1px 2px 3px
+//
+// padding(args...)
+//   if args
+//     test-y args[0]
+//     test-x args[1]
+//
+// body
+//   padding 1px
+//   padding 1px 2px
+//
+// padding(args...)
+//   pad args[0]
+//   pad args[1]
+//   pad args[2]
+//   len length(args)
+//
+// body
+//   padding 1 2 (3 4 5)
+//
+foo(args...)
+  bar: args
+
+body
+  foo 1 2 3
+  foo 1, 2, 3
+"""
+    source = """
+foo(i)
+  if i < 0
+    lower
+  else
+    higher
+
+body
+  higher foo(10)
+  lower foo(-10)
+"""
     result = Renderer(source, {}).render()
     print(f'result: {result}.')
     # parser = Parser(source, {})

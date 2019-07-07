@@ -64,7 +64,8 @@ class Expression(Node):
                            column=self.column)
         clone.preserve = self.preserve
         clone.filename = self.filename
-        clone.nodes = [node.clone(parent, clone) for node in self.nodes]
+        for something in self.nodes:
+            clone.append(something.clone(parent, clone))
         return clone
 
     def to_boolean(self):
@@ -99,7 +100,7 @@ class Expression(Node):
                     self.nodes[n] = value
                 elif node.string:
                     if not self.is_empty() and self.nodes[0].name == 'object':
-                        self.nodes[0].set(node.string, value.clone)
+                        self.nodes[0].set(node.string, value.clone())
             return value
         elif op == '[]':
             expression = Expression()

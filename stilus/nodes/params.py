@@ -35,7 +35,8 @@ class Params(Node):
     def clone(self, parent=None, node=Node):
         clone = Params(lineno=self.lineno, column=self.column)
         clone.filename = self.filename
-        self.nodes = [node.clone(parent, clone) for node in self.nodes]
+        for something in self.nodes:
+            clone.nodes.append(something.clone(parent, clone))
         return clone
 
     def to_json(self):

@@ -96,5 +96,9 @@ body
 //  foo 1, 2, 3
 """
 
+    source = """
+body
+    foo PI round(PI)
+"""
     css = stilus.render(source, {})
     print(f'result:\n[{css}]')

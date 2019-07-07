@@ -1,7 +1,6 @@
 from stilus.nodes.node import Node
 
 import logging
-# logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
@@ -19,25 +18,32 @@ class Visitor:
         return value of the visited method.
         """
 
+        method = None
         if hasattr(node, 'node_name'):
             method = f'visit_{node.node_name}'
-            # print(f'VISITING {method}({node})')
-            if self.is_callable(method):
+            log.info(f'Visiting {method}({node.node_name}).')
+            if node.node_name == 'block':
+                return getattr(self, method)(node, node.index)
+            if self.callable(method):
                 log.debug(f'{method} is callable. [{node.node_name}]')
                 return getattr(self, method)(node)
 
             # debug else
-            if log.isEnabledFor(logging.DEBUG) and self.is_callable(method):
+            if log.isEnabledFor(logging.DEBUG) and not self.callable(method):
                 log.debug(f'{method} is NOT a callable! [{node.node_name}]')
 
         # debug else
         if log.isEnabledFor(logging.DEBUG) and not hasattr(node, 'node_name'):
             log.debug(f'{type(node)} has no node_name attribute!')
 
-        log.debug(f'returning {type(node)}')
+        if method:
+            log.info(f'Returning {type(node)} from '
+                     f'{method}({node.node_name}).')
+        else:
+            log.info(f'Skipping, since no visiting method found for {node}.')
         return node
 
-    def is_callable(self, method: str):
+    def callable(self, method: str):
         methods = [f for f in dir(self) if callable(getattr(self, f))]
         if method in methods:
             return True

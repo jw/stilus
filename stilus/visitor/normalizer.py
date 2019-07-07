@@ -11,6 +11,9 @@ from stilus.nodes.root import Root
 from stilus.nodes.selector import Selector
 from stilus.visitor.visitor import Visitor
 
+import logging
+log = logging.getLogger(__name__)
+
 
 class Normalizer(Visitor):
 
@@ -130,7 +133,7 @@ class Normalizer(Visitor):
         expression.nodes = [handle(node) for node in expression.nodes]
         return expression
 
-    def visit_block(self, block):
+    def visit_block(self, block, index=None):
         if block.has_properties():
             for node in block.nodes:
                 if block.node_name in ['null', 'expression', 'function',

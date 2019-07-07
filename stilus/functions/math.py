@@ -10,4 +10,8 @@ def math(n: Unit, fn: String):
     """Apply Math ``fn`` to ``n``"""
     assert_type(n, 'unit', 'n')
     assert_string(fn, 'fn')
+
+    if fn.string == 'round':
+        return Unit(round(n.value), n.type)
+
     return Unit(m.__getattribute__(fn.string)(n.value), n.type)

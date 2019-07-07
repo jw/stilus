@@ -74,7 +74,7 @@ class Evaluator(Visitor):
         return [node.string for node in self.lookup('vendors').nodes]
 
     def import_file(self, node: Import, file, literal, lineno=1, column=1):
-        # print(f'importing {file}; {self.import_stack}')
+        log.debug(f'importing {file}; {self.import_stack}')
 
         # handling 'require'
         if node.once:
@@ -573,34 +573,33 @@ class Evaluator(Visitor):
 
         return block
 
-    def visit_block(self, block):
+    def visit_block(self, block, index=None):
         self.stack.append(Frame(block))
 
-        block.index = 0
-        while block.index < len(block.nodes):
+        index = 0
+        while index < len(block.nodes):
+            block.index = index
             try:
-                # print(f'block: {id(block)} | Called by [{block.lineno}:'
-                #       f'{block.column}] | index is {block.index}; block has '
-                #       f'{len(block.nodes)} nodes.')
-                # print(f'block.nodes[{block.index}]: '
-                #       f'{block.nodes[block.index]}')
-                # print(f'--> before: {block.nodes[block.index]}')
-                # block.nodes[block.index] =
-                # self.visit(block.nodes[block.index])
-                v = self.visit(block.nodes[block.index])
-                # print(f'-->  after: {block.nodes[block.index]}')
-                block.nodes[block.index] = v
-                # type_message = type(block.nodes[block.index])
-                # print(f'block: {id(block)} | Called by [{block.lineno}:'
-                #       f'{block.column}] | updated '
-                #       f'node {block.index}: ['
-                #       f'{block.nodes[block.index].lineno}'
-                #       f':{block.nodes[block.index].column}]: '
-                #       f'{block.nodes[block.index]}')
+                if hasattr(block.nodes[index], 'string'):
+                    identifier = f'{block.nodes[index].string}'
+                else:
+                    identifier = f'{id(block.nodes[index])}'
+                block_nodes = ', '.join([f'{block.node_name}'
+                                         for block in block.nodes])
+                log.debug(f'Visiting {identifier} '
+                          f'[{block.nodes[index].lineno}:'
+                          f'{block.nodes[index].column}] '
+                          f'({block.nodes[index].node_name}) from '
+                          f'{id(block)} block [{block.lineno}:{block.column}] '
+                          f'(which has {len(block.nodes)} nodes: '
+                          f'{block_nodes}) | index: {index}')
+                block.nodes[index] = self.visit(block.nodes[block.index])
+
             except Expression as e:
                 # fixme: when a 'return' value type in e and take action!
+                print(e)
                 raise e
-            block.index += 1
+            index = block.index + 1
 
         self.stack.pop()
         return block
@@ -654,7 +653,7 @@ class Evaluator(Visitor):
             elif node.elses:
                 for block in node.elses:
                     # else if
-                    if block.cond:
+                    if hasattr(block, 'cond') and block.cond:
                         block.block.scope = block.block.has_media()
                         self.result += 1
                         cond = self.visit(block.cond).first.to_boolean()
@@ -708,8 +707,16 @@ class Evaluator(Visitor):
 
         return ret
 
-    # todo: rewrite this; this is not Python >:-(
+    # todo: rewrite this; this is not Python nor proper code >:-(
     def mixin(self, nodes, block):
+
+        def prettify(nodes):
+            buffer = [f' -> {node}' for node in nodes]
+            return '\n'.join(buffer)
+
+        log.debug(f'Mixin: in: nodes:\n{prettify(nodes)}')
+        log.debug(f'Mixin: in: block: {block}')
+        log.debug(f'Mixin: in: block.nodes:\n{prettify(block.nodes)}')
         if len(nodes) == 0:
             return None
         head = block.nodes[:block.index]
@@ -718,7 +725,7 @@ class Evaluator(Visitor):
         block.index = 0
         head.extend(tail)
         block.nodes = head
-        print(f'Mixin result: {block.nodes}')
+        log.debug(f'Mixin: out: {block.nodes}')
         # self.set_current_block(block)
 
     # todo: rewrite this; this is not Python >:-(
@@ -840,7 +847,7 @@ class Evaluator(Visitor):
 
         self.result -= 1
 
-        # print(f'import {path}')
+        log.debug(f'import {path}')
 
         # todo: implement me!
         # url() passed

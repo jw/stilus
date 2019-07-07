@@ -5,12 +5,14 @@ from stilus.nodes.node import Node
 
 class Function(Node):
 
-    def __init__(self, function_name, params, body=None, lineno=1, column=1):
+    def __init__(self, function_name, params=None, body=None,
+                 lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
         self.params = params
         self.builtin = callable(params)
         self.block = body
+        self.fn = None
 
     def __str__(self):
         if self.params:
@@ -38,10 +40,11 @@ class Function(Node):
         return f'function {self.function_name}'
 
     def clone(self, parent=None, node=None):
-        if self.function_name:
-            clone = Function(self.function_name, self.params)
+        if self.fn:
+            # check this: what is fn?
+            clone = Function(self.function_name, self.fn)
         else:
-            clone = Function(self.node_name)
+            clone = Function(self.function_name)
             clone.params = self.params.clone(parent, clone)
             clone.block = self.block.clone(parent, clone)
         clone.lineno = self.lineno

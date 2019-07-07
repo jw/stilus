@@ -60,8 +60,8 @@ class Block(Node):
         clone = Block(p, n, lineno=self.lineno, column=self.column)
         clone.filename = self.filename
         clone.scope = self.scope
-        for node in self.nodes:
-            clone.append(node.clone(clone, clone))
+        for something in self.nodes:
+            clone.nodes.append(something.clone(clone, clone))
         return clone
 
     def append(self, node):
