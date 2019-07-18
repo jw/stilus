@@ -6,7 +6,7 @@ from pathlib import Path
 
 from stilus import utils
 from stilus.colors import colors
-from stilus.functions.bifs import bifs
+from stilus.functions.bifs import bifs, raw_bifs
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import Boolean, false, true
@@ -573,27 +573,19 @@ class Evaluator(Visitor):
 
         return block
 
-    def visit_block(self, block, index=None):
+    def visit_block(self, block):
         self.stack.append(Frame(block))
 
         index = 0
         while index < len(block.nodes):
             block.index = index
             try:
-                if hasattr(block.nodes[index], 'string'):
-                    identifier = f'{block.nodes[index].string}'
+                v = self.visit(block.nodes[block.index])
+                if block.mixin:
+                    log.debug(f'Not adding mixin [{v}]!')
+                    block.mixin = False
                 else:
-                    identifier = f'{id(block.nodes[index])}'
-                block_nodes = ', '.join([f'{block.node_name}'
-                                         for block in block.nodes])
-                log.debug(f'Visiting {identifier} '
-                          f'[{block.nodes[index].lineno}:'
-                          f'{block.nodes[index].column}] '
-                          f'({block.nodes[index].node_name}) from '
-                          f'{id(block)} block [{block.lineno}:{block.column}] '
-                          f'(which has {len(block.nodes)} nodes: '
-                          f'{block_nodes}) | index: {index}')
-                block.nodes[index] = self.visit(block.nodes[block.index])
+                    block.nodes[index] = v
 
             except Expression as e:
                 # fixme: when a 'return' value type in e and take action!
@@ -715,7 +707,7 @@ class Evaluator(Visitor):
             return '\n'.join(buffer)
 
         log.debug(f'Mixin: in: nodes:\n{prettify(nodes)}')
-        log.debug(f'Mixin: in: block: {block}')
+        # log.debug(f'Mixin: in: block: {block}')
         log.debug(f'Mixin: in: block.nodes:\n{prettify(block.nodes)}')
         if len(nodes) == 0:
             return None
@@ -723,9 +715,10 @@ class Evaluator(Visitor):
         tail = block.nodes[block.index + 1:]
         self._mixin(nodes, head, block)
         block.index = 0
+        block.mixin = True
         head.extend(tail)
         block.nodes = head
-        log.debug(f'Mixin: out: {block.nodes}')
+        log.debug(f'Mixin: out: {prettify(block.nodes)}')
         # self.set_current_block(block)
 
     # todo: rewrite this; this is not Python >:-(
@@ -809,9 +802,9 @@ class Evaluator(Visitor):
         # providing a nicer js api for
         # built-in functions. Functions may specify that
         # they wish to accept full expressions
-        # via .raw
-        if hasattr(fn, 'raw') and fn.raw:
-            args = args.nodes
+        # via bifs_raw
+        if hasattr(fn, '__name__') and fn.__name__ in raw_bifs:
+            ret = args.nodes
         else:
             ret = []
             # todo: add args.map handling
@@ -825,18 +818,18 @@ class Evaluator(Visitor):
                 else:
                     ret.append(arg.first())
 
-            # invoke builtin function
-            body = utils.coerce(fn(*ret), False, lineno=self.parser.lineno,
-                                column=self.parser.column)
+        # invoke builtin function
+        body = utils.coerce(fn(*ret), False, lineno=self.parser.lineno,
+                            column=self.parser.column)
 
-            # Always wrapping allows js functions
-            # to return several values with a single
-            # Expression node
-            expr = Expression()
-            expr.append(body)
-            body = expr
+        # Always wrapping allows js functions
+        # to return several values with a single
+        # Expression node
+        expr = Expression()
+        expr.append(body)
+        body = expr
 
-            return self.invoke(body)
+        return self.invoke(body)
 
     def visit_import(self, imported):
         self.result += 1

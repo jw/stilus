@@ -133,7 +133,7 @@ class Normalizer(Visitor):
         expression.nodes = [handle(node) for node in expression.nodes]
         return expression
 
-    def visit_block(self, block, index=None):
+    def visit_block(self, block):
         if block.has_properties():
             for node in block.nodes:
                 if block.node_name in ['null', 'expression', 'function',

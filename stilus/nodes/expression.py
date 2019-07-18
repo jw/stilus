@@ -108,11 +108,15 @@ class Expression(Node):
             values = utils.unwrap(self).nodes
             nodes = utils.unwrap(right).nodes
             for node in nodes:
+                n = None
                 if node.node_name == 'unit':
                     if node.value < 0:
                         n = values[len(values) + node.value]
                     else:
-                        n = values[int(node.value)]
+                        try:
+                            n = values[int(node.value)]
+                        except IndexError:
+                            n = None
                 elif len(values) > 0 and values[0].name == 'object':
                     n = values[0].get(node.string)
                 if n:

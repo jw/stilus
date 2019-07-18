@@ -13,6 +13,7 @@ class Block(Node):
         self.scope = scope
         self.lacks_rendered_selectors = False  # for compiler
         self.index = 0
+        self.mixin = False
 
     def __str__(self):
         return f'block [{self.lineno}:{self.column}] | scope: {self.scope}; ' \

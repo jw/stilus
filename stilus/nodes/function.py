@@ -13,6 +13,10 @@ class Function(Node):
         self.builtin = callable(params)
         self.block = body
         self.fn = None
+        if hasattr(params, '__call___'):
+            self.fn = params
+        # else:
+        #     self.fn = None
 
     def __str__(self):
         if self.params:

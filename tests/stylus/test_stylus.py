@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from bin.stilus import setup_logging
 from stilus.stilus import Renderer
 
 
@@ -21,143 +22,35 @@ def test_stylus_cases():
 
 
 if __name__ == '__main__':
-    # source_file = Path('./cases/vargs.styl.later')
-    # with open(source_file, 'r') as f:
-    #     source = f.read()
-    # with open(source_file.with_suffix('.css'), 'r') as f:
-    #     destination = f.read()
+    setup_logging('bin/logging.yaml')
+
+    source_file = Path('./cases/vargs.styl')
+    with open(source_file, 'r') as f:
+        source = f.read()
+    with open(source_file.with_suffix('.css'), 'r') as f:
+        destination = f.read()
     # print(f'source: {source}')
-    # result = Renderer(source, {}).render()
-    # print(f'result: [{result}].')
-    # print(Renderer(source, {}).render())
-    # assert destination == Renderer(source, {}).render()
-    #     source = """
-    # padding(y, rest...)
-    #   test-y y
-    #   if rest
-    #     padding rest
-    #
-    # body
-    #   padding 1px
-    #   padding 1px 2px 3px
-    #
-    # foo(args...)
-    #   bar: args
-    #
-    # body
-    #   foo 1 2 3
-    #   foo 1, 2, 3
-    # """
+    result = Renderer(source, {}).render()
+    print(f'result: [{result}].')
     source = """
-  box-shadow(args...)
+box-shadow(args...)
     -webkit-box-shadow args
     -moz-box-shadow args
     box-shadow args
 
-  #login
+#login
     box-shadow 1px 2px 5px #eee
-"""
-    #     source = """
-    # add(a, b)
-    #   a + b
-    #
-    # body
-    #   padding add(5, 2)
-    #   padding add(10, 20)
-    #   padding add(100, 100)
-    #   padding add(10, -5)
-    #   foo
-    #     foo add(10, 10)
-    #     foo add(10, 20)
-    #   middle add(1, 0)
-    #   bar
-    #     bar add(100, 1000)
-    #     bar add(100, 500)
-    # head
-    #   padding add(10, 3)
-    # """
-    #     source = """
-    # body
-    #   foo unit(20, 'px')
-    #   foo unit(20, px)
-    #   foo unit(20%, px)
-    #   foo unit(20, '%')
-    # """
-    source = """body
-  foo dark(black) == true
-  foo dark(#005716) == true
-  foo dark(white) == false
+    body
+        box-shadow 100px 100px 3px red
 """
     source = """
-// padding(n)
-//   padding n
-//
-// body
-//   padding 5px
-//   padding 5px 10px
-//
-// padding(y, x = null)
-//   padding y x
-//
-// body
-//   padding 5px
-//   padding 5px 10px
-//
-// padding(args...)
-//   padding args
-//
-// body
-//   padding 5px
-//   padding 5px 10px
-//   padding 5px 10px 0 2px
-//
-padding(y, rest...)
-  test-y y
-  if rest
-    padding rest
-
 body
-  padding 1px
-  padding 1px 2px 3px
-//
-// padding(args...)
-//   if args
-//     test-y args[0]
-//     test-x args[1]
-//
-// body
-//   padding 1px
-//   padding 1px 2px
-//
-// padding(args...)
-//   pad args[0]
-//   pad args[1]
-//   pad args[2]
-//   len length(args)
-//
-// body
-//   padding 1 2 (3 4 5)
-//
-foo(args...)
-  bar: args
-
-body
-  foo 1 2 3
-  foo 1, 2, 3
+    foo length(1, 2)
 """
-    source = """
-foo(i)
-  if i < 0
-    lower
-  else
-    higher
-
-body
-  higher foo(10)
-  lower foo(-10)
-"""
-    result = Renderer(source, {}).render()
-    print(f'result: {result}.')
+    # result = Renderer(source, {}).render()
+    # print(f'------------------- result ---')
+    # print(f'{result}')
+    # print(f'------------------------------')
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(Renderer(source, {}).render())

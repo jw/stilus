@@ -57,7 +57,7 @@ def assert_string(node: Node, param):
                         f'but got {node.node_name}:{node}')
 
 
-def assert_type(node: Node, type, param):
+def assert_type(node: Node, type, param=None):
     assert_present(node, param)
     if node.node_name == type:
         return
