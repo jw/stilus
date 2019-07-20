@@ -24,33 +24,33 @@ def test_stylus_cases():
 if __name__ == '__main__':
     setup_logging('bin/logging.yaml')
 
-    source_file = Path('./cases/vargs.styl')
-    with open(source_file, 'r') as f:
-        source = f.read()
-    with open(source_file.with_suffix('.css'), 'r') as f:
-        destination = f.read()
-    # print(f'source: {source}')
-    result = Renderer(source, {}).render()
-    print(f'result: [{result}].')
-    source = """
-box-shadow(args...)
-    -webkit-box-shadow args
-    -moz-box-shadow args
-    box-shadow args
-
-#login
-    box-shadow 1px 2px 5px #eee
-    body
-        box-shadow 100px 100px 3px red
-"""
+    # source_file = Path('./cases/bifs.darken.styl')
+    # with open(source_file, 'r') as f:
+    #     source = f.read()
+    # with open(source_file.with_suffix('.css'), 'r') as f:
+    #     destination = f.read()
+    # # print(f'source: {source}')
+    # result = Renderer(source, {}).render()
+    # print(f'result: [{result}].')
+#     source = """
+# box-shadow(args...)
+#     -webkit-box-shadow args
+#     -moz-box-shadow args
+#     box-shadow args
+#
+# #login
+#     box-shadow 1px 2px 5px #eee
+#     body
+#         box-shadow 100px 100px 3px red
+# """
     source = """
 body
-    foo length(1, 2)
+  foo: lighten(lighten(#2c2c2c, 20), 50)
 """
-    # result = Renderer(source, {}).render()
-    # print(f'------------------- result ---')
-    # print(f'{result}')
-    # print(f'------------------------------')
+    result = Renderer(source, {}).render()
+    print(f'------------------- result ---')
+    print(f'{result}')
+    print(f'------------------------------')
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(Renderer(source, {}).render())

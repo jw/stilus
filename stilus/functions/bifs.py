@@ -1,7 +1,9 @@
-from stilus.functions import blue, math, math_prop, unit, length, addProperty
+from stilus.functions import adjust, blue, math, math_prop, unit, length, \
+    addProperty
 
 bifs = {
     '-math-prop': math_prop.math_prop,
+    'adjust': adjust.adjust,
     'blue': blue.blue,
     'math': math.math,
     'unit': unit.unit,

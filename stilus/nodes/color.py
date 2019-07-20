@@ -84,7 +84,7 @@ class HSLA(Color):
 
     @staticmethod
     def from_rgba(rgba):
-        (h, s, l) = colorsys.rgb_to_hls(rgba.r / 255,
+        (h, l, s) = colorsys.rgb_to_hls(rgba.r / 255,
                                         rgba.g / 255,
                                         rgba.b / 255)
         return HSLA(h * 360, s * 100, l * 100, rgba.a)

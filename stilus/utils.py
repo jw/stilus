@@ -1,4 +1,5 @@
 import types
+from decimal import Decimal, ROUND_HALF_UP
 from os.path import join
 from pathlib import Path
 from typing import List
@@ -66,7 +67,8 @@ def assert_type(node: Node, type, param=None):
 
 
 def clamp(n, smallest=0, largest=255):
-    return max(smallest, min(round(n), largest))
+    rounded = Decimal(n).quantize(Decimal(1), rounding=ROUND_HALF_UP)
+    return max(smallest, min(int(rounded), largest))
 
 
 def clamp_alpha(n, smallest=0, largest=1):

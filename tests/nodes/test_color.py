@@ -108,9 +108,3 @@ def test_rgba_hash():
     assert rgba.hash() == 'rgba(300, 300, 300, 0.003)'
     rgba = RGBA(300, 300, 300, 42)
     assert rgba.hash() == '#fff'
-
-
-def test_rgba_hsla():
-    rgba = RGBA(152, 125, 62, 0.020)
-    assert rgba.hsla() == HSLA(41.99999999999999, 41.96078431372549,
-                               42.05607476635513, 0.020)
