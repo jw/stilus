@@ -4,12 +4,12 @@ The first cases release, a.k.a. `committers, committers, committers!`
 
  - [x] Added all remaining nodes.
  - [x] Recreated the `.clone()` method for all nodes; the current one were far too slow; and very WRONG!
- - [ ] Pass 50 Stylus test cases.  11/50 done, or 22% :)
+ - [ ] Pass 50 Stylus test cases.  15/50 done, or 30% :)
  - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.
  - [ ] Add tests for `to_json()`, `equal()`, `coerce()`, `clone()` and `operate()` in all nodes.
  - [ ] Finalize the compiler.
  - [ ] Finalize the evaluator.
  - [ ] Finalize the parser.
  - [ ] Add 3.7 and 3.8 Python.
- - [ ] Create all builtin functions. 6/62 done, or 9.68% ;-)
+ - [ ] Create all builtin functions. 9/62 done, or 14.52% ;-)
  
