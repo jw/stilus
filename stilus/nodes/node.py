@@ -65,7 +65,7 @@ class Node:
         """Operate on ``right`` with the given ``op``."""
         from stilus.nodes.boolean import Boolean
         if op == 'is a':
-            if 'string' == right.first().name:
+            if 'string' == right.first().node_name:
                 return Boolean(self.node_name == right.value)
             else:
                 raise Exception(f'"is a" expects a string, '

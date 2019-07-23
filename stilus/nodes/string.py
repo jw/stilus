@@ -49,7 +49,7 @@ class String(Node):
         else:
             return String(other.__str__())
 
-    def operate(self, op, right):
+    def operate(self, op, right, value=None):
         if op == '%':
             expr = Expression()
             expr.push(self)
@@ -63,7 +63,8 @@ class String(Node):
             return s(expr.join(args))
         if op == '+':
             expr = Expression()
-            expr.push(String(self.value + self.coerce(right).value,
-                             lineno=self.lineno, column=self.column))
+            expr.append(String(self.value + self.coerce(right).value,
+                               lineno=self.lineno, column=self.column))
+            return expr
         else:
-            super().operate(op, right)
+            return super().operate(op, right)

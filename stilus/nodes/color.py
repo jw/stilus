@@ -129,7 +129,8 @@ class RGBA(Color):
             else:
                 return f'#{r}{g}{b}'
         else:
-            return f'rgba({self.r}, {self.g}, {self.b}, {self.a:.3f})'
+            alpha = f'{self.a:.3f}'.rstrip('0').rstrip('.')
+            return f'rgba({self.r},{self.g},{self.b},{alpha})'
 
     def __repr__(self):
         return self.__str__()
@@ -218,7 +219,7 @@ class RGBA(Color):
         return RGBA(r * 255, g * 255, b * 255, hsla.alpha)
 
     # todo: implement me!
-    def operate(self, op, right: Node):
+    def operate(self, op, right: Node, value=None):
         """Operate on `right` with given `op`."""
         if op != 'in':
             right = right.first()
@@ -228,4 +229,5 @@ class RGBA(Color):
         elif op == '+':
             if right.node_name == 'unit':
                 if right.type == '%':
-                    raise NotImplementedError
+                    pass
+        raise NotImplementedError

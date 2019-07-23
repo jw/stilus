@@ -32,20 +32,41 @@ if __name__ == '__main__':
     # # print(f'source: {source}')
     # result = Renderer(source, {}).render()
     # print(f'result: [{result}].')
-#     source = """
-# box-shadow(args...)
-#     -webkit-box-shadow args
-#     -moz-box-shadow args
-#     box-shadow args
-#
-# #login
-#     box-shadow 1px 2px 5px #eee
-#     body
-#         box-shadow 100px 100px 3px red
-# """
+    source = """
+box-shadow(args...)
+    -webkit-box-shadow args
+    -moz-box-shadow args
+    box-shadow args
+
+#login
+    box-shadow 1px 2px 5px #eee
+    body
+        box-shadow 100px 100px 3px red
+"""
     source = """
 body
-  foo: lighten(lighten(#2c2c2c, 20), 50)
+  foo saturate(#ee0, 0%)
+  foo saturate(#dd0, 20%)
+  foo saturate(#d87240, 60%)
+  foo saturate(#fd0cc7, 100%)
+
+body
+  foo saturate(rgba(35,124,46,0.5), 20%)
+  foo saturate(rgba(35,124,46,0.5), 80%)
+
+body
+  foo desaturate(#ee0, 0%)
+  foo desaturate(#dd0, 20%)
+  foo desaturate(#d87240, 60%)
+  foo desaturate(#fd0cc7, 100%)
+
+body
+  foo desaturate(rgba(35,124,46,0.5), 20%)
+  foo desaturate(rgba(35,124,46,0.5), 80%)
+
+body
+  foo saturate()
+  foo saturate(100%)
 """
     result = Renderer(source, {}).render()
     print(f'------------------- result ---')

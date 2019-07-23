@@ -802,7 +802,7 @@ class Evaluator(Visitor):
         # providing a nicer js api for
         # built-in functions. Functions may specify that
         # they wish to accept full expressions
-        # via bifs_raw
+        # via raw_bifs
         if hasattr(fn, '__name__') and fn.__name__ in raw_bifs:
             ret = args.nodes
         else:

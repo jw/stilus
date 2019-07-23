@@ -143,7 +143,7 @@ class Expression(Node):
             from stilus.nodes.boolean import true
             return true
         else:
-            return self.first().operate(op, right)
+            return self.first().operate(op, right, value)
 
     @deprecated(reason='use append')
     def push(self, node):

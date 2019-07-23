@@ -261,11 +261,18 @@ class Compiler(Visitor):
             # always return '0' unless the unit is a percentage or time
             if '%' != t and 's' != t and 'ms' != t and 0 == n:
                 return 0
-            # omit leading '0' on floats
-            if f and n < 1 and n > -1:
-                return n.replace('0.', '.')
+            if f:
+                # remove trailing zeros
+                n = f'{self.a:.3f}'.rstrip('0').rstrip('.')
+                if 1 > float(n) > -1:
+                    # omit leading '0' on floats
+                    n = n.replace('0.', '.')
+                return n
+        if f:
+            v = f'{n:.15f}'.rstrip('0').rstrip('.')
+            return f'{v}{t}'
         else:
-            return f'{n:g}{t}'
+            return f'{n}{t}'
 
     def visit_group(self, group: Group):
         if self.keyframe:

@@ -86,7 +86,7 @@ def test_rbga_clamping_and_string():
     assert rgba.g == 0
     assert rgba.b == 0
     assert rgba.a == 0.42
-    assert str(rgba) == 'rgba(0, 0, 0, 0.420)'
+    assert str(rgba) == 'rgba(0,0,0,0.42)'
     rgba = RGBA(-30, 0, -60, 0.42)
     assert rgba.r == 0
     assert rgba.g == 0
@@ -100,11 +100,11 @@ def test_rbga_no_clamping():
     assert rgba.g == 300
     assert rgba.b == 300
     assert rgba.a == 0.003
-    assert str(rgba) == 'rgba(300, 300, 300, 0.003)'
+    assert str(rgba) == 'rgba(300,300,300,0.003)'
 
 
 def test_rgba_hash():
     rgba = RGBA.without_clamping(300, 300, 300, 0.003)
-    assert rgba.hash() == 'rgba(300, 300, 300, 0.003)'
+    assert rgba.hash() == 'rgba(300,300,300,0.003)'
     rgba = RGBA(300, 300, 300, 42)
     assert rgba.hash() == '#fff'

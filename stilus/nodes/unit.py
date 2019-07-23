@@ -29,7 +29,12 @@ class Unit(Node):
 
     def __str__(self):
         type = self.type if self.type else ''
-        return f'{self.value}{type}'
+        # remove trailing zeros
+        if isinstance(self.value, float):
+            v = f'{self.value}'.rstrip('0').rstrip('.')
+        else:
+            v = self.value
+        return f'{v}{type}'
 
     def __repr__(self):
         return self.__str__()

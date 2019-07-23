@@ -23,6 +23,9 @@ padding(y, rest...)
 body
   padding 1px 2px 3px
 """
+    source = '\nsize = 12px\n\nbody\n  font-size: size\n\n'
+    css = 'body {\n  font-size: 12px;\n}\n'
+    assert stilus.render(source, {}) == css
 
 #     source = """
 # foo
