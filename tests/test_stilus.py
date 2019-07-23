@@ -27,81 +27,37 @@ body
     css = 'body {\n  font-size: 12px;\n}\n'
     assert stilus.render(source, {}) == css
 
-#     source = """
-# foo
-#   hello
-#
-#   bar
-#     there
-#
-#     fizz
-#       abc
-#
-# fuzz
-#   def
-# """
-
-    source = """
-//padding(n)
-//  padding n
-//
-//body
-//  padding 5px
-//  padding 5px 10px
-//
-//padding(y, x = null)
-//  padding y x
-//
-//body
-//  padding 5px
-//  padding 5px 10px
-//
-//padding(args...)
-//  padding args
-//
-//body
-//  padding 5px
-//  padding 5px 10px
-//  padding 5px 10px 0 2px
-//
-padding(y, rest...)
-  test-y y
-  if rest
-    padding rest
+    source = """   
+size = 12px
+large = size * (3 - 1)
+huge = size * 3
 
 body
-  padding 1px
-  padding 1px 2px 3px
-//
-//padding(args...)
-//  if args
-//    test-y args[0]
-//    test-x args[1]
-//
-//body
-//  padding 1px
-//  padding 1px 2px
-//
-//padding(args...)
-//  pad args[0]
-//  pad args[1]
-//  pad args[2]
-//  len length(args)
-//
-//body
-//  padding 1 2 (3 4 5)
-//
-//foo(args...)
-//  bar: args
-//
-//body
-//  foo 1 2 3
-//  foo 1, 2, 3
-"""
+  font-size size
 
-    source = """
-body
-    foo PI round(PI)
+h1
+  font-size huge
+
+h2
+  font-size large
+  font 5px % 3
+  font 5px % 5
+  font 2px ** 4
+  y = 10
+  x = 15
+
+body {
+  foo: 50% * 2;
+  foo: 2 * 50%;
+  foo: 50 + 50%;
+  foo: 50 - 50%;
+  foo: 50% - 50%;
+  foo: 50% + 20%;
+}
+body {
+  foo: 5 + 5em;
+  foo: 5em + 5;
+}
 """
     css = stilus.render(source, {})
     print(f'result:\n[{css}]')
