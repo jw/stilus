@@ -17,8 +17,24 @@ from stilus.nodes.unit import Unit
 from stilus.visitor.visitor import Visitor
 
 
-# checkme: this class will very likely not work
-# todo: add tests and tests and tests!
+# fixme: this method should not be called
+def _handle_weird_deg_value(value, type):
+    """
+    Remove all numbers after the period (and the period itself) from
+    deg units that have 14 zeros after the period and one single
+    non-zero character at the end.
+
+    This is a hack; it is caused by the colorsys call in the Color
+    node.
+    """
+    result = value
+    if type == 'deg' and re.match(r'[1-9]', value[-1]):
+        match = re.search(r'\.(0*)', value)
+        if match and len(match.groups()) == 1 and len(match.group(1)) == 14:
+            result = value[:-1].rstrip('0').rstrip('.')
+    return result
+
+
 class Compiler(Visitor):
 
     def __init__(self, root, options):
@@ -251,7 +267,7 @@ class Compiler(Visitor):
         return str(rgba)
 
     def visit_hsla(self, hsla):
-        return str(hsla.rgba)
+        return str(hsla.rgba())
 
     def visit_unit(self, unit: Unit):
         t = unit.type if unit.type else ''
@@ -270,6 +286,7 @@ class Compiler(Visitor):
                 return n
         if f:
             v = f'{n:.15f}'.rstrip('0').rstrip('.')
+            v = _handle_weird_deg_value(v, t)
             return f'{v}{t}'
         else:
             return f'{n}{t}'

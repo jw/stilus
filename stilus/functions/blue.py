@@ -1,5 +1,5 @@
 from stilus.functions.rgba import rgba
-from stilus.nodes.color import Color
+from stilus.nodes.color import Color, HSLA
 from stilus.nodes.unit import Unit
 
 
@@ -17,7 +17,8 @@ def blue(color: Color, value: Unit = None):
     :param value:
     :return:
     """
-    c = color.rgba
+    if isinstance(color, HSLA):
+        color = color.rgba()
     if value:
-        return rgba(Unit(c.r), Unit(c.g), value, Unit(c.a))
-    return Unit(c.b, '')
+        return rgba(Unit(color.r), Unit(color.g), value, Unit(color.a))
+    return Unit(color.b, '')

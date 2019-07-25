@@ -7,7 +7,7 @@ from stilus.nodes.unit import Unit
 
 def saturation(color: Color, value=None):
     if value:
-        hsla_color = color.hsla
+        hsla_color = color.hsla()
         return hsla(Unit(hsla_color.hue),
                     value,
                     Unit(hsla_color.lightness),

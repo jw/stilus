@@ -1,12 +1,7 @@
-from typing import Type
-
-from stilus.nodes.color import Color
-from stilus.nodes.string import String
-from stilus.nodes.unit import Unit
 from stilus.utils import assert_color, assert_string, assert_type
 
 
-def adjust(color: Type[Color], prop: String, amount: Unit):
+def adjust(color, prop, amount):
     assert_color(color, 'color')
     assert_string(prop, 'prop')
     assert_type(amount, 'unit', 'amount')

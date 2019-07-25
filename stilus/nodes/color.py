@@ -1,6 +1,9 @@
 import colorsys
 import json
 
+from stilus.functions.adjust import adjust
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 from stilus.nodes.boolean import true
 from stilus.nodes.node import Node
 from stilus.utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
@@ -20,10 +23,10 @@ class HSLA(Color):
         self.saturation = clamp_percentage(s)
         self.lightness = clamp_percentage(l)
         self.alpha = clamp_alpha(a)
-        self.hsla = self
+        self._hsla = self
 
     def hsla(self):
-        return self.hsla
+        return self._hsla
 
     def __str__(self):
         return f'hsla({self.hue}, {round(self.saturation)}%, ' \
@@ -58,7 +61,7 @@ class HSLA(Color):
                            'filename': self.filename})
 
     def rgba(self):
-        return RGBA.from_hsla(self.hsla)
+        return RGBA.from_hsla(self._hsla)
 
     def __hash__(self):
         return hash(self.__str__())
@@ -75,12 +78,12 @@ class HSLA(Color):
     def sub(self, h, s, l):
         return self.add(-h, -s, -l)
 
-    def operate(self, op, right):
+    def operate(self, op, right, value=None):
         """Operate on `right` with the given `op`."""
         if op in ['==', '!=', '<=', '>=', '<', '>', 'is a', '||', '&&']:
-            return self.rgba.operate(op, right)
+            return self.rgba().operate(op, right)
         else:
-            return self.rgba.operate(op, right).hsla
+            return self.rgba().operate(op, right).hsla()
 
     @staticmethod
     def from_rgba(rgba):
@@ -108,7 +111,7 @@ class RGBA(Color):
         self.b = clamp(b)
         self.a = clamp_alpha(a)
         self.name = ''
-        self.rgba = self
+        self._rgba = self
         self.raw = None
 
     def __str__(self):
@@ -175,10 +178,10 @@ class RGBA(Color):
         return str(self)
 
     def hsla(self):
-        return HSLA.from_rgba(self.rgba)
+        return HSLA.from_rgba(self.rgba())
 
     def rgba(self):
-        return self.rgba
+        return self._rgba
 
     def add(self, r, g, b, a):
         return RGBA(self.r + r,
@@ -218,7 +221,6 @@ class RGBA(Color):
                                         hsla.saturation / 100)
         return RGBA(r * 255, g * 255, b * 255, hsla.alpha)
 
-    # todo: implement me!
     def operate(self, op, right: Node, value=None):
         """Operate on `right` with given `op`."""
         if op != 'in':
@@ -228,6 +230,36 @@ class RGBA(Color):
             return true
         elif op == '+':
             if right.node_name == 'unit':
+                n = right.value
                 if right.type == '%':
-                    pass
-        raise NotImplementedError
+                    return adjust(self, String('lightness'), right)
+                elif right.type == 'deg':
+                    return self.add(n, n, n, 0)
+            elif right.node_name == 'rgba':
+                return self.add(right.r, right.g, right.b, right.a)
+            elif right.node_name == 'hsla':
+                return self.hsla().add(right.hue,
+                                       right.saturation,
+                                       right.lightness)
+        elif op == '-':
+            if right.node_name == 'unit':
+                n = right.value
+                if right.type == '%':
+                    return adjust(self, String('lightness'), Unit(-n, '%'))
+                elif right.type == 'deg':
+                    return self.hsla().adjust_hue(-n).rgba()
+                else:
+                    return self.sub(n, n, n, 0)
+            elif right.node_name == 'rgba':
+                return self.sub(right.r, right.g, right.b, right.a)
+            elif right.node_name == 'hsla':
+                return self.hsla().sub(right.hue,
+                                       right.saturation,
+                                       right.lightness)
+        elif op == '*':
+            if right.node_name == 'unit':
+                return self.multiply(right.value)
+        elif op == '/':
+            if right.node_name == 'unit':
+                return self.divide(right.value)
+        return self.operate(op, right)

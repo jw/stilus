@@ -14,11 +14,11 @@ def hsla(hue, saturation=None, lightness=None, alpha=None):
     # color
     if hue and (saturation is lightness is alpha is None):
         assert_color(hue)
-        return hue.hsla
+        return hue.hsla()
     # alpha
     if hue and saturation and (lightness is alpha is None):
         assert_color(hue)
-        color = hue.hsla
+        color = hue.hsla()
         assert_type(saturation, 'unit', 'alpha')
         alpha = saturation.clone()
         if alpha.type == '%':

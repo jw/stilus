@@ -6,6 +6,7 @@ from stilus.utils import assert_type, unwrap
 # this is a very weird function; it uses evaluator and
 # does in fact almost the same as the evaluator.mixin()
 # function?
+# todo: fix me, implement me
 def addProperty(name, expr):
     assert_type(name, 'expression', 'name')
     name = unwrap(name).first()

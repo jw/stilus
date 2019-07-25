@@ -42,6 +42,6 @@ def component(color: Color, name: str) -> Unit:
     type = type_map[name]
     name = component_map[name]
     try:
-        return Unit(color.__getattribute__(type).__getattribute__(name), unit)
+        return Unit(getattr(getattr(color, type)(), name), unit)
     except AttributeError:
         raise TypeError(f'invalid color component "{name}"')
