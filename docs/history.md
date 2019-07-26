@@ -1,5 +1,13 @@
 ## History
 
+### 0.6.0
+
+The first cases release, a.k.a. `committers, committers, committers!`
+
+ - Fixed the big `visit_block()` and `mixin()` problem in the evaluator.
+ - Added all built in functions.
+ - Added x test cases.
+
 ### 0.5.0 
 
 The first evaluate a.k.a. the `let's never commit` release.
