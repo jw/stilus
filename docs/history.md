@@ -1,6 +1,6 @@
 ## History
 
-### 0.6.0
+### 0.6.0 [work in progress]
 
 The first cases release, a.k.a. `committers, committers, committers!`
 

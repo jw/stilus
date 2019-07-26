@@ -43,6 +43,11 @@ box-shadow(args...)
     body
         box-shadow 100px 100px 3px red
 """
+    source = """
+body
+  foo bar
+  foo complement(#f00)
+"""
     result = Renderer(source, {}).render()
     print(f'------------------- result ---')
     print(f'{result}')

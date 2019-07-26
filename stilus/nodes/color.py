@@ -234,6 +234,8 @@ class RGBA(Color):
                 if right.type == '%':
                     return adjust(self, String('lightness'), right)
                 elif right.type == 'deg':
+                    return self.hsla().adjust_hue(n).rgba()
+                else:
                     return self.add(n, n, n, 0)
             elif right.node_name == 'rgba':
                 return self.add(right.r, right.g, right.b, right.a)
