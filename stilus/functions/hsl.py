@@ -3,8 +3,8 @@ from stilus.functions.hsla import hsla
 from stilus.utils import assert_color
 
 
-def hsl(hue, saturation, lightness):
+def hsl(hue, saturation=None, lightness=None):
     if hue and (saturation is lightness is None):
         assert_color(hue, 'color')
-        return hue.hsla
+        return hue.hsla()
     return hsla(hue, saturation, lightness, Unit(1))

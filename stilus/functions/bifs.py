@@ -1,3 +1,4 @@
+from stilus.functions import baseConvert, s
 from stilus.functions import hue, lightness, saturation
 from stilus.functions import hsl, rgb, alpha, blue, green, red
 from stilus.functions import rgba, hsla
@@ -6,9 +7,10 @@ from stilus.functions import adjust, math, math_prop, unit, length, \
 
 bifs = {
     '-math-prop': math_prop.math_prop,
-    'addProperty': addProperty.addProperty,
+    'add-property': addProperty.addProperty,
     'adjust': adjust.adjust,
     'alpha': alpha.alpha,
+    'base-convert': baseConvert.baseConvert,
     'blue': blue.blue,
     'green': green.green,
     'hsl': hsl.hsl,
@@ -20,9 +22,10 @@ bifs = {
     'red': red.red,
     'rgb': rgb.rgb,
     'rgba': rgba.rgba,
+    's': s.s,
     'saturation': saturation.saturation,
     'unit': unit.unit,
     'unquote': unquote.unquote,
 }
 
-raw_bifs = ['addProperty', 'length']
+raw_bifs = ['add-property', 'base-convert', 'length', 's']
