@@ -342,12 +342,12 @@ class Evaluator(Visitor):
         vals = []
         self.result -= 1
 
-        each.get_block().scope = False
+        each.block.scope = False
 
         def visit_body(key, value):
             scope.add(value)
             scope.add(key)
-            body = self.visit(each.get_block().clone())
+            body = self.visit(each.block.clone())
             vals.insert(body.nodes)
 
         # for prop in obj
@@ -422,7 +422,7 @@ class Evaluator(Visitor):
             # user-defined
             # evaluate mixin block
             if call.block:
-                call.block = self.visit(call.block, id=id)
+                call.block = self.visit(call.block)
             ret = self.invoke_function(fn, args, call.block)
 
         self.calling.pop()
@@ -468,7 +468,7 @@ class Evaluator(Visitor):
 
         # hack (sic): ternary
         if binop.value:
-            value = self.visit(binop.val)
+            value = self.visit(binop.value)
         else:
             value = null
 
@@ -629,7 +629,9 @@ class Evaluator(Visitor):
             ok = true
         self.result -= 1
 
-        node.block.scope = node.block.has_media()
+        node.block.scope = \
+            hasattr(node.block, 'has_media') and \
+            node.block.has_media()
 
         # evaluate body
         ret = None
@@ -745,10 +747,10 @@ class Evaluator(Visitor):
             dest.append(item)
 
     def mixin_node(self, node):
-        pass
+        raise NotImplementedError
 
     def mixin_object(self, object):
-        pass
+        raise NotImplementedError
 
     def eval(self, vals=None):
         if vals is None:
@@ -883,16 +885,16 @@ class Evaluator(Visitor):
         return block
 
     def lookup_property(self, name):
-        pass
+        raise NotImplementedError
 
     def closest_block(self):
-        pass
+        raise NotImplementedError
 
     def closest_group(self):
-        pass
+        raise NotImplementedError
 
     def selector_stack(self):
-        pass
+        raise NotImplementedError
 
     def property_expression(self, prop, name):
         expr = Expression(lineno=self.parser.lineno,
@@ -980,7 +982,7 @@ class Evaluator(Visitor):
 
     def is_defined(self, node):
         if 'ident' == node.node_name:
-            return Boolean(self.lookup(node.value))  # checkme: or string?
+            return Boolean(self.lookup(node.name))
         else:
             raise ParseError(f'invalid "is defined" '
                              f'check on non-variable {node}')

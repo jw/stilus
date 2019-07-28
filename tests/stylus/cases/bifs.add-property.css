@@ -1,0 +1,121 @@
+body {
+  background: foo -moz-linear-gradient(#2a2a2a, #454545) bar;
+  background: foo -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2a2a2a), to(#454545)) bar;
+}
+body {
+  background-image: -moz-linear-gradient(#2a2a2a, #454545);
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2a2a2a), to(#454545));
+}
+body {
+  foo: -moz-linear-gradient(#333, #999);
+  foo: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#333), to(#999));
+}
+body {
+  foo: -moz-linear-gradient(#eee, #999);
+  foo: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#999));
+}
+body {
+  foo: -webkit-something(15px);
+  foo: -moz-something(15px);
+  foo: something(15px);
+}
+.test-as-mixin {
+  foo: bar;
+}
+body {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -o-flex;
+  display: -ms-flex;
+  display: flex;
+}
+@media all and (min-width: 768px) {
+  body {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -o-flex;
+    display: -ms-flex;
+    display: flex;
+  }
+}
+@page {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -o-flex;
+  display: -ms-flex;
+  display: flex;
+}
+@font-face {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -o-flex;
+  display: -ms-flex;
+  display: flex;
+}
+body {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -o-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -o-flex;
+  display: -ms-flex;
+  display: flex;
+}
+@media print {
+  body {
+    display: block;
+    foo: -webkit-something(4px);
+    foo: -moz-something(4px);
+    foo: something(4px);
+  }
+}
+@-moz-keyframes foo {
+  0% {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -o-flex;
+    display: -ms-flex;
+    display: flex;
+  }
+  100% {
+    display: block;
+  }
+}
+@-webkit-keyframes foo {
+  0% {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -o-flex;
+    display: -ms-flex;
+    display: flex;
+  }
+  100% {
+    display: block;
+  }
+}
+@-o-keyframes foo {
+  0% {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -o-flex;
+    display: -ms-flex;
+    display: flex;
+  }
+  100% {
+    display: block;
+  }
+}
+@keyframes foo {
+  0% {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -o-flex;
+    display: -ms-flex;
+    display: flex;
+  }
+  100% {
+    display: block;
+  }
+}

@@ -172,7 +172,7 @@ class RGBA(Color):
         return true
 
     def __hash__(self):
-        return self.__str__()
+        return hash((self.r, self.g, self.g, self.a))
 
     def hash(self):
         return str(self)
@@ -264,4 +264,4 @@ class RGBA(Color):
         elif op == '/':
             if right.node_name == 'unit':
                 return self.divide(right.value)
-        return self.operate(op, right)
+        return super().operate(op, right)

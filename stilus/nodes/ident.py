@@ -71,7 +71,7 @@ class Ident(Node):
         else:
             return super().coerce(other)
 
-    def operate(self, op, right):
+    def operate(self, op, right, value=None):
         value = right.first()
         if op == '-':
             if value.name == 'unit':

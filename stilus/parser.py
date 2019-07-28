@@ -505,15 +505,15 @@ class Parser:
             state = 'expression'
 
         if state in ['assignment', 'expression', 'function arguments']:
-            op = self.accept(['if', 'unless', 'for'])
-            if op:
-                if op.type in ['if', 'unless']:
+            while True:
+                op = self.accept(['if', 'unless', 'for'])
+                if op and op.type in ['if', 'unless']:
                     stmt = If(self.expression(), stmt, lineno=self.lineno,
                               column=self.column)
                     stmt.postfix = true
                     stmt.negate = 'unless' == op.type
                     self.accept(';')
-                elif op.type == 'for':
+                elif op and op.type == 'for':
                     val = self.id().name
                     key = None
                     if self.accept(','):
@@ -525,6 +525,8 @@ class Parser:
                     block.append(stmt)
                     each.block = block
                     stmt = each
+                else:
+                    break
         return stmt
 
     def stmt(self):
@@ -1036,17 +1038,22 @@ class Parser:
                 return self.stmt_selector()
             if self._ident == self.peek():
                 return self.id()
-            i += 1
-            while '=' != self.lookahead(i).type and self.lookahead(i) in \
+            print(f'{self.lookahead(i).type}; {self.lookahead(i + 1).type}')
+            while '=' != self.lookahead(i).type and \
+                    self.lookahead(i + 1).type not in \
                     ['[', ',', 'newline', 'indent', 'eos']:
+
+                i = i + 1
                 pass
-            if '=' != self.lookahead(i).type:
+            i = i + 1
+            if '=' == self.lookahead(i).type:
                 self._ident = self.peek()
                 return self.expression()
-            elif self.looks_like_attribute_selector() and \
+            elif self.looks_like_selector() and \
                     self.state_allows_selector():
                 return self.stmt_selector()
             else:
+                raise NotImplementedError
                 # huh?
                 pass
         elif la == '[':

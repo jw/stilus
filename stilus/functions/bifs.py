@@ -1,3 +1,4 @@
+from stilus.functions import replace
 from stilus.functions import baseConvert, s
 from stilus.functions import hue, lightness, saturation
 from stilus.functions import hsl, rgb, alpha, blue, green, red
@@ -20,6 +21,7 @@ bifs = {
     'lightness': lightness.lightness,
     'math': math.math,
     'red': red.red,
+    'replace': replace.replace,
     'rgb': rgb.rgb,
     'rgba': rgba.rgba,
     's': s.s,

@@ -6,6 +6,9 @@ from stilus.nodes.node import Node
 class Boolean(Node):
 
     def __init__(self, value: bool, lineno=1, column=1):
+        from stilus.nodes.null import null
+        if value == null:
+            value = False
         super().__init__(bool(value), lineno=lineno, column=column)
 
     def __str__(self):
@@ -35,6 +38,9 @@ class Boolean(Node):
 
     def to_json(self):
         return json.dumps({'__type': 'Boolean', 'value': self.value})
+
+    def to_boolean(self):
+        return self
 
 
 true = Boolean(True)

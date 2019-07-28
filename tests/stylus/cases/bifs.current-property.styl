@@ -1,0 +1,33 @@
+foo()
+  current-property[0]
+
+bar(args...)
+  bar: args
+
+body
+  bar foo()
+
+foo()
+  baz()
+
+bar()
+  +baz()
+    width: 10px
+
+baz()
+  test: current-property
+
+raz
+  foo: taz
+  bar: taz
+
+$global-padding ?= .75rem;
+
+padding-left()
+  {current-property[0]}: arguments
+
+mixin($padding = $global-padding)
+  padding-left: $padding * 2;
+
+body
+  mixin()

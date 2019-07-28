@@ -245,7 +245,7 @@ class Compiler(Visitor):
             return comment.value
 
     def visit_function(self, fn):
-        return fn.name
+        return fn.function_name
 
     def visit_charset(self, charset):
         return '@charset ' + self.visit(charset.value) + ';'
