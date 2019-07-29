@@ -20,6 +20,8 @@ codecov = "*"
 recommonmark = "*"
 commonmark = "*"
 pytest-icdiff = "*"
+coveralls = "*"
+coveralls-python = "*"
 
 [requires]
 python_version = "3.6"
