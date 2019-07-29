@@ -15,9 +15,9 @@ install:
   - pipenv install --dev
 
 script:
-  - flake8
-  - python setup.py test
+  - pipenv run flake8
+  - pipenv run python setup.py test
 
 after_success:
-  - coveralls
-  - codecov
+  - pipenv run coveralls
+  - pipenv run codecov
