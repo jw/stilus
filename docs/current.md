@@ -7,9 +7,7 @@ The first cases release, a.k.a. `committers, committers, committers!`
  - [ ] Pass 50 Stylus test cases.  21/50 done, or 42% :)
  - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.
  - [ ] Add tests for `to_json()`, `equal()`, `coerce()`, `clone()` and `operate()` in all nodes.
- - [ ] Finalize the compiler.
- - [ ] Finalize the evaluator.
- - [ ] Finalize the parser.
- - [ ] Add 3.7 and 3.8 Python.
+ - [x] Add 3.7 and 3.8 Python.
  - [ ] Create all builtin functions. 20/62 done, or 32.26% ;-)
+ - [ ] Update the travis-ci coverage report!
  
