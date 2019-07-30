@@ -17,7 +17,7 @@ class Block(Node):
 
     def __str__(self):
         return f'block [{self.lineno}:{self.column}] | scope: {self.scope}; ' \
-               f'node: {self.node}; nodes: {self.nodes}'
+               f'node: {self.node.node_name}'
 
     def __repr__(self):
         return self.__str__()

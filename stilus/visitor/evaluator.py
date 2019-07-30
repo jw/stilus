@@ -1,7 +1,6 @@
 import logging
 import os
 import re
-from distutils import dirname
 from pathlib import Path
 
 from stilus import utils
@@ -98,7 +97,7 @@ class Evaluator(Visitor):
 
         # expose imports
         node.path = file
-        node.dirname = dirname(file)
+        node.dirname = Path(file).parent
         # store modified time
         node.mtime = os.stat(file).st_mtime
         self.paths.append(node.dirname)
@@ -683,7 +682,7 @@ class Evaluator(Visitor):
 
     def invoke(self, body, stack=None, filename=None):
         if filename:
-            self.paths.append(dirname(filename))
+            self.paths.append(str(Path(filename).parent))
 
         if self.result:
             ret = self.eval(body.nodes)
