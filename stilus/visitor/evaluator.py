@@ -21,7 +21,8 @@ from stilus.nodes.null import null, Null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
-from stilus.parser import Parser, ParseError, StilusError
+from stilus.parser import Parser
+from stilus.exceptions import ParseError, StilusError
 from stilus.stack.frame import Frame
 from stilus.stack.scope import Scope
 from stilus.stack.stack import Stack
@@ -162,7 +163,7 @@ class Evaluator(Visitor):
                 raise e
             input = '[unknown]'
             try:
-                with open(node.filename) as f:
+                with open(str(node.filename)) as f:
                     input = f.read()
             except (AttributeError, FileNotFoundError):
                 pass
@@ -347,25 +348,25 @@ class Evaluator(Visitor):
             scope.add(value)
             scope.add(key)
             body = self.visit(each.block.clone())
-            vals.insert(body.nodes)
+            vals.extend(body.nodes)
 
         # for prop in obj
         if length == 1 and 'object' == expr.nodes[0].name:
             obj = expr.nodes[0]
             for prop in obj.vals:
-                val.val = String(prop, lineno=self.parser.lineno,
-                                 column=self.parser.column)
-                key.val = obj.get(prop)  # checkme: works?
+                val.value = String(prop, lineno=self.parser.lineno,
+                                   column=self.parser.column)
+                key.value = obj.get(prop)  # checkme: works?
                 visit_body(key, val)
         else:
             for i, n in enumerate(expr.nodes):
-                val.val = n
-                key.val = Unit(i)
+                val.value = n
+                key.value = Unit(i)
                 visit_body(key, val)
 
         self.mixin(vals, block)
-        if vals[len(vals)]:
-            return vals[len(vals)]
+        if vals and len(vals):
+            return vals[len(vals) - 1]
         else:
             null
 
@@ -820,7 +821,9 @@ class Evaluator(Visitor):
                     ret.append(arg.first())
 
         # invoke builtin function
-        body = utils.coerce(fn(*ret), False, lineno=self.parser.lineno,
+        body = utils.coerce(fn(*ret, evaluator=self),
+                            False,
+                            lineno=self.parser.lineno,
                             column=self.parser.column)
 
         # Always wrapping allows js functions
@@ -887,7 +890,15 @@ class Evaluator(Visitor):
         raise NotImplementedError
 
     def closest_block(self):
-        raise NotImplementedError
+        for stack in self.stack:
+            block = stack.block
+            if hasattr(block, 'node') and block.node and \
+                    block.node.node_name in ['group', 'keyframes',
+                                             'atrule', 'atblock',
+                                             'media', 'call']:
+                return block
+        # todo: create warning when entering here
+        return None
 
     def closest_group(self):
         raise NotImplementedError

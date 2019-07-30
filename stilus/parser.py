@@ -1,5 +1,6 @@
 from collections import deque
 
+from stilus.exceptions import ParseError
 from stilus.lexer import Lexer, Token
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.atblock import Atblock
@@ -38,33 +39,6 @@ from stilus.nodes.supports import Supports
 from stilus.nodes.ternary import Ternary
 from stilus.nodes.unaryop import UnaryOp
 from stilus.units import units
-
-
-class ParseError(Exception):
-
-    def __init__(self, message, filename=None, lineno=None,
-                 column=None, input=None):
-        super().__init__(message)
-        self.message = message
-        self.filename = filename
-        self.lineno = lineno
-        self.column = column
-        self.input = input
-
-
-class StilusError(Exception):
-
-    def __init__(self, message, filename=None, lineno=None,
-                 column=None, input=None):
-        super().__init__(message)
-        self.message = message
-        self.filename = filename
-        self.lineno = lineno
-        self.column = column
-        self.input = input
-
-    def __str__(self):
-        return f'Could not compile.'
 
 
 class Parser:

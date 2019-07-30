@@ -1,14 +1,14 @@
+from stilus.exceptions import StilusError
 from stilus.utils import assert_color, assert_string, assert_type
 
 
-def adjust(color, prop, amount):
+def adjust(color, prop, amount, evaluator=None):
     assert_color(color, 'color')
     assert_string(prop, 'prop')
     assert_type(amount, 'unit', 'amount')
     hsl = color.hsla().clone()
     if not hasattr(hsl, prop.string):
-        # todo: raise proper stilus exception
-        raise TypeError('Invalid adjustment property.')
+        raise StilusError('Invalid adjustment property.')
     value = amount.value
     if amount.type == '%':
         if prop.string == 'lightness' and value > 0:

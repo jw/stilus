@@ -2,7 +2,7 @@ from stilus.nodes.color import HSLA
 from stilus.utils import assert_color, assert_type
 
 
-def hsla(hue, saturation=None, lightness=None, alpha=None):
+def hsla(hue, saturation=None, lightness=None, alpha=None, evaluator=None):
     """Convert the given `color` to an `HSLA` node, or h,s,l,a component
     values.
     :param hue:

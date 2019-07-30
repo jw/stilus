@@ -38,7 +38,8 @@ linear-gradient(from, to) {
     moz = s('-moz-linear-gradient(%s, %s)', from, to);
     prop = current-property;
     replace(current-property[1], '__CALL__', moz);
-    foo from;
+    add-property(prop[0], prop[1]);
+    webkit;
   } else {
     error('linear-gradient() must be used within a property');
   }

@@ -90,7 +90,7 @@ class Expression(Node):
             nodes = utils.unwrap(right).nodes
             value = utils.unwrap(value)
             for node in nodes:
-                if node.name == 'unit':
+                if node.node_name == 'unit':
                     i = len(nodes) + value if node.value < 0 else node.value
                     n = i
                     while i > len(nodes):

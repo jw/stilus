@@ -11,7 +11,7 @@ def _convert(num, base):
         return _convert(num // base, base) + convert_string[num % base]
 
 
-def baseConvert(num, base, width=None):
+def baseConvert(num, base, width=None, evaluator=None):
     if isinstance(num, Expression):
         num = unwrap(num).nodes[0]
     if isinstance(base, Expression):

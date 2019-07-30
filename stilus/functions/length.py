@@ -2,7 +2,7 @@ from stilus import utils
 
 
 # todo: the *args is there due to javascript weirdness.
-def length(expr, *args):
+def length(expr, *args, evaluator=None):
     if expr:
         if expr.nodes:
             nodes = utils.unwrap(expr).nodes

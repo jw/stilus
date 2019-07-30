@@ -5,7 +5,7 @@ from stilus.nodes.unit import Unit
 
 
 # todo: convert all javascript math functions to python and vice versa
-def math_prop(prop: String):
+def math_prop(prop: String, evaluator=None):
     """Get Math ``prop``"""
     if hasattr(m, prop.string):
         return Unit(getattr(m, prop.string))

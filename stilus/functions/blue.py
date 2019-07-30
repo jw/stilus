@@ -3,7 +3,7 @@ from stilus.nodes.color import Color, HSLA
 from stilus.nodes.unit import Unit
 
 
-def blue(color: Color, value: Unit = None):
+def blue(color: Color, value: Unit = None, evaluator=None):
     """Return the blue component of the given `color`, or set the blue
     component to the optional second `value` argument.
 
@@ -20,5 +20,9 @@ def blue(color: Color, value: Unit = None):
     if isinstance(color, HSLA):
         color = color.rgba()
     if value:
-        return rgba(Unit(color.r), Unit(color.g), value, Unit(color.a))
+        return rgba(Unit(color.r),
+                    Unit(color.g),
+                    value,
+                    Unit(color.a),
+                    evaluator)
     return Unit(color.b, '')

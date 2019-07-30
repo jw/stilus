@@ -29,7 +29,7 @@ type_map = {
 }
 
 
-def component(color: Color, name: str) -> Unit:
+def component(color: Color, name: str, evaluator=None) -> Unit:
     """Return component `name` for a given `color`.
     :param color: Color
     :param name: str
