@@ -47,6 +47,10 @@ linear-gradient(from, to) {
 body
   background fizz linear-gradient(#2a2a2a, #454545) fuzz
 """
+    source = """
+body
+    foo hsl(15deg,100%,60%)    
+"""
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

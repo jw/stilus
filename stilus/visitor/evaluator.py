@@ -21,7 +21,7 @@ from stilus.nodes.null import null, Null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
-from stilus.parser import Parser, ParseError
+from stilus.parser import Parser, ParseError, StilusError
 from stilus.stack.frame import Frame
 from stilus.stack.scope import Scope
 from stilus.stack.stack import Stack
@@ -157,7 +157,7 @@ class Evaluator(Visitor):
     def visit(self, node):
         try:
             return super().visit(node)
-        except Exception as e:
+        except BaseException as e:
             if hasattr(e, 'filename'):
                 raise e
             input = '[unknown]'
@@ -166,11 +166,11 @@ class Evaluator(Visitor):
                     input = f.read()
             except Exception:
                 pass
-            raise ParseError(str(self.stack),
-                             filename=node.filename,
-                             lineno=node.lineno,
-                             column=node.column,
-                             input=input)
+            raise StilusError(self.stack,
+                              filename=node.filename,
+                              lineno=node.lineno,
+                              column=node.column,
+                              input=input)
 
     def setup(self):
         self.populate_global_scope()
@@ -586,7 +586,7 @@ class Evaluator(Visitor):
                 else:
                     block.nodes[index] = v
 
-            except Expression as e:
+            except TypeError as e:
                 # fixme: when a 'return' value type in e and take action!
                 print(e)
                 raise e

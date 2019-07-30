@@ -52,6 +52,21 @@ class ParseError(Exception):
         self.input = input
 
 
+class StilusError(Exception):
+
+    def __init__(self, message, filename=None, lineno=None,
+                 column=None, input=None):
+        super().__init__(message)
+        self.message = message
+        self.filename = filename
+        self.lineno = lineno
+        self.column = column
+        self.input = input
+
+    def __str__(self):
+        return f'Could not compile.'
+
+
 class Parser:
 
     def __init__(self, s, options: dict):
