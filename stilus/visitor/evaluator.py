@@ -164,7 +164,7 @@ class Evaluator(Visitor):
             try:
                 with open(node.filename) as f:
                     input = f.read()
-            except Exception:
+            except (AttributeError, FileNotFoundError):
                 pass
             raise StilusError(self.stack,
                               filename=node.filename,

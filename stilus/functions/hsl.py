@@ -4,8 +4,6 @@ from stilus.utils import assert_color
 
 
 def hsl(hue, saturation=None, lightness=None):
-    if True:
-        raise RuntimeError()
     if hue and (saturation is lightness is None):
         assert_color(hue, 'color')
         return hue.hsla()

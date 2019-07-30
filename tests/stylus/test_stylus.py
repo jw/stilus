@@ -8,7 +8,7 @@ from stilus.stilus import Renderer
 # todo: add dot per styl -> css compilation
 # see: https://docs.pytest.org/en/latest/example/parametrize.html#paramexamples
 def test_stylus_cases():
-    path = Path('/home/jw/python/projects/stilus/tests/stylus/cases')
+    path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
     source_files = path.glob('*.styl')
     for source_file in source_files:
         # print(f'Handling {source_file}...', end='')
@@ -46,10 +46,6 @@ linear-gradient(from, to) {
 
 body
   background fizz linear-gradient(#2a2a2a, #454545) fuzz
-"""
-    source = """
-body
-    foo hsl(15deg,100%,60%)    
 """
     # parser = Parser(source, {})
     # ast = parser.parse()
