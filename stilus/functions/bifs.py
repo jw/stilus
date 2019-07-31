@@ -4,7 +4,7 @@ from stilus.functions import hue, lightness, saturation
 from stilus.functions import hsl, rgb, alpha, blue, green, red
 from stilus.functions import rgba, hsla
 from stilus.functions import adjust, math, math_prop, unit, length, \
-    addProperty, unquote, clone, lookup
+    addProperty, unquote, clone, lookup, basename, blend
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -12,6 +12,8 @@ bifs = {
     'adjust': adjust.adjust,
     'alpha': alpha.alpha,
     'base-convert': baseConvert.baseConvert,
+    'basename': basename.basename,
+    'blend': blend.blend,
     'blue': blue.blue,
     'clone': clone.clone,
     'green': green.green,

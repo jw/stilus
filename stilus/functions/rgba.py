@@ -2,7 +2,7 @@ from stilus.nodes.color import RGBA
 from stilus.utils import assert_color, assert_type
 
 
-def rgba(red, green, blue, alpha, evaluator=None):
+def rgba(red, green=None, blue=None, alpha=None, evaluator=None):
     """Return a `RGBA` from the r,g,b,a channels.
 
     >>> rgba(255,0,0,0.5)
@@ -21,11 +21,11 @@ def rgba(red, green, blue, alpha, evaluator=None):
     # color
     if red and (green is blue is alpha is None):
         assert_color(red)
-        return red.rgba
+        return red.rgba()
     # alpha
     if red and green and (blue is alpha is None):
         assert_color(red)
-        color = red.rgba
+        color = red.rgba()
         assert_type(green, 'unit', 'alpha')
         alpha = green.clone()
         if alpha.type == '%':

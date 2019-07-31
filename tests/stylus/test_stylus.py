@@ -11,13 +11,13 @@ def test_stylus_cases():
     path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
     source_files = path.glob('*.styl')
     for source_file in source_files:
-        # print(f'Handling {source_file}...', end='')
+        print(f'Handling {source_file}...', end='')
         with open(source_file, 'r') as f:
             source = f.read()
         with open(source_file.with_suffix('.css'), 'r') as f:
             destination = f.read()
         assert destination == Renderer(source, {}).render()
-        # print('.')
+        print('.')
         # print('.', end='')
     # print()
 
@@ -47,6 +47,10 @@ linear-gradient(from, to) {
 
 body
   background fizz linear-gradient(#2a2a2a, #454545) fuzz
+"""
+    source = """
+body
+  foo blend(rgba(0, 0, 0, 0.5))
 """
     # parser = Parser(source, {})
     # ast = parser.parse()
