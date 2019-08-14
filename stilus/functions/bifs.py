@@ -1,10 +1,12 @@
-from stilus.functions import replace
+# todo: clean these up
+from stilus.functions import replace, listSeparator
 from stilus.functions import baseConvert, s
 from stilus.functions import hue, lightness, saturation
 from stilus.functions import hsl, rgb, alpha, blue, green, red
 from stilus.functions import rgba, hsla
 from stilus.functions import adjust, math, math_prop, unit, length, \
-    addProperty, unquote, clone, lookup, basename, blend
+    addProperty, unquote, clone, lookup, basename, blend, convert, \
+    type_function, push
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -16,22 +18,27 @@ bifs = {
     'blend': blend.blend,
     'blue': blue.blue,
     'clone': clone.clone,
+    'convert': convert.convert,
     'green': green.green,
     'hsl': hsl.hsl,
     'hsla': hsla.hsla,
     'hue': hue.hue,
     'length': length.length,
     'lightness': lightness.lightness,
+    'list-separator': listSeparator.listSeparator,
     'lookup': lookup.lookup,
     'math': math.math,
+    'push': push.push,
     'red': red.red,
     'replace': replace.replace,
     'rgb': rgb.rgb,
     'rgba': rgba.rgba,
     's': s.s,
     'saturation': saturation.saturation,
+    'type': type_function.type_function,
     'unit': unit.unit,
     'unquote': unquote.unquote,
 }
 
-raw_bifs = ['addProperty', 'base-convert', 'clone', 'length', 's']
+raw_bifs = ['addProperty', 'baseConvert', 'clone', 'length',
+            'listSeparator', 'push', 's']

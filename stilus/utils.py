@@ -6,6 +6,7 @@ from typing import List
 
 from stilus.nodes.boolean import Boolean
 from stilus.nodes.expression import Expression
+from stilus.nodes.literal import Literal
 from stilus.nodes.node import Node
 from stilus.nodes.null import null
 from stilus.nodes.object_node import ObjectNode
@@ -236,3 +237,13 @@ def coerce(value, raw: bool, lineno=1, column=1):
         return value
     else:
         coerce_object(value, raw, lineno=lineno, column=column)
+
+
+def parse_string(str: String):
+    from stilus.parser import Parser
+    try:
+        parser = Parser(str, {})
+        result = parser.list()
+    except BaseException:
+        result = Literal(str)
+    return result
