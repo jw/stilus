@@ -11,6 +11,6 @@ def saturation(color: Color, value=None, evaluator=None):
         return hsla(Unit(hsla_color.hue),
                     value,
                     Unit(hsla_color.lightness),
-                    Unit(hsla_color.alpha),
+                    Unit(hsla_color.a),
                     evaluator)
     return component(color, String('saturation'))

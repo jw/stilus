@@ -275,17 +275,15 @@ class Evaluator(Visitor):
         right = node.right
         obj = self.visit(left).first()
 
-        if 'object' != obj.name:
+        if 'objectnode' != obj.node_name:
             raise ParseError(f'{left} has no property .{right}')
 
         if node.value:
             self.result += 1
-            # checkme: this can not ever work - what is set?
             obj.set(right.value, self.visit(node.value))
             self.result -= 1
 
-        # checkme: what is get?
-        return obj.get(right.value)
+        return obj.values.get(right.name)
 
     def visit_keyframes(self, keyframes):
         if keyframes.fabricated:

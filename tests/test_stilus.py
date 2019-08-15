@@ -14,15 +14,6 @@ def test_stylus():
 
 
 if __name__ == '__main__':
-    source = """
-padding(y, rest...)
-  test-y y
-  if rest
-    padding rest
-
-body
-  padding 1px 2px 3px
-"""
     source = '\nsize = 12px\n\nbody\n  font-size: size\n\n'
     css = 'body {\n  font-size: 12px;\n}\n'
     assert stilus.render(source, {}) == css
@@ -171,6 +162,14 @@ body
   background hue(hsla(240,100,40,0.5), 90deg)
   background saturation(hsla(240,100,40,0.5), 50%)
   background lightness(hsla(240,100,40,0.5), 90%)
+"""
+    source = """
+.test
+  test1: luminosity(white)
+  test2: luminosity(#000)
+  test3: luminosity(red)
+  test4: luminosity(hsla(200,0%,0%,1))
+  test5: luminosity(hsl(200,0%,50%))
 """
     css = stilus.render(source, {})
     print(f'result:\n[{css}]')

@@ -7,7 +7,7 @@ def test_hsla():
     assert hsla.hue == 100
     assert hsla.saturation == 100
     assert hsla.lightness == 100
-    assert hsla.alpha == 0
+    assert hsla.a == 0
 
 
 def test_hsla_clamping_string():
@@ -16,21 +16,21 @@ def test_hsla_clamping_string():
     assert hsla.hue == 140  # 500 - 360
     assert hsla.saturation == 100
     assert hsla.lightness == 90
-    assert hsla.alpha == 1
+    assert hsla.a == 1
     assert str(hsla) == 'hsla(140, 100%, 90%, 1)'
     hsla = HSLA(-10, -20, 0, 0.3)
     assert hsla.node_name == 'hsla'
     assert hsla.hue == 350  # 360 - 10
     assert hsla.saturation == 0
     assert hsla.lightness == 0
-    assert hsla.alpha == 0.3
+    assert hsla.a == 0.3
     assert str(hsla) == 'hsla(350, 0%, 0%, 0.3)'
     hsla = HSLA(42, 42, 42, -42.42)
     assert hsla.node_name == 'hsla'
     assert hsla.hue == 42
     assert hsla.saturation == 42
     assert hsla.lightness == 42
-    assert hsla.alpha == 0
+    assert hsla.a == 0
     assert str(hsla) == 'hsla(42, 42%, 42%, 0)'
 
 

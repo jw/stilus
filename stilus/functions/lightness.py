@@ -11,6 +11,6 @@ def lightness(color: Color, value=None, evaluator=None):
         return hsla(Unit(hsla_color.hue),
                     Unit(hsla_color.saturation),
                     value,
-                    Unit(hsla_color.alpha),
+                    Unit(hsla_color.a),
                     evaluator)
     return component(color, String('lightness'), evaluator)

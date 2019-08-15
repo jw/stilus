@@ -11,6 +11,10 @@ from stilus.utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
 
 class Color(Node):
 
+    def __init__(self, a):
+        super().__init__()
+        self.a = clamp_alpha(a)
+
     def rgba(self):
         pass
 
@@ -18,11 +22,10 @@ class Color(Node):
 class HSLA(Color):
 
     def __init__(self, h, s, l, a):
-        super().__init__()
+        super().__init__(a)
         self.hue = clamp_degrees(h)
         self.saturation = clamp_percentage(s)
         self.lightness = clamp_percentage(l)
-        self.alpha = clamp_alpha(a)
         self._hsla = self
 
     def hsla(self):
@@ -30,7 +33,7 @@ class HSLA(Color):
 
     def __str__(self):
         return f'hsla({self.hue}, {round(self.saturation)}%, ' \
-               f'{round(self.lightness)}%, {self.alpha})'
+               f'{round(self.lightness)}%, {self.a})'
 
     def __repr__(self):
         return self.__str__()
@@ -40,11 +43,11 @@ class HSLA(Color):
             return self.hue == other.hue and \
                    self.saturation == other.saturation and \
                    self.lightness == other.lightness and \
-                   self.alpha == other.alpha
+                   self.a == other.a
         return False
 
     def clone(self, parent=None, node=Node):
-        clone = HSLA(self.hue, self.saturation, self.lightness, self.alpha)
+        clone = HSLA(self.hue, self.saturation, self.lightness, self.a)
         clone.lineno = self.lineno
         clone.column = self.column
         clone.filename = self.filename
@@ -55,7 +58,7 @@ class HSLA(Color):
                            'h': self.hue,
                            's': self.saturation,
                            'l': self.lightness,
-                           'a': self.alpha,
+                           'a': self.a,
                            'lineno': self.lineno,
                            'column': self.column,
                            'filename': self.filename})
@@ -73,7 +76,7 @@ class HSLA(Color):
         return HSLA(self.hue + h,
                     self.saturation + s,
                     self.lightness + l,
-                    self.alpha)
+                    self.a)
 
     def sub(self, h, s, l):
         return self.add(-h, -s, -l)
@@ -105,11 +108,10 @@ class HSLA(Color):
 class RGBA(Color):
 
     def __init__(self, r, g, b, a):
-        super().__init__()
+        super().__init__(a)
         self.r = clamp(r)
         self.g = clamp(g)
         self.b = clamp(b)
-        self.a = clamp_alpha(a)
         self.name = ''
         self._rgba = self
         self.raw = None
@@ -219,7 +221,7 @@ class RGBA(Color):
         (r, g, b) = colorsys.hls_to_rgb(hsla.hue / 360,
                                         hsla.lightness / 100,
                                         hsla.saturation / 100)
-        return RGBA(r * 255, g * 255, b * 255, hsla.alpha)
+        return RGBA(r * 255, g * 255, b * 255, hsla.a)
 
     def operate(self, op, right: Node, value=None):
         """Operate on `right` with given `op`."""

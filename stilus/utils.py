@@ -68,8 +68,11 @@ def assert_type(node: Node, type, param=None):
 
 
 def clamp(n, smallest=0, largest=255):
-    rounded = Decimal(n).quantize(Decimal(1), rounding=ROUND_HALF_UP)
-    return max(smallest, min(int(rounded), largest))
+    return max(smallest, min(int(stilus_round(n)), largest))
+
+
+def stilus_round(n):
+    return Decimal(n).quantize(Decimal(1), rounding=ROUND_HALF_UP)
 
 
 def clamp_alpha(n, smallest=0, largest=1):

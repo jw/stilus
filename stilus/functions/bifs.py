@@ -3,7 +3,7 @@ from stilus.functions import replace, listSeparator
 from stilus.functions import baseConvert, s
 from stilus.functions import hue, lightness, saturation
 from stilus.functions import hsl, rgb, alpha, blue, green, red
-from stilus.functions import rgba, hsla
+from stilus.functions import rgba, hsla, contrast, luminosity
 from stilus.functions import adjust, math, math_prop, unit, length, \
     addProperty, unquote, clone, lookup, basename, blend, convert, \
     type_function, push
@@ -19,6 +19,7 @@ bifs = {
     'blue': blue.blue,
     'clone': clone.clone,
     'convert': convert.convert,
+    'contrast': contrast.contrast,
     'green': green.green,
     'hsl': hsl.hsl,
     'hsla': hsla.hsla,
@@ -26,6 +27,7 @@ bifs = {
     'length': length.length,
     'lightness': lightness.lightness,
     'list-separator': listSeparator.listSeparator,
+    'luminosity': luminosity.luminosity,
     'lookup': lookup.lookup,
     'math': math.math,
     'push': push.push,
