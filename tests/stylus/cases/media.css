@@ -1,0 +1,46 @@
+@media print and (width: 21cm) and (height: 29cm) {
+  body {
+    margin: 3cm;
+    padding: 0;
+  }
+}
+@media print {
+  @page :left {
+    margin-left: 5px;
+  }
+  @page :right {
+    margin-right: 5px;
+  }
+}
+.foo {
+  width: 50%;
+}
+@media screen and (max-width: 500px) {
+  .foo {
+    width: 100%;
+  }
+}
+.bar {
+  width: 50%;
+}
+@media screen and (max-width: 500px) {
+  .bar {
+    width: 100%;
+  }
+}
+.baz {
+  width: 50%;
+}
+@media screen and (max-width: 500px) {
+  .baz {
+    width: 100%;
+  }
+}
+.quux {
+  font-weight: bold;
+}
+@media screen {
+  .quux {
+    background-position: 100px 0px;
+  }
+}

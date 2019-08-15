@@ -720,7 +720,8 @@ class Parser:
         node.segments = self.selector_parts()
         self.skip_spaces_and_comments()
         tok = self.peek().type
-        if tok in ['indent', '{', 'newline'] and self.lookahead(2).type == '{':
+        if tok in ['indent', '{'] or \
+                (tok == 'newline' and self.lookahead(2).type == '{'):
             self.state.append('atrule')
             node.block = self.block(node)
             self.prev_state = self.state[-1]
@@ -920,7 +921,7 @@ class Parser:
                 selector = Selector(arr)
                 selector.lineno = arr[0].lineno
                 selector.column = arr[0].column
-                group.push(selector)
+                group.append(selector)
 
             if self.accept([',', 'newline']) is None:
                 break
@@ -1027,7 +1028,6 @@ class Parser:
                 return self.stmt_selector()
             if self._ident == self.peek():
                 return self.id()
-            print(f'{self.lookahead(i).type}; {self.lookahead(i + 1).type}')
             while '=' != self.lookahead(i).type and \
                     self.lookahead(i + 1).type not in \
                     ['[', ',', 'newline', 'indent', 'eos']:

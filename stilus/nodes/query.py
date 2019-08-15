@@ -12,11 +12,16 @@ class Query(Node):
         self.predicate = ''
 
     def __str__(self):
-        pred = self.predicate + ' ' if self.predicate else ''
+        length = len(self.nodes)
+        pred = str(self.predicate) + ' ' if self.predicate else ''
         if self.type:
-            type = self.type
+            type = str(self.type)
+            if length > 0:
+                type += ' and '
         else:
             type = ''
+        for node in self.nodes:
+            print(str(node))
         s = ' and '.join([str(e) for e in self.nodes])
         return f'{pred}{type}{s}'
 

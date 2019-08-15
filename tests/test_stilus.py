@@ -164,12 +164,45 @@ body
   background lightness(hsla(240,100,40,0.5), 90%)
 """
     source = """
-.test
-  test1: luminosity(white)
-  test2: luminosity(#000)
-  test3: luminosity(red)
-  test4: luminosity(hsla(200,0%,0%,1))
-  test5: luminosity(hsl(200,0%,50%))
+.d
+  @media only screen and (min-width: 1024px)
+    test: current-media()
+
+foo()
+  test: current-media()
+
+.e
+  foo()
+
+  .f
+    foo()
+
+@media only screen and (min-width: 1024px)
+  .g
+    foo()
+
+.h
+  @media only screen and (min-width: 1024px)
+    foo()
+
+$foo = 'screen'
+@media $foo
+  .i
+    test: current-media()
 """
+    source = """
+$foo = 'screen'
+body
+  bar $foo
+@media $foo
+  .i
+    test: $foo
+"""
+    # parser = Parser(source, {})
+    # ast = parser.parse()
+    # print(f'{ast}')
+
     css = stilus.render(source, {})
-    print(f'result:\n[{css}]')
+    print(f'------------- result ---\n'
+          f'{css}'
+          f'------------------------')

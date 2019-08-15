@@ -5,7 +5,7 @@ from stilus.nodes.atrule import Atrule
 
 class Media(Atrule):
 
-    def __init__(self, value, lineno=1, column=1):
+    def __init__(self, value=None, lineno=1, column=1):
         super().__init__('media', lineno=lineno, column=column)
         self.value = value
 

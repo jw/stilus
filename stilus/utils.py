@@ -117,7 +117,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
     def parse(selector, buf):
         parts = [selector.value]
         parents = []
-        string = SelectorParser(parts[0], parents, parts).parse()['val']
+        string = SelectorParser(parts[0], parents, parts).parse()['value']
 
         if buf:
             for i, part in enumerate(buf):
@@ -127,9 +127,9 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
 
                 # todo: fix this
                 if child['nested']:
-                    string += ' ' + child['val']
+                    string += ' ' + child['value']
                 else:
-                    string = child.val
+                    string = child['value']
 
         return string.strip()
 

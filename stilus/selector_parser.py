@@ -14,6 +14,7 @@ class SelectorParser:
         self.level = 2
         self.nested = True
         self.ignore = False
+        self.value = None
 
     def skip(self, len):
         self.string = self.string[len:]
@@ -83,11 +84,12 @@ class SelectorParser:
                 self.skip(2)
                 return char
 
+    # fixme: add the raw attribute/function check
     def parent(self):
         r"""'&"""
         if '&' == self.string[0]:
             self.nested = False
-            if not self.pos and (not self.stack or self.raw):
+            if not self.pos and (not self.stack):  # or self.raw):
                 i = 0
                 while ' ' == self.string[i]:
                     i += 1
@@ -95,9 +97,9 @@ class SelectorParser:
                     self.skip(i + 1)
                     return
 
-            self.skip()
-            if not self.raw:
-                return self.stack[len(self.stack) - 1]
+            self.skip(1)
+            # if not self.raw:
+            return self.stack[len(self.stack) - 1]
 
     def partial(self):
         r"""'^[' range ']'"""
@@ -183,10 +185,10 @@ class SelectorParser:
 
     def parse(self):
         r"""Parses the selector."""
-        val = ''
+        value = ''
         while self.string:
-            val += self.advance()
+            value += self.advance()
             if self.ignore:
-                val = ''
+                value = ''
                 break
-        return {'val': val.rstrip(), 'nested': self.nested}
+        return {'value': value.rstrip(), 'nested': self.nested}

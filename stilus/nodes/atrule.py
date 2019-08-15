@@ -42,7 +42,7 @@ class Atrule(Node):
         return hasattr(block, 'nodes') and \
             any(node.node_name in ['property', 'literal', 'import'] or
                 self._has_output(node) or
-                self._has_output(node.block)
+                (hasattr(node, 'block') and self._has_output(node.block))
                 for node in block.nodes)
 
     def has_only_properties(self):

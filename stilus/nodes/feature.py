@@ -5,7 +5,7 @@ from stilus.nodes.node import Node
 
 class Feature(Node):
 
-    def __init__(self, segments, lineno=1, column=1):
+    def __init__(self, segments=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.segments = segments
         self.expr = None
@@ -13,7 +13,10 @@ class Feature(Node):
 
     def __str__(self):
         if self.expr:
-            return f'({"".join(self.segments)}: {self.expr})'
+            s = ''
+            for segment in self.segments:
+                s += str(segment)
+            return f'({s}: {self.expr})'
         else:
             return ''.join(self.segments)
 
@@ -40,7 +43,6 @@ class Feature(Node):
         clone.filename = self.filename
         return clone
 
-    # todo: add expr and node_name
     def to_json(self):
         return json.dumps({'__type': 'Feature',
                            'segment': self.segments,

@@ -179,22 +179,22 @@ class Compiler(Visitor):
     def visit_query(self, node):
         length = len(node.nodes)
         if node.predicate:
-            self.buf += self.out(node.predicate + ' ')
+            self.buf += self.out(f'{node.predicate} ')
         if node.type:
             self.buf += self.out(str(node.type) +
                                  (' and ' if length > 0 else ''))
-        for node in node.nodes:
+        for i, node in enumerate(node.nodes):
             self.buf += self.out(self.visit(node))
-            if length - 1 != 1:
+            if length - 1 != i:
                 self.buf += self.out(' and ')
 
-    def visit_features(self, node: Node):
+    def visit_feature(self, node: Node):
         if not node.expr:
             return node.node_name
         elif node.expr.is_empty():
-            return '(' + node.node_name + ')'
+            return '(' + node.name + ')'
         else:
-            return '(' + node.node_name + (':' if self.compress else ': ') + \
+            return '(' + node.name + (':' if self.compress else ': ') + \
                    self.visit(node.expr) + ')'
 
     def visit_import(self, imported):
@@ -204,16 +204,16 @@ class Compiler(Visitor):
     def visit_atrule(self, atrule):
         newline = '' if self.compress else '\n'
 
-        self.buf += self.out(self.indent() + '@' + atrule.type, atrule)
+        self.buf += self.out(f'{self.indent()}@{atrule.type.value}', atrule)
 
         if atrule.value:
-            self.buf += self.out(' ' + atrule.value.strim())
+            self.buf += self.out(f' {atrule.value.strip()}')
 
         if atrule.block:
             if atrule.has_only_properties():
                 self.visit(atrule.block)
             else:
-                self.buf += self.out('{' if self.compress else '{\n')
+                self.buf += self.out('{' if self.compress else ' {\n')
                 self.indents += 1
                 self.visit(atrule.block)
                 self.indents -= 1

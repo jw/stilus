@@ -10,7 +10,10 @@ class QueryList(Node):
         self.nodes = []
 
     def __str__(self):
-        return '(' + ', '.join(self.nodes) + ')'
+        lst = []
+        for node in self.nodes:
+            lst.append(str(node))
+        return f'({", ".join(lst)})'
 
     def __repr__(self):
         return self.__str__()

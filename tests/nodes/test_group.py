@@ -15,7 +15,7 @@ def test_group_add_selector():
     group = Group()
     selector = Selector(['abc', 'def'])
     selector.optional = True
-    group.push(selector)
+    group.append(selector)
     assert len(group.nodes) == 1
     assert group.nodes[0] == selector
     assert group.has_only_placeholders() is False
@@ -25,7 +25,7 @@ def test_group_placeholder():
     group = Group()
     selector = Selector(['abc', 'def'])
     selector.value = '$foo'
-    group.push(selector)
+    group.append(selector)
     assert group.has_only_placeholders() is True
 
 
@@ -33,7 +33,7 @@ def test_group_block():
     group = Group()
     selector = Selector(['abc', 'def'])
     selector.value = '$foo'
-    group.push(selector)
+    group.append(selector)
     assert group.get_block() is None
     block = Block('hello', 'there')
     group.set_block(block)

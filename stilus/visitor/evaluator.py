@@ -234,7 +234,7 @@ class Evaluator(Visitor):
         media.value = self.visit(media.value)
         return media
 
-    def visit_queryList(self, queries):
+    def visit_querylist(self, queries):
         for node in queries.nodes:
             self.visit(node)
 
@@ -643,20 +643,20 @@ class Evaluator(Visitor):
                 ret = self.visit(node.block)
             # else
             elif node.elses:
-                for block in node.elses:
+                for b in node.elses:
                     # else if
-                    if hasattr(block, 'cond') and block.cond:
-                        block.block.scope = block.block.has_media()
+                    if hasattr(b, 'cond') and b.cond:
+                        b.block.scope = b.block.has_media()
                         self.result += 1
-                        cond = self.visit(block.cond).first.to_boolean()
+                        cond = self.visit(b.cond).first().to_boolean()
                         self.result -= 1
                         if cond.is_true():
-                            ret = self.visit(block)
+                            ret = self.visit(b.block)
                             break
                     # else:
                     else:
-                        block.scope = block.has_media()
-                        ret = self.visit(block)
+                        b.scope = b.has_media()
+                        ret = self.visit(b)
 
         # mixin conditional statements within
         # a selector group or at-rule
@@ -706,9 +706,9 @@ class Evaluator(Visitor):
             buffer = [f' -> {node}' for node in nodes]
             return '\n'.join(buffer)
 
-        log.debug(f'Mixin: in: nodes:\n{prettify(nodes)}')
+        # log.debug(f'Mixin: in: nodes:\n{prettify(nodes)}')
         # log.debug(f'Mixin: in: block: {block}')
-        log.debug(f'Mixin: in: block.nodes:\n{prettify(block.nodes)}')
+        # log.debug(f'Mixin: in: block.nodes:\n{prettify(block.nodes)}')
         if len(nodes) == 0:
             return None
         head = block.nodes[:block.index]
@@ -718,12 +718,13 @@ class Evaluator(Visitor):
         block.mixin = True
         head.extend(tail)
         block.nodes = head
-        log.debug(f'Mixin: out: {prettify(block.nodes)}')
+        # log.debug(f'Mixin: out: {prettify(block.nodes)}')
         # self.set_current_block(block)
 
     # todo: rewrite this; this is not Python >:-(
     def _mixin(self, items, dest, block):
         for item in items:
+            media_passed = False
             if item.node_name == 'return':
                 return
             elif item.node_name == 'block':
@@ -731,12 +732,18 @@ class Evaluator(Visitor):
                 break
             elif item.node_name == 'media':
                 # fix link to the parent block
-                # fixme: implement me
-                raise NotImplementedError()
-            elif item.node_name == 'property':
-                value = item.expr
-                # prevent `block mixin recursion
-                if item.literal and hasattr(value, 'first') and \
+                parent_node = item.block.parent.node
+                if parent_node and parent_node.node_name != 'call':
+                    item.block.parent = block
+                media_passed = True
+            if media_passed or item.node_name == 'property':
+                value = None
+                if hasattr(item, 'expr'):
+                    value = item.expr
+                # prevent `block` mixin recursion
+                if hasattr(item, 'literal') and \
+                        item.literal and \
+                        hasattr(value, 'first') and \
                         value.first().node_name == 'block':
                     value = unwrap(value)
                     value.nodes[0] = Literal('block',

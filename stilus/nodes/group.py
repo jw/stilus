@@ -24,7 +24,7 @@ class Group(Node):
     def __eq__(self, other):
         return self.value == other.value
 
-    def push(self, selector: Selector):
+    def append(self, selector: Selector):
         self.nodes.append(selector)
 
     # TODO: getter?
@@ -46,7 +46,7 @@ class Group(Node):
         clone = Group(lineno=self.lineno, column=self.column)
         clone.filename = self.filename
         clone.nodes = [node.clone(parent, clone) for node in self.nodes]
-        clone.block = self.block.clone(parent, clone)
+        clone.block = self.get_block().clone(parent, clone)
         return clone
 
     def to_json(self):

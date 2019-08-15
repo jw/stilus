@@ -1,5 +1,5 @@
 # todo: clean these up
-from stilus.functions import replace, listSeparator
+from stilus.functions import replace, listSeparator, currentMedia
 from stilus.functions import baseConvert, s
 from stilus.functions import hue, lightness, saturation
 from stilus.functions import hsl, rgb, alpha, blue, green, red
@@ -20,6 +20,7 @@ bifs = {
     'clone': clone.clone,
     'convert': convert.convert,
     'contrast': contrast.contrast,
+    'current-media': currentMedia.currentMedia,
     'green': green.green,
     'hsl': hsl.hsl,
     'hsla': hsla.hsla,
