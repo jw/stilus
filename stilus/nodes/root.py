@@ -1,5 +1,4 @@
 import json
-from collections import deque
 
 from stilus.nodes.node import Node
 
@@ -8,21 +7,19 @@ class Root(Node):
 
     def __init__(self, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
-        self.nodes = deque([])
+        self.nodes = []
 
     def append(self, node):
         self.nodes.append(node)
 
     def unshift(self, node):
-        self.nodes.appendleft(node)
+        self.nodes.insert(0, node)
 
     def __key(self):
         return self.nodes
 
     def __eq__(self, other):
-        # print(f'ROOT: {other} vs {self} ({id(other)} vs {id(self)})')
         if isinstance(other, Root):
-            # return self.__key() == other.__key()
             return id(self) == id(other)
         return False
 

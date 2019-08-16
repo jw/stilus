@@ -216,7 +216,6 @@ class Evaluator(Visitor):
         return self.visit(self.root)
 
     def visit_group(self, group: Group):
-        # group.nodes = map(self.interpolate, group.nodes)
         new_nodes = []
         for n in group.nodes:
             n.value = self.interpolate(n)
@@ -334,7 +333,9 @@ class Evaluator(Visitor):
         expr = utils.unwrap(self.visit(each.expr))
         length = len(expr.nodes)
         val = Ident(each.value)
-        key = Ident(each.key)
+        key = Ident('__index__')
+        if each.key:
+            key = Ident(each.key)
         scope = self.get_current_scope()
         block = self.get_current_block()
         vals = []
@@ -349,7 +350,7 @@ class Evaluator(Visitor):
             vals.extend(body.nodes)
 
         # for prop in obj
-        if length == 1 and 'object' == expr.nodes[0].name:
+        if length == 1 and 'object' == expr.nodes[0].node_name:
             obj = expr.nodes[0]
             for prop in obj.vals:
                 val.value = String(prop, lineno=self.parser.lineno,
@@ -363,7 +364,7 @@ class Evaluator(Visitor):
                 visit_body(key, val)
 
         self.mixin(vals, block)
-        if vals and len(vals):
+        if vals and len(vals) > 0:
             return vals[len(vals) - 1]
         else:
             null
@@ -566,7 +567,12 @@ class Evaluator(Visitor):
         i = 0
         while i < len(block.nodes):
             block.index = i
-            block.nodes[i] = self.visit(block.nodes[i])
+            v = self.visit(block.nodes[i])
+            if hasattr(block, 'mixin') and block.mixin:
+                log.debug(f'Not adding mixin [{v}]!')
+                block.mixin = False
+            else:
+                block.nodes[i] = v
             i += 1
 
         return block
@@ -590,6 +596,7 @@ class Evaluator(Visitor):
                 print(e)
                 raise e
             index = block.index + 1
+            block.index += 1
 
         self.stack.pop()
         return block
@@ -675,8 +682,8 @@ class Evaluator(Visitor):
         if block.node.node_name == 'group':
             block = self.closest_group()
         for selector in extend.selectors:
-            # todo: implement me
             block.node.extends.append(None)
+            raise NotImplementedError
         return null
 
     def invoke(self, body, stack=None, filename=None):

@@ -91,19 +91,25 @@ class Unit(Node):
             elif op == '**':
                 return Unit(self.value ** right.value, type)
             elif op in ['..', '...']:
-                start = self.value
-                end = right.value
+                start = int(self.value)
+                end = int(right.value)
                 expr = Expression()
                 inclusive = '..' == op
                 if start < end:
                     while True:
-                        expr.push(Unit(start))
-                        if ++start <= end if inclusive else ++start < end:
+                        expr.append(Unit(start))
+                        start += 1
+                        if inclusive and start > end:
+                            break
+                        if not inclusive and start >= end:
                             break
                 else:
                     while True:
-                        expr.push(Unit(start))
-                        if --start >= end if inclusive else --start > end:
+                        expr.append(Unit(start))
+                        start -= 1
+                        if inclusive and start < end:
+                            break
+                        if not inclusive and start <= end:
                             break
                 return expr
 

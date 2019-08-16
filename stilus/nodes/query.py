@@ -20,8 +20,6 @@ class Query(Node):
                 type += ' and '
         else:
             type = ''
-        for node in self.nodes:
-            print(str(node))
         s = ' and '.join([str(e) for e in self.nodes])
         return f'{pred}{type}{s}'
 

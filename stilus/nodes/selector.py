@@ -46,6 +46,7 @@ class Selector(Node):
         clone.value = self.value
         clone.segments = [node.clone(parent, clone) for node in self.segments]
         clone.optional = self.optional
+        clone.block = self.block
         return clone
 
     def to_json(self):

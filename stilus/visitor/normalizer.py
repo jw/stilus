@@ -150,6 +150,7 @@ class Normalizer(Visitor):
     def visit_group(self, group):
         stack = self.stack
         normalized = []
+        # normalize interpolated selectors with a comma
         for selector in group.nodes:
             if selector.value:
                 # do nothing
