@@ -367,7 +367,7 @@ class Evaluator(Visitor):
         if vals and len(vals) > 0:
             return vals[len(vals) - 1]
         else:
-            null
+            return null
 
     def visit_call(self, call):
         fn = self.lookup(call.function_name)

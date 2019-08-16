@@ -31,8 +31,12 @@ class BinOp(Node):
 
     def clone(self, parent=None, node=None):
         clone = BinOp(self.op, None)
-        clone.left = self.left.clone(parent, node)
-        clone.right = self.right.clone(parent, node)
+        clone.left = None
+        if self.left:
+            clone.left = self.left.clone(parent, node)
+        clone.right = None
+        if self.right:
+            clone.right = self.right.clone(parent, node)
         clone.lineno = self.lineno
         clone.column = self.column
         clone.filename = self.filename

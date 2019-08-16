@@ -49,22 +49,20 @@ body
   background fizz linear-gradient(#2a2a2a, #454545) fuzz
 """
     source = """
-foo = '100px'
-bar = '#c00'
-baz = 'something'
+foo()
+  bar = 1
+
+  for x in arguments
+    null
+
+  baz bar is defined
+  baz bar is defined
 
 body
-  test: type(convert(foo))
-  test: type(convert(bar))
-  test: type(convert(baz))
-  list = convert('10 20 30 40')
-  list2 = convert('10, 20, 30, 40')
-  push(list, 50)
-  test: list
-  test: list-separator(list) == ' '
-  test: list-separator(list2) == ','
-  test: 10em + convert('1.334em')
-  test: 10em + convert('-4.5em')
+  foo()
+
+body
+  foo(42)
 """
     # parser = Parser(source, {})
     # ast = parser.parse()
