@@ -154,7 +154,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
 
     compile(arr, len(arr) - 1)
 
-    return set(selectors)
+    return selectors
 
 
 # todo: check deep parameter; check why this method exists
