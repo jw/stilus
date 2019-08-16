@@ -1,25 +1,24 @@
 from pathlib import Path
 
+import pytest
+
 from bin.stilus import setup_logging
-# from stilus.parser import Parser
 from stilus.stilus import Renderer
 
+files = []
+path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
+styl_files = path.glob('*.styl')
+for f in styl_files:
+    files.append((str(f), str(f.with_suffix('.css'))))
 
-# todo: add dot per styl -> css compilation
-# see: https://docs.pytest.org/en/latest/example/parametrize.html#paramexamples
-def test_stylus_cases():
-    path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
-    source_files = path.glob('*.styl')
-    for source_file in source_files:
-        # print(f'Handling {source_file}...', end='')
-        with open(source_file, 'r') as f:
-            source = f.read()
-        with open(source_file.with_suffix('.css'), 'r') as f:
-            destination = f.read()
-        assert destination == Renderer(source, {}).render()
-        # print('.')
-        # print('.', end='')
-    # print()
+
+@pytest.mark.parametrize("styl,css", files)
+def test_stylus_cases(styl, css):
+    with open(styl, 'r') as f:
+        source = f.read()
+    with open(css, 'r') as f:
+        destination = f.read()
+    assert destination == Renderer(source, {}).render()
 
 
 if __name__ == '__main__':
@@ -49,20 +48,59 @@ body
   background fizz linear-gradient(#2a2a2a, #454545) fuzz
 """
     source = """
-foo()
-  bar = 1
 
-  for x in arguments
-    null
+test(args...)
+  test-args args
+  for arg in args
+    foo arg
 
-  baz bar is defined
-  baz bar is defined
-
-body
-  foo()
+size(a, b)
+  return a b
 
 body
-  foo(42)
+  test 1 2 3
+  test (1 2) (3 4) 5
+  test size(1, 2) size(3, 4)
+
+body
+  sizes = size(1, 2) size(3, 4)
+  for size in sizes
+    foo size
+
+body
+  for n in 1..5
+    foo n
+
+body
+  for n in 1 2 3
+    foo n
+
+body
+  for n in 1 2 3
+    foo
+      bar n
+"""
+    """
+func(num)
+  return num
+
+body
+  for n in 1 2 3
+    bar func(num: n)
+
+test(args...)
+  foo
+    for arg in args
+      bar
+        baz arg
+
+body
+  test 1 2 3
+
+body
+  for val, index in foo bar baz
+    foo index val
+
 """
     # parser = Parser(source, {})
     # ast = parser.parse()

@@ -19,6 +19,7 @@ from stilus.nodes.import_node import Import
 from stilus.nodes.literal import Literal
 from stilus.nodes.null import null, Null
 from stilus.nodes.object_node import ObjectNode
+from stilus.nodes.return_node import ReturnNode
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 from stilus.parser import Parser
@@ -224,8 +225,8 @@ class Evaluator(Visitor):
         group.block = self.visit(group.get_block())
         return group
 
-    def visit_return(self, ret):
-        ret.expr = self.visit(ret.expr)
+    def visit_returnnode(self, ret):
+        ret.expression = self.visit(ret.expression)
         raise ret
 
     def visit_media(self, media):
@@ -785,7 +786,10 @@ class Evaluator(Visitor):
                 node = self.visit(node)
             return node
 
-        nodes = [update(node) for node in vals]
+        try:
+            nodes = [update(node) for node in vals]
+        except ReturnNode as rn:
+            return rn.expression
 
         # try:
         #     for i, node in enumerate(vals):
