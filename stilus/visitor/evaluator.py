@@ -500,7 +500,10 @@ class Evaluator(Visitor):
         elif op == '+':
             node.value = +node.value
         elif op == '~':
-            node.value = ~node.value
+            if isinstance(node.value, float):
+                node.value = ~int(node.value)
+            else:
+                node.value = ~node.value
         elif op == '!':
             return node.to_boolean().negate()
 
@@ -862,16 +865,15 @@ class Evaluator(Visitor):
 
         log.debug(f'import {path}')
 
-        # todo: implement me!
         # url() passed
         # if path.name == 'url':
-        #     if imported.once:
-        #         raise TypeError('You cannot @require a url')
+        #     if hasattr(imported, 'once') and imported.once:
+        #         raise StilusError('You cannot @require a url')
         #     return imported
 
         # ensure string
         # if not path.string:
-        #     raise TypeError(f'@{node_name} string expected')
+        #     raise StilusError(f'@{node_name} string expected')
 
         name = path = path.string
 

@@ -88,6 +88,10 @@ $foo = 'screen'
   .i
     test: current-media()
 """
+    source = """
+body
+  background #fff url('/some/image.png') no-repeat -29px 1px
+"""
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

@@ -343,7 +343,7 @@ class Compiler(Visitor):
         return ''
 
     def visit_call(self, call: Call):
-        self.is_url = 'url' == call.value
+        self.is_url = 'url' == call.function_name
         args = [self.visit(node) for node in call.args.nodes]
         if self.compress:
             args = ','.join(args)
@@ -351,6 +351,7 @@ class Compiler(Visitor):
             args = ', '.join(args)
         if self.is_url:
             args = f'"{args}"'
+        self.is_url = False
         return f'{call.function_name}({args})'
 
     def visit_expression(self, expr: Expression):
