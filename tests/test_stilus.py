@@ -59,8 +59,7 @@ foo()
 
   .f
     foo()
-"""
-    """
+
 @media only screen and (min-width: 1024px)
   .g
     foo()
@@ -86,11 +85,15 @@ foo()
 $foo = 'screen'
 @media $foo
   .i
+    bar: $foo
     test: current-media()
 """
     source = """
-body
-  background #fff url('/some/image.png') no-repeat -29px 1px
+$foo = 'screen'
+@media $foo
+  .i
+    bar: $foo
+    test: current-media()
 """
     # parser = Parser(source, {})
     # ast = parser.parse()

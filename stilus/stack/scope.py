@@ -38,4 +38,4 @@ class Scope:
         :return:
         """
         # print(f'SCOPE: Lookup of {str(name)} in {str(list(self.commons))}.')
-        return self.commons.get(name, None)
+        return self.commons.get(str(name), None)

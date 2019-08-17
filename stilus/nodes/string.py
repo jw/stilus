@@ -23,6 +23,9 @@ class String(Node):
     def __repr__(self):
         return self.__str__()
 
+    def __hash__(self):
+        return hash(str(self))
+
     def clone(self, parent=None, node=None):
         clone = String(self.value, self.quote,
                        lineno=self.lineno, column=self.column)

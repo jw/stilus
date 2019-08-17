@@ -908,7 +908,7 @@ class Evaluator(Visitor):
         raise NotImplementedError
 
     def closest_block(self):
-        for stack in self.stack:
+        for stack in reversed(self.stack):
             block = stack.block
             if hasattr(block, 'node') and block.node and \
                     block.node.node_name in ['group', 'keyframes',
@@ -957,7 +957,7 @@ class Evaluator(Visitor):
         # fixme: this is handled differently on stylus!
         if self.ignore_colors and name in colors:
             return
-        val = self.stack.lookup(name)  # <--- oops!
+        val = self.stack.lookup(name)
         if val is not None:  # fixme!
             return utils.unwrap(val)
         else:
