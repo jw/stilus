@@ -1,12 +1,8 @@
-# todo: clean these up
-from stilus.functions import replace, listSeparator, currentMedia
-from stilus.functions import baseConvert, s
-from stilus.functions import hue, lightness, saturation
-from stilus.functions import hsl, rgb, alpha, blue, green, red
-from stilus.functions import rgba, hsla, contrast, luminosity
-from stilus.functions import adjust, math, math_prop, unit, length, \
-    addProperty, unquote, clone, lookup, basename, blend, convert, \
-    type_function, push
+from stilus.functions import addProperty, adjust, alpha, baseConvert, \
+    basename, blend, blue, clone, contrast, convert, currentMedia, green, \
+    hsl, hsla, hue, length, lightness, listSeparator, lookup, luminosity, \
+    math, math_prop, push, red, replace, rgb, rgba, s, saturation, \
+    type_function, unit, unquote
 
 bifs = {
     '-math-prop': math_prop.math_prop,
