@@ -9,9 +9,14 @@ dist/
 stilus.egg-info/
 .eggs/
 
+.python-version
+
 .idea/
 
 .pytest_cache/
 
 coverage.xml
+.coverage
 htmlcov/
+
+debug.log
