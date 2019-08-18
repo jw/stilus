@@ -4,7 +4,6 @@ Blocks
 
 In Stylus (in JavaScript) blocks in arrays are processed via
 
-
 .. code-block:: javascript
 
     for (block.index = 0; block.index < block.nodes.length; ++block.index) {
