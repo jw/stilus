@@ -5,7 +5,8 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     type_function, unit, unquote
 
 # new functions
-from stilus.functions import error, extname, define, dirname, p
+from stilus.functions import error, extname, define, dirname, p, pop, shift, \
+    unshift
 
 
 bifs = {
@@ -13,6 +14,7 @@ bifs = {
     'add-property': addProperty.addProperty,
     'adjust': adjust.adjust,
     'alpha': alpha.alpha,
+    'append': push.push,
     'base-convert': baseConvert.baseConvert,
     'basename': basename.basename,
     'blend': blend.blend,
@@ -36,17 +38,22 @@ bifs = {
     'lookup': lookup.lookup,
     'math': math.math,
     'p': p.p,
+    'pop': pop.pop,
     'push': push.push,
+    'prepend': unshift.unshift,
     'red': red.red,
     'replace': replace.replace,
     'rgb': rgb.rgb,
     'rgba': rgba.rgba,
     's': s.s,
     'saturation': saturation.saturation,
+    'shift': shift.shift,
     'type': type_function.type_function,
     'unit': unit.unit,
     'unquote': unquote.unquote,
+    'unshift': unshift.unshift,
 }
 
-raw_bifs = ['addProperty', 'baseConvert', 'clone', 'length',
-            'listSeparator', 'p', 'push', 's']
+raw_bifs = ['addProperty', 'append', 'baseConvert', 'clone', 'length',
+            'listSeparator', 'p', 'pop', 'push', 'prepend', 's', 'shift',
+            'unshift']
