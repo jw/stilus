@@ -6,7 +6,7 @@
 Stilus: Stylus in Python
 ========================
 
-Release xyz
+Release |version|.
 
 .. image:: https://img.shields.io/travis/jw/stilus/master.svg?style=flat-square
     :target: https://travis-ci.org/jw/stilus
@@ -26,9 +26,9 @@ Release xyz
 .. image:: https://img.shields.io/pypi/l/stilus?style=flat-square)
     :target: https://pypi.org/project/stilus/
 
-**Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`.
+**Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`_.
 
-.. note:: **Stilus** is not ready yet.  Only half of the built-in functions are implemented; too little documentation is written.  More tests are required.  The Stylus bin is incomplete.  So all help is appreciated!
+.. note:: **Stilus** is not ready yet.  Only half of the built-in functions are implemented; too little documentation is written.  More tests are required.  The Stilus bin is incomplete.  **So all help is appreciated!**
 
 The Plan
 --------
@@ -36,7 +36,7 @@ The Plan
 The ongoing work, the future plans and the work done.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    plan/current.md
    plan/future.md
@@ -48,10 +48,10 @@ Developing Stilus
 The development of Stilus, some todo's and thoughts.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    dev/architecture.md
-   dev/todo.md
+   dev/thoughts.md
    dev/codeguidelines.md
    dev/migration.md
    dev/workflow.md
@@ -59,24 +59,26 @@ The development of Stilus, some todo's and thoughts.
 Issues
 ------
 
-Some built-in functions do not work properly yet.
+Some built-in functions do not work properly yet; arrays/lists of blocks are
+handled weirdly.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    bifs.md
+   blocks.rst
 
 
-The API
--------
+Code
+----
 
 If you are looking for information on a specific function, class, or method,
 this part of the documentation is for you.  (c) requests ;-)
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   api.rst
+   code.rst
 
 Indices and tables
 ==================

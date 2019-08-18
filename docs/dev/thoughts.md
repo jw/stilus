@@ -1,4 +1,4 @@
-## ToDo
+## Thoughts
 
 Some things to add or at least think about.
 
