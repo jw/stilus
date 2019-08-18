@@ -1554,12 +1554,16 @@ class Parser:
         self.expect('{')
         self.skip_whitespace()
 
-        while self.accept('}').type != '}':
-            if self.accept(['comment', 'newline']):
+        while True:
+            token = self.next()
+            if token and token.type == '}':
+                break
+            if token.type in ['comment', 'newline']:
                 continue
-            if not comma:
-                self.accept(',')
-            id = self.accept(['ident', 'string'])
+            if not comma and token.type == ',':
+                continue
+            if token.type in ['ident', 'string']:
+                id = token
             if id is None:
                 self.error('expected "ident" or "string", got {peek}')
             id = id.value.hash()

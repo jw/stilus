@@ -91,7 +91,8 @@ class ObjectNode(Node):
     def clone(self, parent=None, node=None):
         clone = ObjectNode(lineno=self.lineno, column=self.column)
         clone.filename = self.filename
-        clone.values = [node.clone(parent, clone) for node in self.values]
+        clone.values = {key: value.clone(parent, clone)
+                        for key, value in self.values.items()}
         return clone
 
     def to_json(self):

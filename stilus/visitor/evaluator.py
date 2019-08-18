@@ -265,7 +265,7 @@ class Evaluator(Visitor):
             self.result -= 1
         return node
 
-    def visit_object(self, obj: ObjectNode):
+    def visit_objectnode(self, obj: ObjectNode):
         for key, value in obj.values.items():
             obj.values[key] = self.visit(value)
         return obj
@@ -593,12 +593,19 @@ class Evaluator(Visitor):
                     log.debug(f'Not adding mixin [{v}]!')
                     block.mixin = False
                 else:
-                    block.nodes[index] = v
+                    try:
+                        block.nodes[index] = v
+                    except TypeError:
+                        pass
 
-            except TypeError as e:
-                # fixme: when a 'return' value type in e and take action!
-                print(e)
-                raise e
+            except ReturnNode as rn:
+                if self.result:
+                    self.stack.pop()
+                    raise rn
+                else:
+                    block.nodes[block.index] = rn
+                    break
+
             index = block.index + 1
             block.index += 1
 

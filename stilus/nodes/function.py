@@ -20,9 +20,12 @@ class Function(Node):
 
     def __str__(self):
         if self.params:
-            strings = [str(node if node else 'None')
-                       for node in self.params.nodes]
-            return f'{self.function_name}({", ".join(strings)})'
+            if hasattr(self.params, 'nodes'):
+                strings = [str(node if node else 'None')
+                           for node in self.params.nodes]
+                return f'{self.function_name}({", ".join(strings)})'
+            else:
+                return f'{self.function_name}()'
         else:
             return f'{self.function_name}()'
 

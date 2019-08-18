@@ -4,6 +4,10 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     math, math_prop, push, red, replace, rgb, rgba, s, saturation, \
     type_function, unit, unquote
 
+# new functions
+from stilus.functions import error, extname, define, dirname, p
+
+
 bifs = {
     '-math-prop': math_prop.math_prop,
     'add-property': addProperty.addProperty,
@@ -17,6 +21,10 @@ bifs = {
     'convert': convert.convert,
     'contrast': contrast.contrast,
     'current-media': currentMedia.currentMedia,
+    'define': define.define,
+    'dirname': dirname.dirname,
+    'error': error.error,
+    'extname': extname.extname,
     'green': green.green,
     'hsl': hsl.hsl,
     'hsla': hsla.hsla,
@@ -27,6 +35,7 @@ bifs = {
     'luminosity': luminosity.luminosity,
     'lookup': lookup.lookup,
     'math': math.math,
+    'p': p.p,
     'push': push.push,
     'red': red.red,
     'replace': replace.replace,
@@ -40,4 +49,4 @@ bifs = {
 }
 
 raw_bifs = ['addProperty', 'baseConvert', 'clone', 'length',
-            'listSeparator', 'push', 's']
+            'listSeparator', 'p', 'push', 's']

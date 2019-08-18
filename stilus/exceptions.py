@@ -21,6 +21,7 @@ class StilusError(Exception):
         self.lineno = lineno
         self.column = column
         self.input = input
+        self.from_stilus = None
 
     def __str__(self):
         if self.message:
