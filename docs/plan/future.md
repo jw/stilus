@@ -2,10 +2,10 @@
 
 ### 0.7.0
 
- - [ ] Start using Sphinx and web documentation: https://stilus.readthedocs.io.
  - [ ] Use typing properly.
  - [ ] Update the assertions in the built-in functions (using the above typing).
- 
+ - [ ] Add tests for `to_json()`, `equal()`, `coerce()`, `clone()` and `operate()` in all nodes.
+
 ### 0.8.0
  
  - [ ] Start spreading the word in pycon sweden.

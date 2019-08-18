@@ -1,0 +1,5 @@
+# only needed fro readthedocs
+click==7.0
+deprecated==1.2.6
+pyyaml==5.1.1
+wrapt==1.11.2
