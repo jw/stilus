@@ -1,8 +1,8 @@
 
-Developer Interface
-===================
+Code
+====
 
-This part of the documentation covers all the interfaces of Stilus.
+This part of the documentation covers all the code of Stilus.
 
 .. automodule:: stilus
    :members:
