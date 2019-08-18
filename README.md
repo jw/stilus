@@ -6,6 +6,8 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/stilus.svg?style=flat-square)](https://pypi.org/project/stilus/#files)
 [![PyPI](https://img.shields.io/pypi/v/stilus.svg?style=flat-square)](https://pypi.org/project/stilus/#history)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/stilus.svg?style=flat-square)](https://pypi.org/project/stilus/#description)
-![PyPI - License](https://img.shields.io/pypi/l/stilus?style=flat-square)
+[![PyPI - License](https://img.shields.io/pypi/l/stilus?style=flat-square)](https://pypi.org/project/stilus/)
 
 A Stylus css compiler in Python.  Very much a work in progress...
+
+There is [some documentation](https://stilus.readthedocs.io) available.

@@ -3,23 +3,80 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the stilus documentation!
-====================================
+Stilus: Stylus in Python
+========================
+
+Release xyz
+
+.. image:: https://img.shields.io/travis/jw/stilus/master.svg?style=flat-square
+    :target: https://travis-ci.org/jw/stilus
+
+.. image:: https://img.shields.io/codecov/c/github/jw/stilus/master.svg?style=flat-square
+    :target: https://codecov.io/gh/jw/stilus
+
+.. image:: https://img.shields.io/pypi/dm/stilus.svg?style=flat-square
+    :target: https://pypi.org/project/stilus/#files
+
+.. image:: https://img.shields.io/pypi/v/stilus.svg?style=flat-square
+    :target: https://pypi.org/project/stilus/#history
+
+.. image:: https://img.shields.io/pypi/pyversions/stilus.svg?style=flat-square
+    :target: https://pypi.org/project/stilus/#description
+
+.. image:: https://img.shields.io/pypi/l/stilus?style=flat-square)
+    :target: https://pypi.org/project/stilus/
+
+**Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`.
+
+.. note:: **Stilus** is not ready yet.  Only half of the built-in functions are implemented; too little documentation is written.  More tests are required.  The Stylus bin is incomplete.  So all help is appreciated!
+
+The Plan
+--------
+
+The ongoing work, the future plans and the work done.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   future.md
-   current.md
-   workflow.md
-   history.md
-   todo.md
+   plan/current.md
+   plan/future.md
+   plan/history.md
 
-   architecture.md
-   codeguidelines.md
-   migration.md
+Developing Stilus
+-----------------
 
+The development of Stilus, some todo's and thoughts.
+
+.. toctree::
+   :maxdepth: 2
+
+   dev/architecture.md
+   dev/todo.md
+   dev/codeguidelines.md
+   dev/migration.md
+   dev/workflow.md
+
+Issues
+------
+
+Some built-in functions do not work properly yet.
+
+.. toctree::
+   :maxdepth: 2
+
+   bifs.md
+
+
+The API
+-------
+
+If you are looking for information on a specific function, class, or method,
+this part of the documentation is for you.  (c) requests ;-)
+
+.. toctree::
+   :maxdepth: 2
+
+   api.rst
 
 Indices and tables
 ==================
