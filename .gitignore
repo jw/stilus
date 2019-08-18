@@ -13,5 +13,5 @@ stilus.egg-info/
 
 .pytest_cache/
 
-.coverage
+coverage.xml
 htmlcov/
