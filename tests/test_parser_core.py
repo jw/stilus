@@ -1,9 +1,8 @@
 import pytest
 
-from stilus.nodes.ident import Ident
-from stilus.nodes.root import Root
-from stilus.parser import Parser
 from stilus.exceptions import ParseError
+from stilus.nodes.ident import Ident
+from stilus.parser import Parser
 
 
 def test_parser_construct():
@@ -85,9 +84,3 @@ def test_parser_iterator():
     tokens = [token for token in parser]
     assert len(tokens) == 6
     assert tokens[3].type == 'space'
-
-
-if __name__ == '__main__':
-    parser = Parser('abc\n  color: red\n', {})
-    assert parser.root == Root()
-    assert parser.options == {'prefix': '', 'root': Root()}

@@ -281,10 +281,3 @@ def test_lexer_escaped():
     lexer = Lexer('bar: 1 \\+ 2\n', {})
     tokens = [token for token in lexer]
     assert tokens[3] == Token('ident', Literal('+'), lineno=1, column=8)
-
-
-if __name__ == '__main__':
-    lexer = Lexer('abc:\n  color: #11223311\n', {})
-    assert lexer.next() == Token('ident', Ident('abc', null),
-                                 lineno=1, column=1)
-    assert lexer.next() == Token(':', ':', '', lineno=1, column=4)

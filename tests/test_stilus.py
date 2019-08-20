@@ -15,16 +15,6 @@ def test_stylus():
 
 if __name__ == '__main__':
     source = """
-font-size-2 = 10px
-font-size-3 = 20px
-font-size-4 = 30px
-font-size-5 = 40px
-
-for i in 3..2
-  .text-{i}
-    font-size: lookup('font-size-' + i)
-"""
-    source = """
 
 string(val)
   '' + val
@@ -66,64 +56,14 @@ body
   border: border-length border-style border-color
 """
     source = """
+font-size-2 = 10px
+font-size-3 = 20px
+font-size-4 = 30px
+font-size-5 = 40px
 
-nums = 1
-
-append(nums, 2)
-append(nums, 3, 4, 5)
-
-body
-  foo: nums
-  foo: nums[0]
-  foo: nums[4]
-
-nums = 1
-
-push(nums, 2)
-
-body
-  foo: ret = push(nums, 3, 4, 5)
-  foo: nums[0]
-  foo: nums[4]
-
-
-nums = 3
-
-body
-  foo: unshift(nums, 2, 1)
-  foo: nums
-
-list = ()
-
-body
-  foo: push(list, foo, bar, baz)
-  foo: push(list, foo, bar, baz)
-  foo: list
-
-list = (one 1)
-push(list, two 2, three 3)
-
-body
-  foo: list
-
-func(list)
-  push(list, 3,4,5)
-
-nums = 1 2
-func(nums)
-
-body
-  foo: nums
-
-func()
-  list = ()
-
-  for arg in arguments
-    foo: arg
-    push(list, arg)
-
-body
-  func: 1, 2, 3
+for i in 3..2
+  .text-{i}
+    font-size: lookup('font-size-' + i)
 """
 
     # parser = Parser(source, {})

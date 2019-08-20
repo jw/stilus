@@ -103,12 +103,3 @@ def test_expression_hash():
     expression.append(false)
     # in stylus null::true::false is returned; stilus returns the Python types
     assert expression.hash() == 'None::True::False'
-
-
-if __name__ == '__main__':
-    expression = Expression()
-    other_expression = Expression()
-    other_expression.append(Ident('foo'))
-    other_expression.append(Ident('bar'))
-    assert expression.operate('in', other_expression) == Boolean(False)
-    assert other_expression.operate('in', expression) == Boolean(False)

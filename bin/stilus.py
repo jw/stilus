@@ -34,7 +34,7 @@ setup_logging('bin/logging.yaml')
 def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
-    from __version__ import __version__
+    from stilus import __version__
     click.echo(f'Version {__version__}')
     ctx.exit()
 
