@@ -61,8 +61,29 @@ font-size-3 = 20px
 font-size-4 = 30px
 font-size-5 = 40px
 
+body
+    font-size: lookup('font-size-' + 2)
+    font-size: lookup('font-size-' + 3)
+
 for i in 3..2
-  .text-{i}
+    foo: i
+    font-size: lookup('font-size-' + i)
+
+for i in 3..2
+  .text-{i / 10}
+    foo: i
+    font-size: lookup('font-size-' + i)
+"""
+
+    source = """
+font-size-2 = 10px
+font-size-3 = 20px
+font-size-4 = 30px
+font-size-5 = 40px
+
+for i in 3..2
+  .text-{i / 10}
+    foo: i
     font-size: lookup('font-size-' + i)
 """
 

@@ -1,7 +1,5 @@
 import json
 
-from deprecated import deprecated
-
 from stilus.nodes.node import Node
 
 
@@ -144,10 +142,6 @@ class Expression(Node):
             return true
         else:
             return self.first().operate(op, right, value)
-
-    @deprecated(reason='use append')
-    def push(self, node):
-        self.nodes.append(node)
 
     def append(self, node):
         self.nodes.append(node)

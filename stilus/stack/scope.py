@@ -32,8 +32,7 @@ class Scope:
         self.commons[ident.string] = ident.value
 
     def lookup(self, name) -> Type[Node]:
-        """
-        Lookup the given local variable name
+        """Lookup the given local variable name.
         :param name:
         :return:
         """

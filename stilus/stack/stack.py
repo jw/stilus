@@ -1,7 +1,5 @@
 from typing import Type
 
-from deprecated import deprecated
-
 from stilus.nodes.block import Block
 from stilus.nodes.node import Node
 from stilus.stack.frame import Frame
@@ -30,10 +28,6 @@ class Stack(list):
 
     def __next__(self):
         return super(next())
-
-    @deprecated(reason='use append')
-    def push(self, frame: Frame):
-        return self.append(frame)
 
     def append(self, frame: Frame):
         """Push a frame to the stack."""
