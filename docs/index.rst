@@ -23,7 +23,7 @@ Release |version|.
 .. image:: https://img.shields.io/pypi/pyversions/stilus.svg?style=flat-square
     :target: https://pypi.org/project/stilus/#description
 
-.. image:: https://img.shields.io/pypi/l/stilus?style=flat-square)
+.. image:: https://img.shields.io/pypi/l/stilus?style=flat-square
     :target: https://pypi.org/project/stilus/
 
 **Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`_.
