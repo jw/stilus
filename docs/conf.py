@@ -30,12 +30,6 @@ project = 'stilus'
 copyright = '2019, Jan Willems'
 author = 'Jan Willems'
 
-# The short X.Y version
-version = ''
-# The full version, including alpha/beta/rc tags
-release = ''
-
-
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
