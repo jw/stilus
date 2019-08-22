@@ -27,7 +27,7 @@ import recommonmark  # noqa
 # -- Project information -----------------------------------------------------
 
 project = 'stilus'
-copyright = '2018, Jan Willems'
+copyright = '2019, Jan Willems'
 author = 'Jan Willems'
 
 # The short X.Y version
