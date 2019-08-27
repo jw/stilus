@@ -88,22 +88,32 @@ for i in 100..99
 """
 
     source = """
-.message {
-  margin: 5px;
-  padding: 20px;
-  font-weight: bold;
-}
+body
+ bar{color:'asdf'}
 
-.warning {
-  @extend .message;
-  color: yellow;
-}
-
-.error {
-  @extend .message;
-  color: red;
-}
 """
+
+    source = """
+@font-face
+  font-family: "Your typeface"
+  src: url("type/filename.eot")
+
+@font-face
+    font-family 'SPEdessa'
+    src: url('fonts/spedessa-webfont.eot')
+    src: url('fonts/spedessa-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/spedessa-webfont.woff') format('woff'),
+         url('fonts/spedessa-webfont.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
+
+@font-face
+{
+  font-family: 'ekibastuzregular'
+}
+
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

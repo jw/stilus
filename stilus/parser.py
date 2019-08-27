@@ -269,7 +269,7 @@ class Parser:
     def is_pseudo_selector(self, n):
         value = self.lookahead(n).value
         if value:
-            return value.name in self.pseudo_selectors
+            return value.value in self.pseudo_selectors
 
     def line_contains(self, type):
         i = 1
