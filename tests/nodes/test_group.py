@@ -34,7 +34,7 @@ def test_group_block():
     selector = Selector(['abc', 'def'])
     selector.value = '$foo'
     group.append(selector)
-    assert group.get_block() is None
+    assert group.block is None
     block = Block('hello', 'there')
-    group.set_block(block)
-    assert group.get_block() == block
+    group.block = block
+    assert group.block == block

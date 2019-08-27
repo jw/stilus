@@ -2,7 +2,7 @@ from stilus.nodes.property import Property
 from stilus.utils import assert_type, unwrap, assert_string
 
 
-def addProperty(name, expr, evaluator=None):
+def add_property(name, expr, evaluator=None):
     assert_type(name, 'expression', 'name')
     name = unwrap(name).first()
     assert_string(name, 'name')

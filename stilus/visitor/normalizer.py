@@ -75,7 +75,7 @@ class Normalizer(Visitor):
                 block.append(prop)
 
             group.append(selector)
-            group.set_block(block)
+            group.block = block
 
             node.block.nodes = []
             node.block.append(group)
@@ -170,7 +170,7 @@ class Normalizer(Visitor):
                         part = '/' + part
                     s = Selector([Literal(part)])
                     s.value = part
-                    s.block = group.get_block()
+                    s.block = group.block
                     normalized[i] = s
         stack.append(normalized)
 
@@ -250,7 +250,7 @@ class Normalizer(Visitor):
 
     def extend(self, group: Group, selectors):
         selector_map = self.selector_map
-        parent = self.closest_group(group.get_block())
+        parent = self.closest_group(group.block)
 
         for extend in group.extends:
             groups = selector_map[extend.selector]
@@ -271,4 +271,4 @@ class Normalizer(Visitor):
                         self.extend(group, selectors)
                     group.append(node)
 
-        group.set_block(self.visit(group.get_block()))
+        group.block = self.visit(group.block)

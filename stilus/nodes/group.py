@@ -27,15 +27,15 @@ class Group(Node):
     def append(self, selector: Selector):
         self.nodes.append(selector)
 
-    # TODO: getter?
-    def get_block(self):
+    @property
+    def block(self):
         if self.nodes[0]:
             return self.nodes[0].block
         else:
             return None
 
-    # TODO: setter?
-    def set_block(self, block: Block):
+    @block.setter
+    def block(self, block: Block):
         for node in self.nodes:
             node.block = block
 
@@ -46,7 +46,7 @@ class Group(Node):
         clone = Group(lineno=self.lineno, column=self.column)
         clone.filename = self.filename
         clone.nodes = [node.clone(parent, clone) for node in self.nodes]
-        clone.block = self.get_block().clone(parent, clone)
+        clone.block = self.block.clone(parent, clone)
         return clone
 
     def to_json(self):

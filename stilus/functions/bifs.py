@@ -11,18 +11,18 @@ from stilus.functions import error, extname, define, dirname, p, pop, shift, \
 
 bifs = {
     '-math-prop': math_prop.math_prop,
-    'add-property': addProperty.addProperty,
+    'add-property': addProperty.add_property,
     'adjust': adjust.adjust,
     'alpha': alpha.alpha,
     'append': push.push,
-    'base-convert': baseConvert.baseConvert,
+    'base-convert': baseConvert.base_convert,
     'basename': basename.basename,
     'blend': blend.blend,
     'blue': blue.blue,
     'clone': clone.clone,
     'convert': convert.convert,
     'contrast': contrast.contrast,
-    'current-media': currentMedia.currentMedia,
+    'current-media': currentMedia.current_media,
     'define': define.define,
     'dirname': dirname.dirname,
     'error': error.error,
@@ -33,7 +33,7 @@ bifs = {
     'hue': hue.hue,
     'length': length.length,
     'lightness': lightness.lightness,
-    'list-separator': listSeparator.listSeparator,
+    'list-separator': listSeparator.list_separator,
     'luminosity': luminosity.luminosity,
     'lookup': lookup.lookup,
     'math': math.math,
@@ -54,6 +54,6 @@ bifs = {
     'unshift': unshift.unshift,
 }
 
-raw_bifs = ['addProperty', 'append', 'baseConvert', 'clone', 'length',
-            'listSeparator', 'p', 'pop', 'push', 'prepend', 's', 'shift',
+raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'length',
+            'list_separator', 'p', 'pop', 'push', 'prepend', 's', 'shift',
             'unshift']

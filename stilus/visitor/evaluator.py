@@ -218,11 +218,11 @@ class Evaluator(Visitor):
 
     def visit_group(self, group: Group):
         new_nodes = []
-        for n in group.nodes:
-            n.value = self.interpolate(n)
-            new_nodes.append(n)
+        for selector in group.nodes:
+            selector.value = self.interpolate(selector)
+            new_nodes.append(selector)
         group.nodes = new_nodes
-        group.block = self.visit(group.get_block())
+        group.block = self.visit(group.block)
         return group
 
     def visit_returnnode(self, ret):
@@ -365,6 +365,7 @@ class Evaluator(Visitor):
                 visit_body(key, val)
 
         self.mixin(vals, block)
+
         if vals and len(vals) > 0:
             return vals[len(vals) - 1]
         else:
@@ -443,7 +444,11 @@ class Evaluator(Visitor):
             # object or block mixin
             if val is not None and ident.mixin:
                 self.mixin_node(val)
-            return self.visit(val) if val is not None else ident
+            if val is not None:
+                return self.visit(val)
+            else:
+                return ident
+            # return self.visit(val) if val is not None else ident
         else:
             # assign
             self.result += 1
@@ -961,11 +966,10 @@ class Evaluator(Visitor):
         :param name:
         :return:
         """
-        # fixme: this is handled differently on stylus!
         if self.ignore_colors and name in colors:
             return
         val = self.stack.lookup(name)
-        if val is not None:  # fixme!
+        if val is not None:  # fixme: implement __len__()
             return utils.unwrap(val)
         else:
             return self.lookup_function(name)
@@ -977,8 +981,10 @@ class Evaluator(Visitor):
             if node.node_name in ['function', 'ident']:
                 return node.name
             elif node.node_name in ['literal', 'string']:
-                # huh?
-                if self.prefix and not node.prefixed and not node.value.name:
+                if self.prefix and \
+                        hasattr(node, 'prefixed') and not node.prefixed and \
+                        hasattr(node.value, 'node_name') and \
+                        not node.value.node_name:
                     node.val = re.sub(r'\.', f'.{self.prefix}', node.val)
                     node.prefixed = True
                 return node.value
@@ -991,9 +997,10 @@ class Evaluator(Visitor):
                 # prevent cyclic 'selector()' calls
                 if self.calling and 'selector' in self.calling and \
                         self._selector:
-                    return self.selector
+                    return self._selector
                 self.result += 1
                 ret = to_string(self.visit(node).first())
+                self.result -= 1
                 if is_selector:
                     self._selector = ret
                 return ret

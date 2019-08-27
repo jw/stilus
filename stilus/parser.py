@@ -930,7 +930,7 @@ class Parser:
             return group.nodes
 
         self.state.append('selector')
-        group.set_block(self.block(group))
+        group.block = self.block(group)
         self.prev_state = self.state[-1]
         self.state.pop()
 

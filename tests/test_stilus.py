@@ -81,12 +81,25 @@ font-size-3 = 20px
 font-size-4 = 30px
 font-size-5 = 40px
 
-for i in 3..2
-  .text-{i / 10}
+for i in 100..99
+  .text-{i}
     foo: i
-    font-size: lookup('font-size-' + i)
+    // font-size: lookup('font-size-' + i)
 """
 
+    source = """
+list = red green blue
+no-colors = false
+
+body
+  color: color for color in list if length(list) > 2 unless no-colors
+
+mixin()
+  color: color for color in list if length(list) > 2 unless no-colors
+
+body
+  mixin()
+"""
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

@@ -305,7 +305,7 @@ class Compiler(Visitor):
         stack.append(group.nodes)
 
         # selectors
-        if group.get_block().has_properties():
+        if group.block.has_properties():
             selectors = utils.compile_selectors(stack, indent=self.indent())
 
             if selectors:
@@ -328,9 +328,9 @@ class Compiler(Visitor):
                     self.buf += self.out(selector + ('' if last else comma),
                                          group.nodes[i])
             else:
-                group.get_block().lacks_rendered_selectors = True
+                group.block.lacks_rendered_selectors = True
 
-        self.visit(group.get_block())
+        self.visit(group.block)
         stack.pop()
 
     def visit_ident(self, ident: Ident):

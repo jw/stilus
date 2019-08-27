@@ -40,7 +40,7 @@ class Stack(list):
         if len(self) == 0:
             return None
         else:
-            return self[self.__len__() - 1]  # todo: [-1]
+            return self[-1]
 
     def get_block_frame(self, block: Block):
         """Lookup stack frame for a given block"""
