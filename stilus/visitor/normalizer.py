@@ -253,7 +253,7 @@ class Normalizer(Visitor):
         parent = self.closest_group(group.block)
 
         for extend in group.extends:
-            groups = selector_map[extend.selector]
+            groups = selector_map[extend.selectors]
             if not group:
                 if extend.optional:
                     break

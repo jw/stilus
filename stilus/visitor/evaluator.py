@@ -5,6 +5,7 @@ from pathlib import Path
 
 from stilus import utils
 from stilus.colors import colors
+from stilus.exceptions import ParseError, StilusError
 from stilus.functions.bifs import bifs, raw_bifs
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
@@ -12,18 +13,18 @@ from stilus.nodes.boolean import Boolean, false, true
 from stilus.nodes.call import Call
 from stilus.nodes.color import RGBA
 from stilus.nodes.expression import Expression
+from stilus.nodes.extend import Extend
 from stilus.nodes.function import Function
 from stilus.nodes.group import Group
 from stilus.nodes.ident import Ident
 from stilus.nodes.import_node import Import
 from stilus.nodes.literal import Literal
-from stilus.nodes.null import null, Null
+from stilus.nodes.null import Null, null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.return_node import ReturnNode
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 from stilus.parser import Parser
-from stilus.exceptions import ParseError, StilusError
 from stilus.stack.frame import Frame
 from stilus.stack.scope import Scope
 from stilus.stack.stack import Stack
@@ -698,8 +699,11 @@ class Evaluator(Visitor):
         if block.node.node_name == 'group':
             block = self.closest_group()
         for selector in extend.selectors:
-            block.node.extends.append(None)
-            raise NotImplementedError
+            c = selector.clone()
+            s = self.interpolate(c).strip()
+            e = Extend(s, lineno=c.lineno, column=c.column)
+            e.optional = selector.optional
+            block.node.extends.append(e)
         return null
 
     def invoke(self, body, stack=None, filename=None):
@@ -931,7 +935,10 @@ class Evaluator(Visitor):
         return None
 
     def closest_group(self):
-        raise NotImplementedError
+        for s in self.stack:
+            b = s.block
+            if hasattr(b, 'node') and b.node and b.node.node_name == 'group':
+                return b
 
     def selector_stack(self):
         raise NotImplementedError

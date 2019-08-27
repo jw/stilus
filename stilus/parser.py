@@ -607,7 +607,7 @@ class Parser:
         try:
             while True:
                 arr = self.selector_parts()
-                if arr is None:
+                if arr is None or len(arr) == 0:
                     if self.accept(';'):
                         continue
                     else:

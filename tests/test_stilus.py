@@ -88,17 +88,21 @@ for i in 100..99
 """
 
     source = """
-list = red green blue
-no-colors = false
+.message {
+  margin: 5px;
+  padding: 20px;
+  font-weight: bold;
+}
 
-body
-  color: color for color in list if length(list) > 2 unless no-colors
+.warning {
+  @extend .message;
+  color: yellow;
+}
 
-mixin()
-  color: color for color in list if length(list) > 2 unless no-colors
-
-body
-  mixin()
+.error {
+  @extend .message;
+  color: red;
+}
 """
     # parser = Parser(source, {})
     # ast = parser.parse()

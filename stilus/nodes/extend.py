@@ -8,6 +8,7 @@ class Extend(Node):
     def __init__(self, selectors, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.selectors = selectors
+        self.optional = None
 
     def __str__(self):
         s = ', '.join(self.selectors)
