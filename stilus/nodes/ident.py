@@ -10,6 +10,7 @@ class Ident(Node):
         super().__init__(value, lineno=lineno, column=column)
         self.name = name
         self.string = name
+        # todo: clean this up
         from stilus.nodes.null import null
         self.value = null if value is None else value
         self.mixin = mixin
@@ -32,7 +33,7 @@ class Ident(Node):
         return False
 
     def __hash__(self):
-        return hash(self.__key())
+        return hash(self.name)
 
     def hash(self):
         return self.name

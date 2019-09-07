@@ -58,7 +58,11 @@ class Unit(Node):
         return clone
 
     def operate(self, op, right: Node, value=None):
-        type = self.type if self.type else right.first().type
+        type = None
+        if self.type:
+            type = self.type
+        elif hasattr(right.first(), 'type') and right.first().type:
+            type = right.first().type
 
         # swap color
         if right.node_name in ['rgba', 'hsla']:

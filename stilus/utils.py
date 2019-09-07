@@ -154,6 +154,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
 
     compile(arr, len(arr) - 1)
 
+    # return unique selectors
     return selectors
 
 

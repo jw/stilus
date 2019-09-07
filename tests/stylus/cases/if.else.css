@@ -1,0 +1,12 @@
+body {
+  foo: string;
+  foo: unit;
+  foo: color;
+  foo: unknown;
+}
+body {
+  color: #00f;
+}
+body {
+  color: #f00;
+}

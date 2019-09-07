@@ -1,0 +1,46 @@
+
+naive-type(val = null)
+  if val is a 'unit'
+    unit
+  else if val is a 'color'
+    color
+  else if val is a 'string'
+    string
+  else
+    unknown
+
+body
+  foo naive-type('test')
+  foo naive-type(12)
+  foo naive-type(#fff)
+  foo naive-type()
+
+body
+  if false
+    color red
+  else if true
+    color blue
+  else
+    color green
+
+body
+  if true
+    color red
+
+  // foo
+
+  // comment
+  else
+    color blue
+
+body {
+  if foo {
+    // foo
+  }
+  else if bar {
+    // bar
+  }
+  else if baz {
+    // baz
+  }
+}

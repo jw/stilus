@@ -39,8 +39,9 @@ class Root(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Root',
-                           'nodes': self.nodes,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(self.__dict__)
+        # return json.dumps({'__type': 'Root',
+        #                    'nodes': self.nodes,
+        #                    'lineno': self.lineno,
+        #                    'column': self.column,
+        #                    'filename': self.filename})

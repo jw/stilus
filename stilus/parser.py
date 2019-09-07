@@ -223,14 +223,16 @@ class Parser:
         return self.next()
 
     def next(self) -> Token:
-        # FIXME: add noline and column and co
-        tok = self.lexer.next()
+        if self.stash:
+            tok = self.stash.pop()
+        else:
+            tok = self.lexer.next()
         if tok.value and isinstance(tok.value, Node):
             tok.value.lineno = tok.lineno
             tok.value.column = tok.column
         self.lineno = tok.lineno
         self.column = tok.column
-        # print(tok)
+        # todo: log this: print(tok)
         return tok
 
     def __iter__(self):
@@ -1006,7 +1008,7 @@ class Parser:
                 lookup = Expression(lineno=self.lineno, column=self.column)
                 lookup.append(Ident(name))
                 node = Ternary(defined, lookup, node)
-            elif op in ['+=', '-=', '*=', '/=', '%=']:
+            elif op.type in ['+=', '-=', '*=', '/=', '%=']:
                 node.value = BinOp(op.type[0], Ident(name), expr)
 
         return node
@@ -1131,7 +1133,7 @@ class Parser:
                     break
 
         # empty segment list
-        if len(segs) != 1:
+        if len(segs) == 0:
             self.expect('ident')
 
         return segs
@@ -1308,7 +1310,7 @@ class Parser:
         op = self.accept(['**', '*', '/', '%'])
         if op:
             self.operand = True
-            if '/' == op and self.in_property and len(self.parens) < 0:
+            if '/' == op.value and self.in_property and self.parens == 0:
                 self.stash.append(Token('literal',
                                         Literal('/',
                                                 lineno=self.lineno,

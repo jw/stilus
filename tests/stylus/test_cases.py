@@ -17,4 +17,5 @@ def test_stylus_cases(styl, css):
         source = f.read()
     with open(css, 'r') as f:
         destination = f.read()
-    assert destination == Renderer(source, {}).render()
+
+    assert Renderer(source, {}).render() == destination

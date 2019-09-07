@@ -61,6 +61,7 @@ class Node:
         from stilus.visitor.evaluator import Evaluator
         return Evaluator(self).evaluate()
 
+    # todo: use object.hash(); not hash(object)
     def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
         """Operate on ``right`` with the given ``op``."""
         from stilus.nodes.boolean import Boolean
@@ -81,7 +82,7 @@ class Node:
         elif op == '>':
             return Boolean(hash(self) > hash(right))
         elif op == '<':
-            return Boolean(hash(self) < hash(right))
+            return Boolean(self.hash() < right.hash())
         elif op == '||':
             return self if self.to_boolean() is True else right
         elif op == 'in':
@@ -134,3 +135,6 @@ class Node:
     def to_json(self):
         """Return a JSON representation of this node."""
         return json.dumps([self.lineno, self.column, self.filename])
+
+    def debug(self):
+        return f'[{self.node_name} ({self.column}:{self.lineno})] {self.value}'

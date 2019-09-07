@@ -135,7 +135,7 @@ class Expression(Node):
             for i in range(len(self.nodes)):
                 a = self.nodes[i]
                 b = right.nodes[i]
-                if a.operate(op, b).is_true:
+                if a.operate(op, b).is_true():
                     continue
                 return false
             from stilus.nodes.boolean import true

@@ -165,13 +165,14 @@ class Normalizer(Visitor):
                 parts = selector.value.split(',')
                 root = True if selector.value[0] == '/' else False
                 for i, part in enumerate(parts):
-                    part = part.trim()
+                    part = part.strip()
                     if root and '&' not in part:
                         part = '/' + part
                     s = Selector([Literal(part)])
                     s.value = part
                     s.block = group.block
-                    normalized[i] = s
+                    normalized.append(s)
+        group.nodes = normalized
         stack.append(normalized)
 
         selectors = utils.compile_selectors(stack, True)

@@ -36,7 +36,7 @@ class ObjectNode(Node):
         return self
 
     def get(self, key):
-        return self.value.get(key, null)
+        return self.values.get(key, null)
 
     def __len__(self):
         return len(self.values)

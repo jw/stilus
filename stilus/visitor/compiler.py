@@ -363,9 +363,9 @@ class Compiler(Visitor):
             last = i == length - 1
             buf.append(node)
             if '/' == next or '/' == node:
-                break
+                continue
             if last:
-                break
+                continue
 
             if self.is_url or (self.is_condition and
                                (')' == next or '(' == node)):

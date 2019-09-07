@@ -160,12 +160,11 @@ class Evaluator(Visitor):
     def visit(self, node):
         try:
             return super().visit(node)
-        except BaseException as e:
-            if hasattr(e, 'filename'):
-                raise e
-            input = '[unknown]'
+        except StilusError as se:
+            if not se.filename:
+                raise se
             try:
-                with open(str(node.filename)) as f:
+                with open(str(se.filename)) as f:
                     input = f.read()
             except (AttributeError, FileNotFoundError):
                 pass
@@ -352,9 +351,9 @@ class Evaluator(Visitor):
             vals.extend(body.nodes)
 
         # for prop in obj
-        if length == 1 and 'object' == expr.nodes[0].node_name:
+        if length == 1 and 'objectnode' == expr.nodes[0].node_name:
             obj = expr.nodes[0]
-            for prop in obj.vals:
+            for prop in obj.values:
                 val.value = String(prop, lineno=self.parser.lineno,
                                    column=self.parser.column)
                 key.value = obj.get(prop)  # checkme: works?
@@ -484,6 +483,7 @@ class Evaluator(Visitor):
         try:
             return self.visit(left.operate(op, right, value))
         except Exception as e:
+            print(e)
             # disregard coercion issues in equality
             # checks, and simply return false
             # if 'coercionError' == e:  # fixme: use exception node_name
@@ -643,12 +643,12 @@ class Evaluator(Visitor):
         block = self.get_current_block()
         negate = node.negate
         self.result += 1
-        ok = self.visit(node.cond).first()  # .to_boolean()
-        # todo: fix this!
-        if isinstance(ok, Null):
-            ok = false
-        if not isinstance(ok, Boolean):
-            ok = true
+        ok = self.visit(node.cond).first().to_boolean()
+        # # todo: fix this!
+        # if isinstance(ok, Null):
+        #     ok = false
+        # if not isinstance(ok, Boolean):
+        #     ok = true
         self.result -= 1
 
         node.block.scope = \
@@ -779,7 +779,13 @@ class Evaluator(Visitor):
             dest.append(item)
 
     def mixin_node(self, node):
-        raise NotImplementedError
+        node = self.visit(node.first())
+        if node.node_name == 'objectnode':
+            self.mixin_object(node)
+            return null
+        elif node.node_name in ['block', 'atblock']:
+            self.mixin(node.nodes, self.get_current_block())
+            return null
 
     def mixin_object(self, object):
         raise NotImplementedError
@@ -809,23 +815,6 @@ class Evaluator(Visitor):
             nodes = [update(node) for node in vals]
         except ReturnNode as rn:
             return rn.expression
-
-        # try:
-        #     for i, node in enumerate(vals):
-        #         do_visit = True
-        #         if node.node_name == 'if':
-        #             if node.block.node_name != 'block':
-        #                 vals[i] = self.visit(node)
-        #                 do_visit = False
-        #         if node.node_name in ['if', 'each', 'block']:
-        #             n = self.visit(node)
-        #             if hasattr(node, 'nodes') and node.nodes:
-        #                 n = self.eval(node.nodes)
-        #             do_visit = False
-        #         if do_visit:
-        #             n = self.visit(node)
-        # except Exception as e:
-        #     raise e
 
         return nodes[-1] if nodes else null
 

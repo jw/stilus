@@ -174,7 +174,7 @@ class RGBA(Color):
         return true
 
     def __hash__(self):
-        return hash((self.r, self.g, self.g, self.a))
+        return hash(str(self))
 
     def hash(self):
         return str(self)
