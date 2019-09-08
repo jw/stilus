@@ -6,7 +6,7 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
 
 # new functions
 from stilus.functions import error, extname, define, dirname, p, pop, shift, \
-    unshift
+    unshift, imageSize
 
 
 bifs = {
@@ -31,6 +31,7 @@ bifs = {
     'hsl': hsl.hsl,
     'hsla': hsla.hsla,
     'hue': hue.hue,
+    'image-size': imageSize.image_size,
     'length': length.length,
     'lightness': lightness.lightness,
     'list-separator': listSeparator.list_separator,

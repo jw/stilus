@@ -164,8 +164,12 @@ def merge(a, b):
     return a.update(b)
 
 
-def lookup(path, paths: List, ignore):
-    p = Path(path)
+# todo: use libpath
+def lookup(path, paths: List, ignore=''):
+    if isinstance(path, Path):
+        p = path
+    else:
+        p = Path(path)
     if p.is_absolute() and p.exists():
         return str(path)
 

@@ -9,7 +9,7 @@ from stilus.exceptions import ParseError, StilusError
 from stilus.functions.bifs import bifs, raw_bifs
 from stilus.nodes.arguments import Arguments
 from stilus.nodes.block import Block
-from stilus.nodes.boolean import Boolean, false, true
+from stilus.nodes.boolean import Boolean, false
 from stilus.nodes.call import Call
 from stilus.nodes.color import RGBA
 from stilus.nodes.expression import Expression
@@ -19,7 +19,7 @@ from stilus.nodes.group import Group
 from stilus.nodes.ident import Ident
 from stilus.nodes.import_node import Import
 from stilus.nodes.literal import Literal
-from stilus.nodes.null import Null, null
+from stilus.nodes.null import null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.return_node import ReturnNode
 from stilus.nodes.string import String

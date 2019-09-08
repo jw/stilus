@@ -1,7 +1,5 @@
 import re
-from os.path import dirname, abspath
 
-from stilus import utils
 from stilus.nodes.binop import BinOp
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import Boolean

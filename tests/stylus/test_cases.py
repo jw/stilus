@@ -18,4 +18,7 @@ def test_stylus_cases(styl, css):
     with open(css, 'r') as f:
         destination = f.read()
 
-    assert Renderer(source, {}).render() == destination
+    images = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'images')
+    renderer = Renderer(source, {}).include(images)
+
+    assert renderer.render() == destination

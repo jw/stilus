@@ -1,6 +1,5 @@
-from stilus import stilus, Parser
+from stilus import stilus
 from stilus.stilus import Renderer
-from stilus.visitor.debugger import Debugger
 
 
 def test_stylus():
@@ -246,6 +245,11 @@ foo
  bar{color:'asdf'}
 """
 
+    renderer = Renderer(source, {})
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+
+    css = renderer.render()
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -262,7 +266,7 @@ foo
     # run_test_case(cases + 'vargs.call.styl',
     #               cases + 'vargs.call.css')
 
-    css = Renderer(source, {}).render()
+    # css = Renderer(source, {}).render()
 
     # css = stilus.render(source, {})
 

@@ -7,6 +7,9 @@ name = "pypi"
 deprecated = "*"
 pyyaml = "*"
 click = "*"
+pillow = "*"
+beautifulsoup4 = "*"
+lxml = "*"
 
 [dev-packages]
 pytest = "*"

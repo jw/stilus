@@ -1,6 +1,7 @@
 from os.path import realpath, dirname, join
 
 from stilus.parser import Parser
+from stilus.utils import coerce
 from stilus.visitor.compiler import Compiler
 from stilus.visitor.evaluator import Evaluator
 from stilus.visitor.normalizer import Normalizer
@@ -43,6 +44,21 @@ class Renderer:
         # todo: handle end event
 
         return ast
+
+    def include(self, path):
+        self.options['paths'].append(path)
+        return self
+
+    def define(self, name, fn, raw=None):
+        fn = coerce(fn, raw)
+        if fn.node_name:
+            self.options['globals'][name] = fn
+            return self
+
+        self.options['functions'][name] = fn
+        if raw:
+            fn.raw = raw
+        return self
 
     def do_import(self, file):
         self.options['imports'].append(file)
