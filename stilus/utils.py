@@ -8,7 +8,7 @@ from stilus.nodes.boolean import Boolean
 from stilus.nodes.expression import Expression
 from stilus.nodes.literal import Literal
 from stilus.nodes.node import Node
-from stilus.nodes.null import null
+from stilus.nodes.null import null, Null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
@@ -36,7 +36,7 @@ def unwrap(expression: Expression) -> Node:
 
 
 def assert_present(node: Node, name=None):
-    if node:
+    if node or isinstance(node, Null):
         return
     if name:
         raise ValueError(f'"{name}" argument required')
@@ -165,7 +165,7 @@ def merge(a, b):
 
 
 # todo: use libpath
-def lookup(path, paths: List, ignore=''):
+def lookup(path: Path, paths: List, ignore=''):
     if isinstance(path, Path):
         p = path
     else:
@@ -177,7 +177,7 @@ def lookup(path, paths: List, ignore=''):
         lookup = join(a_path, path)
         if ignore == lookup:
             continue
-        p = Path(lookup)
+        p = Path(lookup).resolve()
         if p.exists():
             return str(lookup)
 

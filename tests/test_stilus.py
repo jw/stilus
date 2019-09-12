@@ -20,7 +20,11 @@ def run_test_case(source, destination):
     with open(destination, 'r') as f:
         destination = f.read()
 
-    css = Renderer(source, {}).render()
+    renderer = Renderer(source, {})
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
+
+    css = renderer.render()
 
     print(f'------------- result ---\n'
           f'{css}'
@@ -245,10 +249,18 @@ foo
  bar{color:'asdf'}
 """
 
-    renderer = Renderer(source, {})
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+    source = """
+icons = json('import.json/icons.json', { hash: true, leave-strings: true });
 
-    css = renderer.render()
+.icon
+  content: icons.menu
+"""
+
+    # renderer = Renderer(source, {})
+    # renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+    # renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
+    #
+    # css = renderer.render()
 
     # parser = Parser(source, {})
     # ast = parser.parse()
@@ -257,9 +269,9 @@ foo
     # for i, d in enumerate(debugger.debug()):
     #     print(f'{i}: {d}')
 
-    # cases = '/home/jw/python/projects/stilus/tests/stylus/cases/'
-    # run_test_case(cases + 'functions.styl',
-    #               cases + 'functions.css')
+    cases = '/home/jw/python/projects/stilus/tests/stylus/cases/'
+    run_test_case(cases + 'bifs.json.styl',
+                  cases + 'bifs.json.css')
     #
     # print(f'------------------------')
     #
@@ -270,6 +282,6 @@ foo
 
     # css = stilus.render(source, {})
 
-    print(f'------------- result ---\n'
-          f'{css}'
-          f'------------------------')
+    # print(f'------------- result ---\n'
+    #       f'{css}'
+    #       f'------------------------')

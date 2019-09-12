@@ -266,8 +266,10 @@ class Evaluator(Visitor):
         return node
 
     def visit_objectnode(self, obj: ObjectNode):
-        for key, value in obj.values.items():
-            obj.values[key] = self.visit(value)
+        for key in obj.values.keys():
+            pass
+            # print(f'key: {key}; value: {obj.values[key]}')
+            # obj.values[key] = self.visit(obj.values[key])
         return obj
 
     def visit_member(self, node):
@@ -833,7 +835,6 @@ class Evaluator(Visitor):
             ret = args.nodes
         else:
             ret = []
-            # todo: add args.map handling
             args = [utils.unwrap(arg) for arg in args]
             for arg in args:
                 # if not hasattr(args, 'nodes'):

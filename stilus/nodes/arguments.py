@@ -11,7 +11,7 @@ class Arguments(Expression):
         self.is_list = False
 
     def __str__(self):
-        return f'map: {self.map}; nodes: {self.nodes}'
+        return f''  # map: {self.map}'  # nodes: {self.nodes}'
 
     def __repr__(self):
         return self.__str__()

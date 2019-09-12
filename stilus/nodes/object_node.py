@@ -13,8 +13,8 @@ class ObjectNode(Node):
 
     def __str__(self):
         obj = {}
-        for key, value in self.values.items():
-            obj[str(key)] = str(value)
+        for key in self.values.keys():
+            obj[key] = self.values[key]
         return json.dumps(obj)
 
     def __repr__(self):
@@ -37,6 +37,9 @@ class ObjectNode(Node):
 
     def get(self, key):
         return self.values.get(key, null)
+
+    def has(self, key):
+        return key in self.values
 
     def __len__(self):
         return len(self.values)

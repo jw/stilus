@@ -18,7 +18,7 @@ class String(Node):
             self.quote = quote
 
     def __str__(self):
-        return f'{self.quote}{self.value}{self.quote}'
+        return f"{self.quote}{self.value}{self.quote}"
 
     def __repr__(self):
         return self.__str__()

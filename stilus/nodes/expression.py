@@ -1,5 +1,6 @@
 import json
 
+from stilus.nodes.boolean import true
 from stilus.nodes.node import Node
 
 
@@ -68,10 +69,8 @@ class Expression(Node):
 
     def to_boolean(self):
         if not self.is_empty():
-            from stilus.nodes.boolean import true
             return true
-        else:
-            return self.first().to_boolean()
+        return self.first().to_boolean()
 
     def to_json(self):
         return json.dumps({'__type': 'Expression',

@@ -6,7 +6,7 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
 
 # new functions
 from stilus.functions import error, extname, define, dirname, p, pop, shift, \
-    unshift, imageSize
+    unshift, imageSize, json
 
 
 bifs = {
@@ -32,6 +32,7 @@ bifs = {
     'hsla': hsla.hsla,
     'hue': hue.hue,
     'image-size': imageSize.image_size,
+    'json': json.json_function,
     'length': length.length,
     'lightness': lightness.lightness,
     'list-separator': listSeparator.list_separator,
@@ -50,6 +51,7 @@ bifs = {
     'saturation': saturation.saturation,
     'shift': shift.shift,
     'type': type_function.type_function,
+    'typeof': type_function.type_function,
     'unit': unit.unit,
     'unquote': unquote.unquote,
     'unshift': unshift.unshift,

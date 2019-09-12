@@ -1021,10 +1021,13 @@ class Parser:
             i += 1
             la = self.lookahead(i).type
 
+        go_on = False
+
         if la in ['=', '?=', '-=', '+=', '*=', '/=', '%=']:
             # assignment
             return self.assignment()
-        elif la == '.':
+
+        if la == '.':
             # member
             if 'space' == self.lookahead(i - 1).type:
                 return self.stmt_selector()
@@ -1044,16 +1047,15 @@ class Parser:
                     self.state_allows_selector():
                 return self.stmt_selector()
             else:
-                raise NotImplementedError
-                # huh?
-                pass
-        elif la == '[':
+                go_on = True
+
+        if la == '[' or go_on:
             # assignment []=
             if self._ident == self.peek():
                 return self.id()
             while ']' != self.lookahead(i).type and \
-                    'selector' != self.lookahead(i + 1) and \
-                    'oes' != self.lookahead(i + 1):
+                    'selector' != self.lookahead(i + 1).type and \
+                    'eos' != self.lookahead(i + 1).type:
                 i += 1
             i += 1
             if '=' == self.lookahead(i).type:
@@ -1061,21 +1063,42 @@ class Parser:
                 return self.expression()
             elif self.looks_like_selector() and self.state_allows_selector():
                 return self.stmt_selector()
-            return self._operation(la)
-        elif la in ['-', '+', '/', '*', '%', '**', '&&', '||', '>', '<', '>=',
-                    '<=', '!=', '==', '?', 'in', 'is a', 'is defined']:
-            return self._operation(la)
-        else:
-            if self.current_state() == 'root':
-                return self.stmt_selector()
-            elif self.current_state() in ['for', 'selector', 'function',
-                                          'conditional', 'atblock', 'atrule']:
-                return self.property()
+            go_on = True
+
+        # operation
+        if la in ['-', '+', '/', '*', '%', '**', '&&', '||', '>', '<', '>=',
+                  '<=', '!=', '==', '?', 'in', 'is a', 'is defined'] or go_on:
+            if self._ident == self.peek():
+                return self.id()
             else:
-                id = self.id()
-                if 'interpolation' == self.previous_state():
-                    id.mixin = True
-                return id
+                self._ident = self.peek()
+                if self.current_state() in ['for', 'selector']:
+                    return self.property()
+                if self.current_state() in ['root', 'atblock', 'atrule']:
+                    if la == ']':
+                        return self.subscript()
+                    else:
+                        return self.stmt_selector()
+                if self.current_state() in ['function', 'conditional']:
+                    if self.looks_like_selector():
+                        return self.stmt_selector()
+                    else:
+                        return self.expression()
+                if self.operand:
+                    return self.id()
+                else:
+                    return self.expression()
+
+        if self.current_state() == 'root':
+            return self.stmt_selector()
+        elif self.current_state() in ['for', 'selector', 'function',
+                                      'conditional', 'atblock', 'atrule']:
+            return self.property()
+        else:
+            id = self.id()
+            if 'interpolation' == self.previous_state():
+                id.mixin = True
+            return id
 
     def property(self):
         if self.looks_like_selector(True):

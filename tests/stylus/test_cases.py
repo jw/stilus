@@ -18,7 +18,9 @@ def test_stylus_cases(styl, css):
     with open(css, 'r') as f:
         destination = f.read()
 
-    images = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'images')
-    renderer = Renderer(source, {}).include(images)
+    stylus = Path.joinpath(Path.cwd(), 'tests', 'stylus')
+    images = stylus / 'images'
+    jsons = stylus / 'cases'
+    renderer = Renderer(source, {}).include(images).include(jsons)
 
     assert renderer.render() == destination

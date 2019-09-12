@@ -1,6 +1,8 @@
 import json
 from typing import Type
 
+from stilus.exceptions import StilusError
+
 
 class CoercionError(Exception):
     """CoercionError"""
@@ -95,8 +97,8 @@ class Node:
                                 'expecting an expression')
 
             # 'prop' in object
-            if len(values) == 1 and values[0].node_name == 'object':
-                return Boolean(values[0].has(self.hash()))  # todo: has?
+            if len(values) == 1 and values[0].node_name == 'objectnode':
+                return Boolean(values[0].has(self.hash()))
 
             for value in values:
                 if value.hash() == self.hash():
@@ -112,9 +114,9 @@ class Node:
                 return self
             return right
         elif op == '[]':
-            raise Exception(f'cannot perform {self}[{right}]')
+            raise StilusError(f'cannot perform {self}[{right}]')
         else:
-            raise Exception(f'cannot perform {self} {op} {right}')
+            raise StilusError(f'cannot perform {self} {op} {right}')
 
     def should_coerce(self, op: str) -> bool:
         """Return False if `op` is generally not coerced."""
@@ -135,6 +137,3 @@ class Node:
     def to_json(self):
         """Return a JSON representation of this node."""
         return json.dumps([self.lineno, self.column, self.filename])
-
-    def debug(self):
-        return f'[{self.node_name} ({self.column}:{self.lineno})] {self.value}'
