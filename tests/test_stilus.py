@@ -352,7 +352,11 @@ body
 
     source = """
 body
-  foo: operate(op: '/', 10, 2);
+  test: range(1, 6)
+  test: range(1, 6, 2)
+  test: range(-6, -1, .5)
+  for i in range(1px, 5px, .5px)
+    test: i
 """
     renderer = Renderer(source, {})
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')

@@ -2,8 +2,8 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     basename, blend, blue, clone, contrast, convert, currentMedia, define, \
     dirname, error, extname, green, hsl, hsla, hue, imageSize, json, \
     length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
-    operate, p, pathjoin, pop, push, red, replace, rgb, rgba, s, saturation, \
-    shift, type_function, unit, unquote, unshift
+    operate, p, pathjoin, pop, push, range, red, replace, rgb, rgba, s, \
+    saturation, shift, type_function, unit, unquote, unshift
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -41,6 +41,7 @@ bifs = {
     'pop': pop.pop,
     'push': push.push,
     'prepend': unshift.unshift,
+    'range': range.range_function,
     'red': red.red,
     'replace': replace.replace,
     'rgb': rgb.rgb,
