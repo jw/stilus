@@ -351,11 +351,45 @@ body
 """
 
     source = """
+@charset 'utf-8'
+
+@namespace svg url(http://www.w3.org/2000/svg)
+
 body
-  line-height remove-unit(1em)
-  line-height remove-unit(auto)
-  line-height remove-unit(5)
+  background-color red
+
+svg|svg
+  fill blue
+
+svg|.foo
+  fill green
+
+svg|.bar
+  fill yellow
 """
+
+    source = """
+body
+  background url("/images/foo.png")
+  background url(/images/foo.png)
+
+  dir = '/images'
+  img = 'foo.png'
+  background url(dir/foo.png)
+  background url(dir/img)
+
+  background url('/images/' + img)
+  background url(dir'/foo.png')
+  background url(dir + '/foo.png')
+  background url(dir + '/' + img)
+
+  list = foo bar
+  background url('/images/' + list[0] + '.png')
+
+  background url(http://foo.com/images/bar.png)
+  background url(//foo.com/images/bar.png)
+"""
+
     renderer = Renderer(source, {})
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')

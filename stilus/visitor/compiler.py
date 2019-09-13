@@ -252,7 +252,7 @@ class Compiler(Visitor):
 
     def visit_namespace(self, namespace):
         prefix = self.visit(namespace.prefix) + ' ' if namespace.prefix else ''
-        return f'@namespace {prefix}{self.visit(namespace.val)};'
+        return f'@namespace {prefix}{self.visit(namespace.value)};'
 
     def visit_literal(self, literal):
         val = literal.value
