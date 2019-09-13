@@ -3,7 +3,8 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     dirname, error, extname, green, hsl, hsla, hue, imageSize, json, \
     length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
     operate, p, pathjoin, pop, push, range, red, remove, replace, rgb, \
-    rgba, s, saturation, shift, type_function, unit, unquote, unshift
+    rgba, s, saturation, shift, tan, trace, type_function, unit, unquote, \
+    unshift, warn
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -50,11 +51,14 @@ bifs = {
     's': s.s,
     'saturation': saturation.saturation,
     'shift': shift.shift,
+    'tan': tan.tan,
+    'trace': trace.trace,
     'type': type_function.type_function,
     'typeof': type_function.type_function,
     'unit': unit.unit,
     'unquote': unquote.unquote,
     'unshift': unshift.unshift,
+    'warn': warn.warn,
 }
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone',
