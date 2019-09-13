@@ -352,11 +352,9 @@ body
 
     source = """
 body
-  test: range(1, 6)
-  test: range(1, 6, 2)
-  test: range(-6, -1, .5)
-  for i in range(1px, 5px, .5px)
-    test: i
+  test: remove({ foo: 1, bar: 2 }, 'foo')
+  test: remove({ foo: 1, bar: 2 }, 'undef')
+  test: remove({ 'foo': 1, 'bar': 2, 'baz': 3 }, 'baz')
 """
     renderer = Renderer(source, {})
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')

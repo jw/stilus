@@ -361,7 +361,7 @@ class Compiler(Visitor):
 
         for i, (node, next) in enumerate(zip(nodes, nodes[1:] + ['end'])):
             last = i == length - 1
-            buf.append(node)
+            buf.append(str(node))
             if '/' == next or '/' == node:
                 continue
             if last:

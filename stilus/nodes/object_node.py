@@ -12,10 +12,10 @@ class ObjectNode(Node):
         self.values = values
 
     def __str__(self):
-        obj = {}
-        for key in self.values.keys():
-            obj[key] = self.values[key]
-        return json.dumps(obj)
+        s = []
+        for key, value in self.values.items():
+            s.append(f'"{key}":"{str(self.values[key])}"')
+        return '{' + ','.join(s) + '}'
 
     def __repr__(self):
         return self.__str__()
