@@ -5,7 +5,7 @@
 The first cases release, a.k.a. `committers, committers, committers!`
 
  - Fixed the big `visit_block()` and `mixin()` problem in the evaluator.
- - Added all built in functions.
+ - Added x built in functions.
  - Added x test cases.
 
 ### 0.5.0 

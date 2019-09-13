@@ -6,6 +6,7 @@ The first cases release, a.k.a. `committers, committers, committers!`
  - [x] Recreated the `.clone()` method for all nodes; the current one were far too slow; and very WRONG!
  - [x] Add 3.7 and 3.8 Python.
  - [x] Start using Sphinx and web documentation: https://stilus.readthedocs.io.
- - [ ] Pass 50 Stylus test cases.  42/50 done, or 84% :)
- - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.  At 78%!
- - [ ] Create all builtin functions. 43/62 done, or 69.35% ;-)
+ - [x] Pass 50 Stylus test cases.  64/50 done, or 128% :)
+ - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.  At 79%!
+ - [ ] Create all builtin functions. 53/62 done, or 85.48% ;-)
+       Still to do: prefix-classes, replace, selector-exists, selector, slice, split, substr, transparentify and use.
