@@ -352,9 +352,9 @@ body
 
     source = """
 body
-  test: remove({ foo: 1, bar: 2 }, 'foo')
-  test: remove({ foo: 1, bar: 2 }, 'undef')
-  test: remove({ 'foo': 1, 'bar': 2, 'baz': 3 }, 'baz')
+  line-height remove-unit(1em)
+  line-height remove-unit(auto)
+  line-height remove-unit(5)
 """
     renderer = Renderer(source, {})
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')

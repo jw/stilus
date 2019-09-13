@@ -74,7 +74,7 @@ class Node:
                 raise Exception(f'"is a" expects a string, '
                                 f'got {right.toString}')
         elif op == '==':
-            return Boolean(hash(self) == hash(right))
+            return Boolean(self.hash() == right.hash())
         elif op == '!=':
             return Boolean(hash(self) != hash(right))
         elif op == '>=':
