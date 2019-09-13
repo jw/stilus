@@ -1,5 +1,6 @@
 import json
 
+from stilus.functions.bifs import bifs
 from stilus.nodes.node import Node
 
 
@@ -10,7 +11,7 @@ class Function(Node):
         super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
         self.params = params
-        self.builtin = callable(params)
+        self.builtin = self.function_name in bifs.keys()
         self.block = body
         self.fn = None
         if hasattr(params, '__call___'):

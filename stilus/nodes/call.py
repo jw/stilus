@@ -11,10 +11,7 @@ class Call(Node):
         super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
         self.block = None
-        if args:
-            self.args = args
-        else:
-            self.args = Arguments()
+        self.args = args
 
     def __str__(self):
         return f'{self.function_name}({", ".join(str(self.args))})'

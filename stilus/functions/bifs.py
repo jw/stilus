@@ -1,13 +1,9 @@
 from stilus.functions import addProperty, adjust, alpha, baseConvert, \
-    basename, blend, blue, clone, contrast, convert, currentMedia, green, \
-    hsl, hsla, hue, length, lightness, listSeparator, lookup, luminosity, \
-    math, math_prop, push, red, replace, rgb, rgba, s, saturation, \
-    type_function, unit, unquote
-
-# new functions
-from stilus.functions import error, extname, define, dirname, p, pop, shift, \
-    unshift, imageSize, json
-
+    basename, blend, blue, clone, contrast, convert, currentMedia, define, \
+    dirname, error, extname, green, hsl, hsla, hue, imageSize, json, \
+    length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
+    operate, p, pathjoin, pop, push, red, replace, rgb, rgba, s, saturation, \
+    shift, type_function, unit, unquote, unshift
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -39,7 +35,9 @@ bifs = {
     'luminosity': luminosity.luminosity,
     'lookup': lookup.lookup,
     'math': math.math,
+    'operate': operate.operate,
     'p': p.p,
+    'pathjoin': pathjoin.pathjoin,
     'pop': pop.pop,
     'push': push.push,
     'prepend': unshift.unshift,
@@ -57,6 +55,6 @@ bifs = {
     'unshift': unshift.unshift,
 }
 
-raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'length',
-            'list_separator', 'p', 'pop', 'push', 'prepend', 's', 'shift',
-            'unshift']
+raw_bifs = ['add_property', 'append', 'base_convert', 'clone',
+            'length', 'list_separator', 'p', 'pop', 'push',
+            'prepend', 's', 'shift', 'unshift']

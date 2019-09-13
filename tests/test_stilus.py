@@ -256,11 +256,109 @@ icons = json('import.json/icons.json', { hash: true, leave-strings: true });
   content: icons.menu
 """
 
-    # renderer = Renderer(source, {})
-    # renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
-    # renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
-    #
-    # css = renderer.render()
+    source = """
+pad-y(top, bottom) {
+  padding-top: top;
+  padding-bottom: bottom;
+}
+
+#login {
+  pad-y(15px, 100px);
+}
+
+#login {
+  pad-y(bottom: 100px, top: 15px);
+}
+
+#login {
+  pad-y(top: 15px, bottom: 100px);
+}
+
+#login {
+  pad-y(bottom: 100px, 15px);
+}
+
+#login {
+  pad-y(15px, bottom: 100px);
+}
+
+#login {
+  pad-y(100px, top: 15px);
+}
+
+#login {
+  pad-y(top: 15px, 100px);
+}
+
+#login {
+  pad-y(15px, bottom: 100px);
+}
+
+#login {
+  foo: operate('/', 2, 10);
+  foo: operate('/', 10, 2);
+
+  foo: operate(op: '/', 10, 2);
+  foo: operate(10, op: '/', 2);
+  foo: operate(10, 2, op: '/');
+
+  foo: operate('/', left: 10, right: 2);
+  foo: operate('/', right: 2, left: 10);
+  foo: operate(right: 2, left: 10, op: '/');
+
+  foo: operate(right: 10, left: 2, op: '/');
+  foo: operate('/', left: 2, right: 10);
+}
+
+body {
+  foo: join(', ', 1, 2, 3);
+  foo: join(', ', 1 2 3);
+  foo: join(delim: ', ', 1, 2, 3);
+  foo: join(1, 2, 3, delim: '|');
+  foo: join(1, delim: '|', 2, 3);
+}
+
+body {
+  foo: join('|', 1, 2, 3);
+  foo: join(1 2 3, delim: '|');
+  foo: join(delim: '|', 1 2 3);
+}
+"""
+
+    source_foo = """
+body
+  foo join(' ', 1 2 3)
+  foo join(', ', 1 2 3)
+  foo join(',', 1 2 3)
+  foo join(',', 1)
+  foo join(',') == null
+
+body
+  foo join(', ', 1, 2, 3)
+  foo join(', ', one 1, two 2, three 3)
+
+body
+  a = 1 2
+  b = 3 4
+  c = 5 6
+  foo: join(', ', 1 2, #fff #000, 5px 6px)
+  foo: join(', ', a, b, c)
+  foo: join(', ', a b c)
+  foo: join(', ', 1, 2, 3, 4, 5, 6)
+  foo: join(', ', 1 2 3 4 5 6)
+  foo: join(', ', hsl(0, 0%, 0%), hsl(120, 20%, 80%))
+  foo: join(', ', hsla(120, 20%, 80%, 1), hsla(90, 0%, 0%, 1))
+"""
+
+    source = """
+body
+  foo: operate(op: '/', 10, 2);
+"""
+    renderer = Renderer(source, {})
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
+
+    css = renderer.render()
 
     # parser = Parser(source, {})
     # ast = parser.parse()
@@ -269,9 +367,9 @@ icons = json('import.json/icons.json', { hash: true, leave-strings: true });
     # for i, d in enumerate(debugger.debug()):
     #     print(f'{i}: {d}')
 
-    cases = '/home/jw/python/projects/stilus/tests/stylus/cases/'
-    run_test_case(cases + 'bifs.json.styl',
-                  cases + 'bifs.json.css')
+    # cases = '/home/jw/python/projects/stilus/tests/stylus/cases/'
+    # run_test_case(cases + 'bifs.json.styl',
+    #               cases + 'bifs.json.css')
     #
     # print(f'------------------------')
     #
@@ -282,6 +380,6 @@ icons = json('import.json/icons.json', { hash: true, leave-strings: true });
 
     # css = stilus.render(source, {})
 
-    # print(f'------------- result ---\n'
-    #       f'{css}'
-    #       f'------------------------')
+    print(f'------------- result ---\n'
+          f'{css}'
+          f'------------------------')

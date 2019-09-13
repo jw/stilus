@@ -1,3 +1,4 @@
+import inspect
 import logging
 import os
 import re
@@ -835,15 +836,27 @@ class Evaluator(Visitor):
             ret = args.nodes
         else:
             ret = []
-            args = [utils.unwrap(arg) for arg in args]
-            for arg in args:
-                # if not hasattr(args, 'nodes'):
-                #     ret.append(arg)
-                if len(arg.nodes) > 1:
-                    for i, a in enumerate(arg):
-                        ret.append(utils.unwrap(a.nodes[i].first()))
-                else:
-                    ret.append(arg.first())
+            #  fit in the args to the functions
+            sig = inspect.signature(fn)
+            i = 0
+            # remove the last parameter (the evaluaor) first
+            keys = [key for key in sig.parameters.keys()][:-1]
+            for key in keys:
+                param = sig.parameters.get(key)
+                # handle the *args parameters
+                if param.name == 'args':
+                    while i < len(args.nodes):
+                        ret.append(utils.unwrap(args.nodes[i].first()))
+                        i += 1
+                # regular parameters
+                elif param.name in args.map.keys():
+                    # in the map
+                    ret.append(args.map[param.name].first())
+                elif i < len(args.nodes):
+                    # then in the nodes
+                    ret.append(utils.unwrap(args.nodes[i].first()))
+                    i += 1
+                # else: assume remaining parameters are not required
 
         # invoke builtin function
         body = utils.coerce(fn(*ret, evaluator=self),
@@ -1126,7 +1139,8 @@ class Evaluator(Visitor):
                         column=self.parser.column))
 
         # inject arguments as locals
-        for i, node in enumerate(fn.params.nodes):
+        i = 0
+        for node in fn.params.nodes:
             # rest param support
             if node.rest:
                 node.value = Expression(lineno=self.parser.lineno,
@@ -1143,6 +1157,7 @@ class Evaluator(Visitor):
                 # next node?
                 if not arg and hasattr(args, 'nodes') and i < len(args.nodes):
                     arg = args.nodes[i]
+                    i += 1
 
                 node = node.clone()
                 if arg:

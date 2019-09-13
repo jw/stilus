@@ -31,9 +31,17 @@ class HSLA(Color):
     def hsla(self):
         return self._hsla
 
+    def _cleanup(self, value):
+        if int(value) == value:
+            return int(value)
+        else:
+            return value
+
     def __str__(self):
-        return f'hsla({self.hue}, {round(self.saturation)}%, ' \
-               f'{round(self.lightness)}%, {self.a})'
+        return f'hsla({self._cleanup(self.hue)},' \
+               f'{self._cleanup(round(self.saturation))}%,' \
+               f'{self._cleanup(round(self.lightness))}%,' \
+               f'{self._cleanup(self.a)})'
 
     def __repr__(self):
         return self.__str__()
