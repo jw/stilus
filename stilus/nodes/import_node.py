@@ -5,7 +5,7 @@ from stilus.nodes.node import Node
 
 class Import(Node):
 
-    def __init__(self, expr, once=False, lineno=1, column=1):
+    def __init__(self, expr=None, once=False, lineno=1, column=1):
         super().__init__(lineno, column)
         self.path = expr
         self.once = once
@@ -30,7 +30,7 @@ class Import(Node):
 
     def clone(self, parent=None, node=None):
         clone = Import(lineno=self.lineno, column=self.column)
-        clone.path = self.path.clome(parent, clone)
+        clone.path = self.path.clone(parent, clone)
         clone.once = self.once
         clone.mtime = self.mtime
         clone.filename = self.filename

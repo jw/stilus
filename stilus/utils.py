@@ -191,12 +191,17 @@ def find(path, paths, ignore):
         return [str(p)]
 
     # if not see if it is in paths
-    for a_path in paths:
-        lookup = Path(join(a_path, path))
+    for base in paths:
+        lookup = Path(join(base, path))
         if lookup == ignore:
             continue
-        if lookup.exists():
-            return [str(p)]
+        if '*' in path:
+            found = sorted(Path(base).glob(path))
+            if found:
+                return [str(file) for file in found]
+        else:
+            if lookup.exists():
+                return lookup
 
     return None
 

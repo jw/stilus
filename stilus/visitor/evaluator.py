@@ -81,7 +81,7 @@ class Evaluator(Visitor):
 
         # handling 'require'
         if node.once:
-            if self.require_history[file]:
+            if self.require_history.get(file, False):
                 return null
             self.require_history[file] = True
 
@@ -754,12 +754,13 @@ class Evaluator(Visitor):
     # todo: rewrite this; this is not Python >:-(
     def _mixin(self, items, dest, block):
         for item in items:
+            checked = False
             media_passed = False
             if item.node_name == 'return':
                 return
             elif item.node_name == 'block':
+                checked = True
                 self._mixin(item.nodes, dest, block)
-                break
             elif item.node_name == 'media':
                 # fix link to the parent block
                 parent_node = item.block.parent.node
@@ -779,7 +780,8 @@ class Evaluator(Visitor):
                     value.nodes[0] = Literal('block',
                                              lineno=self.parser.lineno,
                                              column=self.parser.column)
-            dest.append(item)
+            if not checked:
+                dest.append(item)
 
     def mixin_node(self, node):
         node = self.visit(node.first())
@@ -878,7 +880,7 @@ class Evaluator(Visitor):
 
         path = self.visit(imported.path).first()
 
-        node_name = 'required' if imported.once else 'import'
+        node_name = 'require' if imported.once else 'import'
 
         self.result -= 1
 

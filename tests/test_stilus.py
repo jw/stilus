@@ -369,25 +369,10 @@ svg|.bar
 """
 
     source = """
-body
-  background url("/images/foo.png")
-  background url(/images/foo.png)
+foo()
+  @require "import.glob/**/*"
 
-  dir = '/images'
-  img = 'foo.png'
-  background url(dir/foo.png)
-  background url(dir/img)
-
-  background url('/images/' + img)
-  background url(dir'/foo.png')
-  background url(dir + '/foo.png')
-  background url(dir + '/' + img)
-
-  list = foo bar
-  background url('/images/' + list[0] + '.png')
-
-  background url(http://foo.com/images/bar.png)
-  background url(//foo.com/images/bar.png)
+foo()
 """
 
     renderer = Renderer(source, {})

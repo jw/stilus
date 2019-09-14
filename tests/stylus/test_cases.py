@@ -8,7 +8,9 @@ files = []
 path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
 styl_files = path.glob('*.styl')
 for f in styl_files:
-    files.append((str(f), str(f.with_suffix('.css'))))
+    css_file = f.with_suffix('.css')
+    if css_file.exists():
+        files.append((str(f), str(css_file)))
 
 
 @pytest.mark.parametrize("styl,css", files)
