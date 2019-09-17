@@ -398,33 +398,17 @@ foo()
   @import 'import.basic/a'
 """
     source = """
-.foo
-  width: 10px
+$test
+  a
+    color red
 
-foo()
-  .bar
-    {block}
-
-+prefix-classes('prefix-')
-  .test
-    width: 1px
-  .test2
-    width: 1px
-
-+foo()
-  width: 10px
-  +prefix-classes('prefix2-')
-    .test
-      width: 1px
-    .test2
-      width: 1px
-
-
-+prefix-classes('lol-')
-  .bar
-    height: 10px
-
-  @import 'import.basic/a'
+class
+  if selector-exists($test a)
+    color #FFF
+  if selector-exists('$test')
+    border #FFF
+  if selector-exists('$test li')
+    font-size 12px
 """
 
     renderer = Renderer(source, {})

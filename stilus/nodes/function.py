@@ -53,8 +53,10 @@ class Function(Node):
             clone = Function(self.function_name, self.fn)
         else:
             clone = Function(self.function_name)
-            clone.params = self.params.clone(parent, clone)
-            clone.block = self.block.clone(parent, clone)
+            if hasattr(self.params, 'clone'):
+                clone.params = self.params.clone(parent, clone)
+            if hasattr(self.block, 'clone'):
+                clone.block = self.block.clone(parent, clone)
         clone.lineno = self.lineno
         clone.column = self.column
         clone.filename = self.filename

@@ -4,7 +4,7 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
     operate, p, pathjoin, pop, push, range, red, remove, replace, rgb, \
     rgba, s, saturation, shift, tan, trace, type_function, unit, unquote, \
-    unshift, warn, prefixClasses
+    unshift, warn, prefixClasses, selectorExists
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -51,6 +51,7 @@ bifs = {
     'rgba': rgba.rgba,
     's': s.s,
     'saturation': saturation.saturation,
+    'selector-exists': selectorExists.selector_exists,
     'shift': shift.shift,
     'tan': tan.tan,
     'trace': trace.trace,
