@@ -369,9 +369,64 @@ svg|.bar
 """
 
     source = """
-@require "require/complex/c"
-@require "require/complex/a"
+.foo
+  width: 10px
+
+foo()
+  .bar
+    {block}
+
++prefix-classes('prefix-')
+  .test
+    width: 1px
+  .test2
+    width: 1px
+
++foo()
+  width: 10px
+  +prefix-classes('prefix2-')
+    .test
+      width: 1px
+    .test2
+      width: 1px
+
+
++prefix-classes('lol-')
+  .bar
+    height: 10px
+
+  @import 'import.basic/a'
 """
+    source = """
+.foo
+  width: 10px
+
+foo()
+  .bar
+    {block}
+
++prefix-classes('prefix-')
+  .test
+    width: 1px
+  .test2
+    width: 1px
+
++foo()
+  width: 10px
+  +prefix-classes('prefix2-')
+    .test
+      width: 1px
+    .test2
+      width: 1px
+
+
++prefix-classes('lol-')
+  .bar
+    height: 10px
+
+  @import 'import.basic/a'
+"""
+
     renderer = Renderer(source, {})
     # renderer.options['include css'] = True
     # renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')

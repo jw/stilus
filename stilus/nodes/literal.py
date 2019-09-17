@@ -5,7 +5,7 @@ from stilus.nodes.node import Node
 
 class Literal(Node):
 
-    def __init__(self, string, css=False, prefixed='', lineno=1, column=1):
+    def __init__(self, string, css=False, prefixed=False, lineno=1, column=1):
         super().__init__(string, lineno=lineno, column=column)
         self.string = string
         self.css = css

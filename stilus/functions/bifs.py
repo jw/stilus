@@ -4,7 +4,7 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
     operate, p, pathjoin, pop, push, range, red, remove, replace, rgb, \
     rgba, s, saturation, shift, tan, trace, type_function, unit, unquote, \
-    unshift, warn
+    unshift, warn, prefixClasses
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -40,6 +40,7 @@ bifs = {
     'p': p.p,
     'pathjoin': pathjoin.pathjoin,
     'pop': pop.pop,
+    '-prefix-classes': prefixClasses.prefix_classes,
     'push': push.push,
     'prepend': unshift.unshift,
     'range': range.range_function,

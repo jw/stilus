@@ -838,10 +838,10 @@ class Evaluator(Visitor):
             ret = args.nodes
         else:
             ret = []
-            #  fit in the args to the functions
+            # fit in the args to the functions
             sig = inspect.signature(fn)
             i = 0
-            # remove the last parameter (the evaluaor) first
+            # remove the last parameter (the evaluator) first
             keys = [key for key in sig.parameters.keys()][:-1]
             for key in keys:
                 param = sig.parameters.get(key)
@@ -997,11 +997,9 @@ class Evaluator(Visitor):
             if node.node_name in ['function', 'ident']:
                 return node.name
             elif node.node_name in ['literal', 'string']:
-                if self.prefix and \
-                        hasattr(node, 'prefixed') and not node.prefixed and \
-                        hasattr(node.value, 'node_name') and \
-                        not node.value.node_name:
-                    node.val = re.sub(r'\.', f'.{self.prefix}', node.val)
+                if self.prefix and not node.prefixed and \
+                        not hasattr(node.value, 'node_name'):
+                    node.value = re.sub(r'\.', f'.{self.prefix}', node.value)
                     node.prefixed = True
                 return node.value
             elif node.node_name == 'unit':
