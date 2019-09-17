@@ -191,7 +191,7 @@ def find(path, paths, ignore):
         return [str(p)]
 
     # if not see if it is in paths
-    for base in paths:
+    for base in reversed(paths):
         lookup = Path(join(base, path))
         if lookup == ignore:
             continue
@@ -201,7 +201,7 @@ def find(path, paths, ignore):
                 return [str(file) for file in found]
         else:
             if lookup.exists():
-                return lookup
+                return [str(lookup.resolve())]
 
     return None
 

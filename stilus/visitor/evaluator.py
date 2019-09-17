@@ -104,7 +104,7 @@ class Evaluator(Visitor):
         node.dirname = Path(file).parent
         # store modified time
         node.mtime = os.stat(file).st_mtime
-        self.paths.append(node.dirname)
+        self.paths.append(str(node.dirname))
 
         if '_imports' in self.options:
             self.options['_imports'].append(node.clone())
@@ -876,6 +876,7 @@ class Evaluator(Visitor):
         return self.invoke(body)
 
     def visit_import(self, imported):
+        literal = False
         self.result += 1
 
         path = self.visit(imported.path).first()
@@ -900,8 +901,10 @@ class Evaluator(Visitor):
 
         # todo: absolute URL or hash
 
-        # todo: literal
-        literal = False
+        if path.endswith('.css'):
+            literal = True
+            if not imported and not self.include_css:
+                return imported
 
         # support optional .styl
         if not literal and not path.endswith('.styl'):
@@ -914,7 +917,8 @@ class Evaluator(Visitor):
 
         # throw if import failed
         if not found:
-            raise TypeError(f'failed to locate @{node_name} file {path}')
+            raise TypeError(f'failed to locate @{node_name} file {path};'
+                            f' {self.paths}')
 
         block = Block(None, None, lineno=self.parser.lineno,
                       column=self.parser.column)

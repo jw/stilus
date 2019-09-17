@@ -369,15 +369,16 @@ svg|.bar
 """
 
     source = """
-foo()
-  @require "import.glob/**/*"
-
-foo()
+@require "require/complex/c"
+@require "require/complex/a"
 """
-
     renderer = Renderer(source, {})
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+    # renderer.options['include css'] = True
+    # renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
+                     'cases/import.basic')
+    # renderer.include('.')
 
     css = renderer.render()
 

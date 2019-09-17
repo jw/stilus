@@ -1,12 +1,11 @@
-import math
+import logging
 
-from stilus.nodes.unit import Unit
-from stilus.utils import assert_type
+from stilus.nodes.null import null
+
+log = logging.getLogger(__name__)
 
 
-def trace(angle, evaluator=None):
-    assert_type(angle, 'unit', 'angle')
-    radians = angle.value
-    if angle.type == 'deg':
-        radians *= math.pi / 180
-    return Unit(math.tan(radians), '')
+def trace(evaluator=None):
+    print(f'{evaluator.stack}')
+    log.info(f'{evaluator.stack}')
+    return null

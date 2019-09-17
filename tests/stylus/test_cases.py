@@ -22,7 +22,13 @@ def test_stylus_cases(styl, css):
 
     stylus = Path.joinpath(Path.cwd(), 'tests', 'stylus')
     images = stylus / 'images'
-    jsons = stylus / 'cases'
-    renderer = Renderer(source, {}).include(images).include(jsons)
+    basics = stylus / 'cases' / 'import.basic'
+    cases = stylus / 'cases'
+
+    renderer = Renderer(source, {})
+    renderer.include(images)
+    renderer.include(basics)
+    renderer.include(cases)
+    renderer.options['include css'] = True
 
     assert renderer.render() == destination
