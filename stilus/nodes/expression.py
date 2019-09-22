@@ -89,7 +89,7 @@ class Expression(Node):
             for node in nodes:
                 if node.node_name == 'unit':
                     i = len(nodes) + value if node.value < 0 else node.value
-                    n = i
+                    n = int(i)
                     while i > len(nodes):
                         i = i - 1
                         from stilus.nodes.null import null

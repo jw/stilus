@@ -9,6 +9,5 @@ def selector_exists(selector, evaluator=None):
                          evaluator.parser,
                          evaluator.options)
     visitor.visit(visitor.root)
-    # map = visitor.selector_map
 
     return selector.string in visitor.selector_map

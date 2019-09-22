@@ -155,7 +155,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
     compile(arr, len(arr) - 1)
 
     # return unique selectors
-    return selectors
+    return list(dict.fromkeys(selectors))
 
 
 # todo: check deep parameter; check why this method exists

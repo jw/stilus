@@ -88,7 +88,6 @@ class Normalizer(Visitor):
 
             node.bubbled = True
 
-    # fixme: this is a terrible conversion form stylus
     def closest_group(self, block: Block) -> Group:
         parent = block.parent
         while parent and hasattr(parent, 'node') and parent.node:
@@ -104,12 +103,12 @@ class Normalizer(Visitor):
 
     def visit_root(self, block):
         ret = Root()
-        for node in block.nodes:
+        for i, node in enumerate(block.nodes):
             if node.node_name in ['null', 'expression', 'function',
                                   'unit', 'atblock']:
                 continue
             else:
-                self.root_index = 1
+                self.root_index = i
                 ret.append(self.visit(node))
         return ret
 
@@ -135,15 +134,23 @@ class Normalizer(Visitor):
 
     def visit_block(self, block):
         if block.has_properties():
-            for node in block.nodes:
-                if block.node_name in ['null', 'expression', 'function',
-                                       'group', 'unit', 'atblock']:
+            i = 0
+            while i < len(block.nodes):
+                node = block.nodes[i]
+                if node.node_name in ['null', 'expression', 'function',
+                                      'group', 'unit', 'atblock']:
+                    i += 1
                     continue
                 else:
-                    node = self.visit(node)
+                    block.nodes[i] = self.visit(node)
+                    i += 1
 
         # nesting
-        block.nodes = [self.visit(node) for node in block.nodes]
+        i = 0
+        while i < len(block.nodes):
+            node = block.nodes[i]
+            block.nodes[i] = self.visit(node)
+            i += 1
 
         return block
 
@@ -254,10 +261,10 @@ class Normalizer(Visitor):
         parent = self.closest_group(group.block)
 
         for extend in group.extends:
-            groups = selector_map[extend.selectors]
-            if not group:
-                if extend.optional:
-                    break
+            groups = selector_map[extend['selector']]
+            if not groups:
+                if extend['optional']:
+                    return
                 err = TypeError(f'Failed to @extend "{extend.selector}"')
                 err.lineno = extend.lineno
                 err.column = extend.column
@@ -266,10 +273,10 @@ class Normalizer(Visitor):
                 node = Selector()
                 node.value = selector
                 node.inherits = False
-                for group in groups:
+                for g in groups:
                     # prevent recursive extend
-                    if not parent or parent != group:
-                        self.extend(group, selectors)
-                    group.append(node)
+                    if not parent or parent != g:
+                        self.extend(g, selectors)
+                    g.append(node)
 
         group.block = self.visit(group.block)

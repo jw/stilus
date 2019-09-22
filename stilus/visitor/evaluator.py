@@ -14,7 +14,6 @@ from stilus.nodes.boolean import Boolean, false
 from stilus.nodes.call import Call
 from stilus.nodes.color import RGBA
 from stilus.nodes.expression import Expression
-from stilus.nodes.extend import Extend
 from stilus.nodes.function import Function
 from stilus.nodes.group import Group
 from stilus.nodes.ident import Ident
@@ -699,14 +698,16 @@ class Evaluator(Visitor):
 
     def visit_extend(self, extend, id=None):
         block = self.get_current_block()
-        if block.node.node_name == 'group':
+        if block.node.node_name != 'group':
             block = self.closest_group()
         for selector in extend.selectors:
             c = selector.clone()
-            s = self.interpolate(c).strip()
-            e = Extend(s, lineno=c.lineno, column=c.column)
-            e.optional = selector.optional
-            block.node.extends.append(e)
+            # todo: this is really bad; refactor this
+            some_object = {'selector': self.interpolate(c).strip(),
+                           'optional': selector.optional,
+                           'lineno': c.lineno,
+                           'column': c.column}
+            block.node.extends.append(some_object)
         return null
 
     def invoke(self, body, stack=None, filename=None):
@@ -950,7 +951,15 @@ class Evaluator(Visitor):
                 return b
 
     def selector_stack(self):
-        raise NotImplementedError
+        stack = []
+        for s in self.stack:
+            b = s.block
+            if hasattr(b, 'node') and b.node and b.node.node_name == 'group':
+                for s in b.node.nodes:
+                    if not s.value:
+                        s.value = self.interpolate(s)
+                stack.append(b.node.nodes)
+        return stack
 
     def property_expression(self, prop, name):
         expr = Expression(lineno=self.parser.lineno,
@@ -994,8 +1003,10 @@ class Evaluator(Visitor):
         is_selector = 'selector' == node.node_name
 
         def to_string(node):
-            if node.node_name in ['function', 'ident']:
+            if node.node_name == 'ident':
                 return node.name
+            elif node.node_name == 'function':
+                return node.function_name
             elif node.node_name in ['literal', 'string']:
                 if self.prefix and not node.prefixed and \
                         not hasattr(node.value, 'node_name'):

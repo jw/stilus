@@ -7,6 +7,6 @@ The first cases release, a.k.a. `committers, committers, committers!`
  - [x] Add 3.7 and 3.8 Python.
  - [x] Start using Sphinx and web documentation: https://stilus.readthedocs.io.
  - [x] Pass 50 Stylus test cases.  74/50 done, or 148% :)
- - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.  At 80%!
+ - [ ] Try to get coverage above 70%. Aim for 80%; 75% will be fine.  At 81%!
  - [ ] Create all builtin functions. 56/62 done, or 90.32% ;-)
-       Still to do: selector, slice, split, substr, transparentify and use.
+       Still to do: selectors (!), slice, split, substr, transparentify and use.

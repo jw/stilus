@@ -397,19 +397,6 @@ foo()
 
   @import 'import.basic/a'
 """
-    source = """
-$test
-  a
-    color red
-
-class
-  if selector-exists($test a)
-    color #FFF
-  if selector-exists('$test')
-    border #FFF
-  if selector-exists('$test li')
-    font-size 12px
-"""
 
     renderer = Renderer(source, {})
     # renderer.options['include css'] = True

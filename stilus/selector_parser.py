@@ -6,15 +6,20 @@ COMBINATORS = ['>', '+', '~']
 # TODO: this class needs proper getter and setters annotations!
 class SelectorParser:
 
-    def __init__(self, string: str, stack: list, parts):
-        self.parts = parts
-        self.stack = stack
+    def __init__(self, string: str, stack=None, parts=None):
         self.string = string
+        self.stack = stack
+        if stack is None:
+            self.stack = []
+        self.parts = parts
+        if parts is None:
+            self.parts = []
         self.pos = 0
         self.level = 2
         self.nested = True
         self.ignore = False
         self.value = None
+        self.raw = False
 
     def skip(self, len):
         self.string = self.string[len:]
@@ -63,9 +68,8 @@ class SelectorParser:
             while self.relative(True):
                 self.level += 1
             if not self.raw:
-                ret = self.stack[len(self.stack) - self.level]
-                if ret:
-                    return ret
+                if len(self.stack) >= self.level:
+                    return self.stack[len(self.stack) - self.level]
                 else:
                     self.ignore = True
 
@@ -89,21 +93,25 @@ class SelectorParser:
         r"""'&"""
         if '&' == self.string[0]:
             self.nested = False
-            if not self.pos and (not self.stack):  # or self.raw):
+            if not self.pos and (not self.stack or self.raw):
                 i = 0
-                while ' ' == self.string[i]:
-                    i += 1
+                for i, char in enumerate(self.string[1:], start=1):
+                    if char != ' ':
+                        break
                 if self.string[i] in COMBINATORS:
                     self.skip(i + 1)
                     return
 
             self.skip(1)
-            # if not self.raw:
-            return self.stack[len(self.stack) - 1]
+            # if not self.raw
+            if self.stack and len(self.stack) > 0:
+                return self.stack[len(self.stack) - 1]
+            else:
+                return None
 
     def partial(self):
         r"""'^[' range ']'"""
-        if '^[' == self.string[0:1]:
+        if '^[' == self.string[0:2]:
             self.skip(2)
             self.skip_spaces()
             ret = self.range()
@@ -136,6 +144,7 @@ class SelectorParser:
     def range(self):
         r"""number ('..' number)?"""
         start = self.number()
+        ret = None
 
         if '..' == self.string[0:2]:
             self.skip(2)
@@ -151,10 +160,10 @@ class SelectorParser:
                 start, end = end, start
 
             def selector_value(selector):
-                if selector.nested:
-                    return f' {selector.val}'
+                if selector['nested']:
+                    return f" {selector['value']}"
                 else:
-                    return f'{selector.val}'
+                    return f"{selector['value']}"
 
             def selector(part):
                 selector = SelectorParser(part, self.stack, self.parts)
@@ -162,16 +171,20 @@ class SelectorParser:
                 return selector.parse()
 
             if end < length - 1:
-                ret = map(selector_value,
-                          map(selector, self.parts[start:end + 1]))
+                ret = []
+                for part in self.parts[start:end + 1]:
+                    s = selector(part)
+                    ret.append(selector_value(s))
                 return ''.join(ret).strip()
 
         else:
-            if start < 0:
-                ret = self.stack[len(self.stack) - 1]
+            if len(self.stack) > 0:
+                if start < 0:
+                    ret = self.stack[len(self.stack) - 1]
+                else:
+                    ret = self.stack[start]
             else:
-                ret = self.stack[start]
-
+                ret = None
         if ret:
             return ret
         else:
@@ -179,7 +192,9 @@ class SelectorParser:
 
     def char(self):
         r""".+"""
-        char = self.string[0]
+        char = None
+        if self.string:
+            char = self.string[0]
         self.skip(1)
         return char
 
@@ -187,7 +202,9 @@ class SelectorParser:
         r"""Parses the selector."""
         value = ''
         while self.string:
-            value += self.advance()
+            next = self.advance()
+            if next:
+                value += next
             if self.ignore:
                 value = ''
                 break
