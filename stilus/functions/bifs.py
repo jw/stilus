@@ -4,7 +4,8 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
     operate, p, pathjoin, pop, push, range, red, remove, replace, rgb, \
     rgba, s, saturation, shift, tan, trace, type_function, unit, unquote, \
-    unshift, warn, prefixClasses, selectorExists, selector
+    unshift, warn, prefixClasses, selectorExists, selector, stilus_slice, \
+    stilus_split
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -54,6 +55,8 @@ bifs = {
     'selector': selector.selector,
     'selector-exists': selectorExists.selector_exists,
     'shift': shift.shift,
+    'slice': stilus_slice.slice,
+    'split': stilus_split.split,
     'tan': tan.tan,
     'trace': trace.trace,
     'type': type_function.type_function,
@@ -66,4 +69,4 @@ bifs = {
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone',
             'length', 'list_separator', 'p', 'pop', 'push',
-            'prepend', 's', 'selector', 'shift', 'unshift']
+            'prepend', 's', 'selector', 'shift', 'slice', 'unshift']
