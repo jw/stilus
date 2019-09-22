@@ -398,6 +398,13 @@ foo()
   @import 'import.basic/a'
 """
 
+    source = """
+body
+  ident substr(ident, 1, 2)
+  string substr('string', 1, 2)
+  var = dredd
+  background substr(substr(var, 1), 0, 3)
+"""
     renderer = Renderer(source, {})
     # renderer.options['include css'] = True
     # renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
