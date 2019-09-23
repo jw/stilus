@@ -28,7 +28,7 @@ Release |version|.
 
 **Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`_.
 
-.. note:: **Stilus** is not ready yet, but is nearing completion! Almost all built-in functions are implemented; 6 of the 60+ are missing. Most things work, but there is far too little documentation. More tests are required an the Stilus bin is incomplete.  **So all help is appreciated!**
+.. note:: **Stilus** is not ready yet, but is nearing completion! All built-in functions are implemented. Most things work, but there is far too little documentation. More tests are required and the Stilus bin is incomplete.  **So all help is appreciated!**
 
 The Plan
 --------
