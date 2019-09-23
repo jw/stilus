@@ -5,7 +5,7 @@ from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     operate, p, pathjoin, pop, push, range, red, remove, replace, rgb, \
     rgba, s, saturation, shift, tan, trace, type_function, unit, unquote, \
     unshift, warn, prefixClasses, selectorExists, selector, stilus_slice, \
-    stilus_split, substr
+    stilus_split, substr, transparentify
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -60,6 +60,7 @@ bifs = {
     'substr': substr.substr,
     'tan': tan.tan,
     'trace': trace.trace,
+    'transparentify': transparentify.transparentify,
     'type': type_function.type_function,
     'typeof': type_function.type_function,
     'unit': unit.unit,
