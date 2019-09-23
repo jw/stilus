@@ -1,15 +1,5 @@
 ## Future tasks
 
-### 0.7.0
-
- - [ ] Update the Stilus bin
- - [ ] Fix all the weird test cases.
- - [ ] Cleanup of coverall/codecov properties.
- - [ ] Start spreading the word in pycon Sweden.
- - [ ] Start using github issues.
- - [ ] Start using github project management.
- - [ ] Update site to promote Stilus!
-
 ### 0.8.0
  
  - [ ] Update the assertions in the built-in functions.
@@ -17,4 +7,9 @@
  - [ ] Test all Stylus regression tests.
  - [ ] Add tests for `to_json()`, `equal()`, `coerce()`, `clone()` and `operate()` in all nodes?
  - [ ] Other things?
+ 
+### 1.0.0
+
+Last semantic versioning release; Stilus is ready!
+From now on calendar versioning will be used.
  
