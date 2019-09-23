@@ -65,7 +65,7 @@ def stilus(verbose, print_, input, output=None):
     if print_:
         click.echo(css)
     p = Path(output).resolve()
-    with p.open(mode='w+') as f:
+    with p.open(mode='w+'):
         p.write_text(css)
 
 
