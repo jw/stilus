@@ -6,6 +6,11 @@ from pathlib import Path
 import click
 import yaml
 
+from stilus.stilus import Renderer
+
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
 
 def setup_logging(default_path='logging.yaml',
                   default_level=logging.INFO,
@@ -35,18 +40,34 @@ def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
     from stilus import __version__
-    click.echo(f'Version {__version__}')
-    ctx.exit()
+    if True:  # verbose:
+        click.echo(f'Stilus version {__version__} ()')
+    else:
+        click.echo(f'{__version__}')
+        ctx.exit()
 
 
-@click.command()
-@click.option('--version', is_flag=True, callback=print_version,
-              expose_value=False, is_eager=True)
-def hello():
-    logging.info(f'An info message!')
-    click.echo(f'This still needs some work 8-)')
-    logging.debug(f'Some debug message.')
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.option('-v', '--verbose', count=True)
+@click.option('-p', '--print', 'print_', is_flag=True, default=False,
+              help='Print out the compiled CSS')
+@click.argument('input', type=click.File('r'))
+@click.argument('output', required=False,
+                type=click.Path(dir_okay=False,
+                                writable=True))
+@click.option('--version', '-V', is_flag=True, callback=print_version,
+              expose_value=False, is_eager=True,
+              help='Display the version of Stilus')
+def stilus(verbose, print_, input, output=None):
+    renderer = Renderer(input.read(), {})
+    renderer.include('.')
+    css = renderer.render()
+    if print_:
+        click.echo(css)
+    p = Path(output).resolve()
+    with p.open(mode='w+') as f:
+        p.write_text(css)
 
 
 if __name__ == '__main__':
-    hello()
+    stilus()
