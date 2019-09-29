@@ -1,5 +1,3 @@
-from os.path import realpath, dirname, join
-
 from stilus.parser import Parser
 from stilus.utils import coerce
 from stilus.visitor.compiler import Compiler
@@ -17,6 +15,8 @@ class Renderer:
         self.options['use'] = options.get('use', [])
         if not isinstance(self.options['use'], list):
             self.options['use'] = list(self.options['use'])
+        # todo: fix me and use pathlib
+        from os.path import realpath, dirname, join
         self.options['imports'] = [join(dirname(realpath(__file__)),
                                         'functions')]
         self.options['paths'] = options.get('paths', [])

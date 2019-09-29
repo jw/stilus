@@ -40,34 +40,32 @@ def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
     from stilus import __version__
-    if True:  # verbose:
-        click.echo(f'Stilus version {__version__} ()')
-    else:
-        click.echo(f'{__version__}')
-        ctx.exit()
+    click.echo(f'{__version__}')
+    ctx.exit()
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('-v', '--verbose', count=True)
 @click.option('-p', '--print', 'print_', is_flag=True, default=False,
-              help='Print out the compiled CSS')
+              help='Print out the compiled CSS.')
+@click.option('-I', '--include', help='Add <path> to lookup paths.')
 @click.argument('input', type=click.File('r'))
 @click.argument('output', required=False,
                 type=click.Path(dir_okay=False,
                                 writable=True))
 @click.option('--version', '-V', is_flag=True, callback=print_version,
               expose_value=False, is_eager=True,
-              help='Display the version of Stilus')
-def stilus(verbose, print_, input, output=None):
+              help='Display the version of Stilus.')
+def cli(verbose, print_, include, input, output=None):
     renderer = Renderer(input.read(), {})
-    renderer.include('.')
     css = renderer.render()
-    if print_:
+    if print_ or not output:
         click.echo(css)
-    p = Path(output).resolve()
-    with p.open(mode='w+'):
-        p.write_text(css)
+    if output:
+        p = Path(output).resolve()
+        with p.open(mode='w+'):
+            p.write_text(css)
 
 
 if __name__ == '__main__':
-    stilus()
+    cli()

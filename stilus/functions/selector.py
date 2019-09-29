@@ -4,7 +4,7 @@ from stilus.utils import assert_string, compile_selectors
 
 
 def parse(selector):
-    from stilus import Parser
+    from stilus.parser import Parser
     parser = Parser(selector, {})
     parser.state.append('selector-parts')
     nodes = parser.stmt_selector()

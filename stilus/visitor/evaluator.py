@@ -646,11 +646,6 @@ class Evaluator(Visitor):
         negate = node.negate
         self.result += 1
         ok = self.visit(node.cond).first().to_boolean()
-        # # todo: fix this!
-        # if isinstance(ok, Null):
-        #     ok = false
-        # if not isinstance(ok, Boolean):
-        #     ok = true
         self.result -= 1
 
         node.block.scope = \
@@ -918,7 +913,7 @@ class Evaluator(Visitor):
 
         # throw if import failed
         if not found:
-            raise TypeError(f'failed to locate @{node_name} file {path};'
+            raise TypeError(f'failed to locate @{node_name} file in {path}'
                             f' {self.paths}')
 
         block = Block(None, None, lineno=self.parser.lineno,
