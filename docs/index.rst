@@ -1,7 +1,5 @@
 .. stilus documentation master file, created by
    sphinx-quickstart on Sun Oct 14 21:02:54 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
 Stilus: Stylus in Python
 ========================
@@ -37,6 +35,12 @@ Install Stilus on your machine using pip:
 
  $ python -m pip install -U stilus
  $ pip install -U stilus
+
+It might be that you'll need to install some extra dev packages. This might help:
+
+.. code-block:: bash
+
+ $ sudo apt install libjpeg-dev libxml2-dev libxslt1-dev
 
 The Missing Parts
 -----------------
