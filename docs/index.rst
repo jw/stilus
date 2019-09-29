@@ -28,7 +28,27 @@ Release |version|.
 
 **Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`_.
 
-.. note:: **Stilus** is not ready yet, but is nearing completion! All built-in functions are implemented. Most things work, but there is far too little documentation. More tests are required and the Stilus bin is incomplete.  **So all help is appreciated!**
+Installation
+------------
+
+Install Stilus on your machine using pip:
+
+.. code-block:: bash
+
+ $ python -m pip install -U stilus
+ $ pip install -U stilus
+
+The Missing Parts
+-----------------
+
+Most of Stylus is implemented in Stilus, but some parts are missing:
+
+ - Plugins
+ - Caching
+ - More tests
+ - Documentation
+
+All help is appreciated!
 
 The Plan
 --------

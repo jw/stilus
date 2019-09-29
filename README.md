@@ -26,11 +26,11 @@ There is [some documentation](https://stilus.readthedocs.io) available.
 
 ## Missing
 
-Some parts of Stylus are not in Stilus.
+Some parts of Stylus are not in Stilus yet:
 
  - Caching
  - Plugins
  - Many tests
  - Documentation
 
-All help on this is appreciated!
+All help is appreciated!
