@@ -16,6 +16,7 @@ AUTHOR = 'Jan Willems'
 REQUIRES_PYTHON = '>=3.6.0'
 VERSION = None
 
+# todo: add this automatically from pipenv
 REQUIRED = [
     'deprecated', 'pyyaml', 'click', 'pillow', 'beautifulsoup4', 'lxml'
 ]
