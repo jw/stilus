@@ -22,6 +22,7 @@ from stilus.nodes.literal import Literal
 from stilus.nodes.null import null
 from stilus.nodes.object_node import ObjectNode
 from stilus.nodes.return_node import ReturnNode
+from stilus.nodes.root import Root
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
 from stilus.parser import Parser
@@ -266,10 +267,9 @@ class Evaluator(Visitor):
         return node
 
     def visit_objectnode(self, obj: ObjectNode):
-        for key in obj.values.keys():
-            pass
+        for key, _ in obj.values.items():
             # print(f'key: {key}; value: {obj.values[key]}')
-            # obj.values[key] = self.visit(obj.values[key])
+            obj.values[key] = self.visit(obj.values[key])
         return obj
 
     def visit_member(self, node):
@@ -282,10 +282,10 @@ class Evaluator(Visitor):
 
         if node.value:
             self.result += 1
-            obj.set(right.value, self.visit(node.value))
+            obj.set(right.name, self.visit(node.value))
             self.result -= 1
 
-        return obj.values.get(right.name)
+        return obj.values.get(right.name, null)
 
     def visit_keyframes(self, keyframes):
         if keyframes.fabricated:
@@ -571,9 +571,7 @@ class Evaluator(Visitor):
     def visit_root(self, block):
         if block != self.root:
             # normalize cached imports
-            # fixme: add constructors
-            # stylus: block.constructor = nodes.Block;
-            return self.visit(Block())
+            return self.visit(block.to_block())
 
         # for i, node in enumerate(list(block.nodes)):
         i = 0
@@ -788,8 +786,28 @@ class Evaluator(Visitor):
             self.mixin(node.nodes, self.get_current_block())
             return null
 
-    def mixin_object(self, object):
-        raise NotImplementedError
+    def mixin_object(self, object: ObjectNode):
+        s = f'$block {object.to_block()}'
+        print(s)
+        p = Parser(s, utils.merge({'root': Root()}, self.options))
+        try:
+            block = p.parse()
+        except StilusError as e:
+            e.filename = self.filename
+            e.lineno = p.lexer.lineno
+            e.column = p.lexer.column
+            e.input = s
+            raise e
+
+        block.parent = self.root
+        block.scope = False
+
+        ret = self.visit(block)
+        values = ret.first().nodes
+        for value in values:
+            if value.block:
+                self.mixin(value.block.nodes, self.get_current_block())
+                break
 
     def eval(self, vals=None):
         if vals is None:
@@ -926,7 +944,33 @@ class Evaluator(Visitor):
         return block
 
     def lookup_property(self, name):
-        raise NotImplementedError
+        i = len(self.stack)
+        index = self.get_current_block().index
+        top = i
+        while i > 0:
+            i -= 1
+            block = self.stack[i].block
+            if hasattr(block, 'node') and block.node.node_name in \
+                    ['group', 'function', 'if', 'each', 'atrule',
+                     'media', 'atblock', 'call']:
+                nodes = block.nodes
+                if i + 1 == top:
+                    while index > 0:
+                        index -= 1
+                        if self.property == nodes[index]:
+                            continue
+                        other = self.interpolate(nodes[index])
+                        if name == other:
+                            return nodes[index].clone()
+                else:
+                    length = len(nodes)
+                    if property != nodes[length].node_name or \
+                            self.property == nodes[length]:
+                        continue
+                    other = self.interpolate(nodes[length])
+                    if name == other:
+                        return nodes[length].clone()
+        return null
 
     def closest_block(self):
         for stack in reversed(self.stack):

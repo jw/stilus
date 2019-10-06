@@ -158,10 +158,19 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
     return list(dict.fromkeys(selectors))
 
 
-# todo: check deep parameter; check why this method exists
-def merge(a, b):
-    """Merges two dicts.  How weird."""
-    return a.update(b)
+def merge(a, b, deep=None):
+    for k in b.keys():
+        if deep and k in a.keys():
+            node_a = unwrap(a[k].first())
+            node_b = unwrap(b[k].first())
+            if node_a.node_name == 'objectnode' and \
+                    node_b.node_name == 'objectnode':
+                a[k].first().values = merge(node_a.values, node_b.values, deep)
+            else:
+                a[k] = b[k]
+        else:
+            a[k] = b[k]
+    return a
 
 
 # todo: use libpath
@@ -184,6 +193,7 @@ def lookup(path: Path, paths: List, ignore=''):
     return None
 
 
+# fixme: this is bad
 def find(path, paths, ignore):
     # first see if path exists
     p = Path(path)
@@ -195,6 +205,7 @@ def find(path, paths, ignore):
         lookup = Path(join(base, path))
         if lookup == ignore:
             continue
+        # fixme: this is *very* bad
         if '*' in path:
             found = sorted(Path(base).glob(path))
             if found:

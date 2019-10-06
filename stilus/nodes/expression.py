@@ -94,9 +94,14 @@ class Expression(Node):
                         i = i - 1
                         from stilus.nodes.null import null
                         self.nodes[i] = null
+                    # FIXME: this is very, very ugly!
+                    if len(self.nodes) <= n:
+                        extra = [None] * (len(self.nodes) - n + 1)
+                        self.nodes.extend(extra)
                     self.nodes[n] = value
                 elif node.string:
-                    if not self.is_empty() and self.nodes[0].name == 'object':
+                    if not self.is_empty() and \
+                            self.nodes[0].node_name == 'objectnode':
                         self.nodes[0].set(node.string, value.clone())
             return value
         elif op == '[]':
@@ -114,7 +119,7 @@ class Expression(Node):
                             n = values[int(node.value)]
                         except IndexError:
                             n = None
-                elif len(values) > 0 and values[0].name == 'object':
+                elif len(values) > 0 and values[0].node_name == 'objectnode':
                     n = values[0].get(node.string)
                 if n:
                     expression.append(n)

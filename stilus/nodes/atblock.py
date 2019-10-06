@@ -26,6 +26,7 @@ class Atblock(Node):
             return self.__key() == other.__key()
         return False
 
+    @property
     def nodes(self):
         if self.block:
             return self.block.nodes

@@ -1,5 +1,6 @@
 import json
 
+from stilus.nodes.block import Block
 from stilus.nodes.node import Node
 
 
@@ -37,6 +38,11 @@ class Root(Node):
         clone.filename = self.filename
         clone.nodes = [node.clone(clone, clone) for node in self.nodes]
         return clone
+
+    def to_block(self):
+        block = Block(self, self)
+        block.nodes = self.nodes
+        return block
 
     def to_json(self):
         return json.dumps(self.__dict__)

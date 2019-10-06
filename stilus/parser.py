@@ -48,8 +48,8 @@ class Parser:
         self.s = s
         self.options = options
         self.lexer = Lexer(s, options)
-        self.prefix = options.setdefault('prefix', '')
-        self.root = options.setdefault('root', Root())
+        self.prefix = options.get('prefix', '')
+        self.root = options.get('root', Root())
         self.state = ['root']
         self.stash = []
         self.parens = 0
@@ -1033,13 +1033,11 @@ class Parser:
                 return self.stmt_selector()
             if self._ident == self.peek():
                 return self.id()
+            i += 1
             while '=' != self.lookahead(i).type and \
-                    self.lookahead(i + 1).type not in \
+                    self.lookahead(i).type not in \
                     ['[', ',', 'newline', 'indent', 'eos']:
-
-                i = i + 1
-                pass
-            i = i + 1
+                i += 1
             if '=' == self.lookahead(i).type:
                 self._ident = self.peek()
                 return self.expression()
@@ -1384,7 +1382,7 @@ class Parser:
 
     def member(self):
         node = self.primary()
-        if node or node.node_name == 'null':  # todo: this seems not right
+        if node and node.node_name != 'nothing':
             while self.accept('.'):
                 id = Ident(self.expect('ident').value.string)
                 node = Member(node, id)
@@ -1464,11 +1462,15 @@ class Parser:
         self.accept('space')
         return tok.value
 
-    def atblock(self, node):
-        if not node:
+    def atblock(self, node=None):
+        if node is None:
             self.expect('atblock')
-        node = Atblock()
+        n = Atblock()
         self.state.append('atblock')
+        n.block = self.block(n, scope=False)
+        self.prev_state = self.state[-1]
+        self.state.pop()
+        return n
 
     def return_expression(self):
         self.expect('return')

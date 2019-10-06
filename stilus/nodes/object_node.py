@@ -72,15 +72,22 @@ class ObjectNode(Node):
 
         # fixme: node.nodes
         def to_string(node):
-            if node.nodes:
-                return str(node.nodes)
-            else:
+            if hasattr(node, 'nodes') and node.nodes:
+                strings = []
+                for n in node.nodes:
+                    strings.append(to_string(n))
+                if hasattr(node, 'is_list') and node.is_list:
+                    return ','.join(strings)
+                else:
+                    return ' '.join(strings)
+            elif node.node_name == 'literal' and node.value == ',':
                 return '\\,'
-            return str(node)
+            else:
+                return str(node)
 
         string = '{'
         for key, value in self.values.items():
-            if value.first.name == 'object':
+            if value.first().node_name == 'objectnode':
                 string += key + ' ' + value.first.to_block()
             else:
                 if key == '@charset':

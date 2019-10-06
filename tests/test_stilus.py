@@ -368,56 +368,20 @@ svg|.bar
   fill yellow
 """
 
-    source = """
-.foo
-  width: 10px
-
-foo()
-  .bar
-    {block}
-
-+prefix-classes('prefix-')
-  .test
-    width: 1px
-  .test2
-    width: 1px
-
-+foo()
-  width: 10px
-  +prefix-classes('prefix2-')
-    .test
-      width: 1px
-    .test2
-      width: 1px
-
-
-+prefix-classes('lol-')
-  .bar
-    height: 10px
-
-  @import 'import.basic/a'
-"""
-
-    source = """
-body
-  ident substr(ident, 1, 2)
-  string substr('string', 1, 2)
-  var = dredd
-  background substr(substr(var, 1), 0, 3)
-"""
-    renderer = Renderer(source, {})
-    # renderer.options['include css'] = True
-    # renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
-                     'cases/import.basic')
-    # renderer.include('.')
-
-    css = renderer.render()
-
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
+
+    renderer = Renderer(source, {})
+    renderer.options['include css'] = True
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
+    renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
+                     'cases/import.basic')
+    renderer.include('.')
+
+    css = renderer.render()
+
     # debugger = Debugger(ast, {})
     # for i, d in enumerate(debugger.debug()):
     #     print(f'{i}: {d}')

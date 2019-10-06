@@ -9,10 +9,10 @@ def test_atblock():
     atblock = Atblock()
     assert atblock.node_name == 'atblock'
     assert atblock.block is None
-    assert atblock.nodes() == []
+    assert atblock.nodes == []
     block = Block(Node(), Node())
     block.append(null)
     block.append(Node())
     block.append(true)
     atblock.block = block
-    assert atblock.nodes() == [null, Node(), true]
+    assert atblock.nodes == [null, Node(), true]
