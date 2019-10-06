@@ -22,9 +22,10 @@ class Token:
         self.column = column
 
     def __str__(self):
-        space = f', space={self.space}' if self.space else ''
-        return f'Token({self.type}, {self.value}{space}) ' \
-            f'[{self.lineno}:{self.column}]'
+        if self.value:
+            return f'{self.value}'
+        else:
+            return f'{self.type}'
 
     def __repr__(self):
         return str(self)

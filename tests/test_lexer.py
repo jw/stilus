@@ -24,13 +24,13 @@ def test_lexer_token_string():
     token = Token('indent', 'abc: def')
     token.lineno = 42
     token.column = 100
-    assert str(token) == 'Token(indent, abc: def) [42:100]'
+    assert str(token) == 'abc: def'
     token.space = 5
-    assert str(token) == 'Token(indent, abc: def, space=5) [42:100]'
+    assert str(token) == 'abc: def'
     token = Token('eos')
     token.lineno = 1
     token.column = 1
-    assert str(token) == 'Token(eos, None) [1:1]'
+    assert str(token) == 'eos'
 
 
 def test_lexer_empty_string():

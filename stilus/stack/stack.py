@@ -47,7 +47,6 @@ class Stack(list):
         for frame in self:
             # print(f'Checking equality between {block} and {frame.block}...')
             if block == frame.block:
-                # print('equal!')
                 return frame
         return None
 
@@ -59,7 +58,6 @@ class Stack(list):
         :param name: local variable
         :return:
         """
-        # print(f'lookup: {name}...')
         block = None
         if self.current_frame():
             block = self.current_frame().block
@@ -68,12 +66,10 @@ class Stack(list):
             if frame:
                 val = frame.lookup(name)
                 if val is not None:  # fixme: use val: (fix __len__)
-                    # print(f'returning {val}!')
                     return val
             if hasattr(block, 'parent'):
                 block = block.parent
             else:
                 block = None
             if block is None:
-                # print(f'Not found.')
                 return

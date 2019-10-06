@@ -49,7 +49,7 @@ class Atrule(Node):
         if not self.block:
             return False
         for node in self.block.nodes:
-            if node.name in ['property', 'expression', 'comment']:
+            if node.node_name in ['property', 'expression', 'comment']:
                 continue
             else:
                 return False

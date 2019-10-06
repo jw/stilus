@@ -1,4 +1,4 @@
-from stilus import stilus
+from stilus import stilus, Parser
 from stilus.stilus import Renderer
 
 
@@ -368,9 +368,25 @@ svg|.bar
   fill yellow
 """
 
-    # parser = Parser(source, {})
-    # ast = parser.parse()
-    # print(f'{ast}')
+    source = """
+@foo
+  $bar
+    color: red
+// @foo bar baz;
+.bar
+  @extend $bar
+"""
+
+    source = """
+$bar
+  color: red
+.bar
+  @extend $bar
+"""
+
+    parser = Parser(source, {})
+    ast = parser.parse()
+    print(f'{ast}')
 
     renderer = Renderer(source, {})
     renderer.options['include css'] = True

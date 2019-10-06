@@ -147,7 +147,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
         else:
             for selector in arr[0]:
                 if not leave_hidden and selector.is_placeholder():
-                    return
+                    continue
                 string = parse(selector, buf)
                 if string:
                     selectors.append(indent + string)

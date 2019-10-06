@@ -586,7 +586,7 @@ class Parser:
         self.skip_spaces_and_comments()
 
         str = self.accept('string')
-        if str is not None:
+        if not str:
             str = self.url()
         self.allow_postfix = True
         return Namespace(str, prefix)

@@ -788,7 +788,6 @@ class Evaluator(Visitor):
 
     def mixin_object(self, object: ObjectNode):
         s = f'$block {object.to_block()}'
-        print(s)
         p = Parser(s, utils.merge({'root': Root()}, self.options))
         try:
             block = p.parse()
