@@ -783,9 +783,9 @@ class Parser:
             if la in ['ident', '{']:
                 return self.feature()
             else:
-                self.expect('{')
+                self.expect('(')
                 node = Expression(lineno=self.lineno, column=self.column)
-                node.append(Literal('{',
+                node.append(Literal('(',
                                     lineno=self.lineno,
                                     column=self.column))
                 node.append(self.supports_condition())
