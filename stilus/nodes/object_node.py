@@ -7,9 +7,12 @@ from stilus.nodes.null import null
 
 class ObjectNode(Node):
 
-    def __init__(self, values: dict = {}, lineno=1, column=1):
+    def __init__(self, values: dict = None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
-        self.values = values
+        if values is None:
+            self.values = {}
+        else:
+            self.values = values
 
     def __str__(self):
         s = []

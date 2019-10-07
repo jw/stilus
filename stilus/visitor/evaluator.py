@@ -268,10 +268,10 @@ class Evaluator(Visitor):
         return node
 
     def visit_objectnode(self, obj: ObjectNode):
-        for key, _ in obj.values.items():
-            # print(f'key: {key}; value: {obj.values[key]}')
-            obj.values[key] = self.visit(obj.values[key])
-        return obj
+        new_obj = ObjectNode()
+        for key, value in obj.values.items():
+            new_obj.set(key, self.visit(value))
+        return new_obj
 
     def visit_member(self, node):
         left = node.left
