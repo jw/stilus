@@ -1,4 +1,4 @@
-from stilus import stilus, Parser
+from stilus import stilus
 from stilus.stilus import Renderer
 
 
@@ -384,9 +384,57 @@ $bar
   @extend $bar
 """
 
-    parser = Parser(source, {})
-    ast = parser.parse()
-    print(f'{ast}')
+    source = """
+
+test(n)
+  if n < 0
+    got below
+  else
+    got above
+
+test-nested(a, b)
+  if a > 1
+    if unit(-5) == ''
+      got empty
+      yup just lots of empty
+    else
+      got unit(-5px)
+
+test-unless(n = 0)
+  unless n
+    padding 10px
+
+body
+  test(5px)
+  test(-5px)
+  test-nested(5px, -5)
+  test-unless()
+
+foo()
+  $width = 10px
+  .foo
+    if true
+      width: $width
+
+foo()
+
+bar()
+  @font-face
+    font-family foo
+    if true
+      src bar
+
+  @page
+    margin 0
+    if true
+      padding 0
+
+bar()
+"""
+
+    # parser = Parser(source, {})
+    # ast = parser.parse()
+    # print(f'{ast}')
 
     renderer = Renderer(source, {})
     renderer.options['include css'] = True

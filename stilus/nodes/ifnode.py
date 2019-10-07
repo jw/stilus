@@ -12,7 +12,7 @@ class If(Node):
         self.postfix = None
         self.block = None
         self.negate = None
-        if negate:  # and isinstance(negate, bool):
+        if negate and isinstance(negate, Node):
             self.block = negate
         else:
             self.negate = negate

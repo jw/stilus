@@ -1,0 +1,106 @@
+@media print {
+  body {
+    foo: 'bar';
+  }
+}
+
+body
+  @media print {
+    something {
+      foo: 'bar';
+    }
+  }
+
+foo()
+  @media print {
+    something {
+      foo: 'bar';
+    }
+  }
+
+body
+  foo()
+
+body
+  ul
+    li
+      foo()
+
+foo()
+  ul
+    li
+      @media print {
+        body {
+          foo: 'bar';
+        }
+      }
+
+body
+  one: 1
+  two: 2
+  foo()
+
+nested(w) {
+  margin-left: (w / 2)
+  @media screen {
+    & {
+      margin-left: w
+    }
+  }
+}
+
+.nested 
+  nested 20px
+
+
+foo()
+  @media only screen and (max-width: 900px)
+    &
+      foo: bar
+      bar: baz
+
+.something
+  foo()
+
+body
+  .thing
+    @media only screen
+      background: #123456
+      .child
+        more: stuff
+
+stuff()
+  @media stuff
+    stuff: 1234
+
+complex
+  stuff()
+  @media only awesome
+    fizz: buzz
+  @media not awesome
+    &
+      one: 1
+    .child
+      two: 2
+
+image(path, w = auto, h = auto)
+  background-image: url(path)
+  @media all and (-webkit-min-device-pixel-ratio: 1.5)
+    background-size: w h
+
+#logo
+  image: '/images/logo.png'
+
+#logo
+  image: '/images/logo.png' 50px 100px
+
+nav#sticky-nav
+  .logo
+    image: '../img/logo.png' 56px 56px
+
+  @media (max-width: 640px), (max-height: 320px)
+    .logo
+      width: 42px
+      height: 42px
+      margin-top: -(@height / 2)
+      image: '../img/logo-dark.png' 42px 42px

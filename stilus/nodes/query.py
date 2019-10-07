@@ -70,17 +70,17 @@ class Query(Node):
         else:
             t2 = t1
 
-        if 'not' == p1 ^ 'not' == p2:
+        if p1 and p2 and ('not' == p1 ^ 'not' == p2):
             if t1 == t2:
                 return
             type = t2 if 'not' == t1 else t1
             pred = p2 if 'not' == p1 else p1
-        elif 'not' == p1 and 'not' == p2:
+        elif p1 and p2 and ('not' == p1 and 'not' == p2):
             if t1 != t2:
                 return
             type = t1
             pred = 'not'
-        elif t1 != t2:
+        elif t1 and t2 and t1 != t2:
             return
         else:
             type = t1
@@ -91,7 +91,8 @@ class Query(Node):
 
         query.predicate = pred
         query.type = type
-        query.nodes = self.nodes.extend(other.nodes)
+        query.nodes.extend(self.nodes)
+        query.nodes.extend(other.nodes)
         return query
 
     def clone(self, parent=None, node=None):

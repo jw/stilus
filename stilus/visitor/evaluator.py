@@ -243,8 +243,9 @@ class Evaluator(Visitor):
             query = queries.nodes[0]
             val = self.lookup(query.type)
             if val:
-                val = val.first().string
-                if not val:
+                if hasattr(val, 'first') and hasattr(val.first(), 'string'):
+                    val = val.first().string
+                else:
                     return queries
                 parser = Parser(val, self.options)
                 queries = self.visit(parser.queries())

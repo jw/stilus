@@ -673,12 +673,9 @@ class Parser:
 
         pred = self.accept(['ident', 'not'])
         if pred:
-            if pred.value.string:
-                pred = Literal(pred.value.string,
-                               lineno=self.lineno,
-                               column=self.lineno)
-            else:
-                pred = pred.value
+            pred = Literal(pred.value,
+                           lineno=self.lineno,
+                           column=self.lineno)
 
             self.skip_spaces_and_comments()
             id = self.accept('ident')

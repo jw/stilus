@@ -31,10 +31,11 @@ class QueryList(Node):
 
     def merge(self, other):
         list = QueryList()
-        for i, query in enumerate(self.nodes):
-            merged = query.merge(other.nodes[i])
-            if merged:
-                list.append(merged)
+        for query in self.nodes:
+            for i, other_node in enumerate(other.nodes):
+                merged = query.merge(other_node)
+                if merged:
+                    list.append(merged)
         return list
 
     def append(self, node):
