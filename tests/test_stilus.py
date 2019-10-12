@@ -378,7 +378,16 @@ svg|.bar
 
     source = """
 body
-  color red
+  unicode-range u+0-10ffff
+  unicode-range U+26
+  unicode-range U+0025-00FF
+  unicode-range U+4??
+  unicode-range U+0025-00FF, U+4??
+
+@font-face
+  font-family 'Ampersand'
+  src local('Times New Roman')
+  unicode-range U+0026
 """
 
     # parser = Parser(source, {})
@@ -392,7 +401,7 @@ body
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
                      'cases/import.basic')
     renderer.include('.')
-    renderer.options['compress'] = True
+    # renderer.options['compress'] = True
 
     css = renderer.render()
 
