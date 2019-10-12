@@ -197,7 +197,7 @@ class Parser:
                 break
             stmt = self.statement()
             self.accept(';')
-            if not stmt:
+            if stmt is None:
                 self.error('unexpected token {peek}, not '
                            'allowed at the root level')
             block.append(stmt)
@@ -729,8 +729,10 @@ class Parser:
 
     def stmt_scope(self):
         self.expect('scope')
-        selector = ''.join(map(lambda s: s.value, self.selector_parts()))
-        self.selector_scope = selector.strip()
+        parts = []
+        for literal in self.selector_parts():
+            parts.append(str(literal))
+        self.selector_scope = ''.join(parts).strip()
         return null
 
     def stmt_supports(self):

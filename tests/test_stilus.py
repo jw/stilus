@@ -368,6 +368,14 @@ svg|.bar
   fill yellow
 """
 
+    source = """
+@scope body.signup-page[attr='foo']
+
+& .container
+  color: red
+
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
