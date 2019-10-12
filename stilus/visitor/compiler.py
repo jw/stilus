@@ -88,7 +88,7 @@ class Compiler(Visitor):
 
         if block.has_properties() and not block.lacks_rendered_selectors:
 
-            last_property_index = -1
+            last_property_index = 0
             if self.compress:
                 for i, node in enumerate(block.nodes):
                     if node.name == 'property':

@@ -376,6 +376,11 @@ svg|.bar
 
 """
 
+    source = """
+body
+  color red
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -387,6 +392,7 @@ svg|.bar
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
                      'cases/import.basic')
     renderer.include('.')
+    renderer.options['compress'] = True
 
     css = renderer.render()
 

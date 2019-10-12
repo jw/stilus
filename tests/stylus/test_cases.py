@@ -37,6 +37,9 @@ def test_stylus_cases(styl, css):
     renderer.include(cases)
     renderer.options['include css'] = True
 
+    if 'compressed' in styl.name:
+        renderer.options['compress'] = True
+
     result = renderer.render()
 
     assert result == destination
