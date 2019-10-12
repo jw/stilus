@@ -92,7 +92,7 @@ class Evaluator(Visitor):
         if file in self.import_stack:
             raise ImportError('import loop has been found')
 
-        with open(file) as f:
+        with open(file, 'r') as f:
             source = f.read()
 
         # shortcut for empty files
@@ -680,9 +680,10 @@ class Evaluator(Visitor):
 
         # mixin conditional statements within
         # a selector group or at-rule
-        if ret and not node.postfix and block.node and \
-                block.node.node_name in ['group', 'atrule', 'media',
-                                         'supports', 'keyframes']:
+        if ret and not node.postfix and hasattr(block, 'node') and \
+                block.node and block.node.node_name \
+                in ['group', 'atrule', 'media',
+                    'supports', 'keyframes']:
             self.mixin(ret.nodes, block)
             return null
 

@@ -759,7 +759,7 @@ class Parser:
             expr.append(feature)
             op = self.accept(['&&', '||'])
             while op:
-                expr.append(Literal('and' if op.value == '&&' else '||',
+                expr.append(Literal('and' if op.value == '&&' else 'or',
                                     lineno=self.lineno,
                                     column=self.column))
                 expr.append(self.supports_feature())
@@ -790,6 +790,9 @@ class Parser:
                                     column=self.column))
                 node.append(self.supports_condition())
                 self.expect(')')
+                node.append(Literal(')',
+                                    lineno=self.lineno,
+                                    column=self.column))
                 self.skip_spaces_and_comments()
                 return node
         return None

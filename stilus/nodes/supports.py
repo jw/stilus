@@ -1,9 +1,9 @@
 import json
 
-from stilus.nodes.node import Node
+from stilus.nodes.atrule import Atrule
 
 
-class Supports(Node):
+class Supports(Atrule):
 
     def __init__(self, condition, lineno=1, column=1):
         super().__init__('supports', lineno=lineno, column=column)
@@ -28,7 +28,7 @@ class Supports(Node):
         return hash(self.__key())
 
     def clone(self, parent=None, node=None):
-        clone = Supports(lineno=self.lineno, column=self.column)
+        clone = Supports(None, lineno=self.lineno, column=self.column)
         clone.condition = self.condition.clone(parent, clone)
         clone.block = self.block.clone(parent, clone)
         return clone

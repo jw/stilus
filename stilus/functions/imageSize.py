@@ -9,7 +9,6 @@ from stilus.utils import assert_type, lookup
 
 
 def _x_and_y_from_svg(path):
-    print(path)
     with open(path) as f:
         soup = BeautifulSoup(f, 'lxml')
     width = soup.svg['width']

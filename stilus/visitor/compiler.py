@@ -190,7 +190,7 @@ class Compiler(Visitor):
 
     def visit_feature(self, node: Node):
         if not node.expr:
-            return node.node_name
+            return node.name
         elif node.expr.is_empty():
             return '(' + node.name + ')'
         else:
@@ -229,7 +229,7 @@ class Compiler(Visitor):
         self.is_condition = True
         self.buf += self.out(self.visit(node.condition))
         self.is_condition = False
-        self.buf += self.out('{' if self.compress else '{\n')
+        self.buf += self.out('{' if self.compress else ' {\n')
         self.indents += 1
         self.visit(node.block)
         self.indents -= 1

@@ -10,16 +10,22 @@ styl_files = path.glob('*.styl')
 for f in styl_files:
     css_file = f.with_suffix('.css')
     if css_file.exists():
-        files.append((str(f), str(css_file)))
+        files.append((f, css_file))
 
 
-@pytest.mark.parametrize("styl,css", files)
+def idfn(val):
+    if isinstance(val, Path):
+        return str(val)
+
+
+@pytest.mark.parametrize("styl,css", files, ids=idfn)
 def test_stylus_cases(styl, css):
-    with open(styl, 'r') as f:
+    with styl.open(encoding='utf-8') as f:
         source = f.read()
-    with open(css, 'r') as f:
+    with css.open(encoding='utf-8') as f:
         destination = f.read()
 
+    # first create include folders
     stylus = Path.joinpath(Path.cwd(), 'tests', 'stylus')
     images = stylus / 'images'
     basics = stylus / 'cases' / 'import.basic'
@@ -31,4 +37,6 @@ def test_stylus_cases(styl, css):
     renderer.include(cases)
     renderer.options['include css'] = True
 
-    assert renderer.render() == destination
+    result = renderer.render()
+
+    assert result == destination
