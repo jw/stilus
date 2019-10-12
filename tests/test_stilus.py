@@ -377,17 +377,10 @@ svg|.bar
 """
 
     source = """
+color = white
+color = color is defined ? color : black
 body
-  unicode-range u+0-10ffff
-  unicode-range U+26
-  unicode-range U+0025-00FF
-  unicode-range U+4??
-  unicode-range U+0025-00FF, U+4??
-
-@font-face
-  font-family 'Ampersand'
-  src local('Times New Roman')
-  unicode-range U+0026
+  background color
 """
 
     # parser = Parser(source, {})
