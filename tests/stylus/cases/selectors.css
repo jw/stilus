@@ -1,0 +1,134 @@
+@media print {
+  [contenteditable=true] {
+    border: none;
+    outline: none;
+  }
+}
+foo bar baz {
+  foo: bar;
+}
+foo > bar {
+  foo: bar;
+}
+input[type=text] {
+  foo: bar;
+}
+input[type="text"] {
+  foo: bar;
+}
+* {
+  foo: bar;
+}
+* .foo-bar {
+  foo: bar;
+}
+*,
+*:before,
+*:after {
+  foo: bar;
+}
+body > #container * {
+  foo: bar;
+}
+#foo > #bar + .baz {
+  foo: bar;
+}
+#foo>#bar {
+  foo: bar;
+}
+p + p ~ p {
+  foo: bar;
+}
+ul :odd {
+  foo: bar;
+}
+ul > li:last-child {
+  foo: bar;
+}
+ul > li:nth-child(2n) {
+  foo: bar;
+}
+*,
+p + p,
+ul > li {
+  foo: bar;
+}
+[is],
+[for],
+[or],
+[null] {
+  foo: bar;
+}
+#for,
+#aor {
+  foo: bar;
+}
+#for .foo {
+  foo: bar;
+}
+.or .foo {
+  foo: bar;
+}
+.return  .foo {
+  foo: bar;
+}
+.null .foo {
+  foo: bar;
+}
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+button[disabled]:hover,
+input[disabled]:hover {
+  cursor: pointer;
+}
+a:hover button[disabled],
+a:hover input[disabled] {
+  cursor: pointer;
+}
+input[type="submit"],
+button {
+  color: #f00;
+}
+input[foo] .bar {
+  color: #f00;
+}
+input[foo]["bar"] {
+  color: #f00;
+}
+input["foo"]::before {
+  color: #f00;
+}
+input["bar"] + .foo {
+  color: #f00;
+}
+input["bar"] > .foo {
+  color: #f00;
+}
+input["bar"] ~ .foo {
+  color: #f00;
+}
+input["bar"].foo:hover * .foo {
+  color: #f00;
+}
+input.foo[bar="baz"] {
+  color: #f00;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+}
+button,
+input,
+a {
+  color: #f00;
+}
+paper {
+  background: #008000;
+}
+paper paper-input::shadow .color {
+  background: #f00;
+}

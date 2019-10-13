@@ -970,7 +970,7 @@ class Parser:
                                        lineno=self.lineno,
                                        column=self.column))
                 elif tok.type == 'function':
-                    arr.append(Literal(f'{tok.value.node_name}(',
+                    arr.append(Literal(f'{tok.value.name}(',
                                        lineno=self.lineno,
                                        column=self.column))
                 elif tok.type == 'ident':

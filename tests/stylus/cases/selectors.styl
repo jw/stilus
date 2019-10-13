@@ -1,0 +1,127 @@
+@media print
+  [contenteditable=true]
+    border: none
+    outline: none
+
+foo bar baz
+  foo bar
+
+foo > bar
+  foo bar
+
+input[type=text]
+  foo bar
+
+input[type="text"]
+  foo bar
+
+*
+  foo bar
+
+* .foo-bar
+  foo bar
+
+*
+*:before
+*:after
+  foo bar
+
+body > #container *
+  foo bar
+
+#foo > #bar + .baz
+  foo bar
+#foo>#bar
+  foo bar
+
+p + p ~ p
+  foo bar
+
+ul :odd
+  foo bar
+
+ul > li:last-child
+  foo bar
+
+ul > li:nth-child(2n)
+  foo bar
+
+*, p + p, ul > li
+  foo bar
+
+[is]
+[for]
+[or]
+[null]
+  foo bar
+
+#for
+#aor
+  foo bar
+
+#for .foo
+  foo bar
+
+.or .foo
+  foo bar
+
+.return  .foo
+  foo bar
+
+.null .foo
+  foo bar
+
+button[disabled]
+input[disabled]
+  cursor default
+
+button[disabled]:hover
+input[disabled]:hover
+  cursor pointer
+
+a:hover button[disabled]
+a:hover input[disabled]
+  cursor pointer
+
+input[type="submit"]
+button
+  color red
+
+input[foo] .bar
+  color red
+
+input[foo]["bar"]
+  color red
+
+input["foo"]::before
+  color red
+
+input["bar"] + .foo
+  color red
+
+input["bar"] > .foo
+  color red
+
+input["bar"] ~ .foo
+  color red
+
+input["bar"].foo:hover * .foo
+  color red
+
+input.foo[bar="baz"]
+  color red
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"], /* 2 */
+input[type="submit"]
+  cursor pointer
+
+button, input, /* foo */ a
+  color red
+
+paper
+  background green
+
+  paper-input::shadow .color
+    background red
