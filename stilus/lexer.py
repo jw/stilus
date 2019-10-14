@@ -77,17 +77,17 @@ class Lexer:
         s = re.sub(r'\s+$', '\n', s)
         s = re.sub(r'\r\n?', '\n', s)
         s = re.sub(r'\\ *\n', '\r', s)
-        # s = re.sub('\\[+]')
 
         def _comment(match):
-            # TODO: this needs a cleanup
-            s = match.group(0)
+            # TODO: this needs a rewrite
+            m = match.group(0)
             value = match.groups()[0]
             offset = match.start(0)
             string = match.string
-            in_comment = s.rfind('/*', offset) > s.rfind('*/', offset)
-            comment_index = s.rfind('//', offset)
-            i = s.rfind('\n', offset)
+            in_comment = \
+                string.rfind('/*', offset) > string.rfind('*/', offset)
+            comment_index = string.rfind('//', 0, offset)
+            i = s.rfind('\n', 0, offset)
             double = 0
             single = 0
 
@@ -102,7 +102,7 @@ class Lexer:
                         break
                     i += 1
 
-            return string if in_comment else value + '\r'
+            return m if in_comment else value + '\r'
 
         s = re.sub(r'([,(:](?!\/\/[^ ])) *(?:\/\/[^\n]*|\/\*.*?\*\/)?\n\s*',
                    _comment, s)
