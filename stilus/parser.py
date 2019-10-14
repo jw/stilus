@@ -1406,11 +1406,12 @@ class Parser:
             paren = self.expect(')')
             self.parens -= 1
             if self.accept('%'):
-                expr.push(Ident('%'))
+                expr.append(Ident('%'))
             tok = self.peek()
             # (1 + 2)px, (1 + 2)em, etc.
             if not paren.space and 'ident' == tok.type and \
-                    tok.value.string not in units:
+                    tok.value.string in units:
+                expr.append(Ident(tok.value.string))
                 self.next()
             return expr
 

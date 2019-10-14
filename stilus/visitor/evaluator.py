@@ -1101,7 +1101,8 @@ class Evaluator(Visitor):
         return len(expr.nodes) == 2 and \
                expr.first().node_name == 'unit' and \
                expr.nodes[1] and \
-               expr.nodes[1].node_name in units
+               hasattr(expr.nodes[1], 'name') and \
+               expr.nodes[1].name in units
 
     def warn(self, message):
         if not self.warnings:
