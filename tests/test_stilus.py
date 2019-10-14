@@ -370,14 +370,8 @@ svg|.bar
 
     source = """
 body
-  foo: foo bar (1)pt
-  foo: foo bar (2 * 5)px
-  foo: foo (2 * 5 + (5 * 55))px bar
-"""
-
-    source = """
-body
-  foo: foo bar (1)pt
+  foo 15px
+  foo -15px
 """
 
     # parser = Parser(source, {})
@@ -391,7 +385,7 @@ body
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
                      'cases/import.basic')
     renderer.include('.')
-    # renderer.options['compress'] = True
+    renderer.options['compress'] = True
 
     css = renderer.render()
 

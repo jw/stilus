@@ -90,8 +90,8 @@ class Compiler(Visitor):
 
             last_property_index = 0
             if self.compress:
-                for i, node in enumerate(block.nodes):
-                    if node.name == 'property':
+                for i, node in reversed(list(enumerate(block.nodes))):
+                    if node.node_name == 'property':
                         last_property_index = i
                         break
 
@@ -279,11 +279,11 @@ class Compiler(Visitor):
                 return 0
             if f:
                 # remove trailing zeros
-                n = f'{self.a:.3f}'.rstrip('0').rstrip('.')
+                n = f'{n:.3f}'.rstrip('0').rstrip('.')
                 if 1 > float(n) > -1:
                     # omit leading '0' on floats
                     n = n.replace('0.', '.')
-                return n
+                return f'{n}{t}'
         if f:
             v = f'{n:.15f}'.rstrip('0').rstrip('.')
             v = _handle_weird_deg_value(v, t)
