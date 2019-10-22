@@ -333,6 +333,7 @@ class Parser:
 
     def looks_like_selector(self, from_property=False):
         i = 1
+        brace = None
 
         # real property
         if from_property and ':' == self.lookahead(i + 1).type and \
@@ -388,7 +389,6 @@ class Parser:
 
             # the ':' token within braces signifies
             # a selector. ex: "foo{bar:'baz'}"
-            brace = None
             if '{' == self.lookahead(i).type:
                 brace = True
             elif '}' == self.lookahead(i).type:

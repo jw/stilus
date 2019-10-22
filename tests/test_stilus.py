@@ -413,6 +413,47 @@ body
 
 """
 
+    source = """
+
+body
+  padding 5px
+
+body
+ padding 5px
+
+body
+  padding: 5px;  margin: 0;
+
+body
+    padding: 5px;
+    margin: 0;
+
+body {
+     padding: 5px;
+  margin: 0;
+}
+
+body {
+  padding: 5px;  margin: 0;
+}
+
+body {
+padding: 5px;
+}
+
+ul {
+  li {
+    padding: 5px;
+}
+}
+
+
+body{padding: 5px;}
+foo
+  bar {color:'asdf'}
+  bar{color:'asdf'}
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -424,7 +465,7 @@ body
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
                      'cases/import.basic')
     renderer.include('.')
-    renderer.options['compress'] = True
+    # renderer.options['compress'] = True
 
     css = renderer.render()
 
