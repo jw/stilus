@@ -1,6 +1,6 @@
 import json
 
-from stilus.nodes.boolean import true
+from stilus.nodes.boolean import true, Boolean
 from stilus.nodes.node import Node
 
 
@@ -142,8 +142,7 @@ class Expression(Node):
                 if a.operate(op, b).is_true():
                     continue
                 return false
-            from stilus.nodes.boolean import true
-            return true
+            return Boolean(True)
         else:
             return self.first().operate(op, right, value)
 

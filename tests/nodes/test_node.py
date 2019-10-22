@@ -44,7 +44,7 @@ def test_name():
 def test_to_boolean():
     node = Node()
     from stilus.nodes.boolean import true
-    assert node.to_boolean() is true
+    assert node.to_boolean() == true
 
 
 def test_first():

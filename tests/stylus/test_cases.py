@@ -6,7 +6,7 @@ from stilus.stilus import Renderer
 
 files = []
 path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
-styl_files = path.glob('*.styl')
+styl_files = path.glob('**/*.styl')
 for f in styl_files:
     css_file = f.with_suffix('.css')
     if css_file.exists():
@@ -31,7 +31,7 @@ def test_stylus_cases(styl, css):
     basics = stylus / 'cases' / 'import.basic'
     cases = stylus / 'cases'
 
-    renderer = Renderer(source, {})
+    renderer = Renderer(source, {'paths': ['.']})
     renderer.include(images)
     renderer.include(basics)
     renderer.include(cases)
@@ -41,5 +41,37 @@ def test_stylus_cases(styl, css):
         renderer.options['compress'] = True
 
     result = renderer.render()
+
+    assert result == destination
+
+
+if __name__ == '__main__':
+    base = Path('/home/jw/python/projects/stilus/tests/stylus/cases')
+    styl = base / 'bifs' / 'bifs.saturate-desaturate.styl'
+    css = base / 'bifs' / 'bifs.saturate-desaturate.css'
+
+    with styl.open(encoding='utf-8') as f:
+        source = f.read()
+    with css.open(encoding='utf-8') as f:
+        destination = f.read()
+
+    # first create include folders
+    stylus = Path.joinpath(Path.cwd())
+    images = stylus / 'images'
+    basics = stylus / 'cases' / 'import.basic'
+    cases = stylus / 'cases'
+
+    renderer = Renderer(source, {'paths': ['.']})
+    renderer.include(images)
+    renderer.include(basics)
+    renderer.include(cases)
+    renderer.options['include css'] = True
+
+    if 'compress' in styl.name:
+        renderer.options['compress'] = True
+
+    result = renderer.render()
+
+    # print(result)
 
     assert result == destination

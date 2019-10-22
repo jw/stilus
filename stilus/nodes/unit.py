@@ -1,7 +1,7 @@
 import json
 from math import isnan
 
-from stilus.nodes.boolean import true, Boolean
+from stilus.nodes.boolean import Boolean
 from stilus.nodes.expression import Expression
 from stilus.nodes.node import Node
 
@@ -40,7 +40,7 @@ class Unit(Node):
         return self.__str__()
 
     def to_boolean(self):
-        return true if self.type else Boolean(self.value)
+        return Boolean(True) if self.type else Boolean(self.value)
 
     def to_json(self):
         return json.dumps({'__type': 'Unit',

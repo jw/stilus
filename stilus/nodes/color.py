@@ -4,7 +4,7 @@ import json
 from stilus.functions.adjust import adjust
 from stilus.nodes.string import String
 from stilus.nodes.unit import Unit
-from stilus.nodes.boolean import true
+from stilus.nodes.boolean import true, Boolean
 from stilus.nodes.node import Node
 from stilus.utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
 
@@ -237,7 +237,7 @@ class RGBA(Color):
             right = right.first()
         if op == 'is a' and right.node_name == 'string' \
                 and right.string == 'color':
-            return true
+            return Boolean(true)
         elif op == '+':
             if right.node_name == 'unit':
                 n = right.value

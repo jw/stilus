@@ -42,8 +42,8 @@ class Node:
         """Return True.
         :return: True
         """
-        from stilus.nodes.boolean import true
-        return true
+        from stilus.nodes.boolean import Boolean
+        return Boolean(True)
 
     def to_expression(self):
         """Return expression or wrap this node in an expression

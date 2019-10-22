@@ -4,6 +4,7 @@ from PIL import Image
 from bs4 import BeautifulSoup
 
 from stilus.exceptions import StilusError
+from stilus.nodes.expression import Expression
 from stilus.nodes.unit import Unit
 from stilus.utils import assert_type, lookup
 
@@ -25,8 +26,12 @@ def image_size(img: str, ignore_errors=False, evaluator=None):
     if path:
         with Image.open(path) as image:
             x, y = image.size
-            return [Unit(x, 'px'), Unit(y, 'px')]
+            expression = Expression()
+            expression.nodes = [Unit(x, 'px'), Unit(y, 'px')]
+            return expression
     elif ignore_errors:
-        return [Unit(0), Unit(0)]
+        expression = Expression()
+        expression.nodes = [Unit(0), Unit(0)]
+        return expression
     else:
         raise StilusError('Could not find image.')

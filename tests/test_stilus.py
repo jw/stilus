@@ -373,6 +373,45 @@ body
   foo 15px
   foo -15px
 """
+    source = """
+foo = #123456
+define('foo', #234567)
+define('bar', #345678)
+define('bar', #456789)
+define('baz', 42)
+
+hey
+  foo: foo
+  bar: bar
+  baz: baz
+
+prefix = 'border'
+
+define('border', {
+  color: #000,
+  length: 1px,
+  style: solid
+})
+
+for prop, val in border
+  define(prefix + '-' + prop, val)
+
+body
+  border: border-length border-style border-color
+
+a = 10
+
+foo(global)
+  a = 5
+  define('a', 15, global)
+
+body
+  aap a
+  test: a == 10
+  foo(true)
+  test: a == 15
+
+"""
 
     # parser = Parser(source, {})
     # ast = parser.parse()
