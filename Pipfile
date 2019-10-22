@@ -24,7 +24,7 @@ recommonmark = "*"
 commonmark = "*"
 pytest-icdiff = "*"
 coveralls = "*"
-coveralls-python = "*"
+python-coveralls = "*"
 
 [requires]
 python_version = "3.6"

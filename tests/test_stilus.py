@@ -369,11 +369,6 @@ svg|.bar
 """
 
     source = """
-body
-  foo 15px
-  foo -15px
-"""
-    source = """
 foo = #123456
 define('foo', #234567)
 define('bar', #345678)
@@ -410,21 +405,6 @@ body
   test: a == 10
   foo(true)
   test: a == 15
-
-"""
-
-    source = """
-
-vendors = webkit
-
-animate(name) {
-  @keyframes name {
-    from { color: red; }
-    to { color: blue; }
-  }
-}
-
-animate(something)
 
 """
 

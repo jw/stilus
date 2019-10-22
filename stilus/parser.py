@@ -270,8 +270,9 @@ class Parser:
 
     def is_pseudo_selector(self, n):
         value = self.lookahead(n).value
-        if value:
-            return value.value in self.pseudo_selectors
+        if value and hasattr(value, 'name'):
+            return value.name in self.pseudo_selectors
+        return False
 
     def line_contains(self, type):
         i = 1

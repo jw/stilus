@@ -56,7 +56,7 @@ def print_version(ctx, param, value):
 @click.option('--version', '-V', is_flag=True, callback=print_version,
               expose_value=False, is_eager=True,
               help='Display the version of Stilus.')
-def cli(verbose, print_, include, input, output=None):
+def stilus(verbose, print_, include, input, output=None):
     renderer = Renderer(input.read(), {})
     css = renderer.render()
     if print_ or not output:
@@ -68,4 +68,4 @@ def cli(verbose, print_, include, input, output=None):
 
 
 if __name__ == '__main__':
-    cli()
+    stilus()
