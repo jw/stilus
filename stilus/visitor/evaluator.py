@@ -294,7 +294,7 @@ class Evaluator(Visitor):
         keyframes.value = self.interpolate(keyframes).strip()
         val = self.lookup(keyframes.value)
         if val:
-            keyframes.val = val.first().string  # || val.first().node_name
+            keyframes.value = val.first().string  # || val.first().node_name
         keyframes.block = self.visit(keyframes.block)
 
         if 'official' != keyframes.prefix:

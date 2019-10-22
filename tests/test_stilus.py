@@ -415,43 +415,17 @@ body
 
     source = """
 
-body
-  padding 5px
+vendors = webkit
 
-body
- padding 5px
-
-body
-  padding: 5px;  margin: 0;
-
-body
-    padding: 5px;
-    margin: 0;
-
-body {
-     padding: 5px;
-  margin: 0;
+animate(name) {
+  @keyframes name {
+    from { color: red; }
+    to { color: blue; }
+  }
 }
 
-body {
-  padding: 5px;  margin: 0;
-}
+animate(something)
 
-body {
-padding: 5px;
-}
-
-ul {
-  li {
-    padding: 5px;
-}
-}
-
-
-body{padding: 5px;}
-foo
-  bar {color:'asdf'}
-  bar{color:'asdf'}
 """
 
     # parser = Parser(source, {})
