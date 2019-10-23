@@ -369,43 +369,46 @@ svg|.bar
 """
 
     source = """
-foo = #123456
-define('foo', #234567)
-define('bar', #345678)
-define('bar', #456789)
-define('baz', 42)
 
-hey
-  foo: foo
-  bar: bar
-  baz: baz
-
-prefix = 'border'
-
-define('border', {
-  color: #000,
-  length: 1px,
-  style: solid
-})
-
-for prop, val in border
-  define(prefix + '-' + prop, val)
+padding(n)
+  padding n
 
 body
-  border: border-length border-style border-color
+  padding(5px)
+  padding(5px 10px)
 
-a = 10
-
-foo(global)
-  a = 5
-  define('a', 15, global)
+padding(y, x = null)
+  padding y x
 
 body
-  aap a
-  test: a == 10
-  foo(true)
-  test: a == 15
+  padding(5px)
+  padding(5px, 10px)
 
+padding(args...)
+  padding args
+
+body
+  padding(5px)
+  padding(5px, 10px)
+  padding(5px, 10px, 0 2px)
+
+padding(y, rest...)
+  test-y y
+  if rest
+    padding rest
+
+body
+  padding(1px)
+  padding(1px, 2px, 3px)
+
+padding(args...)
+  if args
+    test-y args[0]
+    test-x args[1]
+
+body
+  padding(1px)
+  padding(1px, 2px)
 """
 
     # parser = Parser(source, {})

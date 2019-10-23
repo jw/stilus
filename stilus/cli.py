@@ -46,6 +46,8 @@ def print_version(ctx, param, value):
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('-v', '--verbose', count=True)
+@click.option('-c', '--compress', is_flag=True, default=False,
+              help='Compress CSS output.')
 @click.option('-p', '--print', 'print_', is_flag=True, default=False,
               help='Print out the compiled CSS.')
 @click.option('-I', '--include', help='Add <path> to lookup paths.')
@@ -56,8 +58,8 @@ def print_version(ctx, param, value):
 @click.option('--version', '-V', is_flag=True, callback=print_version,
               expose_value=False, is_eager=True,
               help='Display the version of Stilus.')
-def stilus(verbose, print_, include, input, output=None):
-    renderer = Renderer(input.read(), {})
+def stilus(verbose, compress, print_, include, input, output=None):
+    renderer = Renderer(input.read(), {'compress': compress})
     css = renderer.render()
     if print_ or not output:
         click.echo(css)
