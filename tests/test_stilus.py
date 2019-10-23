@@ -370,45 +370,39 @@ svg|.bar
 
     source = """
 
-padding(n)
-  padding n
+add(a, b)
+  a + b
+
+pad(x, y)
+  padding y x y x
 
 body
-  padding(5px)
-  padding(5px 10px)
+  pad(5px, 10px)
 
-padding(y, x = null)
-  padding y x
+form .button
+  padding-left add(10px, 5px)
 
-body
-  padding(5px)
-  padding(5px, 10px)
+-opposite-position(pos)
+  if pos == top
+    bottom
+  else if pos == bottom
+    top
+  else if pos == left
+    right
+  else if pos == right
+    left
+  else
+    error('Invalid position ' + pos)
 
-padding(args...)
-  padding args
-
-body
-  padding(5px)
-  padding(5px, 10px)
-  padding(5px, 10px, 0 2px)
-
-padding(y, rest...)
-  test-y y
-  if rest
-    padding rest
-
-body
-  padding(1px)
-  padding(1px, 2px, 3px)
-
-padding(args...)
-  if args
-    test-y args[0]
-    test-x args[1]
+opposite(positions)
+  for pos in positions
+    pos = -opposite-position(pos)
+    ret = ret is defined ? ret pos : pos
 
 body
-  padding(1px)
-  padding(1px, 2px)
+  foo opposite(top)
+  foo opposite(left)
+  foo opposite(top left)
 """
 
     # parser = Parser(source, {})
