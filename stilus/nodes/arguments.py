@@ -11,7 +11,11 @@ class Arguments(Expression):
         self.is_list = False
 
     def __str__(self):
-        return f''  # map: {self.map}'  # nodes: {self.nodes}'
+        string_nodes = [str(node) for node in self.nodes]
+        if self.is_list:
+            return ', '.join(string_nodes)
+        else:
+            return ' '.join(string_nodes)
 
     def __repr__(self):
         return self.__str__()

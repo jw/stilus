@@ -204,7 +204,7 @@ class Compiler(Visitor):
     def visit_atrule(self, atrule):
         newline = '' if self.compress else '\n'
 
-        self.buf += self.out(f'{self.indent()}@{atrule.type.value}', atrule)
+        self.buf += self.out(f'{self.indent()}@{atrule.type}', atrule)
 
         if atrule.value:
             self.buf += self.out(f' {atrule.value.strip()}')

@@ -1531,7 +1531,8 @@ class Parser:
             self.skip_spaces_and_comments()
             if self.accept(',') is None:
                 break
-        mozdocument.segments = [Literal(', '.join(calls),
+        joined_calls = [str(call) for call in calls]
+        mozdocument.segments = [Literal(', '.join(joined_calls),
                                         lineno=self.lineno,
                                         column=self.column)]
         self.state.append('atrule')

@@ -369,17 +369,30 @@ svg|.bar
 """
 
     source = """
+.embed-no-hash {
+  color: #c00;
+  background: embedurl("circle.svg");
+}
 
-add(a, b)
-  a + b
+.embed-with-hash {
+  color: #c00;
+  background: embedurl("circle.svg#some-id");
+}
 
-size-function = add
+.embed-with-utf8 {
+  color: #c00;
+  background: embedurl("circle.svg", "utf8");
+}
 
-size(n)
-  size-function(n, n)
+.too-big-no-hash {
+  color: #c00;
+  background: url("tiger.svg");
+}
 
-body
-  font size(14px)
+.too-big-with-hash {
+  color: #c00;
+  background: url("tiger.svg#some-id");
+}
 """
 
     # parser = Parser(source, {})
