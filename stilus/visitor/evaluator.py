@@ -902,14 +902,14 @@ class Evaluator(Visitor):
         log.debug(f'import {path}')
 
         # url() passed
-        # if path.name == 'url':
-        #     if hasattr(imported, 'once') and imported.once:
-        #         raise StilusError('You cannot @require a url')
-        #     return imported
+        if hasattr(path, 'function_name') and path.function_name == 'url':
+            if hasattr(imported, 'once') and imported.once:
+                raise StilusError('You cannot @require a url')
+            return imported
 
         # ensure string
-        # if not path.string:
-        #     raise StilusError(f'@{node_name} string expected')
+        if not hasattr(path, 'string'):
+            raise StilusError(f'@{node_name} string expected')
 
         name = path = path.string
 

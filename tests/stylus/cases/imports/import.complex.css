@@ -1,0 +1,15 @@
+one {
+  foo: bar;
+}
+two {
+  foo: bar;
+}
+three {
+  foo: bar;
+}
+.block {
+  color: #00f;
+}
+.block .foo {
+  color: #f00;
+}

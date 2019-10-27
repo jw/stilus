@@ -198,7 +198,7 @@ class Compiler(Visitor):
                    self.visit(node.expr) + ')'
 
     def visit_import(self, imported):
-        self.buf += self.out('@import ' + self.visit(imported.path) + '\n',
+        self.buf += self.out('@import ' + self.visit(imported.path) + ';\n',
                              imported)
 
     def visit_atrule(self, atrule):

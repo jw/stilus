@@ -457,6 +457,81 @@ set-colour(colour = get-red)
   set-colour()
 
 """
+
+    source = """
+
+size = 15px
+small = 5
+
+pad-var(x, y = size)
+  padding y x y x
+
+pad-arg(x, y = x)
+  padding y x y x
+
+body
+  pad-var(5px)
+
+a.button
+  pad-arg(10px)
+
+a.button-2
+  pad-arg(10px, 2px)
+
+add(a, b)
+  a + b
+"""
+
+    source = """
+small = 5
+
+add(a, b)
+  a + b
+
+pad-call(n = unit(add(small, small), 'px'))
+  padding n
+"""
+
+    source = """
+
+@page
+  margin 2.5cm
+
+@page name
+  color: red
+
+@page :left
+  margin-left 5cm
+
+@page :right
+  margin-right 5cm
+
+@page :first
+  margin-top 8cm
+  background white
+
+@page :left {
+  margin-left: 5cm;
+}
+
+@page :blank {
+  @top-center { content: none }
+}
+
+@page :right {
+  @top-center { content: 'foo' }
+  @bottom-center { content: counter(page) }
+}
+
+@page
+  counter-reset: footnote
+  @footnote
+    counter-increment: footnote
+    float: bottom
+    column-span: all
+    height: auto
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
