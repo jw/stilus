@@ -1,5 +1,7 @@
 import base64
 import logging
+import re
+import urllib
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -27,58 +29,54 @@ encoding_types = {
 }
 
 
-def url(options, evaluator=None):
-    o = {}
-    if options:
-        o = options
-
-    _paths = o.get('paths', [])
-    size_limit = o.get('limit', 30000)
-    mimes = o.get('mimes', default_mimes)
+# todo: rewrite this; this is terrible!
+def url(url, enc=None, evaluator=None):
+    _paths = evaluator.options.get('paths', [])
+    size_limit = evaluator.options.get('limit', 30000)
+    mimes = evaluator.options.get('mimes', default_mimes)
 
     def fn(url, enc=None):
         compiler = Compiler(url, {})
-        url = ''
-        for u in url.nodes:
-            url += compiler.visit(u)
+        url = compiler.visit(url)
 
         # parse the url
-        url = urlparse(url)
+        url = urlparse(url[1:-1])
         ext = Path(url.path).suffix
-        mime = mimes[ext]
-        hash = url.frag
-        literal = Literal(f'url("{url.geturl()}"')
-        if evaluator:
-            paths = _paths.extend(evaluator.paths)
+        mime = None
+        if ext:
+            mime = mimes[ext]
+        hash = ''
+        if url.fragment:
+            hash = f'#{url.fragment}'
+        literal = Literal(f'url("{url.geturl()}")')
 
         # not mime or absolute
-        if not mime or not url.protocol:
+        if not mime or url.scheme:
             return literal
 
         # lookup
-        found = utils.lookup(url.path, paths)
+        found = utils.lookup(url.path, _paths)
         if not found:
             # todo: add event management
             logging.warning(f'File not found; File {literal} could not be '
                             f'found, literal url retained!')
             return literal
 
-        # read the url as a utf-8 string
-        buf = ''
-        if enc and enc.first().value.lower() == 'utf8':
-            encoding = 'UTF-8'
-            with open(found, 'r', encoding=encoding) as f:
-                buf = f.read()
-        else:
-            encoding = 'base64'
-            with open(found, 'r', encoding=encoding) as f:
-                data = f.read()
-                buf = base64.b64decode(data) + hash
+        # read the url as a binary
+        buf = open(found, 'rb').read()
 
-        # too large
+        # too large?
         if size_limit and len(buf) > size_limit:
             return literal
 
-        return Literal(f'url("data:{mime};{encoding},{buf}")')
+        if enc and enc.first().value.lower() == 'utf8':
+            encoding = 'charset=utf-8'
+            buf = re.sub(r'\s+', ' ', buf.decode('utf-8'))
+            result = urllib.parse.quote(buf, safe=' ?=:/').strip()
+        else:
+            encoding = 'base64'
+            result = f'{base64.b64encode(buf).decode("utf-8")}{hash}'
 
-    return fn
+        return Literal(f'url("data:{mime};{encoding},{result}")')
+
+    return fn(url, enc)

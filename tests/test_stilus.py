@@ -395,6 +395,26 @@ svg|.bar
 }
 """
 
+    source = """
+
+pad(types = margin padding, n = 5px)
+  padding unit(n, px) if padding in types
+  margin unit(n, px) if margin in types
+
+body
+  pad()
+
+body
+  pad(margin)
+
+body
+  apply-mixins = true
+  pad(padding, 10) if apply-mixins
+
+body
+  foo pad()
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

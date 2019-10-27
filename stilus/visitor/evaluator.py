@@ -201,11 +201,10 @@ class Evaluator(Visitor):
             rgba.name = color
             self.common.scope().add(ident)
 
-        # todo: also expose url javascript function; might be hard >8-(
-        self.common.scope().add(Ident('embedurl',
-                                      Function('embedurl', None, None,
-                                               lineno=self.parser.lineno,
-                                               column=self.parser.column)))
+        # self.common.scope().add(Ident('embedurl',
+        #                               Function('embedurl', url.fn,
+        #                                        lineno=self.parser.lineno,
+        #                                        column=self.parser.column)))
 
         # user defined globals
         commons = self.commons
