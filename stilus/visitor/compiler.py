@@ -62,7 +62,7 @@ class Compiler(Visitor):
         return ' ' * (self.spaces * self.indents)
 
     def need_brackets(self, node):
-        if 1 == self.indents:
+        if 0 == self.indents:
             return True
         if 'atrule' != node.node_name:
             return True

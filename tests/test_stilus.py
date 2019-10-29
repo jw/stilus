@@ -493,36 +493,6 @@ pad-call(n = unit(add(small, small), 'px'))
 """
 
     source = """
-
-@page
-  margin 2.5cm
-
-@page name
-  color: red
-
-@page :left
-  margin-left 5cm
-
-@page :right
-  margin-right 5cm
-
-@page :first
-  margin-top 8cm
-  background white
-
-@page :left {
-  margin-left: 5cm;
-}
-
-@page :blank {
-  @top-center { content: none }
-}
-
-@page :right {
-  @top-center { content: 'foo' }
-  @bottom-center { content: counter(page) }
-}
-
 @page
   counter-reset: footnote
   @footnote
