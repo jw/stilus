@@ -1282,17 +1282,23 @@ class Parser:
         # with a function call or definition. Here
         # we pair parens to prevent false negatives
 
+        # todo: clean this!
         try:
             tok = self.lookahead(i)
             i += 1
             while tok:
                 if tok.type in ['function', '(']:
                     parens += 1
-                    break
+                    tok = self.lookahead(i)
+                    i += 1
+                    continue
                 elif tok.type == ')':
-                    if parens - 1 == 0:
-                        raise TypeError
-                    break
+                    parens -= 1
+                    if parens == 0:
+                        raise TypeError  # which is good
+                    tok = self.lookahead(i)
+                    i += 1
+                    continue
                 elif tok.type == 'oes':
                     self.error('failed to find closing paren ")"')
                 tok = self.lookahead(i)
