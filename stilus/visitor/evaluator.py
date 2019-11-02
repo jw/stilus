@@ -950,7 +950,7 @@ class Evaluator(Visitor):
         while i > 0:
             i -= 1
             block = self.stack[i].block
-            if hasattr(block, 'node') and block.node.node_name in \
+            if block and hasattr(block, 'node') and block.node.node_name in \
                     ['group', 'function', 'if', 'each', 'atrule',
                      'media', 'atblock', 'call']:
                 nodes = block.nodes
@@ -964,12 +964,14 @@ class Evaluator(Visitor):
                             return nodes[index].clone()
                 else:
                     length = len(nodes)
-                    if property != nodes[length].node_name or \
-                            self.property == nodes[length]:
-                        continue
-                    other = self.interpolate(nodes[length])
-                    if name == other:
-                        return nodes[length].clone()
+                    while length > 0:
+                        length -= 1
+                        if 'property' != nodes[length].node_name or \
+                                self.property == nodes[length]:
+                            continue
+                        other = self.interpolate(nodes[length])
+                        if name == other:
+                            return nodes[length].clone()
         return null
 
     def closest_block(self):
@@ -1069,7 +1071,7 @@ class Evaluator(Visitor):
                     self._selector = ret
                 return ret
 
-        if node.segments:
+        if node and hasattr(node, 'segments') and node.segments:
             s = ''
             for segment in node.segments:
                 s += str(to_string(segment))

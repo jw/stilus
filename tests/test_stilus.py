@@ -434,15 +434,27 @@ set-colour(colour = get-red)
 
     source = """
 
-mixin()
-  foo: 5px
-  something
-    here: whoop
+body
+  foo: typeof(@foo)
+  foo: @foo
+  foo: '-' + @foo
+  foo: '-' + @foo
+  foo: '-' + @foo
 
 body
-  margin: 5px
-  padding: 5px
-  mixin()
+  ul
+    li
+      color: blue
+      color: red
+      a
+        color: @color
+
+body
+  foo: @bar == null
+  bar: 'test'
+  unless true
+    bar: 'also test'
+  baz: @bar
 
 """
 
