@@ -432,30 +432,14 @@ set-colour(colour = get-red)
 
 """
 
+    # regression 156!
     source = """
+body
+  mixin()
 
 body
-  foo: typeof(@foo)
-  foo: @foo
-  foo: '-' + @foo
-  foo: '-' + @foo
-  foo: '-' + @foo
-
-body
-  ul
-    li
-      color: blue
-      color: red
-      a
-        color: @color
-
-body
-  foo: @bar == null
-  bar: 'test'
-  unless true
-    bar: 'also test'
-  baz: @bar
-
+  padding-{opposite-position(left)} 0
+  float opposite-position(left)
 """
 
     # parser = Parser(source, {})
