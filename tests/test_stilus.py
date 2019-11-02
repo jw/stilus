@@ -442,6 +442,15 @@ body
   float opposite-position(left)
 """
 
+    source = """
+@import 'import.include.function/import.vendor'
+@import 'import.include.function/import.common'
+
+$radius = 10
+body
+  border-radius: ($radius / 2)px
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

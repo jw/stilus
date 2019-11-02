@@ -414,8 +414,9 @@ class Evaluator(Visitor):
         # evaluate arguments
         self.result += 1
         args = self.visit(call.args)
-        for key in args.map:
-            args.map[key] = self.visit(args.map[key].clone())
+        if hasattr(args, 'map'):
+            for key in args.map:
+                args.map[key] = self.visit(args.map[key].clone())
         self.result -= 1
 
         if fn.builtin:

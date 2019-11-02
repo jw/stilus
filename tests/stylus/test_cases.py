@@ -8,6 +8,8 @@ files = []
 path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
 styl_files = path.glob('**/*.styl')
 for f in styl_files:
+    if 'import.' in str(f.parent):  # skip the import directories
+        continue
     css_file = f.with_suffix('.css')
     if css_file.exists():
         files.append((f, css_file))
@@ -30,11 +32,14 @@ def test_stylus_cases(styl, css):
     images = stylus / 'images'
     basics = stylus / 'cases' / 'import.basic'
     cases = stylus / 'cases'
+    imports = cases / 'imports'
 
     renderer = Renderer(source, {'paths': ['.']})
     renderer.include(images)
+
     renderer.include(basics)
     renderer.include(cases)
+    renderer.include(imports)
     renderer.options['include css'] = True
 
     if 'compress' in styl.name:
