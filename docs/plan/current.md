@@ -6,7 +6,7 @@ The Swedish release, a.k.a. `document, document, document!`
    - [x] create bin app
    - [ ] add watch changes
    - [x] add compression flag
- - [x] Pass 100 Stylus test cases!
+ - [x] Pass 100 Stylus test cases.  At 142!  :-)
  - [ ] Cleanup of coverall/codecov properties.
  - [x] Start spreading the word in pycon Sweden.
  - [ ] Start using github issues.
@@ -14,5 +14,5 @@ The Swedish release, a.k.a. `document, document, document!`
  - [ ] Update site to promote Stilus!
  - [ ] Document using docstrings and Sphinx.
  - [ ] Show diff between Stilus and Stylus.
- - [x] Get to 85% coverage.  At 86%!
- - [ ] Create logo
+ - [x] Get to 85% coverage.  At 87%!
+ - [ ] Create logo.
