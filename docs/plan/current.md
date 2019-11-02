@@ -8,7 +8,7 @@ The Swedish release, a.k.a. `document, document, document!`
    - [x] add compression flag
  - [x] Pass 100 Stylus test cases!
  - [ ] Cleanup of coverall/codecov properties.
- - [ ] Start spreading the word in pycon Sweden.
+ - [x] Start spreading the word in pycon Sweden.
  - [ ] Start using github issues.
  - [ ] Start using github project management.
  - [ ] Update site to promote Stilus!
