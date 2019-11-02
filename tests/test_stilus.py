@@ -433,10 +433,17 @@ set-colour(colour = get-red)
 """
 
     source = """
-small = "screen and (min-width:1px) and (max-width:400px)"
-@media small
-  body
-    background blue
+
+mixin()
+  foo: 5px
+  something
+    here: whoop
+
+body
+  margin: 5px
+  padding: 5px
+  mixin()
+
 """
 
     # parser = Parser(source, {})
