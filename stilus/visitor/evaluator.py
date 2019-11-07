@@ -422,8 +422,7 @@ class Evaluator(Visitor):
         if fn.builtin:
             # built-in
             ret = self.invoke_builtin(fn.params, args)
-        elif 'function' == fn.node_name:
-            # user-defined
+        elif 'function' == fn.node_name:  # user-defined
             # evaluate mixin block
             if call.block:
                 call.block = self.visit(call.block)
@@ -918,7 +917,7 @@ class Evaluator(Visitor):
 
         if path.endswith('.css'):
             literal = True
-            if not imported and not self.include_css:
+            if not imported.once and not self.include_css:
                 return imported
 
         # support optional .styl

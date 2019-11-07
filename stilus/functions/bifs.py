@@ -1,11 +1,11 @@
 from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     basename, blend, blue, clone, contrast, convert, currentMedia, define, \
-    dirname, error, extname, green, hsl, hsla, hue, imageSize, json, \
-    length, lightness, listSeparator, lookup, luminosity, math, math_prop, \
-    operate, p, pathjoin, pop, push, range, red, remove, replace, rgb, \
-    rgba, s, saturation, shift, tan, trace, type_function, unit, unquote, \
-    unshift, warn, prefixClasses, selectorExists, selector, stilus_slice, \
-    stilus_split, substr, transparentify, url
+    dirname, error, extname, green, hsl, hsla, hue, imageSize, json, length, \
+    lightness, listSeparator, lookup, luminosity, math, math_prop, operate, \
+    oppositePosition, p, pathjoin, pop, prefixClasses, push, range, red, \
+    remove, replace, rgb, rgba, s, saturation, selector, selectorExists, \
+    shift, stilus_slice, stilus_split, substr, tan, trace, transparentify, \
+    type_function, unit, unquote, unshift, url, warn
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -39,6 +39,7 @@ bifs = {
     'lookup': lookup.lookup,
     'math': math.math,
     'operate': operate.operate,
+    'opposite-position': oppositePosition.opposite_position,
     'p': p.p,
     'pathjoin': pathjoin.pathjoin,
     'pop': pop.pop,
@@ -71,5 +72,5 @@ bifs = {
 }
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
-            'length', 'list_separator', 'p', 'pop', 'push',
-            'prepend', 's', 'selector', 'shift', 'slice', 'unshift']
+            'length', 'list_separator', 'opposite_position', 'p', 'pop',
+            'push', 'prepend', 's', 'selector', 'shift', 'slice', 'unshift']

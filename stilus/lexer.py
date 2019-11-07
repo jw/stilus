@@ -458,12 +458,14 @@ class Lexer:
         """
         '@css' ' '* '{' .* '}' ' '*
         """
-        match = re.match(r'^@css[ \t]*', self.s)
+        match = re.match(r'^@css[ \t]*{', self.s)
         if match:
             self._skip_string(match.group(0))
             braces = 1
             css = ''
-            for c in self.s:
+            while True:
+                c = self.s[0]
+                self.s = self.s[1:]
                 if c == '{':
                     braces += 1
                 elif c == '}':

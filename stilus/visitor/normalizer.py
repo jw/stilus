@@ -218,19 +218,21 @@ class Normalizer(Visitor):
         merge_queries(media.block)
         self.bubble(media)
 
-        # fixme: node is changed while enumerating the media list! :-(
-        for node in medias:
+        index = 0
+        while index < len(medias):
+            node = medias[0]
             if group:
                 group.block.append(node)
             else:
-                self.root_index -= 1
-                self.root.nodes.splice(self.root_index, 0, node)
+                self.root_index += 1
+                self.root.nodes.insert(self.root_index, node)
             node = self.visit(node)
             parent = node.block.parent
             if node.bubbled and \
                     (not group or parent.node.node_name == 'group'):
                 node.group.block = node.block.nodes[0].block
                 node.block.nodes[0] = node.group
+            index += 1
 
         return media
 

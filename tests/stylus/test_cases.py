@@ -40,7 +40,9 @@ def test_stylus_cases(styl, css):
     renderer.include(basics)
     renderer.include(cases)
     renderer.include(imports)
-    renderer.options['include css'] = True
+
+    if 'include' in styl.name:
+        renderer.options['include css'] = True
 
     if 'compress' in styl.name:
         renderer.options['compress'] = True

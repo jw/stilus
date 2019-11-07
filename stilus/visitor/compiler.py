@@ -1,6 +1,8 @@
 import re
 from os.path import dirname, abspath
 
+from stilus.exceptions import StilusError
+
 from stilus import utils
 from stilus.nodes.block import Block
 from stilus.nodes.boolean import Boolean
@@ -121,7 +123,9 @@ class Compiler(Visitor):
                 self.buf += self.out(self.indent() + '}' + separator)
 
         # nesting
-        for node in block.nodes:
+        index = 0
+        while index < len(block.nodes):
+            node = block.nodes[index]
             if node.node_name in ['group', 'block', 'keyframes']:
                 if self.linenos:
                     self.debug_info(node)
@@ -134,6 +138,7 @@ class Compiler(Visitor):
                                          self.visit(node) + '\n', node)
             elif node.node_name in ['charset', 'literal', 'namespace']:
                 self.buf += self.out(self.visit(node) + '\n', node)
+            index += 1
 
     def visit_keyframes(self, node: Node):
         if not node.frames:
@@ -189,7 +194,7 @@ class Compiler(Visitor):
                 self.buf += self.out(' and ')
 
     def visit_feature(self, node: Node):
-        if not node.expr:
+        if node.expr is None:
             return node.name
         elif node.expr.is_empty():
             return '(' + node.name + ')'
@@ -257,7 +262,7 @@ class Compiler(Visitor):
     def visit_literal(self, literal):
         val = literal.value
         if literal.css:
-            val = re.sub(r'^  ', val, flags=re.MULTILINE)
+            val = re.sub(r'^  ', '', val, flags=re.MULTILINE)
         return val
 
     def visit_boolean(self, boolean: Boolean):
@@ -306,7 +311,9 @@ class Compiler(Visitor):
 
         # selectors
         if group.block.has_properties():
-            selectors = utils.compile_selectors(stack, indent=self.indent())
+            selectors = utils.compile_selectors(stack,
+                                                leave_hidden=False,
+                                                indent=self.indent())
 
             if selectors:
                 if self.keyframe:
@@ -324,9 +331,12 @@ class Compiler(Visitor):
                     # checkme:                   selector;
                     if self.keyframe:
                         selector.strip()
-
-                    self.buf += self.out(selector + ('' if last else comma),
-                                         group.nodes[i])
+                    try:
+                        self.buf += self.out(selector +
+                                             ('' if last else comma),
+                                             group.nodes[i-1])
+                    except BaseException:
+                        raise StilusError()
             else:
                 group.block.lacks_rendered_selectors = True
 

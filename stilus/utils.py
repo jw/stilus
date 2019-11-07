@@ -137,7 +137,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
         if i:
             for selector in arr[i]:
                 if not leave_hidden and selector.is_placeholder():
-                    return
+                    continue
                 if selector.inherits:
                     buf.insert(0, selector.value)
                     compile(arr, i - 1)

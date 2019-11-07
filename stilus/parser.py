@@ -1338,7 +1338,7 @@ class Parser:
     def multiplicative(self):
         node = self.defined()
         op = self.accept(['**', '*', '/', '%'])
-        if op:
+        while op:
             self.operand = True
             if '/' == op.value and self.in_property and self.parens == 0:
                 self.stash.append(Token('literal',
@@ -1353,6 +1353,7 @@ class Parser:
                                f'missing left-hand operand')
                 node = BinOp(op.type, node, self.defined())
                 self.operand = False
+            op = self.accept(['**', '*', '/', '%'])
         return node
 
     def defined(self):
@@ -1461,7 +1462,8 @@ class Parser:
 
         # body
         self.state.append('function')
-        fn = Function(name, params, lineno=self.lineno, column=self.column)
+        fn = Function(name, params, builtin=False,
+                      lineno=self.lineno, column=self.column)
         fn.block = self.block(fn)
         self.prev_state = self.state[-1]
         self.state.pop()

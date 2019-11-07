@@ -7,17 +7,18 @@ from stilus.nodes.node import Node
 class Function(Node):
 
     def __init__(self, function_name, params=None, body=None,
-                 lineno=1, column=1):
+                 builtin=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
         self.params = params
-        self.builtin = self.function_name in bifs.keys()
+        if builtin is not None:
+            self.builtin = builtin
+        else:
+            self.builtin = self.function_name in bifs.keys()
         self.block = body
         self.fn = None
         if hasattr(params, '__call___'):
             self.fn = params
-        # else:
-        #     self.fn = None
 
     def __str__(self):
         if self.params:

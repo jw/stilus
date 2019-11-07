@@ -415,7 +415,7 @@ body
   foo pad()
 """
 
-    source = """
+    sourced = """
 
 get-red()
   p('in red')
@@ -426,29 +426,7 @@ set-colour(colour = get-red)
   color colour()
 
 .red
-  p('before')
-  // foo get-red()
   set-colour()
-
-"""
-
-    # regression 156!
-    source = """
-body
-  mixin()
-
-body
-  padding-{opposite-position(left)} 0
-  float opposite-position(left)
-"""
-
-    source = """
-@import 'import.include.function/import.vendor'
-@import 'import.include.function/import.common'
-
-$radius = 10
-body
-  border-radius: ($radius / 2)px
 """
 
     # parser = Parser(source, {})
@@ -456,7 +434,7 @@ body
     # print(f'{ast}')
 
     renderer = Renderer(source, {})
-    renderer.options['include css'] = True
+    # renderer.options['include css'] = True
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
     renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
