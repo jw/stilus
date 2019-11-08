@@ -13,6 +13,6 @@ The Swedish release, a.k.a. `document, document, document!`
  - [ ] Update site to promote Stilus!
  - [ ] Show diff between Stilus and Stylus.
    - [ ] Test diff
-   - [ ] Bin diff
- - [x] Get to 85% coverage.  At 87%!
+   - [x] Bin diff
+ - [x] Get to 85% coverage.  At 88%!
  - [ ] Create logo.
