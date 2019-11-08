@@ -2,6 +2,9 @@
 
 ### 0.8.0
  
+ - [ ] Document using docstrings and Sphinx. 
+ - [ ] Start using github issues.
+ - [ ] Start using github project management.
  - [ ] Update the assertions in the built-in functions.
  - [ ] Use typing properly.
  - [ ] Test all Stylus regression tests.
