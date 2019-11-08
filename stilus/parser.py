@@ -371,7 +371,7 @@ class Parser:
 
             # #a after an ident and newline
             if 'color' == self.lookahead(i).type and \
-                    'newline' == self.lookahead(i + 1).type:
+                    'newline' == self.lookahead(i - 1).type:
                 return true
 
             if self.looks_like_attribute_selector(i):

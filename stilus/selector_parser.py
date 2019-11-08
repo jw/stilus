@@ -78,11 +78,14 @@ class SelectorParser:
         if not self.pos and '~/' == self.string[0:2]:
             self.nested = False
             self.skip(2)
-            return self.stacl[0]
+            if self.stack and len(self.stack)> 0:
+                return self.stack[0]
+            else:
+                return None
 
     def escaped(self):
         r"""'\' ('&' | '^')"""
-        if '\\' == self.string[0]:
+        if self.string and len(self.string) > 0 and '\\' == self.string[0]:
             char = self.string[1]
             if char in ['&', '^']:
                 self.skip(2)
@@ -91,7 +94,7 @@ class SelectorParser:
     # fixme: add the raw attribute/function check
     def parent(self):
         r"""'&"""
-        if '&' == self.string[0]:
+        if self.string and len(self.string) > 0 and '&' == self.string[0]:
             self.nested = False
             if not self.pos and (not self.stack or self.raw):
                 i = 0
@@ -100,14 +103,12 @@ class SelectorParser:
                         break
                 if self.string[i] in COMBINATORS:
                     self.skip(i + 1)
-                    return
 
             self.skip(1)
-            # if not self.raw
-            if self.stack and len(self.stack) > 0:
-                return self.stack[len(self.stack) - 1]
-            else:
-                return None
+            if not self.raw:
+                if self.stack and len(self.stack) > 0:
+                    return self.stack[len(self.stack) - 1]
+        return None
 
     def partial(self):
         r"""'^[' range ']'"""
@@ -178,11 +179,15 @@ class SelectorParser:
                 return ''.join(ret).strip()
 
         else:
+            # todo: fix me!
             if len(self.stack) > 0:
                 if start < 0:
-                    ret = self.stack[len(self.stack) - 1]
+                    ret = self.stack[len(self.stack) + start - 1]
                 else:
-                    ret = self.stack[start]
+                    try:
+                        ret = self.stack[start]
+                    except IndexError:
+                        ret = None
             else:
                 ret = None
         if ret:

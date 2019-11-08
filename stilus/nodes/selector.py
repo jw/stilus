@@ -34,7 +34,7 @@ class Selector(Node):
         return self.value == other.value
 
     def is_placeholder(self):
-        if self.value and '$' in self.value[0:1]:
+        if self.value and '$' in self.value[0:2]:
             return True
         else:
             return False

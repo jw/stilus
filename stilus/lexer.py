@@ -409,7 +409,8 @@ class Lexer:
         '//' *
         """
         # single line
-        if '/' == self.s[0] and '/' == self.s[1]:
+        if self.s and len(self.s) > 2 and \
+                '/' == self.s[0] and '/' == self.s[1]:
             end = self.s.find('\n')
             if -1 == end:
                 end = len(self.s)
@@ -417,7 +418,8 @@ class Lexer:
             return self.advance()
 
         # multi-line
-        if '/' == self.s[0] and '*' == self.s[1]:
+        if self.s and len(self.s) > 2 and \
+                '/' == self.s[0] and '*' == self.s[1]:
             end = self.s.find('*/')
             suppress = True
             inline = False
