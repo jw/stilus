@@ -57,8 +57,8 @@ Stilus
    -V, --version       Display the version of Stilus.
    -h, --help          Show this message and exit.
 
-In progress
------------
+In progress...
+--------------
 
 .. toctree::
    :maxdepth: 1

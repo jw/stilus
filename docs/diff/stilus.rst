@@ -1,6 +1,6 @@
 
-Stilus
-======
+The stilus binary
+=================
 
 Stilus is currently aiming for Stylus version 0.54.5.
 
@@ -30,7 +30,7 @@ Todo
 Currently an input file is required, which produces an output.
 But Stylus gets the input as a stream and produces an output.
 
-It also supports these options:
+Stylus also supports these options:
 
 ======================== ===========================================
 option                   description
