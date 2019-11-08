@@ -5,126 +5,126 @@ Stilus tests
 ============================================= =====================
 Stylus test                                   Success!
 ============================================= =====================
-arithmetic.color.styl
-arithmetic.styl
-arithmetic.unary.styl
-atblock.styl
-atrules.compressed.styl
-atrules.styl
-atscope.styl
-bifs.add-property.styl
-bifs.base-convert.styl
-bifs.blend.styl
+arithmetic.color.styl                         ok
+arithmetic.styl                               ok
+arithmetic.unary.styl                         ok
+atblock.styl                                  ok
+atrules.compressed.styl                       ok (in compress)
+atrules.styl                                  ok
+atscope.styl                                  ok
+bifs.add-property.styl                        not ok (needs work)
+bifs.base-convert.styl                        ok (in bifs)
+bifs.blend.styl                               ok (in bifs)
 bifs.cache.at-media.styl
 bifs.cache.samename.styl
 bifs.cache.size.styl
 bifs.cache.styl
 bifs.called-from.styl
-bifs.clone.styl
-bifs.complement.styl
-bifs.components.styl
-bifs.contrast.styl
-bifs.convert.styl
-bifs.current-media.styl
-bifs.current-property.styl
-bifs.darken.styl
-bifs.dark.styl
-bifs.define.styl
+bifs.clone.styl                               ok (in bifs)
+bifs.complement.styl                          ok (in bifs)
+bifs.components.styl                          ok (in bifs)
+bifs.contrast.styl                            ok (in bifs)
+bifs.convert.styl                             ok (in bifs)
+bifs.current-media.styl                       ok (in bifs)
+bifs.current-property.styl                    ok (in bifs)
+bifs.darken.styl                              ok (in bifs)
+bifs.dark.styl                                ok (in bifs)
+bifs.define.styl                              ok (in bifs)
 bifs.fade.styl
 bifs.floats.styl
 bifs.grayscale.styl
-bifs.hsla.styl
-bifs.image-size.styl
+bifs.hsla.styl                                ok (in bifs)
+bifs.image-size.styl                          ok (in bifs)
 bifs.index.styl
 bifs.invert.styl
-bifs.join.styl
-bifs.json.styl
+bifs.join.styl                                ok (in bifs)
+bifs.json.styl                                ok (in bifs)
 bifs.keys.styl
 bifs.last.styl
-bifs.length.styl
-bifs.lighten.styl
-bifs.light.styl
+bifs.length.styl                              ok (in bifs)
+bifs.lighten.styl                             ok (in bifs)
+bifs.light.styl                               ok (in bifs)
 bifs.list-separator.styl
-bifs.lookup.styl
-bifs.luminosity.styl
-bifs.match.styl
-bifs.math.styl
+bifs.lookup.styl                              ok (in bifs)
+bifs.luminosity.styl                          ok (in bifs)
+bifs.match.styl                               ok (in bifs)
+bifs.math.styl                                ok (in bifs)
 bifs.merge.styl
 bifs.mix.styl
-bifs.opposite-position.styl
+bifs.opposite-position.styl                   ok (in bifs)
 bifs.percentage.styl
 bifs.percent-to-decimal.styl
-bifs.pop.styl
-bifs.prefix-classes.styl
-bifs.push.styl
-bifs.range.styl
-bifs.remove.styl
-bifs.remove-unit.styl
-bifs.replace.styl
+bifs.pop.styl                                 ok (in bifs)
+bifs.prefix-classes.styl                      ok (in bifs)
+bifs.push.styl                                ok (in bifs)
+bifs.range.styl                               ok (in bifs)
+bifs.remove.styl                              ok (in bifs)
+bifs.remove-unit.styl                         ok (in bifs)
+bifs.replace.styl                             ok (in bifs)
 bifs.rgba.styl
-bifs.saturate-desaturate.styl
-bifs.selector.exitsts.styl
+bifs.saturate-desaturate.styl                 ok (in bifs)
+bifs.selector.exitsts.styl                    ok (in bifs) [with typo :)]
 bifs.selectors.styl
-bifs.selector.styl
+bifs.selector.styl                            ok (in bifs)
 bifs.shade.styl
-bifs.slice.styl
-bifs.split.styl
-bifs.s.styl
-bifs.substr.styl
+bifs.slice.styl                               ok (in bifs)
+bifs.split.styl                               ok (in bifs)
+bifs.s.styl                                   ok (in bifs)
+bifs.substr.styl                              ok (in bifs)
 bifs.tint.styl
-bifs.transparentify.styl
+bifs.transparentify.styl                      ok (in bifs)
 bifs.type.styl
-bifs.unit.styl
-bifs.unquote.styl
-bifs.url.styl
+bifs.unit.styl                                ok (in bifs)
+bifs.unquote.styl                             ok (in bifs)
+bifs.url.styl                                 ok (in bifs)
 bifs.use.styl
 bifs.values.styl
-casting.styl
+casting.styl                                  ok
 coercion.styl
-colors.styl
-comments.styl
-compress.comments.styl
-compress.semicolon.styl
-compress.units.styl
-conditional-assignment.styl
+colors.styl                                   ok
+comments.styl                                 ok
+compress.comments.styl                        ok (in compress)
+compress.semicolon.styl                       ok (in compress)
+compress.units.styl                           ok (in compress)
+conditional-assignment.styl                   ok
 control.blueprint.ie.styl
 control.blueprint.screen.styl
 control.boilerplate.styl
-css.eos.styl
-css.extend.styl
-css.functions.single-line.styl
-css.if.styl
-css.keyframes.styl
-css.large.styl
-css.media.styl
+css.eos.styl                                  ok (in css)
+css.extend.styl                               ok (in css)
+css.functions.single-line.styl                ok (in css)
+css.if.styl                                   ok (in css)
+css.keyframes.styl                            ok (in css)
+css.large.styl                                ok (in css)
+css.media.styl                                ok (in css)
 css.mixins.braces.styl
 css.mixins.root.styl
 css.mixins.root.wonky.styl
 css.mixins.styl
 css.selector.interpolation.styl
-css.selectors.styl
-css.whitespace.styl
-dumb.styl
-eol-escape.styl
-escape.styl
-extend.cascade.styl
+css.selectors.styl                            ok (in css)
+css.whitespace.styl                           ok (in css)
+dumb.styl                                     ok
+eol-escape.styl                               ok
+escape.styl                                   ok
+extend.cascade.styl                           ok (in extend)
 extend.complex.styl
 extend.in-loop-context.styl
-extend.in-loop.styl
+extend.in-loop.styl                           ok (in extend)
 extend.in-media-query.styl
 extend.in-mixin.nested.styl
 extend.in-mixin.styl
-extend.multiple-definitions.styl
+extend.multiple-definitions.styl              ok (in extend)
 extend.multiple-selectors.styl
-extend.styl
+extend.styl                                   ok (in extend)
 extend.using-variable.styl
 extend.with.optional.styl
 extend.with.parent.reference.styl
 extend.with.placeholders.styl
 fontface.styl
-for.complex.styl
-for.function.styl
-for.postfix.styl
+for.complex.styl                              ok
+for.function.styl                             ok
+for.postfix.styl                              ok
 for.styl
 function.arguments.styl
 function.literals.styl
@@ -134,40 +134,29 @@ functions.call.mixin.styl
 functions.call.styl
 functions.call.to-string.styl
 functions.defaults.styl
-functions.multi-line.styl
-functions.multiple-calls.styl
-functions.nested-calls.styl
-functions.nested.styl
-functions.property.styl
-functions.return.each.styl
-functions.return.styl
-functions.styl
-functions.url.styl
-functions.variable.ident.styl
-functions.variable.styl
+functions.multi-line.styl                     ok (in functions)
+functions.multiple-calls.styl                 ok (in functions)
+functions.nested-calls.styl                   ok (in functions)
+functions.nested.styl                         ok (in functions)
+functions.property.styl                       ok (in functions)
+functions.return.each.styl                    ok (in functions)
+functions.return.styl                         ok (in functions)
+functions.styl                                ok (in functions)
+functions.url.styl                            ok (in functions)
+functions.variable.ident.styl                 ok (in functions)
+functions.variable.styl                       ok (in functions)
 hack.star.styl
 hoist.at-rules.styl
-if.else.styl
+if.else.styl                                  ok
 if.mixin.styl
 if.postfix.styl
 if.selectors.styl
 important.styl
-import.basic/a.styl
-import.basic/b.styl
-import.basic/clone2.styl
-import.basic/clone.styl
-import.basic/c.styl
-import.basic.styl
-import.clone.styl
-import.comments/comments.styl
-import.comments.styl
-import.complex/a.styl
-import.complex/c.styl
-import.complex/d.styl
-import.complex.styl
-import.glob/a.styl
-import.glob/c.styl
-import.glob.styl
+import.basic.styl                             ok (in imports)
+import.clone.styl                             ok (in imports)
+import.comments.styl                          ok (in imports)
+import.complex.styl                           ok (in imports)
+import.glob.styl                              ok (in imports)
 import.include.basic.styl
 import.include.complex/a.styl
 import.include.complex.styl
@@ -365,8 +354,8 @@ scope.complex.styl
 scope.nested.styl
 scope.styl                                    ok
 selector.interpolation.styl
-selector.reference.styl
-selectors.complex.styl
+selector.reference.styl                       ok
+selectors.complex.styl                        ok
 selectors.nested.comma.styl                   ok
 selectors.nested.styl                         ok
 selectors.pseudo.elements.styl                ok
@@ -383,3 +372,37 @@ variables.styl                                ok
 variable.styl                                 ok
 whitespace.oes.styl                           ok
 ============================================= =====================
+
+Directories
+===========
+
+Directories used by import, extend:
+
+import.basic.styl -> import.basic
+---------------------------------
+
+import.basic/a.styl
+import.basic/b.styl
+import.basic/clone2.styl
+import.basic/clone.styl
+import.basic/c.styl
+
+import.comments.styl -> import.comments
+---------------------------------------
+
+comments.styl
+
+import.complex.styl -> import.complex
+-------------------------------------
+
+import.complex/nested/b.styl
+import.complex/a.styl
+import.complex/c.styl
+import.complex/d.styl
+
+import.glob.styl -> import.glob
+-------------------------------
+
+import.glob/a.styl
+import.glob/c.styl
+

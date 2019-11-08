@@ -78,7 +78,7 @@ class SelectorParser:
         if not self.pos and '~/' == self.string[0:2]:
             self.nested = False
             self.skip(2)
-            if self.stack and len(self.stack)> 0:
+            if self.stack and len(self.stack) > 0:
                 return self.stack[0]
             else:
                 return None
