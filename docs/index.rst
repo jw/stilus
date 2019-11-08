@@ -42,6 +42,21 @@ It might be that you'll need to install some extra dev packages. This might help
 
  $ sudo apt install libjpeg-dev libxml2-dev libxslt1-dev
 
+Binary
+------
+
+.. code-block:: bash
+
+ $ stilus --help
+ Usage: stilus [OPTIONS] INPUT [OUTPUT]
+
+ Options:
+   -v, --verbose
+   -p, --print         Print out the compiled CSS.
+   -I, --include TEXT  Add <path> to lookup paths.
+   -V, --version       Display the version of Stilus.
+   -h, --help          Show this message and exit.
+
 The Missing Parts
 -----------------
 
