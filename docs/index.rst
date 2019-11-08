@@ -42,7 +42,7 @@ It might be that you'll need to install some extra dev packages. This might help
 
  $ sudo apt install libjpeg-dev libxml2-dev libxslt1-dev
 
-Binary
+Stilus
 ------
 
 .. code-block:: bash
@@ -56,6 +56,15 @@ Binary
    -I, --include TEXT  Add <path> to lookup paths.
    -V, --version       Display the version of Stilus.
    -h, --help          Show this message and exit.
+
+In progress
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   diff/stilus.md
+   diff/tests.rst
 
 The Missing Parts
 -----------------
