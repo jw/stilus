@@ -1,0 +1,96 @@
+ul td:nth-of-type(2),
+ul td:nth-of-type(3) {
+  background: #000;
+}
+table td:nth-child(2),
+table td:nth-child(3),
+table td:nth-child(4),
+table td:nth-child(5),
+table td:first-letter {
+  background: #000;
+}
+table td:nth-child(2) li:first-child,
+table td:nth-child(3) li:first-child,
+table td:nth-child(4) li:first-child,
+table td:nth-child(5) li:first-child,
+table td:first-letter li:first-child,
+table td:nth-child(2) li:last-child,
+table td:nth-child(3) li:last-child,
+table td:nth-child(4) li:last-child,
+table td:nth-child(5) li:last-child,
+table td:first-letter li:last-child {
+  background: #fff;
+}
+table :nth-child(2),
+table :nth-child(3) {
+  background: #000;
+}
+table td:after,
+table td .after {
+  background: #f00;
+}
+table td {
+  background: #fff;
+}
+table td:before,
+table td::before {
+  color: #008000;
+}
+table td:selection,
+table td::selection {
+  color: #f00;
+}
+table td:first-line {
+  color: #ff0;
+}
+table td::first-letter {
+  color: #000;
+}
+label input:indeterminate,
+label span {
+  color: #001;
+}
+label input:checked,
+label span {
+  color: #002;
+}
+label a:any-link,
+label span {
+  color: #003;
+}
+label a:local-link,
+label span {
+  color: #004;
+}
+label input:read-only,
+label span {
+  color: #005;
+}
+label input:read-write,
+label span {
+  color: #006;
+}
+label input:placeholder-shown,
+label span {
+  color: #007;
+}
+label input:out-of-range,
+label span {
+  color: #010;
+}
+label input:required,
+label span {
+  color: #011;
+}
+label input:optional,
+label span {
+  color: #012;
+}
+label input:user-error,
+label span {
+  color: #013;
+}
+label input:blank,
+label span {
+  color: #014;
+}

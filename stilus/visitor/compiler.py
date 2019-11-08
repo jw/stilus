@@ -333,8 +333,7 @@ class Compiler(Visitor):
                         selector.strip()
                     try:
                         self.buf += self.out(selector +
-                                             ('' if last else comma),
-                                             group.nodes[i-1])
+                                             ('' if last else comma))
                     except BaseException:
                         raise StilusError()
             else:

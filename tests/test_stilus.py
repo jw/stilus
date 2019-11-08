@@ -430,70 +430,91 @@ set-colour(colour = get-red)
 """
 
     source = """
-.math
-  test1: ceil(0.5)
-  test2: floor(0.5)
-  test3: round(0.5)
-.math_units
-  test1: ceil(0.5px)
-  test2: floor(0.5px)
-  test3: round(0.5px)
-.math_precision0
-  test1: ceil(0.47,0)
-  test2: floor(0.47,0)
-  test3: round(0.47,0)
-.math_precision1
-  test1: ceil(0.47,1)
-  test2: floor(0.47,1)
-  test3: round(0.47,1)
-.math_precision2
-  test1: ceil(0.472,2)
-  test2: floor(0.472,2)
-  test3: round(0.472,2)
 
-.math_PI
-  foo: PI
+mixin()
+  td:nth-of-type(2)
+  td:nth-of-type(3)
+    background black
 
-.math_sin
-  test1: sin(0)
-  test2: sin(30deg)
-  test3: sin(45deg)
-  test4: sin(60deg)
-  test5: sin(90deg)
-  test6: sin(180deg)
-  test7: sin(270deg)
-  test8: sin(360deg)
+ul
+  mixin()
 
-.math_cos
-  test1: cos(0)
-  test2: cos(30deg)
-  test3: cos(45deg)
-  test4: cos(60deg)
-  test5: cos(90deg)
-  test6: cos(180deg)
-  test7: cos(270deg)
-  test8: cos(360deg)
+table
+  td:nth-child(2)
+  td:nth-child(3)
+  td:nth-child(4)
+  td:nth-child(5)
+  td:first-letter
+    background black
+    li:first-child
+    li:last-child
+      background white
 
-.math_tan
-  test1: tan(0)
-  test2: tan(30deg)
-  test3: tan(45deg)
-  test4: tan(60deg)
-  test5: tan(90deg)
-  test6: tan(180deg)
-  test7: tan(270deg)
-  test8: tan(360deg)
+table
+  :nth-child(2)
+  :nth-child(3)
+    background black
 
-.math_sin_rad
-  test1: sin(2*PI/3)
-  test2: sin(3*PI/4)
-  test3: sin(5*PI/6)
-  test4: sin(7*PI/6)
-  test5: sin(5*PI/4)
-  test6: sin(4*PI/3)
-  test7: sin(5*PI/3)
-  test8: sin(7*PI/4)
-  test9: sin(11*PI/6)
+table
+  td:after, td .after
+    background red
+  td
+    background white
+
+table
+  td:before, td::before
+    color green
+  td:selection, td::selection
+    color red
+  td:first-line
+    color yellow
+  td::first-letter
+    color black
+
+label
+  input:indeterminate
+  span
+    color #001
+  input:checked
+  span
+    color #002
+  a:any-link
+  span
+    color #003
+  a:local-link
+  span
+    color #004
+  input:read-only
+  span
+    color #005
+  input:read-write
+  span
+    color #006
+  input:placeholder-shown
+  span
+    color #007
+  // input:default
+  // span
+  //   color #008
+  //  throws illegal unary "in", missing left-hand operand
+  // input:in-range
+  // span
+  //   color #009
+  input:out-of-range
+  span
+    color #010
+  input:required
+  span
+    color #011
+  input:optional
+  span
+    color #012
+  input:user-error
+  span
+    color #013
+  input:blank
+  span
+    color #014
 """
 
     # parser = Parser(source, {})

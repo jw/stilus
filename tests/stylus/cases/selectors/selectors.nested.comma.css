@@ -1,0 +1,13 @@
+#container .hide,
+#footer .hide {
+  display: none;
+}
+#foo .hide .stuff,
+#bar .hide .stuff,
+#baz .hide .stuff {
+  display: none;
+}
+.foo h1,
+.foo h2 {
+  color: #f00;
+}
