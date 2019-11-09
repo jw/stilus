@@ -89,19 +89,17 @@ class Node:
             return self if self.to_boolean() is True else right
         elif op == 'in':
             from stilus import utils
-            values = utils.unwrap(right)
-            # fixme: this expression check should not be there!
-            from stilus.nodes.expression import Expression
-            if not values and not isinstance(values, Expression):
-                raise Exception('"in" given invalid right-hand operand, '
-                                'expecting an expression')
+            values = utils.unwrap(right).nodes
+            if not values:
+                raise StilusError('"in" given invalid right-hand operand, '
+                                  'expecting an expression')
 
             # 'prop' in object
             if len(values) == 1 and values[0].node_name == 'objectnode':
                 return Boolean(values[0].has(self.hash()))
 
             for value in values:
-                if value.hash() == self.hash():
+                if str(value.hash()) == str(self.hash()):
                     return Boolean(True)
 
             return Boolean(False)

@@ -430,12 +430,73 @@ set-colour(colour = get-red)
 """
 
     source = """
-.foo
-  & .bar
-    width: 10px
 
-    ^[0]:hover ^[1..-1]
-      width: 20px
+
+body
+  nums = 1 2 3
+  foo 1 in nums
+  foo 3 in nums
+  foo 5 in nums
+
+body
+  nums = 1
+  foo 1 in nums == true
+
+body
+  words = foo bar baz
+  foo bar in words
+  foo baz in words
+  foo HEY in words
+
+body
+  tuples = (test 'one') (test 'two') 2
+  foo test in tuples
+  foo 2 in tuples
+  foo (test 'one') in tuples
+  foo (test 'two') in tuples
+  foo (test 'something') in tuples
+
+fn(args...)
+  2 in args
+
+body
+  foo fn()
+  foo fn(1)
+  foo fn(2)
+  foo fn(3 2)
+  foo fn(1,2,3)
+
+fn(args...)
+  (3 2) in args
+
+body
+  foo fn(3 2)
+  foo fn(3,2)
+
+fn()
+  test in arguments
+
+body
+  foo fn(test)
+  foo fn(a, b, c)
+  foo fn(a, test, c)
+  foo fn(a test c)
+
+body
+  foo 10px if red in (blue green white)
+  bar 10px if red in (blue red green)
+"""
+
+    source = """
+fn(args...)
+  2 in args
+
+body
+  foo fn()
+  foo fn(1)
+  foo fn(2)
+  foo fn(3 2)
+  foo fn(1,2,3)
 """
 
     # parser = Parser(source, {})

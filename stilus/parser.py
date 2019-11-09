@@ -213,8 +213,12 @@ class Parser:
         raise ParseError(message.format(peek='"{}{}"'.format(t, value)))
 
     def accept(self, types):
-        if self.peek().type in types:
-            return self.next()
+        if isinstance(types, str):
+            if self.peek().type == types:
+                return self.next()
+        elif isinstance(types, list):
+            if self.peek().type in types:
+                return self.next()
         return None
 
     def expect(self, type):

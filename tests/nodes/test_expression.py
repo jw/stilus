@@ -1,3 +1,6 @@
+import pytest
+from stilus.exceptions import StilusError
+
 from stilus.nodes.boolean import Boolean
 from stilus.nodes.expression import Expression
 from stilus.nodes.ident import Ident
@@ -67,7 +70,8 @@ def test_expression_operate_in():
     other_expression.append(Ident('foo'))
     other_expression.append(Ident('bar'))
     assert expression.operate('in', other_expression) == Boolean(False)
-    assert other_expression.operate('in', expression) == Boolean(False)
+    with pytest.raises(StilusError):
+        other_expression.operate('in', expression) == Boolean(True)
 
     # same expression
     expression = Expression()

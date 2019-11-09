@@ -57,6 +57,9 @@ class Unit(Node):
         clone.filename = self.filename
         return clone
 
+    def hash(self):
+        return self.value
+
     def operate(self, op, right: Node, value=None):
         type = None
         if self.type:
