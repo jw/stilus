@@ -2,129 +2,134 @@
 Stilus tests
 ============
 
-============================================= =====================
-Stylus test                                   Success!
-============================================= =====================
-arithmetic.color.styl                         ok
-arithmetic.styl                               ok
-arithmetic.unary.styl                         ok
-atblock.styl                                  ok
-atrules.compressed.styl                       ok (in compress)
-atrules.styl                                  ok
-atscope.styl                                  ok
-bifs.add-property.styl                        not ok (needs work)
-bifs.base-convert.styl                        ok (in bifs)
-bifs.blend.styl                               ok (in bifs)
+Below you'll find the tests as run in Stylus, and the status in Stilus.
+Also the location of the tests are specified.
+
+Coverage: 40% (367/147)
+
+============================================= ============================== =====================
+Stylus test                                   Location                       Status
+============================================= ============================== =====================
+arithmetic.color.styl                         stylus/cases                   ok
+arithmetic.styl                               stylus/cases                   ok
+arithmetic.unary.styl                         stylus/cases                   ok
+atblock.styl                                  stylus/cases                   ok
+atrules.compressed.styl                       stylus/cases/compress          ok
+atrules.styl                                  stylus/cases                   ok
+atscope.styl                                  stylus/cases                   ok
+bifs.add-property.styl                        stylus/cases                   not ok (needs work)
+bifs.base-convert.styl                        stylus/cases/bifs              ok
+bifs.blend.styl                               stylus/cases/bifs              ok
 bifs.cache.at-media.styl
 bifs.cache.samename.styl
 bifs.cache.size.styl
 bifs.cache.styl
 bifs.called-from.styl
-bifs.clone.styl                               ok (in bifs)
-bifs.complement.styl                          ok (in bifs)
-bifs.components.styl                          ok (in bifs)
-bifs.contrast.styl                            ok (in bifs)
-bifs.convert.styl                             ok (in bifs)
-bifs.current-media.styl                       ok (in bifs)
-bifs.current-property.styl                    ok (in bifs)
-bifs.darken.styl                              ok (in bifs)
-bifs.dark.styl                                ok (in bifs)
-bifs.define.styl                              ok (in bifs)
+bifs.clone.styl                               stylus/cases/bifs              ok
+bifs.complement.styl                          stylus/cases/bifs              ok
+bifs.components.styl                          stylus/cases/bifs              ok
+bifs.contrast.styl                            stylus/cases/bifs              ok
+bifs.convert.styl                             stylus/cases/bifs              ok
+bifs.current-media.styl                       stylus/cases/bifs              ok
+bifs.current-property.styl                    stylus/cases/bifs              ok
+bifs.darken.styl                              stylus/cases/bifs              ok
+bifs.dark.styl                                stylus/cases/bifs              ok
+bifs.define.styl                              stylus/cases/bifs              ok
 bifs.fade.styl
 bifs.floats.styl
 bifs.grayscale.styl
-bifs.hsla.styl                                ok (in bifs)
-bifs.image-size.styl                          ok (in bifs)
+bifs.hsla.styl                                stylus/cases/bifs              ok
+bifs.image-size.styl                          stylus/cases/bifs              ok
 bifs.index.styl
 bifs.invert.styl
-bifs.join.styl                                ok (in bifs)
-bifs.json.styl                                ok (in bifs)
+bifs.join.styl                                stylus/cases/bifs              ok
+bifs.json.styl                                stylus/cases/bifs              ok
 bifs.keys.styl
 bifs.last.styl
-bifs.length.styl                              ok (in bifs)
-bifs.lighten.styl                             ok (in bifs)
-bifs.light.styl                               ok (in bifs)
+bifs.length.styl                              stylus/cases/bifs              ok
+bifs.lighten.styl                             stylus/cases/bifs              ok
+bifs.light.styl                               stylus/cases/bifs              ok
 bifs.list-separator.styl
-bifs.lookup.styl                              ok (in bifs)
-bifs.luminosity.styl                          ok (in bifs)
-bifs.match.styl                               ok (in bifs)
-bifs.math.styl                                ok (in bifs)
+bifs.lookup.styl                              stylus/cases/bifs              ok
+bifs.luminosity.styl                          stylus/cases/bifs              ok
+bifs.match.styl                               stylus/cases/bifs              ok
+bifs.math.styl                                stylus/cases/bifs              ok
 bifs.merge.styl
 bifs.mix.styl
-bifs.opposite-position.styl                   ok (in bifs)
+bifs.opposite-position.styl                   stylus/cases/bifs              ok
 bifs.percentage.styl
 bifs.percent-to-decimal.styl
-bifs.pop.styl                                 ok (in bifs)
-bifs.prefix-classes.styl                      ok (in bifs)
-bifs.push.styl                                ok (in bifs)
-bifs.range.styl                               ok (in bifs)
-bifs.remove.styl                              ok (in bifs)
-bifs.remove-unit.styl                         ok (in bifs)
-bifs.replace.styl                             ok (in bifs)
+bifs.pop.styl                                 stylus/cases/bifs              ok
+bifs.prefix-classes.styl                      stylus/cases/bifs              ok
+bifs.push.styl                                stylus/cases/bifs              ok
+bifs.range.styl                               stylus/cases/bifs              ok
+bifs.remove.styl                              stylus/cases/bifs              ok
+bifs.remove-unit.styl                         stylus/cases/bifs              ok
+bifs.replace.styl                             stylus/cases/bifs              ok
 bifs.rgba.styl
-bifs.saturate-desaturate.styl                 ok (in bifs)
-bifs.selector.exitsts.styl                    ok (in bifs) [with typo :)]
+bifs.saturate-desaturate.styl                 stylus/cases/bifs              ok
+bifs.selector.exitsts.styl                    stylus/cases/bifs              ok [with typo :-)]
 bifs.selectors.styl
-bifs.selector.styl                            ok (in bifs)
+bifs.selector.styl                            stylus/cases/bifs              ok
 bifs.shade.styl
-bifs.slice.styl                               ok (in bifs)
-bifs.split.styl                               ok (in bifs)
-bifs.s.styl                                   ok (in bifs)
-bifs.substr.styl                              ok (in bifs)
+bifs.slice.styl                               stylus/cases/bifs              ok
+bifs.split.styl                               stylus/cases/bifs              ok
+bifs.s.styl                                   stylus/cases/bifs              ok
+bifs.substr.styl                              stylus/cases/bifs              ok
 bifs.tint.styl
-bifs.transparentify.styl                      ok (in bifs)
+bifs.transparentify.styl                      stylus/cases/bifs              ok
 bifs.type.styl
-bifs.unit.styl                                ok (in bifs)
-bifs.unquote.styl                             ok (in bifs)
-bifs.url.styl                                 ok (in bifs)
+bifs.unit.styl                                stylus/cases/bifs              ok
+bifs.unquote.styl                             stylus/cases/bifs              ok
+bifs.url.styl                                 stylus/cases/bifs              ok
 bifs.use.styl
 bifs.values.styl
-casting.styl                                  ok
+casting.styl                                  stylus/cases                   ok
 coercion.styl
-colors.styl                                   ok
-comments.styl                                 ok
-compress.comments.styl                        ok (in compress)
-compress.semicolon.styl                       ok (in compress)
-compress.units.styl                           ok (in compress)
-conditional-assignment.styl                   ok
+colors.styl                                   stylus/cases                   ok
+comments.styl                                 stylus/cases                   ok
+compress.comments.styl                        stylus/compress                ok
+compress.semicolon.styl                       stylus/compress                ok
+compress.units.styl                           stylus/compress                ok
+conditional-assignment.styl                   stylus/cases                   ok
 control.blueprint.ie.styl
 control.blueprint.screen.styl
 control.boilerplate.styl
-css.eos.styl                                  ok (in css)
-css.extend.styl                               ok (in css)
-css.functions.single-line.styl                ok (in css)
-css.if.styl                                   ok (in css)
-css.keyframes.styl                            ok (in css)
-css.large.styl                                ok (in css)
-css.media.styl                                ok (in css)
+css.eos.styl                                  stylus/css                     ok
+css.extend.styl                               stylus/css                     ok
+css.functions.single-line.styl                stylus/css                     ok
+css.if.styl                                   stylus/css                     ok
+css.keyframes.styl                            stylus/css                     ok
+css.large.styl                                stylus/css                     ok
+css.media.styl                                stylus/css                     ok
 css.mixins.braces.styl
 css.mixins.root.styl
 css.mixins.root.wonky.styl
 css.mixins.styl
 css.selector.interpolation.styl
-css.selectors.styl                            ok (in css)
-css.whitespace.styl                           ok (in css)
-dumb.styl                                     ok
-eol-escape.styl                               ok
-escape.styl                                   ok
-extend.cascade.styl                           ok (in extend)
+css.selectors.styl                            stylus/css                     ok
+css.whitespace.styl                           stylus/css                     ok
+dumb.styl                                     stylus/cases                   ok
+eol-escape.styl                               stylus/cases                   ok
+escape.styl                                   stylus/cases                   ok
+extend.cascade.styl                           stylus/cases                   ok
 extend.complex.styl
 extend.in-loop-context.styl
-extend.in-loop.styl                           ok (in extend)
+extend.in-loop.styl                           stylus/cases/extend            ok
 extend.in-media-query.styl
 extend.in-mixin.nested.styl
 extend.in-mixin.styl
-extend.multiple-definitions.styl              ok (in extend)
+extend.multiple-definitions.styl              stylus/cases/extend            ok
 extend.multiple-selectors.styl
-extend.styl                                   ok (in extend)
+extend.styl                                   stylus/cases/extend            ok
 extend.using-variable.styl
 extend.with.optional.styl
 extend.with.parent.reference.styl
 extend.with.placeholders.styl
 fontface.styl
-for.complex.styl                              ok
-for.function.styl                             ok
-for.postfix.styl                              ok
+for.complex.styl                              stylus/cases                   ok
+for.function.styl                             stylus/cases                   ok
+for.postfix.styl                              stylus/cases                   ok
 for.styl
 function.arguments.styl
 function.literals.styl
@@ -134,34 +139,34 @@ functions.call.mixin.styl
 functions.call.styl
 functions.call.to-string.styl
 functions.defaults.styl
-functions.multi-line.styl                     ok (in functions)
-functions.multiple-calls.styl                 ok (in functions)
-functions.nested-calls.styl                   ok (in functions)
-functions.nested.styl                         ok (in functions)
-functions.property.styl                       ok (in functions)
-functions.return.each.styl                    ok (in functions)
-functions.return.styl                         ok (in functions)
-functions.styl                                ok (in functions)
-functions.url.styl                            ok (in functions)
-functions.variable.ident.styl                 ok (in functions)
-functions.variable.styl                       ok (in functions)
+functions.multi-line.styl                     stylus/cases/functions         ok
+functions.multiple-calls.styl                 stylus/cases/functions         ok
+functions.nested-calls.styl                   stylus/cases/functions         ok
+functions.nested.styl                         stylus/cases/functions         ok
+functions.property.styl                       stylus/cases/functions         ok
+functions.return.each.styl                    stylus/cases/functions         ok
+functions.return.styl                         stylus/cases/functions         ok
+functions.styl                                stylus/cases/functions         ok
+functions.url.styl                            stylus/cases/functions         ok
+functions.variable.ident.styl                 stylus/cases/functions         ok
+functions.variable.styl                       stylus/cases/functions         ok
 hack.star.styl
 hoist.at-rules.styl
-if.else.styl                                  ok
+if.else.styl                                  stylus/cases                   ok
 if.mixin.styl
 if.postfix.styl
 if.selectors.styl
 important.styl
-import.basic.styl                             ok (in imports)
-import.clone.styl                             ok (in imports)
-import.comments.styl                          ok (in imports)
-import.complex.styl                           ok (in imports)
-import.glob.styl                              ok (in imports)
-import.include.basic.styl
+import.basic.styl                             stylus/cases/imports           ok
+import.clone.styl                             stylus/cases/imports           ok
+import.comments.styl                          stylus/cases/imports           ok
+import.complex.styl                           stylus/cases/imports           ok
+import.glob.styl                              stylus/cases/imports           ok
+import.include.basic.styl                     stylus/cases/imports           ok
 import.include.complex/a.styl
-import.include.complex.styl
+import.include.complex.styl                   stylus/cases/imports           ok
 import.include.function/a.styl
-import.include.function.call.styl
+import.include.function.call.styl             stylus/cases/imports           ok
 import.include.function/import.common.styl
 import.include.function/import.vendor.styl
 import.include.function.styl
@@ -191,7 +196,7 @@ import.ordering/two.styl
 index.styl
 interpolation.properties.styl
 introspection.styl
-jquery.styl
+jquery.styl                                   stylus/cases                   ok
 keyframes.fabrication.defaults.styl
 keyframes.fabrication.styl
 keyframes.newlines.styl
@@ -220,7 +225,7 @@ mixins.reset.styl
 mixins.return.styl
 mixins.root.styl
 moz-document-import.styl
-moz-document.styl
+moz-document.styl                             stylus/cases                   ok
 multiline.styl
 object.complex.styl
 object.mixin.styl
@@ -240,23 +245,23 @@ operators.subscript.assign.styl
 operators.subscript.range.styl
 operators.subscript.styl
 operators.unary.styl
-page.styl
+page.styl                                     stylus/cases                   ok
 parent.complex.styl
 parent.styl
-parse.styl
+parse.styl                                    stylus/cases                   ok
 prefix.css.selector.interpolation.styl
 prefix.extend.complex.styl
 prefix.extend.styl
 prefix.extend.with.placeholders.styl
 prefix.grid.styl
-properties.colons.styl
-properties.one-line.styl
-properties.styl
-property-access.bubble.styl
-property-access.siblings.styl
-property-access.styl
-queries.styl
-regression.107.lookup-failure.styl
+properties.colons.styl                        stylus/cases/properties        ok
+properties.one-line.styl                      stylus/cases/properties        ok
+properties.styl                               stylus/cases/properties        ok
+property-access.bubble.styl                   stylus/cases/properties        ok
+property-access.siblings.styl                 stylus/cases/properties        ok
+property-access.styl                          stylus/cases/properties        ok
+queries.styl                                  stylus/cases                   ok
+regression.107.lookup-failure.styl            stylus/cases/regressions       ok
 regression.1112.styl
 regression.1171.styl
 regression.1173.styl
@@ -265,15 +270,15 @@ regression.1205.styl
 regression.1206.styl
 regression.1214.styl
 regression.1277.styl
-regression.127.styl
-regression.130.styl
-regression.131.styl
-regression.137.styl
-regression.139.styl
-regression.142.styl
-regression.146.styl
-regression.153.styl
-regression.154.styl
+regression.127.styl                           stylus/cases/regressions       ok
+regression.130.styl                           stylus/cases/regressions       ok
+regression.131.styl                           stylus/cases/regressions       ok
+regression.137.styl                           stylus/cases/regressions       ok
+regression.139.styl                           stylus/cases/regressions       ok
+regression.142.styl                           stylus/cases/regressions       ok
+regression.146.styl                           stylus/cases/regressions       ok
+regression.153.styl                           stylus/cases/regressions       ok
+regression.154.styl                           stylus/cases/regressions       ok
 regression.156.styl
 regression.1571.styl
 regression.1572.styl
@@ -340,41 +345,45 @@ regression.834.styl
 regression.839.styl
 regression.865.styl
 regression.911.styl
-require.basic.styl
-require.complex.styl
-require.glob.styl
-require.include.styl
-require.index.styl
+require.basic.styl                            stylus/cases                   ok
+require.complex.styl                          stylus/cases                   ok
+require.glob.styl                             stylus/cases                   ok
+require.include.styl                          stylus/cases                   ok
+require.index.styl                            stylus/cases                   ok
 require.literal.styl
-reset.styl
-rule.charset.styl
+reset.styl                                    stylus/cases                   ok
+rule.charset.styl                             stylus/cases                   ok
 rulset.newline.styl
-rulset.styl
-scope.complex.styl
-scope.nested.styl
-scope.styl                                    ok
+rulset.styl                                   stylus/cases                   ok
+scope.complex.styl                            stylus/cases                   ok
+scope.nested.styl                             stylus/cases                   ok
+scope.styl                                    stylus/cases                   ok
 selector.interpolation.styl
-selector.reference.styl                       ok
-selectors.complex.styl                        ok
-selectors.nested.comma.styl                   ok
-selectors.nested.styl                         ok
-selectors.pseudo.elements.styl                ok
-selectors.pseudo.styl                         ok
-selectors.styl                                ok
-self-assignment.styl                          ok
-supports.styl                                 ok
-unicode-range.styl                            ok
-units.styl                                    ok
-utf8.bom.styl                                 ok
-vargs.call.styl                               ok
-vargs.styl                                    ok
-variables.styl                                ok
-variable.styl                                 ok
-whitespace.oes.styl                           ok
-============================================= =====================
+selector.reference.styl                       stylus/cases/selectors         ok
+selectors.complex.styl                        stylus/cases/selectors         ok
+selectors.nested.comma.styl                   stylus/cases/selectors         ok
+selectors.nested.styl                         stylus/cases/selectors         ok
+selectors.pseudo.elements.styl                stylus/cases/selectors         ok
+selectors.pseudo.styl                         stylus/cases/selectors         ok
+selectors.styl                                stylus/cases                   ok
+self-assignment.styl                          stylus/cases                   ok
+supports.styl                                 stylus/cases                   ok
+unicode-range.styl                            stylus/cases                   ok
+units.styl                                    stylus/cases                   ok
+utf8.bom.styl                                 stylus/cases                   ok
+vargs.call.styl                               stylus/cases                   ok
+vargs.styl                                    stylus/cases                   ok
+variables.styl                                stylus/cases                   ok
+variable.styl                                 stylus/cases                   ok
+whitespace.oes.styl                           stylus/cases                   ok
+============================================= ============================== =====================
+
+
 
 Directories
 ===========
+
+(This section needs some work)
 
 Directories used by import, extend:
 
@@ -405,4 +414,3 @@ import.glob.styl -> import.glob
 
 import.glob/a.styl
 import.glob/c.styl
-
