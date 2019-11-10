@@ -2,6 +2,20 @@
 
 ### 0.6.0
 
+The Swedish release, a.k.a. `document, document, document!`
+
+ - [x] Update the Stilus bin:
+   - [x] create bin app
+   - [x] add compression flag
+ - [x] Pass 100 Stylus test cases.  At 161!  :-)
+ - [x] Start spreading the word in pycon Sweden.
+ - [x] Show diff between Stilus and Stylus.
+   - [x] Test diff
+   - [x] Bin diff
+ - [x] Get to 85% coverage.  At 89%!
+
+### 0.6.0
+
 The first cases release, a.k.a. `committers, committers, committers!`
 
  - [x] Added all remaining nodes.
