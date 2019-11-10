@@ -1,15 +1,15 @@
-### Current tasks (0.7.0)
+### Current tasks (0.8.0)
 
 The test release, a.k.a. `test, test, test!`
 
  - [ ] Get to 90%+ coverage.  At 89%!
- - [ ] Update the binary
+ - [ ] Update the binary:
     - [ ] document it
     - [ ] add watch changes
-    - [ ] add 3 other 
+    - [ ] add 3 other missing features
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Update the assertions in the built-in functions.
- - [ ] Test 100% of all Stylus tests.  At 40%
+ - [ ] Test 100% of all Stylus tests and document the progress...  At 40% now.
      - [ ] Test all Stylus regression tests
      - [ ] Test bifs
      - [ ] Test compress
