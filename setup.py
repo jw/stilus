@@ -98,7 +98,7 @@ setup(
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
     entry_points={
-        'console_scripts': ['stilus=stilus.cli:cli'],
+        'console_scripts': ['stilus=stilus.cli:stilus'],
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
