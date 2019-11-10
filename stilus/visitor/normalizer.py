@@ -267,9 +267,9 @@ class Normalizer(Visitor):
             if not groups:
                 if extend['optional']:
                     return
-                err = TypeError(f'Failed to @extend "{extend.selector}"')
-                err.lineno = extend.lineno
-                err.column = extend.column
+                err = TypeError(f'Failed to @extend \"{extend["selector"]}\"')
+                err.lineno = extend['lineno']
+                err.column = extend['column']
                 raise TypeError
             for selector in selectors:
                 node = Selector()

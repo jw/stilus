@@ -41,11 +41,14 @@ def test_stylus_cases(styl, css):
     renderer.include(cases)
     renderer.include(imports)
 
-    if 'include' in styl.name:
+    if 'include.' in styl.name:
         renderer.options['include css'] = True
 
     if 'compress' in styl.name:
         renderer.options['compress'] = True
+
+    if 'prefix.' in styl.name:
+        renderer.options['prefix'] = 'prefix-'
 
     result = renderer.render()
 

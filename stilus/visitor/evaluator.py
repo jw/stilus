@@ -1056,7 +1056,10 @@ class Evaluator(Visitor):
                 return node.value
             elif node.node_name == 'unit':
                 # interpolation inside keyframes
-                return f'{node.value}%' if '%' == node.type else node.value
+                if '%' == node.type:
+                    return f'{int(node.value)}%'
+                else:
+                    return f'{int(node.value)}'
             elif node.node_name == 'member':
                 return to_string(self.visit(node))
             elif node.node_name == 'expression':

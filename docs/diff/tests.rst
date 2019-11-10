@@ -249,10 +249,10 @@ page.styl                                     stylus/cases                   ok
 parent.complex.styl
 parent.styl
 parse.styl                                    stylus/cases                   ok
-prefix.css.selector.interpolation.styl
-prefix.extend.complex.styl
-prefix.extend.styl
-prefix.extend.with.placeholders.styl
+prefix.css.selector.interpolation.styl        stylus/cases/prefix            ok
+prefix.extend.complex.styl                    stylus/cases/prefix            ok
+prefix.extend.styl                            stylus/cases/prefix            ok
+prefix.extend.with.placeholders.styl          stylus/cases/prefix            ok
 prefix.grid.styl
 properties.colons.styl                        stylus/cases/properties        ok
 properties.one-line.styl                      stylus/cases/properties        ok

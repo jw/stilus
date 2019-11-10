@@ -12,6 +12,7 @@ The test release, a.k.a. `test, test, test!`
  - [ ] Test 100% of all Stylus tests and document the progress...  At 40% now.
      - [ ] Test all Stylus regression tests
      - [ ] Test bifs
+     - [ ] Test prefix (4/5; 80%)
      - [ ] Test compress
      - [ ] Test css
      - [ ] Test extend
