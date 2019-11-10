@@ -86,7 +86,7 @@ class Node:
         elif op == '<':
             return Boolean(self.hash() < right.hash())
         elif op == '||':
-            return self if self.to_boolean() is True else right
+            return self if self.to_boolean().value is True else right
         elif op == 'in':
             from stilus import utils
             values = utils.unwrap(right).nodes

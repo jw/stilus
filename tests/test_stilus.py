@@ -429,6 +429,26 @@ set-colour(colour = get-red)
   set-colour()
 """
 
+    source = """
+@keyframes tada
+  0%
+    transform: scale(1)
+  10%, 20%
+    transform: scale(.9) rotate(-3deg)
+  from, to
+    background: scale(.5)
+"""
+
+    source = """
+only = webkit
+
+body
+  foo: webkit in only
+  foo: (webkit in only)
+  foo: true or false
+  foo: (webkit in only) or false
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

@@ -10,7 +10,7 @@ The test release, a.k.a. `test, test, test!`
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Update the assertions in the built-in functions.
  - [ ] Test 100% of all Stylus tests and document the progress...  At 40% now.
-     - [ ] Test all Stylus regression tests
+     - [ ] Test all Stylus regression tests (27/85; 31%)
      - [ ] Test bifs
      - [ ] Test prefix (4/5; 80%)
      - [ ] Test compress
@@ -20,7 +20,8 @@ The test release, a.k.a. `test, test, test!`
      - [ ] Test imports
      - [ ] Test nested
      - [ ] Test operators
-     - [ ] Test properties
+     - [ ] Test properties (6/6; 100%)
      - [ ] Test selectors
      - [ ] Test the rest :-)
+ - [ ] Unit update; value() property: float -> int/string (using raw)
  - [ ] Create logo.
