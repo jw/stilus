@@ -395,7 +395,8 @@ class Evaluator(Visitor):
             if 'calc' == self.unvendorize(call.function_name):
                 if call.args.nodes:
                     if call.args.nodes[0]:
-                        ret = Literal(call.function_name + str(call.args.nodes[0]),
+                        ret = Literal(call.function_name +
+                                      str(call.args.nodes[0]),
                                       lineno=self.parser.lineno,
                                       column=self.parser.column)
             else:

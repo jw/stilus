@@ -2,7 +2,7 @@
 
 The test release, a.k.a. `test, test, test!`
 
- - [ ] Get to 90%+ coverage.  At 89%!
+ - [ ] Get to 90%+ coverage.  At 90%!
  - [ ] Update the binary:
     - [ ] add watch changes (watchdog)
     - [ ] add out option
@@ -12,7 +12,7 @@ The test release, a.k.a. `test, test, test!`
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Update the assertions in the built-in functions.
  - [ ] Test 95% of all Stylus tests and document the progress...  At 40% now.
-     - [ ] Test all Stylus regression tests (27/85; 31%)
+     - [ ] Test all Stylus regression tests (27/85; 52%)
      - [ ] Test bifs (59/67; 88%):
          - 4 cache bifs test missing (no cache yet), 
          - 1 use bifs test missing (no plugin system yet) 
