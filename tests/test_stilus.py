@@ -570,15 +570,10 @@ foo()
 """
 
     source = """
-vendors = webkit
-
-@keyframes colors
-  0%
-    background-color red
-  15%
-    background-color blue
-  100%
-    background-color black
+a
+  a: foo bar(baz, buz, 1)
+  b: '' + @a
+  c: join(' ', @a)
 """
 
     # parser = Parser(source, {})

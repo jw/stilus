@@ -10,4 +10,4 @@ def test_binop():
     assert binop.op == '+'
     assert binop.left == left
     assert binop.left == right
-    assert f'{binop}' == f'({left} + {right})'
+    assert f'{binop}' == f'{left} + {right}'

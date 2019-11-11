@@ -133,12 +133,12 @@ for.postfix.styl                              stylus/cases                   ok
 for.styl
 function.arguments.styl
 function.literals.styl
-functions.anonymous.styl
-functions.arg-calls.styl
-functions.call.mixin.styl
-functions.call.styl
-functions.call.to-string.styl
-functions.defaults.styl
+functions.anonymous.styl                      stylus/cases/functions         ok
+functions.arg-calls.styl                      stylus/cases/functions         ok
+functions.call.mixin.styl                     stylus/cases/functions         ok
+functions.call.styl                           stylus/cases/functions         ok
+functions.call.to-string.styl                 stylus/cases/functions         not ok
+functions.defaults.styl                       stylus/cases/functions         not ok
 functions.multi-line.styl                     stylus/cases/functions         ok
 functions.multiple-calls.styl                 stylus/cases/functions         ok
 functions.nested-calls.styl                   stylus/cases/functions         ok

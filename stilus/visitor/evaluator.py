@@ -393,11 +393,11 @@ class Evaluator(Visitor):
         if fn is None or fn.node_name != 'function':
             ret = None
             if 'calc' == self.unvendorize(call.function_name):
-                literal = call.args.nodes and call.args.nodes[0]
-                if literal:
-                    ret = Literal(call.function_name + call.args.nodes[0],
-                                  lineno=self.parser.lineno,
-                                  column=self.parser.column)
+                if call.args.nodes:
+                    if call.args.nodes[0]:
+                        ret = Literal(call.function_name + str(call.args.nodes[0]),
+                                      lineno=self.parser.lineno,
+                                      column=self.parser.column)
             else:
                 ret = self.literal_call(call)
             self.ignore_colors = False
@@ -1128,7 +1128,7 @@ class Evaluator(Visitor):
         for vendor in self.vendors():
             if vendor != 'official':
                 vendor = f'-{vendor}-'
-            if prop in vendor:
+            if vendor in prop:
                 return prop.replace(vendor, '')
         return prop
 

@@ -12,7 +12,7 @@ class BinOp(Node):
         self.right = right
 
     def __str__(self):
-        return f'({self.left} {self.op} {self.right})'
+        return f'{self.left} {self.op} {self.right}'
 
     def __repr__(self):
         return self.__str__()
