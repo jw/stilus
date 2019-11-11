@@ -4,6 +4,8 @@ import os
 import re
 from pathlib import Path
 
+from stilus.nodes.node import CoercionError
+
 from stilus import utils
 from stilus.colors import colors
 from stilus.exceptions import ParseError, StilusError
@@ -484,15 +486,13 @@ class Evaluator(Visitor):
         # operate
         try:
             return self.visit(left.operate(op, right, value))
-        except Exception as e:
-            print(e)
+        except CoercionError as e:
             # disregard coercion issues in equality
             # checks, and simply return false
-            # if 'coercionError' == e:  # fixme: use exception node_name
-            #     if op == '==':
-            #         return false
-            #     elif op == '!=':
-            #         return true
+            if op == '==':
+                return Boolean(False)
+            elif op == '!=':
+                return Boolean(True)
             raise e
 
     def visit_unaryop(self, unary):
@@ -713,7 +713,7 @@ class Evaluator(Visitor):
             if stack:
                 self.stack.pop()
         else:
-            body = self.visit(body)  # <---
+            body = self.visit(body)
             if stack:
                 self.stack.pop()
             self.mixin(body.nodes, self.get_current_block())
@@ -724,16 +724,7 @@ class Evaluator(Visitor):
 
         return ret
 
-    # todo: rewrite this; this is not Python nor proper code >:-(
     def mixin(self, nodes, block):
-
-        def prettify(nodes):
-            buffer = [f' -> {node}' for node in nodes]
-            return '\n'.join(buffer)
-
-        # log.debug(f'Mixin: in: nodes:\n{prettify(nodes)}')
-        # log.debug(f'Mixin: in: block: {block}')
-        # log.debug(f'Mixin: in: block.nodes:\n{prettify(block.nodes)}')
         if len(nodes) == 0:
             return None
         head = block.nodes[:block.index]
@@ -743,8 +734,6 @@ class Evaluator(Visitor):
         block.mixin = True
         head.extend(tail)
         block.nodes = head
-        # log.debug(f'Mixin: out: {prettify(block.nodes)}')
-        # self.set_current_block(block)
 
     # todo: rewrite this; this is not Python >:-(
     def _mixin(self, items, dest, block):

@@ -15,6 +15,14 @@ FACTOR_TABLE = {'mm': {'value': 1, 'label': 'mm'},
                 'kHz': {'value': 1000, 'label': 'Hz'}}
 
 
+# todo: remove this function!
+def is_weird_float(value):
+    if isinstance(value, float) and f'{value}'.endswith('.0'):
+        return True
+    else:
+        return False
+
+
 class Unit(Node):
 
     def __init__(self, value, type=None, lineno=1, column=1):
@@ -58,7 +66,10 @@ class Unit(Node):
         return clone
 
     def hash(self):
-        return self.value
+        if isinstance(self.value, int) or is_weird_float(self.value):  # fixme!
+            return int(self.value)
+        else:
+            return self.value
 
     def operate(self, op, right: Node, value=None):
         type = None
@@ -150,8 +161,8 @@ class Unit(Node):
                 return Unit(0, '%')
             value = float(other.value)
             if isnan(value):
-                return super().coerce(self, value)
+                return super().coerce(value)
             else:
                 return Unit(value)
         else:
-            return super().coerce(self, other)
+            return super().coerce(other)

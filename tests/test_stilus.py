@@ -449,17 +449,26 @@ body
   foo: (webkit in only) or false
 """
 
+    source = """
+body
+  nums = 1 2 3 4
+  foo last(nums) == 4
+  foo last(foo bar baz) == baz
+  foo last(()) == null
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
 
+    stylus_path = '/home/jw/python/projects/stilus/tests/stylus'
     renderer = Renderer(source, {})
-    # renderer.options['include css'] = True
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/images')
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/cases')
-    renderer.include('/home/jw/python/projects/stilus/tests/stylus/'
-                     'cases/import.basic')
+    renderer.include(f'{stylus_path}/images')
+    renderer.include(f'{stylus_path}/cases')
+    renderer.include(f'{stylus_path}/cases/import.basic')
     renderer.include('.')
+
+    # renderer.options['include css'] = True
     # renderer.options['compress'] = True
 
     css = renderer.render()

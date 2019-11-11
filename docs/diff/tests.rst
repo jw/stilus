@@ -5,7 +5,7 @@ Stilus tests
 Below you'll find the tests as run in Stylus, and the status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 40% (367/147)
+Coverage: 50% (367/184)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -24,7 +24,7 @@ bifs.cache.at-media.styl
 bifs.cache.samename.styl
 bifs.cache.size.styl
 bifs.cache.styl
-bifs.called-from.styl
+bifs.called-from.styl                         stylus/cases/bifs              not ok
 bifs.clone.styl                               stylus/cases/bifs              ok
 bifs.complement.styl                          stylus/cases/bifs              ok
 bifs.components.styl                          stylus/cases/bifs              ok
@@ -35,30 +35,30 @@ bifs.current-property.styl                    stylus/cases/bifs              ok
 bifs.darken.styl                              stylus/cases/bifs              ok
 bifs.dark.styl                                stylus/cases/bifs              ok
 bifs.define.styl                              stylus/cases/bifs              ok
-bifs.fade.styl
-bifs.floats.styl
-bifs.grayscale.styl
+bifs.fade.styl                                stylus/cases/bifs              ok
+bifs.floats.styl                              stylus/cases/bifs              not ok (to correct calculation)
+bifs.grayscale.styl                           stylus/cases/bifs              ok
 bifs.hsla.styl                                stylus/cases/bifs              ok
 bifs.image-size.styl                          stylus/cases/bifs              ok
-bifs.index.styl
-bifs.invert.styl
+bifs.index.styl                               stylus/cases/bifs              ok
+bifs.invert.styl                              stylus/cases/bifs              ok
 bifs.join.styl                                stylus/cases/bifs              ok
 bifs.json.styl                                stylus/cases/bifs              ok
-bifs.keys.styl
-bifs.last.styl
+bifs.keys.styl                                stylus/cases/bifs              ok
+bifs.last.styl                                stylus/cases/bifs              ok
 bifs.length.styl                              stylus/cases/bifs              ok
 bifs.lighten.styl                             stylus/cases/bifs              ok
 bifs.light.styl                               stylus/cases/bifs              ok
-bifs.list-separator.styl
+bifs.list-separator.styl                      stylus/cases/bifs              ok
 bifs.lookup.styl                              stylus/cases/bifs              ok
 bifs.luminosity.styl                          stylus/cases/bifs              ok
 bifs.match.styl                               stylus/cases/bifs              ok
 bifs.math.styl                                stylus/cases/bifs              ok
-bifs.merge.styl
-bifs.mix.styl
+bifs.merge.styl                               stylus/cases/bifs              ok
+bifs.mix.styl                                 stylus/cases/bifs              ok
 bifs.opposite-position.styl                   stylus/cases/bifs              ok
-bifs.percentage.styl
-bifs.percent-to-decimal.styl
+bifs.percentage.styl                          stylus/cases/bifs              ok
+bifs.percent-to-decimal.styl                  stylus/cases/bifs              ok
 bifs.pop.styl                                 stylus/cases/bifs              ok
 bifs.prefix-classes.styl                      stylus/cases/bifs              ok
 bifs.push.styl                                stylus/cases/bifs              ok
@@ -66,24 +66,24 @@ bifs.range.styl                               stylus/cases/bifs              ok
 bifs.remove.styl                              stylus/cases/bifs              ok
 bifs.remove-unit.styl                         stylus/cases/bifs              ok
 bifs.replace.styl                             stylus/cases/bifs              ok
-bifs.rgba.styl
+bifs.rgba.styl                                stylus/cases/bifs              ok
 bifs.saturate-desaturate.styl                 stylus/cases/bifs              ok
 bifs.selector.exitsts.styl                    stylus/cases/bifs              ok [with typo :-)]
-bifs.selectors.styl
+bifs.selectors.styl                           stylus/cases/bifs              ok
 bifs.selector.styl                            stylus/cases/bifs              ok
-bifs.shade.styl
+bifs.shade.styl                               stylus/cases/bifs              ok
 bifs.slice.styl                               stylus/cases/bifs              ok
 bifs.split.styl                               stylus/cases/bifs              ok
 bifs.s.styl                                   stylus/cases/bifs              ok
 bifs.substr.styl                              stylus/cases/bifs              ok
-bifs.tint.styl
+bifs.tint.styl                                stylus/cases/bifs              ok
 bifs.transparentify.styl                      stylus/cases/bifs              ok
-bifs.type.styl
+bifs.type.styl                                stylus/cases/bifs              ok
 bifs.unit.styl                                stylus/cases/bifs              ok
 bifs.unquote.styl                             stylus/cases/bifs              ok
 bifs.url.styl                                 stylus/cases/bifs              ok
 bifs.use.styl
-bifs.values.styl
+bifs.values.styl                              stylus/cases/bifs              ok
 casting.styl                                  stylus/cases                   ok
 coercion.styl
 colors.styl                                   stylus/cases                   ok

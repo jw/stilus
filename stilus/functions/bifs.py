@@ -1,11 +1,11 @@
 from stilus.functions import addProperty, adjust, alpha, baseConvert, \
     basename, blend, blue, clone, contrast, convert, currentMedia, define, \
     dirname, error, extname, green, hsl, hsla, hue, imageSize, json, length, \
-    lightness, listSeparator, lookup, luminosity, math, math_prop, operate, \
-    oppositePosition, p, pathjoin, pop, prefixClasses, push, range, red, \
-    remove, replace, rgb, rgba, s, saturation, selector, selectorExists, \
+    lightness, listSeparator, lookup, luminosity, math, math_prop, merge, \
+    operate, oppositePosition, p, pathjoin, pop, prefixClasses, push, range, \
+    red, remove, replace, rgb, rgba, s, saturation, selector, selectorExists, \
     shift, stilus_slice, stilus_split, substr, tan, trace, transparentify, \
-    type_function, unit, unquote, unshift, url, warn
+    type_function, unit, unquote, unshift, url, warn, selectors
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -25,6 +25,7 @@ bifs = {
     'dirname': dirname.dirname,
     'embedurl': url.url,
     'error': error.error,
+    'extend': merge.merge,
     'extname': extname.extname,
     'green': green.green,
     'hsl': hsl.hsl,
@@ -38,6 +39,7 @@ bifs = {
     'luminosity': luminosity.luminosity,
     'lookup': lookup.lookup,
     'math': math.math,
+    'merge': merge.merge,
     'operate': operate.operate,
     'opposite-position': oppositePosition.opposite_position,
     'p': p.p,
@@ -56,6 +58,7 @@ bifs = {
     'saturation': saturation.saturation,
     'selector': selector.selector,
     'selector-exists': selectorExists.selector_exists,
+    'selectors': selectors.selectors,
     'shift': shift.shift,
     'slice': stilus_slice.slice,
     'split': stilus_split.split,
@@ -72,5 +75,6 @@ bifs = {
 }
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
-            'length', 'list_separator', 'opposite_position', 'p', 'pop',
-            'push', 'prepend', 's', 'selector', 'shift', 'slice', 'unshift']
+            'extend', 'length', 'list_separator', 'merge',
+            'opposite_position', 'p', 'pop', 'push', 'prepend', 's',
+            'selector', 'shift', 'slice', 'unshift']

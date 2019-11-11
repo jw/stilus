@@ -9,9 +9,11 @@ The test release, a.k.a. `test, test, test!`
     - [ ] add 3 other missing features
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Update the assertions in the built-in functions.
- - [ ] Test 100% of all Stylus tests and document the progress...  At 40% now.
+ - [ ] Test 95% of all Stylus tests and document the progress...  At 40% now.
      - [ ] Test all Stylus regression tests (27/85; 31%)
-     - [ ] Test bifs
+     - [ ] Test bifs (59/67; 88%):
+         - 4 cache bifs missing, 
+         - The use bifs missing since part of plugin system 
      - [ ] Test prefix (4/5; 80%)
      - [ ] Test compress
      - [ ] Test css

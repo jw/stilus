@@ -113,7 +113,8 @@ class Expression(Node):
                 n = None
                 if node.node_name == 'unit':
                     if node.value < 0:
-                        n = values[len(values) + node.value]
+                        if len(values) <= len(values) + node.value:
+                            n = values[len(values) + node.value]
                     else:
                         try:
                             n = values[int(node.value)]
@@ -128,7 +129,7 @@ class Expression(Node):
         elif op == '||':
             return self if self.to_boolean().is_true() else right
         elif op == 'in':
-            return super().operate(op, right)
+            return super().operate(op, right, self.value)
         elif op == '!=':
             return self.operate('==', right, value)
         elif op == '==':
