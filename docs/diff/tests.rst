@@ -1,8 +1,8 @@
 
-Stilus tests
+Stylus tests
 ============
 
-Below you'll find the tests as run in Stylus, and the status in Stilus.
+Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
 Coverage: 50% (367/184)
@@ -299,7 +299,7 @@ regression.235.styl                           stylus/cases/regressions       ok
 regression.243.styl
 regression.244.styl
 regression.247.styl
-regression.248.compressed.styl
+regression.248.compressed.styl                stylus/cases/regressions       ok
 regression.252.styl
 regression.260.styl
 regression.267.styl                           stylus/cases/regressions       ok

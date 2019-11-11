@@ -44,7 +44,7 @@ def test_stylus_cases(styl, css):
     if 'include.' in styl.name:
         renderer.options['include css'] = True
 
-    if 'compress' in styl.name:
+    if 'compress.' in styl.name or 'compressed.' in styl.name:
         renderer.options['compress'] = True
 
     if 'prefix.' in styl.name:

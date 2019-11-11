@@ -28,7 +28,7 @@ class Member(Node):
         return hash(self.__key())
 
     def clone(self, parent=None, node=None):
-        clone = Member(lineno=self.lineno, column=self.column)
+        clone = Member(None, None, lineno=self.lineno, column=self.column)
         clone.left = self.left.clone(parent, clone)
         clone.right = self.right.clone(parent, clone)
         if clone.value:

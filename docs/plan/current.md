@@ -15,14 +15,14 @@ The test release, a.k.a. `test, test, test!`
          - 4 cache bifs missing, 
          - The use bifs missing since part of plugin system 
      - [ ] Test prefix (4/5; 80%)
-     - [ ] Test compress
+     - [x] Test compress (4/4; 100%)
      - [ ] Test css (12/14; 86%)
      - [ ] Test extend
      - [ ] Test functions
      - [ ] Test imports
      - [ ] Test nested
      - [ ] Test operators
-     - [ ] Test properties (6/6; 100%)
+     - [x] Test properties (6/6; 100%)
      - [ ] Test selectors
      - [ ] Test the rest :-)
  - [ ] Unit update; value() property: float -> int/string (using raw)
