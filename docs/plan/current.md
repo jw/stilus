@@ -16,7 +16,7 @@ The test release, a.k.a. `test, test, test!`
          - The use bifs missing since part of plugin system 
      - [ ] Test prefix (4/5; 80%)
      - [ ] Test compress
-     - [ ] Test css
+     - [ ] Test css (12/14; 86%)
      - [ ] Test extend
      - [ ] Test functions
      - [ ] Test imports

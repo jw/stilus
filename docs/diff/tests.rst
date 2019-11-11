@@ -102,11 +102,11 @@ css.if.styl                                   stylus/css                     ok
 css.keyframes.styl                            stylus/css                     ok
 css.large.styl                                stylus/css                     ok
 css.media.styl                                stylus/css                     ok
-css.mixins.braces.styl
-css.mixins.root.styl
-css.mixins.root.wonky.styl
-css.mixins.styl
-css.selector.interpolation.styl
+css.mixins.braces.styl                        stylus/css                     not ok
+css.mixins.root.styl                          stylus/css                     ok
+css.mixins.root.wonky.styl                    stylus/css                     ok
+css.mixins.styl                               stylus/css                     not ok
+css.selector.interpolation.styl               stylus/css                     ok
 css.selectors.styl                            stylus/css                     ok
 css.whitespace.styl                           stylus/css                     ok
 dumb.styl                                     stylus/cases                   ok
