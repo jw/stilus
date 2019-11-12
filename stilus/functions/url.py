@@ -43,7 +43,7 @@ def url(url, enc=None, evaluator=None):
         url = urlparse(url[1:-1])
         ext = Path(url.path).suffix
         mime = None
-        if ext:
+        if ext and ext in mimes:
             mime = mimes[ext]
         hash = ''
         if url.fragment:

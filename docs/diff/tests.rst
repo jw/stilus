@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 52% (367/191)
+Coverage: 58% (206/252)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -113,19 +113,19 @@ dumb.styl                                     stylus/cases                   ok
 eol-escape.styl                               stylus/cases                   ok
 escape.styl                                   stylus/cases                   ok
 extend.cascade.styl                           stylus/cases                   ok
-extend.complex.styl
-extend.in-loop-context.styl
+extend.complex.styl                           stylus/cases                   ok
+extend.in-loop-context.styl                   stylus/cases                   ok
 extend.in-loop.styl                           stylus/cases/extend            ok
-extend.in-media-query.styl
-extend.in-mixin.nested.styl
-extend.in-mixin.styl
+extend.in-media-query.styl                    stylus/cases                   ok
+extend.in-mixin.nested.styl                   stylus/cases                   ok
+extend.in-mixin.styl                          stylus/cases                   ok
 extend.multiple-definitions.styl              stylus/cases/extend            ok
-extend.multiple-selectors.styl
+extend.multiple-selectors.styl                stylus/cases                   not ok
 extend.styl                                   stylus/cases/extend            ok
-extend.using-variable.styl
-extend.with.optional.styl
-extend.with.parent.reference.styl
-extend.with.placeholders.styl
+extend.using-variable.styl                    stylus/cases                   ok
+extend.with.optional.styl                     stylus/cases                   ok
+extend.with.parent.reference.styl             stylus/cases                   not ok
+extend.with.placeholders.styl                 stylus/cases                   ok
 fontface.styl
 for.complex.styl                              stylus/cases                   ok
 for.function.styl                             stylus/cases                   ok
@@ -163,36 +163,22 @@ import.comments.styl                          stylus/cases/imports           ok
 import.complex.styl                           stylus/cases/imports           ok
 import.glob.styl                              stylus/cases/imports           ok
 import.include.basic.styl                     stylus/cases/imports           ok
-import.include.complex/a.styl
 import.include.complex.styl                   stylus/cases/imports           ok
-import.include.function/a.styl
 import.include.function.call.styl             stylus/cases/imports           ok
-import.include.function/import.common.styl
-import.include.function/import.vendor.styl
-import.include.function.styl
-import.include.in.function/a.styl
-import.include.in.function.styl
-import.include.megacomplex/a.styl
-import.include.megacomplex.styl
-import.include.resolver.absolute.styl
-import.include.resolver.css-file.styl
-import.include.resolver.images/a.styl
-import.include.resolver.images.styl
-import.include.resolver.nested.styl
-import.index.styl
-import.literal/import.literal.css.styl
-import.literal.styl
-import.lookup/index.styl
-import.lookup.styl
-import.loop/test.styl
-import.mixins.styl
-import.mixins.transparent.styl
-import.namespace.styl
-import.namespace/svg.styl
-import.ordering/five.styl
-import.ordering/four.styl
-import.ordering.styl
-import.ordering/two.styl
+import.include.function.styl                  stylus/cases/imports           ok
+import.include.in.function.styl               stylus/cases/imports           not ok
+import.include.megacomplex.styl               stylus/cases/imports           not ok
+import.include.resolver.absolute.styl         stylus/cases/imports           not ok
+import.include.resolver.css-file.styl         stylus/cases/imports           not ok
+import.include.resolver.images.styl           stylus/cases/imports           not ok
+import.include.resolver.nested.styl           stylus/cases/imports           not ok
+import.index.styl                             stylus/cases/imports           ok
+import.literal.styl                           stylus/cases/imports           ok
+import.lookup.styl                            stylus/cases/imports           ok
+import.mixins.styl                            stylus/cases/imports           ok
+import.mixins.transparent.styl                stylus/cases/imports           ok
+import.namespace.styl                         stylus/cases/imports           ok
+import.ordering.styl                          stylus/cases/imports           ok
 index.styl
 interpolation.properties.styl
 introspection.styl
@@ -377,40 +363,3 @@ variables.styl                                stylus/cases                   ok
 variable.styl                                 stylus/cases                   ok
 whitespace.oes.styl                           stylus/cases                   ok
 ============================================= ============================== =====================
-
-
-
-Directories
-===========
-
-(This section needs some work)
-
-Directories used by import, extend:
-
-import.basic.styl -> import.basic
----------------------------------
-
-import.basic/a.styl
-import.basic/b.styl
-import.basic/clone2.styl
-import.basic/clone.styl
-import.basic/c.styl
-
-import.comments.styl -> import.comments
----------------------------------------
-
-comments.styl
-
-import.complex.styl -> import.complex
--------------------------------------
-
-import.complex/nested/b.styl
-import.complex/a.styl
-import.complex/c.styl
-import.complex/d.styl
-
-import.glob.styl -> import.glob
--------------------------------
-
-import.glob/a.styl
-import.glob/c.styl

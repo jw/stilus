@@ -19,9 +19,9 @@ The test release, a.k.a. `test, test, test!`
      - [ ] Test prefix (4/5; 80%)
      - [x] Test compress (4/4; 100%)
      - [ ] Test css (12/14; 86%)
-     - [ ] Test extend
+     - [ ] Test extend (12/14; 86%)
      - [ ] Test functions (15/17; 88%)
-     - [ ] Test imports
+     - [ ] Test imports (16/22; 73%)
      - [ ] Test nested
      - [ ] Test operators
      - [x] Test properties (6/6; 100%)

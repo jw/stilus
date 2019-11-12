@@ -917,7 +917,8 @@ class Evaluator(Visitor):
         # lookup
         found = utils.find(path, self.paths, self.filename)
         if not found:
-            found = utils.lookup_index(name, self.paths, self.filename)
+            found = utils.lookup_index(name, self.paths, self.filename,
+                                       parser=self.parser)
 
         # throw if import failed
         if not found:

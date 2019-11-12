@@ -1,3 +1,5 @@
+import json
+import re
 import types
 from decimal import Decimal, ROUND_HALF_UP
 from os.path import join
@@ -182,7 +184,7 @@ def lookup(path: Path, paths: List, ignore=''):
     if p.is_absolute() and p.exists():
         return str(path)
 
-    for a_path in paths:
+    for a_path in reversed(paths):
         lookup = join(a_path, path)
         if ignore == lookup:
             continue
@@ -217,11 +219,36 @@ def find(path, paths, ignore):
     return None
 
 
-def lookup_index(name, paths, filename):
+def lookup_index(name, paths, filename, parser=None):
+    p = Path(name)
 
-    found = find(join(name, 'index.styl'), paths, filename)
-    # todo: check basename replacement?
-    # todo: check node modules?
+    found = find(join(str(p), 'index.styl'), paths, filename)
+
+    if not found:
+        looking_for = Path(p.name)
+        looking_for = looking_for.with_suffix('.styl')
+        found = find(join(str(p), str(looking_for)), paths, filename)
+
+    def find_in_js_packages(directory):
+        package = lookup(join(directory, 'package.json'), paths, filename)
+        if not package:
+            if re.search('.styl$', directory, re.IGNORECASE):
+                return lookup_index(directory, paths, filename)
+            else:
+                return find_in_js_packages(directory + '.styl')
+        if parser:
+            with open(package) as json_file:
+                data = json.load(json_file)
+                if data['main']:
+                    found = find(join(directory, data['main']),
+                                 paths, filename)
+                else:
+                    found = lookup_index(directory, paths, filename)
+        return found
+
+    if not found and 'node_modules' not in name:
+        found = find_in_js_packages(join('node_modules', name))
+
     return found
 
 

@@ -1,0 +1,23 @@
+form button,
+a.button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #808080;
+}
+a.button {
+  text-decoration: none;
+}
+form button,
+a.button button {
+  padding: 10px;
+  color: #f00;
+}
+form button:hover,
+a.button button:hover {
+  color: #00f;
+}
+body,
+form,
+a.button {
+  width: 75%;
+}

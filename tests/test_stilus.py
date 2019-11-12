@@ -505,6 +505,10 @@ a
   b: '' + @a
   c: join(' ', @a)
 """
+    source = """
+@import url("import.include.resolver.css-file/a.css");
+// @import "import.include.resolver.images/a"
+"""
 
     # parser = Parser(source, {})
     # ast = parser.parse()
@@ -517,7 +521,7 @@ a
     renderer.include(f'{stylus_path}/cases/import.basic')
     renderer.include('.')
 
-    # renderer.options['include css'] = True
+    renderer.options['include css'] = True
     # renderer.options['compress'] = True
 
     css = renderer.render()
