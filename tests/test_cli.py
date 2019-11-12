@@ -17,3 +17,13 @@ def test_cli_plain():
         result = runner.invoke(cli.stilus, ['foo.styl'])
         assert result.exit_code == 0
         assert result.output == 'foo {\n  abc: def;\n}\n\n'
+
+
+def test_cli_plain_compress():
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('foo.styl', 'w') as f:
+            f.write('foo\n  abc def\n')
+        result = runner.invoke(cli.stilus, ['-c', 'foo.styl'])
+        assert result.exit_code == 0
+        assert result.output == 'foo{abc:def}'
