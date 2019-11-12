@@ -1,0 +1,22 @@
+.or,
+.null,
+.if,
+.unless,
+.for,
+.not,
+.and,
+.is,
+.isnt,
+.in,
+.return {
+  position: absolute;
+}
+a.return {
+  color: #f00;
+}
+a.null {
+  color: #f00;
+}
+a.or {
+  color: #f00;
+}

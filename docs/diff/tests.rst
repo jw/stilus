@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 58% (206/252)
+Coverage: 62% (206/352)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -249,13 +249,13 @@ property-access.styl                          stylus/cases/properties        ok
 queries.styl                                  stylus/cases                   ok
 regression.107.lookup-failure.styl            stylus/cases/regressions       ok
 regression.1112.styl
-regression.1171.styl
-regression.1173.styl
-regression.1182.styl
+regression.1171.styl                          stylus/cases/regressions       ok
+regression.1173.styl                          stylus/cases/regressions       ok
+regression.1182.styl                          stylus/cases/regressions       ok
 regression.1205.styl
 regression.1206.styl
 regression.1214.styl
-regression.1277.styl
+regression.1277.styl                          stylus/cases/regressions       not ok
 regression.127.styl                           stylus/cases/regressions       ok
 regression.130.styl                           stylus/cases/regressions       ok
 regression.131.styl                           stylus/cases/regressions       ok
@@ -266,16 +266,16 @@ regression.146.styl                           stylus/cases/regressions       ok
 regression.153.styl                           stylus/cases/regressions       ok
 regression.154.styl                           stylus/cases/regressions       ok
 regression.156.styl
-regression.1571.styl
+regression.1571.styl                          stylus/cases/regressions       ok
 regression.1572.styl
-regression.1584.styl
+regression.1584.styl                          stylus/cases/regressions       not ok
 regression.1623.styl
-regression.1727.styl
-regression.1741.styl
+regression.1727.styl                          stylus/cases/regressions       ok
+regression.1741.styl                          stylus/cases/regressions       ok
 regression.1882.styl
-regression.1995.styl
-regression.1997.styl
-regression.1998.styl
+regression.1995.styl                          stylus/cases/regressions       ok
+regression.1997.styl                          stylus/cases/regressions       ok
+regression.1998.styl                          stylus/cases/regressions       ok
 regression.212.styl                           stylus/cases/regressions       ok
 regression.216.styl                           stylus/cases/regressions       ok
 regression.220.styl                           stylus/cases/regressions       ok
@@ -324,13 +324,13 @@ regression.748.styl
 regression.790-2.styl
 regression.790.styl
 regression.808.styl
-regression.810.styl
+regression.810.styl                           stylus/cases/regressions       ok
 regression.814.styl
 regression.819.styl
-regression.834.styl
-regression.839.styl
-regression.865.styl
-regression.911.styl
+regression.834.styl                           stylus/cases/regressions       ok
+regression.839.styl                           stylus/cases/regressions       ok
+regression.865.styl                           stylus/cases/regressions       ok
+regression.911.styl                           stylus/cases/regressions       ok
 require.basic.styl                            stylus/cases                   ok
 require.complex.styl                          stylus/cases                   ok
 require.glob.styl                             stylus/cases                   ok

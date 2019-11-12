@@ -55,15 +55,15 @@ class String(Node):
     def operate(self, op, right, value=None):
         if op == '%':
             expr = Expression()
-            expr.push(self)
+            expr.append(self)
             # constructor args
-            if right.node == 'expression':
+            if right.node_name == 'expression':
                 args = utils.unwrap(right)
             else:
                 args = [right]
             # apply
             from stilus.functions.s import s
-            return s(expr.join(args))
+            return s(expr, args)
         if op == '+':
             expr = Expression()
             expr.append(String(self.value + self.coerce(right).value,
