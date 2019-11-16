@@ -103,6 +103,8 @@ The development of Stilus, some todo's and thoughts.
    dev/codeguidelines.md
    dev/migration.md
    dev/workflow.md
+   dev/tools.md
+
 
 Issues
 ------
