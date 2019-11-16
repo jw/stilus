@@ -1,7 +1,7 @@
-from stilus.functions.rgba import rgba
-from stilus.nodes.color import RGBA
-from stilus.nodes.unit import Unit
-from stilus.utils import assert_color
+from functions.rgba import rgba
+from nodes.color import RGBA
+from nodes.unit import Unit
+from utils import assert_color
 
 
 def rgb(red, green, blue, evaluator=None):

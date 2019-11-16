@@ -1,14 +1,14 @@
 import re
 from collections import deque
 
-from stilus.nodes.boolean import Boolean
-from stilus.nodes.color import RGBA
-from stilus.nodes.null import null
-from stilus.nodes.string import String
-from stilus.nodes.unit import Unit
-from .nodes.comment import Comment
-from .nodes.ident import Ident
-from .nodes.literal import Literal
+from nodes.boolean import Boolean
+from nodes.color import RGBA
+from nodes.null import null
+from nodes.string import String
+from nodes.unit import Unit
+from nodes.comment import Comment
+from nodes.ident import Ident
+from nodes.literal import Literal
 
 
 class Token:

@@ -1,4 +1,4 @@
-from stilus.nodes.ifnode import If
+from nodes.ifnode import If
 
 
 # TODO: implement complete test

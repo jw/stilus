@@ -1,6 +1,6 @@
-from stilus.nodes.expression import Expression
-from stilus.nodes.literal import Literal
-from stilus.utils import unwrap, assert_type
+from nodes.expression import Expression
+from nodes.literal import Literal
+from utils import unwrap, assert_type
 
 
 def _convert(num, base):

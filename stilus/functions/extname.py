@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from stilus.utils import assert_string
+from utils import assert_string
 
 
 def extname(p, evaluator=None):

@@ -1,9 +1,9 @@
 from pytest import raises
 
-from stilus.nodes.block import Block
-from stilus.nodes.ident import Ident
-from stilus.stack.frame import Frame
-from stilus.stack.scope import Scope
+from nodes.block import Block
+from nodes.ident import Ident
+from stack.frame import Frame
+from stack.scope import Scope
 
 
 def test_frame_creation():

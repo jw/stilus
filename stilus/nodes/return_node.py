@@ -1,7 +1,7 @@
 import json
 
-from stilus.nodes.expression import Expression
-from stilus.nodes.node import Node
+from nodes.expression import Expression
+from nodes.node import Node
 
 
 class ReturnNode(Node, Exception):

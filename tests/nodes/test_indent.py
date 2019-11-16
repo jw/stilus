@@ -1,5 +1,5 @@
-from stilus.nodes.ident import Ident
-from stilus.nodes.null import null
+from nodes.ident import Ident
+from nodes.null import null
 
 
 def test_ident():

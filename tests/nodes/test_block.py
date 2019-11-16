@@ -1,12 +1,12 @@
-from stilus.nodes.block import Block
-from stilus.nodes.boolean import true
-from stilus.nodes.comment import Comment
-from stilus.nodes.expression import Expression
-from stilus.nodes.literal import Literal
-from stilus.nodes.media import Media
-from stilus.nodes.null import null
-from stilus.nodes.property import Property
-from stilus.nodes.string import String
+from nodes.block import Block
+from nodes.boolean import true
+from nodes.comment import Comment
+from nodes.expression import Expression
+from nodes.literal import Literal
+from nodes.media import Media
+from nodes.null import null
+from nodes.property import Property
+from nodes.string import String
 
 
 def test_block():

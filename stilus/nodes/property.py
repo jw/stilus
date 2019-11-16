@@ -1,6 +1,6 @@
 import json
 
-from stilus.nodes.node import Node
+from nodes.node import Node
 
 
 class Property(Node):

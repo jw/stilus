@@ -1,9 +1,9 @@
 import json
 from math import isnan
 
-from stilus.nodes.boolean import Boolean
-from stilus.nodes.expression import Expression
-from stilus.nodes.node import Node
+from nodes.boolean import Boolean
+from nodes.expression import Expression
+from nodes.node import Node
 
 FACTOR_TABLE = {'mm': {'value': 1, 'label': 'mm'},
                 'cm': {'value': 10, 'label': 'mm'},

@@ -1,5 +1,5 @@
-from stilus.nodes.ternary import Ternary
-from stilus.nodes.expression import Expression
+from nodes.ternary import Ternary
+from nodes.expression import Expression
 
 
 def test_ternary():

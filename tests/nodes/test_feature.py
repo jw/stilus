@@ -1,6 +1,6 @@
-from stilus.nodes.expression import Expression
-from stilus.nodes.feature import Feature
-from stilus.nodes.ident import Ident
+from nodes.expression import Expression
+from nodes.feature import Feature
+from nodes.ident import Ident
 
 
 def test_feature():

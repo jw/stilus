@@ -1,4 +1,4 @@
-from stilus.nodes.unit import Unit
+from nodes.unit import Unit
 
 
 def test_unit():
@@ -10,10 +10,10 @@ def test_unit():
 
 def test_boolean():
     unit = Unit(1, 'Hz')
-    from stilus.nodes.boolean import true
+    from nodes.boolean import true
     assert unit.to_boolean() == true
     unit = Unit(10)
-    from stilus.nodes.boolean import Boolean
+    from nodes.boolean import Boolean
     assert unit.to_boolean() == Boolean(10)
 
 

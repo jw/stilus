@@ -1,7 +1,6 @@
 import json
 from typing import Type
-
-from stilus.exceptions import StilusError
+from exceptions import StilusError
 
 
 class CoercionError(Exception):
@@ -42,14 +41,14 @@ class Node:
         """Return True.
         :return: True
         """
-        from stilus.nodes.boolean import Boolean
+        from nodes.boolean import Boolean
         return Boolean(True)
 
     def to_expression(self):
         """Return expression or wrap this node in an expression
         :return:
         """
-        from stilus.nodes.expression import Expression
+        from nodes.expression import Expression
         if self.node_name == 'expression':
             return self
         expression = Expression()
@@ -60,13 +59,13 @@ class Node:
         """Nodes by default evaulate to themselves.
         :return: A Node.
         """
-        from stilus.visitor.evaluator import Evaluator
+        from visitor.evaluator import Evaluator
         return Evaluator(self).evaluate()
 
     # todo: use object.hash(); not hash(object)
     def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
         """Operate on ``right`` with the given ``op``."""
-        from stilus.nodes.boolean import Boolean
+        from nodes.boolean import Boolean
         if op == 'is a':
             if 'string' == right.first().node_name:
                 return Boolean(self.node_name == right.value)
@@ -88,7 +87,7 @@ class Node:
         elif op == '||':
             return self if self.to_boolean().value is True else right
         elif op == 'in':
-            from stilus import utils
+            import utils
             values = utils.unwrap(right).nodes
             if not values:
                 raise StilusError('"in" given invalid right-hand operand, '

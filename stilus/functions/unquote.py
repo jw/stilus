@@ -1,5 +1,5 @@
-from stilus.nodes.literal import Literal
-from stilus.utils import assert_string
+from nodes.literal import Literal
+from utils import assert_string
 
 
 def unquote(string, evaluator=None):

@@ -1,9 +1,9 @@
-from stilus.nodes.ident import Ident
-from stilus.nodes.null import null
-from stilus.nodes.string import String
-from stilus.nodes.expression import Expression
-from stilus.nodes.boolean import false, true
-from stilus.nodes.boolean import Boolean
+from nodes.ident import Ident
+from nodes.null import null
+from nodes.string import String
+from nodes.expression import Expression
+from nodes.boolean import false, true
+from nodes.boolean import Boolean
 
 
 def test_string():

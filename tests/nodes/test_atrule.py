@@ -1,4 +1,4 @@
-from stilus.nodes.atrule import Atrule
+from nodes.atrule import Atrule
 
 
 def test_atrule():

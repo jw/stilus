@@ -1,5 +1,5 @@
-from stilus.nodes.null import null
-from stilus.utils import assert_type
+from nodes.null import null
+from utils import assert_type
 
 
 def lookup(name, evaluator=None):

@@ -1,4 +1,4 @@
-from stilus.functions import addProperty, adjust, alpha, baseConvert, \
+from functions import addProperty, adjust, alpha, baseConvert, \
     basename, blend, blue, clone, contrast, convert, currentMedia, define, \
     dirname, error, extname, green, hsl, hsla, hue, imageSize, json, length, \
     lightness, listSeparator, lookup, luminosity, math, math_prop, merge, \

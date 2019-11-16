@@ -1,8 +1,8 @@
 import json
 
-from stilus.nodes.boolean import false, true, Boolean
-from stilus.nodes.node import Node
-from stilus.nodes.null import null
+from nodes.boolean import false, true, Boolean
+from nodes.node import Node
+from nodes.null import null
 
 
 class ObjectNode(Node):

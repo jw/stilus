@@ -1,4 +1,4 @@
-from stilus.utils import assert_present
+from utils import assert_present
 
 
 def type_function(node, evaluator=None):

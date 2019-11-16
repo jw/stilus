@@ -8,10 +8,12 @@ python:
 env:
   global:
     - PIPENV_IGNORE_VIRTUALENVS=1
+    - PYTHONPATH=stilus
 
 install:
   - pip install pipenv
   - pipenv install --dev
+  - export PYTHONPATH=stilus
 
 script:
   - pipenv run flake8

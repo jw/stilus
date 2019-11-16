@@ -1,5 +1,5 @@
-from stilus.exceptions import StilusError
-from stilus.utils import assert_type
+from exceptions import StilusError
+from utils import assert_type
 
 
 def error(msg, evaluator=None):

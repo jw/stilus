@@ -1,7 +1,7 @@
 import math as m
 
-from stilus.nodes.string import String
-from stilus.nodes.unit import Unit
+from nodes.string import String
+from nodes.unit import Unit
 
 
 # todo: convert all javascript math functions to python and vice versa

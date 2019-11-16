@@ -1,7 +1,8 @@
 import json
+import utils
 
-from stilus.nodes.boolean import true, Boolean
-from stilus.nodes.node import Node
+from nodes.boolean import true, Boolean
+from nodes.node import Node
 
 
 class Expression(Node):
@@ -54,7 +55,7 @@ class Expression(Node):
         if not self.is_empty():
             return self.nodes[0].first()
         else:
-            from stilus.nodes.null import null
+            from nodes.null import null
             return null
 
     def clone(self, parent=None, node=None):
@@ -83,7 +84,7 @@ class Expression(Node):
 
     def operate(self, op, right, value=None):
         if op == '[]=':
-            from stilus import utils
+
             nodes = utils.unwrap(right).nodes
             value = utils.unwrap(value)
             for node in nodes:
@@ -92,7 +93,7 @@ class Expression(Node):
                     n = int(i)
                     while i > len(nodes):
                         i = i - 1
-                        from stilus.nodes.null import null
+                        from nodes.null import null
                         self.nodes[i] = null
                     # FIXME: this is very, very ugly!
                     if len(self.nodes) <= n:
@@ -106,7 +107,7 @@ class Expression(Node):
             return value
         elif op == '[]':
             expression = Expression()
-            from stilus import utils
+
             values = utils.unwrap(self).nodes
             nodes = utils.unwrap(right).nodes
             for node in nodes:
@@ -124,7 +125,7 @@ class Expression(Node):
                     n = values[0].get(node.string)
                 if n:
                     expression.append(n)
-            from stilus.nodes.null import null
+            from nodes.null import null
             return null if expression.is_empty() else utils.unwrap(expression)
         elif op == '||':
             return self if self.to_boolean().is_true() else right
@@ -134,7 +135,7 @@ class Expression(Node):
             return self.operate('==', right, value)
         elif op == '==':
             right = right.to_expression()
-            from stilus.nodes.boolean import false
+            from nodes.boolean import false
             if len(self.nodes) != len(right.nodes):
                 return false
             for i in range(len(self.nodes)):

@@ -1,6 +1,6 @@
-from stilus.functions.rgba import rgba
-from stilus.nodes.color import Color, HSLA
-from stilus.nodes.unit import Unit
+from functions.rgba import rgba
+from nodes.color import Color, HSLA
+from nodes.unit import Unit
 
 
 def blue(color: Color, value: Unit = None, evaluator=None):

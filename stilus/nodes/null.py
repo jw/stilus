@@ -1,6 +1,6 @@
 import json
 
-from stilus.nodes.node import Node
+from nodes.node import Node
 
 
 class Null(Node):
@@ -37,7 +37,7 @@ class Null(Node):
         return self
 
     def to_boolean(self):
-        from stilus.nodes.boolean import false
+        from nodes.boolean import false
         return false
 
     def to_json(self):

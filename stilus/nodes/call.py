@@ -1,7 +1,7 @@
 import json
 
-from stilus.nodes.arguments import Arguments
-from stilus.nodes.node import Node
+from nodes.arguments import Arguments
+from nodes.node import Node
 
 
 class Call(Node):

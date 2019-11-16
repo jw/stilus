@@ -1,6 +1,6 @@
-from stilus.nodes.unit import Unit
-from stilus.functions.hsla import hsla
-from stilus.utils import assert_color
+from nodes.unit import Unit
+from functions.hsla import hsla
+from utils import assert_color
 
 
 def hsl(hue, saturation=None, lightness=None, evaluator=None):

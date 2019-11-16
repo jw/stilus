@@ -1,7 +1,7 @@
-from stilus.nodes.null import null
-from stilus.nodes.literal import Literal
-from stilus.utils import unwrap, assert_string
-from stilus.visitor.compiler import Compiler
+from nodes.null import null
+from nodes.literal import Literal
+from utils import unwrap, assert_string
+from visitor.compiler import Compiler
 
 
 def s(fmt, *args, evaluator=None):
@@ -10,7 +10,7 @@ def s(fmt, *args, evaluator=None):
     assert_string(fmt, 'string')
     result = fmt.string
     for arg in args:
-        from stilus.visitor.evaluator import Evaluator
+        from visitor.evaluator import Evaluator
         if not isinstance(arg, Evaluator):
             c = Compiler(arg, options).compile()
             result = result.replace('%s', c, 1)

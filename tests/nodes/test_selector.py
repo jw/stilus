@@ -1,4 +1,4 @@
-from stilus.nodes.selector import Selector
+from nodes.selector import Selector
 
 
 def test_selector():

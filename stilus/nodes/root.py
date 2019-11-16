@@ -1,7 +1,7 @@
 import json
 
-from stilus.nodes.block import Block
-from stilus.nodes.node import Node
+from nodes.block import Block
+from nodes.node import Node
 
 
 class Root(Node):

@@ -1,8 +1,8 @@
 import pytest
 
-from stilus.exceptions import ParseError
-from stilus.nodes.ident import Ident
-from stilus.parser import Parser
+from exceptions import ParseError
+from nodes.ident import Ident
+from parser import Parser
 
 
 def test_parser_construct():

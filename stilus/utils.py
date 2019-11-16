@@ -6,15 +6,15 @@ from os.path import join
 from pathlib import Path
 from typing import List
 
-from stilus.nodes.boolean import Boolean
-from stilus.nodes.expression import Expression
-from stilus.nodes.literal import Literal
-from stilus.nodes.node import Node
-from stilus.nodes.null import null, Null
-from stilus.nodes.object_node import ObjectNode
-from stilus.nodes.string import String
-from stilus.nodes.unit import Unit
-from stilus.selector_parser import SelectorParser
+from nodes.boolean import Boolean
+from nodes.expression import Expression
+from nodes.literal import Literal
+from nodes.node import Node
+from nodes.null import null, Null
+from nodes.object_node import ObjectNode
+from nodes.string import String
+from nodes.unit import Unit
+from selector_parser import SelectorParser
 
 
 def unwrap(expression: Expression) -> Node:
@@ -291,7 +291,7 @@ def coerce(value, raw: bool, lineno=1, column=1):
 
 
 def parse_string(str: String):
-    from stilus.parser import Parser
+    from parser import Parser
     try:
         parser = Parser(str, {})
         result = parser.list()

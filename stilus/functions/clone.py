@@ -1,4 +1,4 @@
-from stilus.utils import assert_present
+from utils import assert_present
 
 
 def clone(expr, evaluator=None):

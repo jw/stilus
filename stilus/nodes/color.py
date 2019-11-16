@@ -1,12 +1,12 @@
 import colorsys
 import json
 
-from stilus.functions.adjust import adjust
-from stilus.nodes.string import String
-from stilus.nodes.unit import Unit
-from stilus.nodes.boolean import true, Boolean
-from stilus.nodes.node import Node
-from stilus.utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
+from functions.adjust import adjust
+from nodes.string import String
+from nodes.unit import Unit
+from nodes.boolean import true, Boolean
+from nodes.node import Node
+from utils import clamp, clamp_alpha, clamp_degrees, clamp_percentage
 
 
 class Color(Node):

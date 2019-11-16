@@ -1,9 +1,9 @@
 import json
 
-from stilus import utils
-from stilus.nodes.boolean import Boolean
-from stilus.nodes.expression import Expression
-from stilus.nodes.node import Node
+import utils
+from nodes.boolean import Boolean
+from nodes.expression import Expression
+from nodes.node import Node
 
 
 class String(Node):
@@ -62,7 +62,7 @@ class String(Node):
             else:
                 args = [right]
             # apply
-            from stilus.functions.s import s
+            from functions.s import s
             return s(expr, args)
         if op == '+':
             expr = Expression()

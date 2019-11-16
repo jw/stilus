@@ -10,6 +10,7 @@ click = "*"
 pillow = "*"
 beautifulsoup4 = "*"
 lxml = "*"
+watchdog = "*"
 
 [dev-packages]
 pytest = "*"

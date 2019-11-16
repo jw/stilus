@@ -1,5 +1,5 @@
-from stilus.nodes.unaryop import UnaryOp
-from stilus.nodes.expression import Expression
+from nodes.unaryop import UnaryOp
+from nodes.expression import Expression
 
 
 def test_binop():

@@ -1,7 +1,7 @@
-from stilus.nodes.block import Block
-from stilus.nodes.ident import Ident
-from stilus.stack.frame import Frame
-from stilus.stack.stack import Stack
+from nodes.block import Block
+from nodes.ident import Ident
+from stack.frame import Frame
+from stack.stack import Stack
 
 
 def test_stack():

@@ -1,4 +1,4 @@
-from stilus.nodes.node import Node
+from nodes.node import Node
 
 import logging
 log = logging.getLogger(__name__)

@@ -1,4 +1,4 @@
-from stilus.nodes.string import String
+from nodes.string import String
 
 
 def current_media(*args, evaluator=None):

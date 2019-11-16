@@ -1,12 +1,12 @@
 import json
 
-from stilus.nodes.node import Node
+from nodes.node import Node
 
 
 class Boolean(Node):
 
     def __init__(self, value: bool, lineno=1, column=1):
-        from stilus.nodes.null import null
+        from nodes.null import null
         if value == null:
             value = False
         super().__init__(bool(value), lineno=lineno, column=column)

@@ -1,4 +1,4 @@
-from stilus.nodes.member import Member
+from nodes.member import Member
 
 
 def test_member():

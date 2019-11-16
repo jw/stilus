@@ -1,6 +1,6 @@
-from stilus.nodes.expression import Expression
-from stilus.nodes.ident import Ident
-from stilus.nodes.property import Property
+from nodes.expression import Expression
+from nodes.ident import Ident
+from nodes.property import Property
 
 
 def test_property():
@@ -12,9 +12,9 @@ def test_property():
 
 
 def test_property_expression():
-    from stilus.nodes.boolean import true
-    from stilus.nodes.boolean import false
-    from stilus.nodes.null import null
+    from nodes.boolean import true
+    from nodes.boolean import false
+    from nodes.null import null
     expression = Expression()
     expression.append(true)
     expression.append(false)

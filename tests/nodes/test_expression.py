@@ -1,14 +1,14 @@
 import pytest
-from stilus.exceptions import StilusError
+from exceptions import StilusError
 
-from stilus.nodes.boolean import Boolean
-from stilus.nodes.expression import Expression
-from stilus.nodes.ident import Ident
+from nodes.boolean import Boolean
+from nodes.expression import Expression
+from nodes.ident import Ident
 
 
 def test_empty_expression():
-    from stilus.nodes.null import null
-    from stilus.nodes.boolean import false
+    from nodes.null import null
+    from nodes.boolean import false
     expression = Expression()
     assert len(expression) == 0
     assert expression.is_empty()
@@ -38,9 +38,9 @@ def test_expression_make_is_list_and_preserve():
 
 
 def test_expression_append():
-    from stilus.nodes.null import null
-    from stilus.nodes.boolean import true
-    from stilus.nodes.boolean import false
+    from nodes.null import null
+    from nodes.boolean import true
+    from nodes.boolean import false
     expression = Expression()
     expression.append(null)
     expression.append(true)
@@ -49,9 +49,9 @@ def test_expression_append():
 
 
 def test_expression_string_first_boolean():
-    from stilus.nodes.boolean import true
-    from stilus.nodes.boolean import false
-    from stilus.nodes.null import null
+    from nodes.boolean import true
+    from nodes.boolean import false
+    from nodes.null import null
     expression = Expression()
     expression.append(true)
     expression.append(false)
@@ -98,9 +98,9 @@ def test_expression_hash():
     other_expression.append(Ident('foo'))
     other_expression.append(Ident('bar'))
     assert other_expression.hash() == 'foo::bar'
-    from stilus.nodes.null import null
-    from stilus.nodes.boolean import true
-    from stilus.nodes.boolean import false
+    from nodes.null import null
+    from nodes.boolean import true
+    from nodes.boolean import false
     expression = Expression()
     expression.append(null)
     expression.append(true)

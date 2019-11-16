@@ -1,4 +1,4 @@
-from stilus.utils import assert_string, assert_type
+from utils import assert_string, assert_type
 
 
 def prefix_classes(prefix, block=None, evaluator=None):

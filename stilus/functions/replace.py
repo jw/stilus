@@ -1,6 +1,6 @@
-from stilus.nodes.string import String
-from stilus.nodes.ident import Ident
-from stilus.utils import assert_string
+from nodes.string import String
+from nodes.ident import Ident
+from utils import assert_string
 
 
 def replace(pattern, replacement, value, evaluator=None):

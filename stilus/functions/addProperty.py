@@ -1,5 +1,5 @@
-from stilus.nodes.property import Property
-from stilus.utils import assert_type, unwrap, assert_string
+from nodes.property import Property
+from utils import assert_type, unwrap, assert_string
 
 
 def add_property(name, expr, evaluator=None):

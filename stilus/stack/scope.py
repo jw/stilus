@@ -1,7 +1,7 @@
 from typing import Type
 
-from stilus.nodes.ident import Ident
-from stilus.nodes.node import Node
+from nodes.ident import Ident
+from nodes.node import Node
 
 
 class Scope:

@@ -1,5 +1,5 @@
-from stilus.utils import assert_string
-from stilus.visitor.normalizer import Normalizer
+from utils import assert_string
+from visitor.normalizer import Normalizer
 
 
 def selector_exists(selector, evaluator=None):

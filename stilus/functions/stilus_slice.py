@@ -1,6 +1,7 @@
-from stilus import utils
-from stilus.nodes.ident import Ident
-from stilus.nodes.string import String
+
+import utils
+from nodes.ident import Ident
+from nodes.string import String
 
 
 def slice(values, start, end=None, evaluator=None):

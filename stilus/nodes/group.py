@@ -1,8 +1,8 @@
 import json
 
-from stilus.nodes.block import Block
-from stilus.nodes.node import Node
-from stilus.nodes.selector import Selector
+from nodes.block import Block
+from nodes.node import Node
+from nodes.selector import Selector
 
 
 class Group(Node):

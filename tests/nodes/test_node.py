@@ -1,6 +1,6 @@
 import pytest
 
-from stilus.nodes.node import Node, CoercionError
+from nodes.node import Node, CoercionError
 
 
 def test_node():
@@ -43,7 +43,7 @@ def test_name():
 
 def test_to_boolean():
     node = Node()
-    from stilus.nodes.boolean import true
+    from nodes.boolean import true
     assert node.to_boolean() == true
 
 
@@ -59,7 +59,7 @@ def test_valid_coerce():
 
 
 def test_invalid_coerce():
-    from stilus.nodes.null import null
+    from nodes.null import null
     node_1 = Node()
     node_2 = null
     with pytest.raises(CoercionError) as excinfo:

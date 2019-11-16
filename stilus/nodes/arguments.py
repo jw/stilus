@@ -1,6 +1,6 @@
 import json
 
-from stilus.nodes.expression import Expression
+from nodes.expression import Expression
 
 
 class Arguments(Expression):

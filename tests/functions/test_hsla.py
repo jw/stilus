@@ -1,6 +1,6 @@
-from stilus.functions.hsla import hsla
-from stilus.nodes.color import HSLA
-from stilus.nodes.unit import Unit
+from functions.hsla import hsla
+from nodes.color import HSLA
+from nodes.unit import Unit
 
 
 def test_hsla_color():

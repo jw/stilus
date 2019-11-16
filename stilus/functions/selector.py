@@ -1,10 +1,10 @@
-from stilus import utils
-from stilus.selector_parser import SelectorParser
-from stilus.utils import assert_string, compile_selectors
+
+from selector_parser import SelectorParser
+from utils import assert_string, compile_selectors, unwrap
 
 
 def parse(selector):
-    from stilus.parser import Parser
+    from parser import Parser
     parser = Parser(selector, {})
     parser.state.append('selector-parts')
     nodes = parser.stmt_selector()
@@ -24,7 +24,7 @@ def selector(*args, evaluator=None):
     stack = evaluator.selector_stack()
 
     if len(args) == 1:
-        expr = utils.unwrap(args[0])
+        expr = unwrap(args[0])
         length = len(expr.nodes)
 
         # selector .a

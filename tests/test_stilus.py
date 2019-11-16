@@ -1,17 +1,17 @@
-from stilus import stilus
-from stilus.stilus import Renderer
+from stilus import renderer
+from renderer import Renderer
 
 
 def test_stylus():
     source = 'abc\n  color: red\n'
     css = 'abc {\n  color: #f00;\n}\n'
-    assert stilus.render(source, {}) == css
+    assert renderer.render(source, {}) == css
     source = '\nsize = 12px\n\nbody\n  font-size: size\n\n'
     css = 'body {\n  font-size: 12px;\n}\n'
-    assert stilus.render(source, {}) == css
+    assert renderer.render(source, {}) == css
     source = '\nsize = 12px\n\nbody\n  font-size size\n\n'
     css = 'body {\n  font-size: 12px;\n}\n'
-    assert stilus.render(source, {}) == css
+    assert renderer.render(source, {}) == css
 
 
 def run_test_case(source, destination):
@@ -515,13 +515,13 @@ a
     # print(f'{ast}')
 
     stylus_path = '/home/jw/python/projects/stilus/tests/stylus'
-    renderer = Renderer(source, {})
-    renderer.include(f'{stylus_path}/images')
-    renderer.include(f'{stylus_path}/cases')
-    renderer.include(f'{stylus_path}/cases/import.basic')
-    renderer.include('.')
+    r = Renderer(source, {})
+    r.include(f'{stylus_path}/images')
+    r.include(f'{stylus_path}/cases')
+    r.include(f'{stylus_path}/cases/import.basic')
+    r.include('.')
 
-    renderer.options['include css'] = True
+    r.options['include css'] = True
     # renderer.options['compress'] = True
 
     css = renderer.render()

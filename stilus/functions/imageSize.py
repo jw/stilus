@@ -3,10 +3,10 @@ from pathlib import Path
 from PIL import Image
 from bs4 import BeautifulSoup
 
-from stilus.exceptions import StilusError
-from stilus.nodes.expression import Expression
-from stilus.nodes.unit import Unit
-from stilus.utils import assert_type, lookup
+from exceptions import StilusError
+from nodes.expression import Expression
+from nodes.unit import Unit
+from utils import assert_type, lookup
 
 
 def _x_and_y_from_svg(path):

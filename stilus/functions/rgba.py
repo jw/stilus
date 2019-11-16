@@ -1,5 +1,5 @@
-from stilus.nodes.color import RGBA
-from stilus.utils import assert_color, assert_type
+from nodes.color import RGBA
+from utils import assert_color, assert_type
 
 
 def rgba(red, green=None, blue=None, alpha=None, evaluator=None):

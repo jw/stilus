@@ -19,8 +19,8 @@ import sys  # noqa
 sys.path.insert(0, os.path.abspath('..'))
 
 import stilus  # noqa
-from stilus.lexer import Lexer  # noqa
-from stilus.parser import Parser  # noqa
+from lexer import Lexer  # noqa
+from parser import Parser  # noqa
 
 import recommonmark  # noqa
 

@@ -1,7 +1,7 @@
-from stilus.nodes.arguments import Arguments
-from stilus.nodes.boolean import true
-from stilus.nodes.expression import Expression
-from stilus.nodes.unit import Unit
+from nodes.arguments import Arguments
+from nodes.boolean import true
+from nodes.expression import Expression
+from nodes.unit import Unit
 
 
 def test_arguments():

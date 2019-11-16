@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from stilus.stilus import Renderer
+from renderer import Renderer
 
 files = []
 path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
