@@ -2,11 +2,4 @@
 Code
 ====
 
-This part of the documentation covers all the code of Stilus.
-
-.. automodule:: stilus
-   :members:
-   :undoc-members:
-
-.. autoclass:: Lexer
-.. autoclass:: Parser
+To do: This part of the documentation will cover all the code of Stilus.
