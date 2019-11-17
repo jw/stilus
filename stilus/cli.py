@@ -60,7 +60,8 @@ def validate_path(ctx, param, value):
               help='Compress CSS output.')
 @click.option('-p', '--print', 'print_', is_flag=True, default=False,
               help='Print out the compiled CSS.')
-@click.option('-I', '--include', help='Add <path> to lookup paths.')
+@click.option('-I', '--include', multiple=True,
+              help='Add <path> to lookup paths.')
 @click.option('-o', '--out', default='.', flag_value='dir',
               help='Output to <dir> when passing files.')
 @click.option('--version', '-V', is_flag=True, callback=print_version,
@@ -73,8 +74,11 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
             click.echo(click.style(prefix, dim=True), nl=False)
         click.echo(message)
 
-    def render(source):
+    def render(source, includes):
         renderer = Renderer(source, {'compress': compress})
+        for include in includes:
+            # todo: check existence?
+            renderer.include(include)
         return renderer.render()
 
     def write_result(css, path):
@@ -82,8 +86,8 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
         with p.open(mode='w+'):
             p.write_text(css)
 
-    def compile(source, path):
-        css = render(source)
+    def compile(source, path, includes):
+        css = render(source, includes)
         destination = path.with_suffix('.css')
         write_result(css, destination)
         fancy_output(str(destination), prefix='  compiled ')
@@ -101,7 +105,7 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
         for styl in styles:
             fancy_output(str(styl), prefix='  watching ')
             source = styl.read_text()
-            compile(source, path)
+            compile(source, path, include)
         event_handler = StilusHandler()
         observer = Observer()
         observer.schedule(event_handler, path=str(path), recursive=False)
@@ -117,7 +121,7 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
             input = click.get_text_stream('stdin')
         if not output:
             output = click.get_text_stream('stdout')
-        css = render(input.read())
+        css = render(input.read(), include)
         if print_:
             click.echo(css)
         if out:
