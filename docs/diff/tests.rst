@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 62% (206/352)
+Coverage: 64% (206/352)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -218,19 +218,19 @@ object.mixin.styl
 object-prototype-props.styl
 object.styl
 operator.range.styl
-operators.assignment.function.styl
-operators.assignment.mixin.styl
-operators.assignment.root.styl
+operators.assignment.function.styl            stylus/cases/operators         ok
+operators.assignment.mixin.styl               stylus/cases/operators         ok
+operators.assignment.root.styl                stylus/cases/operators         ok
 operators.complex.styl
 operators.equality.styl
-operators.in.styl
+operators.in.styl                             stylus/cases/operators         ok
 operators.mixins.styl
-operators.precedence.styl
+operators.precedence.styl                     stylus/cases/operators         ok
 operators.styl
 operators.subscript.assign.styl
 operators.subscript.range.styl
 operators.subscript.styl
-operators.unary.styl
+operators.unary.styl                          stylus/cases/operators         ok
 page.styl                                     stylus/cases                   ok
 parent.complex.styl
 parent.styl
