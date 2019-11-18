@@ -13,7 +13,6 @@ env:
 install:
   - pip install pipenv
   - pipenv install --dev
-  - export PYTHONPATH=stilus
 
 script:
   - pipenv run flake8
