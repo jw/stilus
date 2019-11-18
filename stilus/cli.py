@@ -1,6 +1,7 @@
 import logging
 import logging.config
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -62,12 +63,19 @@ def validate_path(ctx, param, value):
               help='Print out the compiled CSS.')
 @click.option('-I', '--include', multiple=True,
               help='Add <path> to lookup paths.')
-@click.option('-o', '--out', default='.', flag_value='dir',
+@click.option('-o', '--out',
               help='Output to <dir> when passing files.')
 @click.option('--version', '-V', is_flag=True, callback=print_version,
               expose_value=False, is_eager=True,
               help='Display the version of Stilus.')
 def stilus(verbose, watch, compress, print_, include, out, input, output):
+
+    def fail(message, prefix=None, code=-1):
+        if not prefix:
+            prefix = '     error '
+        click.echo(click.style(prefix, fg='red'), nl=False)
+        click.echo(message)
+        sys.exit(code)
 
     def fancy_output(message, prefix=None):
         if prefix:
@@ -91,6 +99,7 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
         destination = path.with_suffix('.css')
         write_result(css, destination)
         fancy_output(str(destination), prefix='  compiled ')
+        logging.info(f'Compiled {path}.')
 
     class StilusHandler(FileSystemEventHandler):
         def on_modified(self, event):
@@ -99,8 +108,16 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
                 source = path.read_text()
                 compile(source, path)
 
+    if out:
+        if not Path(out).exists():
+            fail(f'Directory not found: {out}.')
+        elif not Path(out).is_dir():
+            fail(f'{out} is not a directory.')
+        logging.info(f'Redirecting results to {out}.')
+
     if watch:
         path = Path.cwd()
+        logging.info(f'Watching {path}...')
         styles = list(path.glob('*.styl'))
         for styl in styles:
             fancy_output(str(styl), prefix='  watching ')
@@ -112,20 +129,25 @@ def stilus(verbose, watch, compress, print_, include, out, input, output):
         observer.start()
         try:
             while True:
-                time.sleep(.5)
+                time.sleep(.25)
         except KeyboardInterrupt:
+            logging.info('Bailing out...')
             observer.stop()
         observer.join()
     else:
         if not input:
             input = click.get_text_stream('stdin')
+            logging.info('Reading from stdin...')
         if not output:
             output = click.get_text_stream('stdout')
+            logging.info('Writing to stdout...')
+        elif out:
+            output = (Path(out) / Path(output.name)).open('w')
+            logging.info(f'Writing to {output}.')
         css = render(input.read(), include)
         if print_:
-            click.echo(css)
-        if out:
-            output.write(css)
+            click.echo(css, nl='\n' if compress else '')
+        output.write(css)
 
 
 if __name__ == '__main__':
