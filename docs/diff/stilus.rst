@@ -16,8 +16,12 @@ These options now work:
 ======================== ===========================================
 option                   description
 ======================== ===========================================
+--out -o <dir>           Output to <dir> when passing files
+--watch -w               Watch file(s) for changes and re-compile
+--compress -c            Compress CSS output
 --help, -h               Show help
 --verbose -v             More verbose output
+--watch -w               Watch file(s) and recompile when changed
 --print, -p              Print css even when streaming to output
 --include, -I <path>     Add <path> to the lookup paths list
 --version, -V            Show the version
@@ -38,10 +42,7 @@ option                   description
 -i, --interactive        Start interactive REPL
 -u, --use <path>         Utilize the Stylus plugin at <path>
 -U, --inline             Utilize image inlining via data URI support
--w, --watch              Watch file(s) for changes and re-compile
--o, --out <dir>          Output to <dir> when passing files
 -C, --css <src> [dest]   Convert CSS input to Stylus
--c, --compress           Compress CSS output
 -d, --compare            Display input along with output
 -f, --firebug            Emits debug info
 -l, --line-numbers       Emits comments

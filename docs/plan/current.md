@@ -2,15 +2,15 @@
 
 The test release, a.k.a. `test, test, test!`
 
- - [ ] Get to 90%+ coverage.  At 90%!
+ - [x] Get to 90%+ coverage.  At 90%!
  - [ ] Update the binary:
-    - [ ] add watch changes (watchdog)
-    - [ ] add out option
+    - [x] add watch changes (watchdog)
+    - [x] add out option
+    - [x] add include option
     - [ ] add prefix option
     - [ ] add hoist atrules option
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.
- - [ ] Update the assertions in the built-in functions.
  - [ ] Test 95% of all Stylus tests and document the progress...  At 52% now.
      - [ ] Test all Stylus regression tests (42/84; 50%)
      - [ ] Test bifs (59/67; 88%):
@@ -28,4 +28,3 @@ The test release, a.k.a. `test, test, test!`
      - [ ] Test selectors
      - [ ] Test the rest :-)
  - [ ] Unit update; value() property: float -> int/string (using raw)
- - [ ] Create logo.

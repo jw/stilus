@@ -2,6 +2,8 @@
 
 ### 0.9.0
 
+ - [ ] Create logo.
+ - [ ] Update the assertions in the built-in functions.
  - [ ] Document using docstrings and Sphinx. 
  - [ ] Use typing properly.
  - [ ] Start using github issues.

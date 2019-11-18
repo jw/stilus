@@ -1,6 +1,6 @@
 ## History
 
-### 0.6.0
+### 0.7.0
 
 The Swedish release, a.k.a. `document, document, document!`
 
