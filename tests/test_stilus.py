@@ -510,6 +510,219 @@ a
 // @import "import.include.resolver.images/a"
 """
 
+    source = """
+body
+  // 5px
+  foo 0 || 5px
+
+  // 0px
+  foo 0px || 5px
+
+  // 0px
+  foo 0px || 0px
+
+  // false
+  foo 0 or false
+
+  // true
+  foo 0 || 0 || true
+
+  // 5px
+  foo 1px && 5px
+
+  // 1px
+  foo 0px && 1px
+
+  // 0
+  foo 1px && 0
+
+  // false
+  foo 1px and false
+
+  // 10
+  foo 5px && 5px && 10
+
+  // #fff
+  foo #000 && #fff
+
+  // 1
+  foo 8 && (4 && 1)
+
+  // true
+  type = "color"
+  foo #fff is a type
+  foo #fff is a 'color'
+
+  // false
+  foo 15px is a 'color'
+  // true
+  foo 15px is a 'unit'
+
+  // true
+  foo 15px is a 'unit' and #fff is a 'color'
+
+  // true
+  foo = 'bar'
+
+  // true
+  bar = 'baz'
+  foo foo is defined and bar is defined
+
+  // false
+  foo baz is defined
+
+  // wahoo
+  foo bar is defined ? wahoo : nope
+
+  // nope
+  foo rawr is defined ? yes : nope
+
+  // "got 15px"
+  foo "got " + 15px
+
+  // 1
+  foo true and 1 or 5
+
+  // 5
+  foo !false and !false and 5
+
+  // true
+  foo !!5 is true or !!0 is false
+  foo !!5 == false or !!0 == false
+
+  // true
+  foo wahoo == wahoo
+
+  // false
+  foo 0 == true
+  foo true == 0
+  foo #fff == undefined
+
+
+body
+  nums = 1 2
+  foo: '<%s:%s>' % 12
+  foo: '<%s:%s>' % nums
+  foo: '<a: %s b: %s>' % 1 2 // not what you might think
+  foo: '<a: %s b: %s>' % (1 2)
+  foo: 'X::Micrsoft::crap(%s)' % rgb(0,255,0)
+  foo: '<%s, %s, %s>' % (foo bar baz)
+
+body
+  foo 5 < '5.1'
+  foo 5 < 5.1
+  foo 5 <= 5.1
+  foo !(5 < '5')
+  foo 5.1 > 5
+  foo !(5 > 5)
+  foo '5.1' > 5
+  foo '5.1' > '5'
+  foo (5 - "5.1") != 0
+  foo !(5 == '5.1')
+
+str = ''
+
+body
+  str += 'bar'
+  foo: str
+
+body
+  foo = 40em
+  bar = '40em'
+  width type(foo) == 'unit' && unit(foo)
+  height type(bar) == 'unit' && unit(bar)
+"""
+
+    source = """
+body
+  // 4
+  foo (--- 0) or 4
+  // 4
+  foo --- 0 or 4
+  // -5px
+  foo ---5px
+  // 2
+  foo (!!!5) or 2
+  foo !!!5 or 2
+
+
+body
+  // true
+  foo !(! 5)
+  foo !!5
+
+body
+  // 5
+  foo (! false) and (! false) and 5
+  foo ! false and ! false and 5
+
+body
+  // true
+  foo (!!5 == true) or (!!0 == false)
+  foo !!5 == true or !!0 == false
+  foo (!!5 == false) or (!!0 == false)
+  foo !!5 == false or !!0 == false
+  // 2
+  foo 5 < 10 and !!5 and 2
+
+body
+  // true
+  foo (!!true) and (!!true)
+  foo !!true and !!true
+
+body
+  test()
+    5 * 2 - 15 / 2
+  // 2.5
+  foo test()
+  foo (5 * 2) - (15 / 2)
+
+body
+  // true
+  foo not 5 < 10 ? 0 : 1
+  // true
+  foo !(5 < 10 ? 0 : 1)
+  // false
+  foo !(5 > 10 ? 0 : 1)
+  // wahoo
+  foo !! 1 ? wahoo : fail
+  // fail
+  foo !1 ? wahoo : fail
+
+body
+  foo = 'test'
+  bar = 'test'
+  // true
+  foo (foo is defined) and (bar is defined)
+  foo foo is defined and bar is defined
+
+body
+  // true
+  foo 5 > 4 is a 'boolean'
+
+  foo = type is a 'unit' ? type : 1
+  // 1
+  foo foo
+
+body
+  padding = false
+  margin = false
+
+  // true
+  foo !padding or !margin
+  foo not padding or margin
+
+  // false
+  foo not padding or margin == !padding or !margin
+  // true
+  foo (not padding or margin) == !padding or !margin
+"""
+
+    sourced = """
+body
+  foo (--- 0) or 4
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -524,7 +737,7 @@ a
     r.options['include css'] = True
     # renderer.options['compress'] = True
 
-    css = renderer.render()
+    css = r.render()
 
     print(f'------------- result ---\n'
           f'{css}'

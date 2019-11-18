@@ -1,7 +1,7 @@
 import json
-import utils
 
-from nodes.boolean import true, Boolean
+import utils
+from nodes.boolean import Boolean
 from nodes.node import Node
 
 
@@ -69,8 +69,8 @@ class Expression(Node):
         return clone
 
     def to_boolean(self):
-        if not self.is_empty():
-            return true
+        if len(self.nodes) > 1:
+            return Boolean(True)
         return self.first().to_boolean()
 
     def to_json(self):
@@ -128,7 +128,7 @@ class Expression(Node):
             from nodes.null import null
             return null if expression.is_empty() else utils.unwrap(expression)
         elif op == '||':
-            return self if self.to_boolean().is_true() else right
+            return self if self.to_boolean().value is True else right
         elif op == 'in':
             return super().operate(op, right, self.value)
         elif op == '!=':

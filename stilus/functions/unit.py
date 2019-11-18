@@ -9,4 +9,4 @@ def unit(unit, type=None, evaluator=None):
         assert_string(type, 'type')
         return Unit(unit.value, type.string)
     else:
-        return unit.type if unit.type else ''
+        return unit.type if hasattr(unit, 'type') and unit.type else ''

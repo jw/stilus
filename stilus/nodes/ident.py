@@ -75,13 +75,13 @@ class Ident(Node):
     def operate(self, op, right, value=None):
         value = right.first()
         if op == '-':
-            if value.name == 'unit':
+            if value.node_name == 'unit':
                 from nodes.expression import Expression
                 expression = Expression()
                 value = value.clone()
                 value.value = -value.value
-                expression.push(self)
-                expression.push(value)
+                expression.append(self)
+                expression.append(value)
                 return expression
         elif op == "+":
             return Ident(self.string + self.coerce(value).string)

@@ -82,6 +82,4 @@ if __name__ == '__main__':
 
     result = renderer.render()
 
-    # print(result)
-
     assert result == destination

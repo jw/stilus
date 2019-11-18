@@ -60,7 +60,7 @@ def test_expression_string_first_boolean():
     expression.is_list = True
     assert str(expression) == '(true, false, null)'
     assert expression.first() is true
-    assert expression.to_boolean() is true
+    assert expression.to_boolean().value is True
 
 
 def test_expression_operate_in():

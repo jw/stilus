@@ -13,7 +13,7 @@ def s(fmt, *args, evaluator=None):
         from visitor.evaluator import Evaluator
         if not isinstance(arg, Evaluator):
             c = Compiler(arg, options).compile()
-            result = result.replace('%s', c, 1)
+            result = result.replace('%s', str(c), 1)
     # add nulls for missed %s elements
     c = Compiler(null, options).compile()
     result = result.replace('%s', c)

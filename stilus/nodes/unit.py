@@ -86,7 +86,9 @@ class Unit(Node):
         if self.should_coerce(op):
             right = right.first()
 
-            if self.type != '%' and op in ['-', '+'] and right.type == '%':
+            if hasattr(self, 'type') and self.type != '%' and \
+                    op in ['-', '+'] and hasattr(right, 'type') and \
+                    right.type == '%':
                 right = Unit(self.value * (right.value / 100), '%')
             else:
                 right = self.coerce(right)
@@ -155,7 +157,7 @@ class Unit(Node):
                 return Unit(b_value, a.type)
             else:
                 return Unit(b.value, a.type)
-        elif other.name == 'string':
+        elif other.node_name == 'string':
             # keyframes interpretation
             if other.value == '%':
                 return Unit(0, '%')

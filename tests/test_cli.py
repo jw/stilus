@@ -84,5 +84,3 @@ def test_cli_out_and_print():
         assert css_file.read_text() == css
         assert result.exit_code == 0
         assert result.output == css
-
-
