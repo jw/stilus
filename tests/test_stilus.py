@@ -724,6 +724,21 @@ set-colour(colour = get-red)
   set-colour()
 """
 
+    source = """
+body
+  color: red
+
+@import url('foo.css')
+
+body
+  a
+    color: blue
+
+@import 'bar.css'
+@charset 'utf-8'
+
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -733,10 +748,12 @@ set-colour(colour = get-red)
     r.include(f'{stylus_path}/images')
     r.include(f'{stylus_path}/cases')
     r.include(f'{stylus_path}/cases/import.basic')
+    r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    r.options['include css'] = True
-    # renderer.options['compress'] = True
+    # r.options['include css'] = True
+    # r.options['compress'] = True
+    r.options['hoist atrules'] = True
 
     css = r.render()
 

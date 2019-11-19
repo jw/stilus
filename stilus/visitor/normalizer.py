@@ -32,10 +32,15 @@ class Normalizer(Visitor):
         if self.hoist:
             # hoist @import
             if len(self.imports) > 0:
-                ret.nodes = self.imports.insert(ret.nodes)
+                self.imports.extend(ret.nodes)
+                ret.nodes = self.imports
             # hoist @charset
             if self.charset:
-                ret.nodes = self.charset.insert(ret.nodes)
+                if not ret.nodes:
+                    ret.nodes = []
+                charsets = [self.charset]
+                charsets.extend(ret.nodes)
+                ret.nodes = charsets
         return ret
 
     def bubble(self, node: Node):

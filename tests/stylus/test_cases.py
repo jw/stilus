@@ -35,8 +35,8 @@ def test_stylus_cases(styl, css):
     imports = cases / 'imports'
 
     renderer = Renderer(source, {'paths': ['.']})
-    renderer.include(images)
 
+    renderer.include(images)
     renderer.include(basics)
     renderer.include(cases)
     renderer.include(imports)
@@ -49,6 +49,9 @@ def test_stylus_cases(styl, css):
 
     if 'prefix.' in styl.name:
         renderer.options['prefix'] = 'prefix-'
+
+    if 'hoist.' in styl.name:
+        renderer.options['hoist atrules'] = True
 
     result = renderer.render()
 
