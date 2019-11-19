@@ -30,7 +30,8 @@ class ReturnNode(Node, Exception):
     def clone(self, parent=None, node=None):
         clone = ReturnNode(lineno=self.lineno, column=self.column)
         clone.filename = self.filename
-        clone.expression = self.expression.clone(parent, clone)
+        if self.expression:
+            clone.expression = self.expression.clone(parent, clone)
         return clone
 
     def to_json(self):

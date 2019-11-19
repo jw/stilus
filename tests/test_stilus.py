@@ -673,13 +673,14 @@ html {font-size:100.01%;}
 """
 
     source = """
-a
-  a: foo bar(baz, buz, 1)
-  b: '' + @a
-  c: join(' ', @a)
-  d: foo()
-  e: '' + @d
-  f: join(' ', @e)
+another()
+  foo bar
+  bar baz
+  return
+  baz raz
+
+body
+  another()
 """
 
     # parser = Parser(source, {})

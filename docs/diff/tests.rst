@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 65% (232/352)
+Coverage: 72% (255/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -194,22 +194,20 @@ literal.styl                                  stylus/cases                   ok
 media.bubble.styl                             stylus/cases                   ok
 media.complex.styl                            stylus/cases                   ok
 media.styl                                    stylus/cases                   ok
-mixin.conditional.styl
-mixin.order.conditional.styl
-mixin.order.nested.styl
-mixin.order.styl
-mixin.pass-keyword-args.styl
-mixins/bar.styl
-mixins/box.styl
-mixins.complex.fix-to.styl
-mixins.complex.styl
-mixins.conditional.styl
-mixins.nested.selectors.styl
-mixins.nested.styl
-mixins.order.2.styl
-mixins.reset.styl
-mixins.return.styl
-mixins.root.styl
+mixin.conditional.styl                        stylus/cases/mixin             not ok
+mixin.order.conditional.styl                  stylus/cases/mixin             ok
+mixin.order.nested.styl                       stylus/cases/mixin             ok
+mixin.order.styl                              stylus/cases/mixin             ok
+mixin.pass-keyword-args.styl                  stylus/cases/mixin             ok
+mixins.complex.fix-to.styl                    stylus/cases/mixin             not ok
+mixins.complex.styl                           stylus/cases/mixin             ok
+mixins.conditional.styl                       stylus/cases/mixin             ok
+mixins.nested.selectors.styl                  stylus/cases/mixin             ok
+mixins.nested.styl                            stylus/cases/mixin             ok
+mixins.order.2.styl                           stylus/cases/mixin             ok
+mixins.reset.styl                             stylus/cases/mixin             ok
+mixins.return.styl                            stylus/cases/mixin             not ok
+mixins.root.styl                              stylus/cases/mixin             ok
 moz-document-import.styl
 moz-document.styl                             stylus/cases                   ok
 multiline.styl
