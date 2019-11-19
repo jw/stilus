@@ -14,7 +14,8 @@ class Call(Node):
         self.args = args
 
     def __str__(self):
-        return f'{self.function_name}{str(self.args)}'
+        arguments = [str(arg)[1:-1] for arg in self.args]
+        return f'{self.function_name}({", ".join(arguments)})'
 
     def __repr__(self):
         return self.__str__()

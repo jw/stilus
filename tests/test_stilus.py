@@ -669,6 +669,10 @@ body
 """
 
     source = """
+html {font-size:100.01%;}
+"""
+
+    source = """
 a
   a: foo bar(baz, buz, 1)
   b: '' + @a
@@ -676,10 +680,6 @@ a
   d: foo()
   e: '' + @d
   f: join(' ', @e)
-"""
-
-    source = """
-html {font-size:100.01%;}
 """
 
     # parser = Parser(source, {})

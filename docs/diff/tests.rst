@@ -137,7 +137,7 @@ functions.anonymous.styl                      stylus/cases/functions         ok
 functions.arg-calls.styl                      stylus/cases/functions         ok
 functions.call.mixin.styl                     stylus/cases/functions         ok
 functions.call.styl                           stylus/cases/functions         ok
-functions.call.to-string.styl                 stylus/cases/functions         not ok
+functions.call.to-string.styl                 stylus/cases/functions         ok
 functions.defaults.styl                       stylus/cases/functions         ok
 functions.multi-line.styl                     stylus/cases/functions         ok
 functions.multiple-calls.styl                 stylus/cases/functions         ok
