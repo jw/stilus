@@ -291,13 +291,13 @@ regression.270.styl                           stylus/cases/regressions       ok
 regression.272.styl
 regression.274.styl
 regression.292.styl
-regression.360.styl
-regression.368.styl
-regression.379.styl
-regression.380.styl
-regression.388.styl
-regression.415.styl
-regression.420.styl
+regression.360.styl                           stylus/cases/regressions       ok
+regression.368.styl                           stylus/cases/regressions       ok
+regression.379.styl                           stylus/cases/regressions       ok
+regression.380.styl                           stylus/cases/regressions       ok
+regression.388.styl                           stylus/cases/regressions       ok
+regression.415.styl                           stylus/cases/regressions       ok
+regression.420.styl                           stylus/cases/regressions       ok
 regression.432.styl                           stylus/cases/regressions       ok
 regression.440.styl                           stylus/cases/regressions       ok
 regression.449.styl                           stylus/cases/regressions       ok
@@ -311,17 +311,17 @@ regression.484.styl                           stylus/cases/regressions       ok
 regression.498.styl                           stylus/cases/regressions       ok
 regression.499.styl
 regression.503.styl
-regression.504.styl
-regression.524.styl
-regression.535.styl
-regression.536.styl
-regression.566.styl
-regression.619.styl
-regression.747.styl
-regression.748.styl
-regression.790-2.styl
-regression.790.styl
-regression.808.styl
+regression.504.styl                           stylus/cases/regressions       not ok
+regression.524.styl                           stylus/cases/regressions       ok
+regression.535.styl                           stylus/cases/regressions       ok
+regression.536.styl                           stylus/cases/regressions       ok
+regression.566.styl                           stylus/cases/regressions       ok
+regression.619.styl                           stylus/cases/regressions       ok
+regression.747.styl                           stylus/cases/regressions       ok
+regression.748.styl                           stylus/cases/regressions       ok
+regression.790-2.styl                         stylus/cases/regressions       ok
+regression.790.styl                           stylus/cases/regressions       not ok
+regression.808.styl                           stylus/cases/regressions       ok
 regression.810.styl                           stylus/cases/regressions       ok
 regression.814.styl
 regression.819.styl
