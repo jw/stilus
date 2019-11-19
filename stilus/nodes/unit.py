@@ -19,8 +19,15 @@ FACTOR_TABLE = {'mm': {'value': 1, 'label': 'mm'},
 def is_weird_float(value):
     if isinstance(value, float) and f'{value}'.endswith('.0'):
         return True
-    else:
-        return False
+    return False
+
+
+def has_many_zeros_and_a_number(value):
+    if isinstance(value, (float, str)):
+        s = f'{value}'
+        if '.' in s and len(s.split('.')[1]) > 10 and s[-1].isdigit():
+            return True
+    return False
 
 
 class Unit(Node):
@@ -38,8 +45,10 @@ class Unit(Node):
     def __str__(self):
         type = self.type if self.type else ''
         # remove trailing zeros
-        if isinstance(self.value, float):
+        if is_weird_float(self.value):  # fixme: do not use this!
             v = f'{self.value}'.rstrip('0').rstrip('.')
+        elif has_many_zeros_and_a_number(self.value):  # fixme: remove this!
+            v = f'{self.value[:-1]}'.rstrip('0')
         else:
             v = self.value
         return f'{v}{type}'

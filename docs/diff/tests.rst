@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 64% (206/352)
+Coverage: 65% (232/352)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -36,7 +36,7 @@ bifs.darken.styl                              stylus/cases/bifs              ok
 bifs.dark.styl                                stylus/cases/bifs              ok
 bifs.define.styl                              stylus/cases/bifs              ok
 bifs.fade.styl                                stylus/cases/bifs              ok
-bifs.floats.styl                              stylus/cases/bifs              not ok (to correct calculation)
+bifs.floats.styl                              stylus/cases/bifs              ok
 bifs.grayscale.styl                           stylus/cases/bifs              ok
 bifs.hsla.styl                                stylus/cases/bifs              ok
 bifs.image-size.styl                          stylus/cases/bifs              ok
@@ -92,8 +92,8 @@ compress.comments.styl                        stylus/compress                ok
 compress.semicolon.styl                       stylus/compress                ok
 compress.units.styl                           stylus/compress                ok
 conditional-assignment.styl                   stylus/cases                   ok
-control.blueprint.ie.styl
-control.blueprint.screen.styl
+control.blueprint.ie.styl                     stylus/cases                   ok
+control.blueprint.screen.styl                 stylus/cases                   ok
 control.boilerplate.styl
 css.eos.styl                                  stylus/css                     ok
 css.extend.styl                               stylus/css                     ok
@@ -102,10 +102,10 @@ css.if.styl                                   stylus/css                     ok
 css.keyframes.styl                            stylus/css                     ok
 css.large.styl                                stylus/css                     ok
 css.media.styl                                stylus/css                     ok
-css.mixins.braces.styl                        stylus/css                     not ok
+css.mixins.braces.styl                        stylus/css                     ok
 css.mixins.root.styl                          stylus/css                     ok
 css.mixins.root.wonky.styl                    stylus/css                     ok
-css.mixins.styl                               stylus/css                     not ok
+css.mixins.styl                               stylus/css                     ok
 css.selector.interpolation.styl               stylus/css                     ok
 css.selectors.styl                            stylus/css                     ok
 css.whitespace.styl                           stylus/css                     ok
@@ -138,7 +138,7 @@ functions.arg-calls.styl                      stylus/cases/functions         ok
 functions.call.mixin.styl                     stylus/cases/functions         ok
 functions.call.styl                           stylus/cases/functions         ok
 functions.call.to-string.styl                 stylus/cases/functions         not ok
-functions.defaults.styl                       stylus/cases/functions         not ok
+functions.defaults.styl                       stylus/cases/functions         ok
 functions.multi-line.styl                     stylus/cases/functions         ok
 functions.multiple-calls.styl                 stylus/cases/functions         ok
 functions.nested-calls.styl                   stylus/cases/functions         ok

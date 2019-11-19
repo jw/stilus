@@ -16,7 +16,7 @@ from nodes.node import Node
 from nodes.property import Property
 from nodes.root import Root
 from nodes.string import String
-from nodes.unit import Unit
+from nodes.unit import Unit, has_many_zeros_and_a_number
 from visitor.visitor import Visitor
 
 
@@ -36,6 +36,14 @@ def _handle_weird_deg_value(value, type):
         if match and len(match.groups()) == 1 and len(match.group(1)) == 14:
             result = value[:-1].rstrip('0').rstrip('.')
     return result
+
+
+# fixme: this method should not exist!
+def _handle_weird_unit(v, n, unit):
+    if isinstance(n, float) and unit.value is not None \
+            and has_many_zeros_and_a_number(v):
+        return unit.value
+    return v
 
 
 class Compiler(Visitor):
@@ -293,6 +301,7 @@ class Compiler(Visitor):
         if f:
             v = f'{n:.15f}'.rstrip('0').rstrip('.')
             v = _handle_weird_deg_value(v, t)
+            v = _handle_weird_unit(v, n, unit)  # fixme: remove this!
             return f'{v}{t}'
         else:
             return f'{n}{t}'

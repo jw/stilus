@@ -11,9 +11,9 @@ The test release, a.k.a. `test, test, test!`
     - [ ] add hoist atrules option
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.
- - [ ] Test 95% of all Stylus tests and document the progress...  At 64% now.
+ - [ ] Test 95% of all Stylus tests and document the progress...  At 65% now.
      - [ ] Test all Stylus regression tests (42/84; 50%)
-     - [ ] Test bifs (59/67; 88%):
+     - [ ] Test bifs (60/67; 89%):
          - 4 cache bifs test missing (no cache yet), 
          - 1 use bifs test missing (no plugin system yet) 
      - [ ] Test prefix (4/5; 80%)
@@ -27,4 +27,4 @@ The test release, a.k.a. `test, test, test!`
      - [x] Test properties (6/6; 100%)
      - [ ] Test selectors
      - [ ] Test the rest :-)
- - [ ] Unit update; value() property: float -> int/string (using raw)
+ - [ ] Unit update; value() property: float -> int/string (using raw/value)

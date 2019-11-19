@@ -1212,9 +1212,9 @@ class Evaluator(Visitor):
                     i += 1
 
                 node = node.clone()
-                if arg:
+                if arg is not None:
                     if hasattr(arg, 'is_empty') and arg.is_empty():
-                        args.nodes[i-1] = self.visit(node)  # todo: fixme!
+                        args.nodes[i - 1] = self.visit(node)
                     else:
                         node.value = arg
                 else:

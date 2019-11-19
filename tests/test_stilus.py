@@ -450,56 +450,6 @@ body
 """
 
     source = """
-
-/*
- * Reset button related properties so that
- * a, button, and input's are supported.
- */
-
--reset()
-  display: block;
-  text-decoration: none;
-
-/*
- * Minimalistic flat button with white inset.
- */
-
-minimal-button(bg = #e3e3e3, intensity = 1)
-  -reset()
-  background: bg;
-  border: 1px solid darken(bg, 15 * intensity);
-  border-radius: 3px;
-  box-shadow: inset 0 0 1px 1px rgba(white, 0.8 * intensity);
-  color: #333;
-  font-family: 'helvetica neue', helvetica, arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 1;
-  padding: 8px 0 9px;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(white, 1 * intensity);
-  width: 150px;
-
-  &:hover {
-    background: darken(bg, 3);
-    box-shadow: inset 0 0 1px 1px rgba(white, 0.5 * intensity);
-    color: #222;
-    cursor: pointer;
-  }
-
-  &:active {
-    background: darken(bg, 5);
-    box-shadow: inset 0 0 1px 1px rgba(white, 0.2 * intensity);
-    color: #000;
-  }
-
-button,
-a.button {
-  minimal-button();
-}
-"""
-
-    source = """
 a
   a: foo bar(baz, buz, 1)
   b: '' + @a
@@ -718,9 +668,60 @@ body
   foo (not padding or margin) == !padding or !margin
 """
 
-    sourced = """
+    source = """
+a
+  a: foo bar(baz, buz, 1)
+  b: '' + @a
+  c: join(' ', @a)
+  d: foo()
+  e: '' + @d
+  f: join(' ', @e)
+"""
+
+    source = """
+html {font-size:100.01%;}
+"""
+
+    source = """
+
+size = 15px
+small = 5
+
+pad-var(x, y = size)
+  padding y x y x
+
+pad-arg(x, y = x)
+  padding y x y x
+
 body
-  foo (--- 0) or 4
+  pad-var(5px)
+
+a.button
+  pad-arg(10px)
+
+a.button-2
+  pad-arg(10px, 2px)
+
+add(a, b)
+  a + b
+
+pad-call(n = unit(add(small, small), 'px'))
+  padding n
+
+body
+  pad-call()
+
+.button
+  pad-call(5px)
+
+get-red()
+  red
+
+set-colour(colour = get-red)
+  color colour()
+
+.red
+  set-colour()
 """
 
     # parser = Parser(source, {})
