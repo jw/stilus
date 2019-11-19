@@ -187,13 +187,13 @@ keyframes.fabrication.defaults.styl
 keyframes.fabrication.styl
 keyframes.newlines.styl
 keyframes.styl
-kwargs.styl
-list.styl
-literal.color.styl
-literal.styl
-media.bubble.styl
-media.complex.styl
-media.styl
+kwargs.styl                                   stylus/cases                   ok
+list.styl                                     stylus/cases                   ok
+literal.color.styl                            stylus/cases                   ok
+literal.styl                                  stylus/cases                   ok
+media.bubble.styl                             stylus/cases                   ok
+media.complex.styl                            stylus/cases                   ok
+media.styl                                    stylus/cases                   ok
 mixin.conditional.styl
 mixin.order.conditional.styl
 mixin.order.nested.styl

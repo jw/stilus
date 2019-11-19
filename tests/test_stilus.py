@@ -682,63 +682,6 @@ a
 html {font-size:100.01%;}
 """
 
-    source = """
-
-size = 15px
-small = 5
-
-pad-var(x, y = size)
-  padding y x y x
-
-pad-arg(x, y = x)
-  padding y x y x
-
-body
-  pad-var(5px)
-
-a.button
-  pad-arg(10px)
-
-a.button-2
-  pad-arg(10px, 2px)
-
-add(a, b)
-  a + b
-
-pad-call(n = unit(add(small, small), 'px'))
-  padding n
-
-body
-  pad-call()
-
-.button
-  pad-call(5px)
-
-get-red()
-  red
-
-set-colour(colour = get-red)
-  color colour()
-
-.red
-  set-colour()
-"""
-
-    source = """
-body
-  color: red
-
-@import url('foo.css')
-
-body
-  a
-    color: blue
-
-@import 'bar.css'
-@charset 'utf-8'
-
-"""
-
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
