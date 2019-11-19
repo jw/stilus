@@ -48,12 +48,15 @@ Stilus
 .. code-block:: bash
 
  $ stilus --help
- Usage: stilus [OPTIONS] INPUT [OUTPUT]
+ Usage: stilus [OPTIONS] [INPUT] [OUTPUT]
 
  Options:
-   -v, --verbose
+   -v, --verbose       Be more verbose.
+   -w, --watch         Watch file(s) for changes and re-compile.
+   -c, --compress      Compress CSS output.
    -p, --print         Print out the compiled CSS.
    -I, --include TEXT  Add <path> to lookup paths.
+   -o, --out TEXT      Output to <dir> when passing files.
    -V, --version       Display the version of Stilus.
    -h, --help          Show this message and exit.
 

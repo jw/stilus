@@ -7,9 +7,9 @@ Stilus is currently aiming for Stylus version 0.54.5.
 Implemented
 -----------
 
-Usage: stilus [OPTIONS] INPUT [OUTPUT]
+Usage: stilus [OPTIONS] [INPUT] [OUTPUT]
 
-Currently an input file is required, which produces an output.
+Just like in Stilus, the stdin an stdout streams can be used.
 
 These options now work:
 
@@ -30,9 +30,6 @@ option                   description
 
 Todo
 ----
-
-Currently an input file is required, which produces an output.
-But Stylus gets the input as a stream and produces an output.
 
 Stylus also supports these options:
 
