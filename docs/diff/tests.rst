@@ -151,7 +151,7 @@ functions.url.styl                            stylus/cases/functions         ok
 functions.variable.ident.styl                 stylus/cases/functions         ok
 functions.variable.styl                       stylus/cases/functions         ok
 hack.star.styl                                stylus/cases                   ok
-hoist.at-rules.styl
+hoist.at-rules.styl                           stylus/cases                   ok
 if.else.styl                                  stylus/cases                   ok
 if.mixin.styl
 if.postfix.styl
