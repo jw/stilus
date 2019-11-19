@@ -126,11 +126,11 @@ extend.using-variable.styl                    stylus/cases                   ok
 extend.with.optional.styl                     stylus/cases                   ok
 extend.with.parent.reference.styl             stylus/cases                   not ok
 extend.with.placeholders.styl                 stylus/cases                   ok
-fontface.styl
+fontface.styl                                 stylus/cases                   ok
 for.complex.styl                              stylus/cases                   ok
 for.function.styl                             stylus/cases                   ok
 for.postfix.styl                              stylus/cases                   ok
-for.styl
+for.styl                                      stylus/cases                   ok
 function.arguments.styl
 function.literals.styl
 functions.anonymous.styl                      stylus/cases/functions         ok
@@ -150,7 +150,7 @@ functions.styl                                stylus/cases/functions         ok
 functions.url.styl                            stylus/cases/functions         ok
 functions.variable.ident.styl                 stylus/cases/functions         ok
 functions.variable.styl                       stylus/cases/functions         ok
-hack.star.styl
+hack.star.styl                                stylus/cases                   ok
 hoist.at-rules.styl
 if.else.styl                                  stylus/cases                   ok
 if.mixin.styl
