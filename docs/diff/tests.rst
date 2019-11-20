@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also the location of the tests are specified.
 
-Coverage: 72% (255/351)
+Coverage: 77% (271/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status

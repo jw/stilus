@@ -12,7 +12,7 @@ The test release, a.k.a. `test, test, test!`
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Test 95% of all Stylus tests and document the progress...  At 72% now.
-     - [ ] Test all Stylus regression tests (42/84; 50%)
+     - [ ] Test all Stylus regression tests (58/84; 69%)
      - [ ] Test bifs (60/67; 89%):
          - 4 cache bifs test missing (no cache yet), 
          - 1 use bifs test missing (no plugin system yet) 
