@@ -3,9 +3,9 @@ Stylus tests
 ============
 
 Below you'll find the tests as run in Stylus, and their status in Stilus.
-Also the location of the tests are specified.
+Also their locations are specified.
 
-Coverage: 77% (271/351)
+Coverage: 80% (283/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -246,13 +246,13 @@ property-access.siblings.styl                 stylus/cases/properties        ok
 property-access.styl                          stylus/cases/properties        ok
 queries.styl                                  stylus/cases                   ok
 regression.107.lookup-failure.styl            stylus/cases/regressions       ok
-regression.1112.styl
+regression.1112.styl                          stylus/cases/regressions       not ok
 regression.1171.styl                          stylus/cases/regressions       ok
 regression.1173.styl                          stylus/cases/regressions       ok
 regression.1182.styl                          stylus/cases/regressions       ok
-regression.1205.styl
-regression.1206.styl
-regression.1214.styl
+regression.1205.styl                          stylus/cases/regressions       ok
+regression.1206.styl                          stylus/cases/regressions       ok
+regression.1214.styl                          stylus/cases/regressions       ok
 regression.1277.styl                          stylus/cases/regressions       not ok
 regression.127.styl                           stylus/cases/regressions       ok
 regression.130.styl                           stylus/cases/regressions       ok
@@ -263,14 +263,14 @@ regression.142.styl                           stylus/cases/regressions       ok
 regression.146.styl                           stylus/cases/regressions       ok
 regression.153.styl                           stylus/cases/regressions       ok
 regression.154.styl                           stylus/cases/regressions       ok
-regression.156.styl
+regression.156.styl                           stylus/cases/regressions       ok
 regression.1571.styl                          stylus/cases/regressions       ok
-regression.1572.styl
+regression.1572.styl                          stylus/cases/regressions       not ok
 regression.1584.styl                          stylus/cases/regressions       not ok
-regression.1623.styl
+regression.1623.styl                          stylus/cases/regressions       not ok
 regression.1727.styl                          stylus/cases/regressions       ok
 regression.1741.styl                          stylus/cases/regressions       ok
-regression.1882.styl
+regression.1882.styl                          stylus/cases/regressions       not ok
 regression.1995.styl                          stylus/cases/regressions       ok
 regression.1997.styl                          stylus/cases/regressions       ok
 regression.1998.styl                          stylus/cases/regressions       ok
@@ -280,17 +280,17 @@ regression.220.styl                           stylus/cases/regressions       ok
 regression.229.styl                           stylus/cases/regressions       ok
 regression.233.styl                           stylus/cases/regressions       ok
 regression.235.styl                           stylus/cases/regressions       ok
-regression.243.styl
-regression.244.styl
-regression.247.styl
+regression.243.styl                           stylus/cases/regressions       ok
+regression.244.styl                           stylus/cases/regressions       ok
+regression.247.styl                           stylus/cases/regressions       ok
 regression.248.compressed.styl                stylus/cases/regressions       ok
-regression.252.styl
-regression.260.styl
+regression.252.styl                           stylus/cases/regressions       ok
+regression.260.styl                           stylus/cases/regressions       ok
 regression.267.styl                           stylus/cases/regressions       ok
 regression.270.styl                           stylus/cases/regressions       ok
-regression.272.styl
-regression.274.styl
-regression.292.styl
+regression.272.styl                           stylus/cases/regressions       not ok (truthiness)
+regression.274.styl                           stylus/cases/regressions       not ok
+regression.292.styl                           stylus/cases/regressions       ok
 regression.360.styl                           stylus/cases/regressions       ok
 regression.368.styl                           stylus/cases/regressions       ok
 regression.379.styl                           stylus/cases/regressions       ok
@@ -304,13 +304,13 @@ regression.449.styl                           stylus/cases/regressions       ok
 regression.458.styl                           stylus/cases/regressions       ok
 regression.460.styl                           stylus/cases/regressions       ok
 regression.469.styl                           stylus/cases/regressions       ok
-regression.472.styl
-regression.475.styl
+regression.472.styl                           stylus/cases/regressions       not ok (add-property bif)
+regression.475.styl                           stylus/cases/regressions       ok
 regression.480.styl                           stylus/cases/regressions       ok
 regression.484.styl                           stylus/cases/regressions       ok
 regression.498.styl                           stylus/cases/regressions       ok
-regression.499.styl
-regression.503.styl
+regression.499.styl                           stylus/cases/regressions       not ok
+regression.503.styl                           stylus/cases/regressions       ok (tada an spaces)
 regression.504.styl                           stylus/cases/regressions       not ok
 regression.524.styl                           stylus/cases/regressions       ok
 regression.535.styl                           stylus/cases/regressions       ok
@@ -323,8 +323,8 @@ regression.790-2.styl                         stylus/cases/regressions       ok
 regression.790.styl                           stylus/cases/regressions       not ok
 regression.808.styl                           stylus/cases/regressions       ok
 regression.810.styl                           stylus/cases/regressions       ok
-regression.814.styl
-regression.819.styl
+regression.814.styl                           stylus/cases/regressions       not ok (hard one)
+regression.819.styl                           stylus/cases/regressions       not ok (hard one)
 regression.834.styl                           stylus/cases/regressions       ok
 regression.839.styl                           stylus/cases/regressions       ok
 regression.865.styl                           stylus/cases/regressions       ok
@@ -342,7 +342,7 @@ rulset.styl                                   stylus/cases                   ok
 scope.complex.styl                            stylus/cases                   ok
 scope.nested.styl                             stylus/cases                   ok
 scope.styl                                    stylus/cases                   ok
-selector.interpolation.styl
+selector.interpolation.styl                   stylus/cases/selectors         not ok (easy fix?)
 selector.reference.styl                       stylus/cases/selectors         ok
 selectors.complex.styl                        stylus/cases/selectors         ok
 selectors.nested.comma.styl                   stylus/cases/selectors         ok
