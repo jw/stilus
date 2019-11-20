@@ -12,12 +12,13 @@ The test release, a.k.a. `test, test, test!`
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Test 95% of all Stylus tests and document the progress...  At 80% now.
-     - [ ] Test all Stylus regression tests (69/84; 83%)
-     - [ ] Test bifs (60/67; 89%):
-         - 4 cache bifs test missing (no cache yet), 
-         - bif 'use' is  missing (no plugin system yet),
-         - bif 'add-property' does not work yet!
      - [ ] Test prefix (4/5; 80%)
+     - [ ] Test bifs (60/67; 89%):
+         - 4 cache bifs missing (no cache yet), 
+         - bif 'use' is missing (no plugin system yet),
+         - bif 'add-property' does not work yet!
+         - bif 'called-from' has bugs!
+     - [ ] Test all Stylus regression tests (69/84; 83%)
      - [x] Test compress (4/4; 100%)
      - [ ] Test css (12/14; 86%)
      - [ ] Test extend (12/14; 86%)

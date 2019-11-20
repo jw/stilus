@@ -20,10 +20,10 @@ atscope.styl                                  stylus/cases                   ok
 bifs.add-property.styl                        stylus/cases                   not ok (needs work)
 bifs.base-convert.styl                        stylus/cases/bifs              ok
 bifs.blend.styl                               stylus/cases/bifs              ok
-bifs.cache.at-media.styl
-bifs.cache.samename.styl
-bifs.cache.size.styl
-bifs.cache.styl
+bifs.cache.at-media.styl                                                     not implemented yet
+bifs.cache.samename.styl                                                     not implemented yet
+bifs.cache.size.styl                                                         not implemented yet
+bifs.cache.styl                                                              not implemented yet
 bifs.called-from.styl                         stylus/cases/bifs              not ok
 bifs.clone.styl                               stylus/cases/bifs              ok
 bifs.complement.styl                          stylus/cases/bifs              ok
@@ -82,7 +82,7 @@ bifs.type.styl                                stylus/cases/bifs              ok
 bifs.unit.styl                                stylus/cases/bifs              ok
 bifs.unquote.styl                             stylus/cases/bifs              ok
 bifs.url.styl                                 stylus/cases/bifs              ok
-bifs.use.styl
+bifs.use.styl                                                                not implemented yet
 bifs.values.styl                              stylus/cases/bifs              ok
 casting.styl                                  stylus/cases                   ok
 coercion.styl
