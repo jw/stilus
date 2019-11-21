@@ -12,7 +12,7 @@ The test release, a.k.a. `test, test, test!`
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Test 95% of all Stylus tests and document the progress...  At 80% now.
-     - [ ] Test prefix (4/5; 80%)
+     - [x] Test prefix (5/5; 100%)
      - [ ] Test bifs (60/67; 89%):
          - 4 cache bifs missing (no cache yet), 
          - bif 'use' is missing (no plugin system yet),

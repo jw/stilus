@@ -143,7 +143,7 @@ class Expression(Node):
                 b = right.nodes[i]
                 if a.operate(op, b).is_true():
                     continue
-                return false
+                return Boolean(False)
             return Boolean(True)
         else:
             return self.first().operate(op, right, value)

@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: 80% (283/351)
+Coverage: +80% (+283/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -237,7 +237,7 @@ prefix.css.selector.interpolation.styl        stylus/cases/prefix            ok
 prefix.extend.complex.styl                    stylus/cases/prefix            ok
 prefix.extend.styl                            stylus/cases/prefix            ok
 prefix.extend.with.placeholders.styl          stylus/cases/prefix            ok
-prefix.grid.styl
+prefix.grid.styl                              stylus/cases/prefix            ok
 properties.colons.styl                        stylus/cases/properties        ok
 properties.one-line.styl                      stylus/cases/properties        ok
 properties.styl                               stylus/cases/properties        ok

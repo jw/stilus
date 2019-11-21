@@ -75,13 +75,13 @@ class Node:
         elif op == '==':
             return Boolean(self.hash() == right.hash())
         elif op == '!=':
-            return Boolean(hash(self) != hash(right))
+            return Boolean(self.hash() != right.hash())
         elif op == '>=':
-            return Boolean(hash(self) >= hash(right))
+            return Boolean(self.hash() >= right.hash())
         elif op == '<=':
-            return Boolean(hash(self) <= hash(right))
+            return Boolean(self.hash() <= right.hash())
         elif op == '>':
-            return Boolean(hash(self) > hash(right))
+            return Boolean(self.hash() > right.hash())
         elif op == '<':
             return Boolean(self.hash() < right.hash())
         elif op == '||':
@@ -105,9 +105,9 @@ class Node:
         elif op == '&&':
             a = self.to_boolean()
             b = right.to_boolean()
-            if a and b:
+            if a.value is True and b.value is True:
                 return right
-            elif a:
+            elif a.value is False:
                 return self
             return right
         elif op == '[]':
