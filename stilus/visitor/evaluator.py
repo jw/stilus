@@ -1189,7 +1189,7 @@ class Evaluator(Visitor):
 
         # current call stack
         expr = Expression(lineno=self.parser.lineno, column=self.parser.column)
-        for call in self.calling[:-1]:
+        for call in reversed(self.calling[:-1]):
             expr.append(Literal(call, lineno=self.parser.lineno,
                                 column=self.parser.column))
         scope.add(Ident('called-from', expr,
