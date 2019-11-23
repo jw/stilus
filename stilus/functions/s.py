@@ -9,11 +9,13 @@ def s(fmt, *args, evaluator=None):
     fmt = unwrap(fmt).nodes[0]
     assert_string(fmt, 'string')
     result = fmt.string
+    results = []
     for arg in args:
         from visitor.evaluator import Evaluator
         if not isinstance(arg, Evaluator):
-            c = Compiler(arg, options).compile()
-            result = result.replace('%s', str(c), 1)
+            results.append(Compiler(arg, options).compile())
+    for r in results:
+        result = result.replace('%s', r, 1)
     # add nulls for missed %s elements
     c = Compiler(null, options).compile()
     result = result.replace('%s', c)

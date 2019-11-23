@@ -12,6 +12,8 @@ def add_property(name, expr, evaluator=None):
     head = block.nodes[0:block.index]
     tail = block.nodes[block.index:len(block.nodes)]
     block.index += 1
+    block.mixin = True  # this is a dirty hack
     head.append(prop)
-    block.nodes = head.extend(tail)
+    head.extend(tail)
+    block.nodes = head
     return prop

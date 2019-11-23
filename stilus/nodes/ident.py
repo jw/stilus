@@ -50,8 +50,7 @@ class Ident(Node):
         return clone
 
     def is_empty(self):
-        from nodes.null import null
-        return self.value is null
+        return self.value is None
 
     def to_json(self):
         return json.dumps({'__type': 'Ident',

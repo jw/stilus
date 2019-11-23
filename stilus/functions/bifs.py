@@ -9,7 +9,7 @@ from functions import addProperty, adjust, alpha, baseConvert, \
 
 bifs = {
     '-math-prop': math_prop.math_prop,
-    'add-property': addProperty.add_property,
+    'add-property-function': addProperty.add_property,
     'adjust': adjust.adjust,
     'alpha': alpha.alpha,
     'append': push.push,

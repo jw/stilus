@@ -17,7 +17,7 @@ def test_ident_no_value():
     assert ident.string == 'node_name'
     assert ident.value == null
     assert ident.mixin is True
-    assert ident.is_empty() is True
+    assert ident.is_empty() is False
 
 
 def test_coerce():

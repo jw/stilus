@@ -63,7 +63,7 @@ class String(Node):
                 args = [right]
             # apply
             from functions.s import s
-            return s(expr, args)
+            return s(expr, *args.nodes)
         if op == '+':
             expr = Expression()
             expr.append(String(self.value + self.coerce(right).value,

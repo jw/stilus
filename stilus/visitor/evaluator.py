@@ -378,6 +378,9 @@ class Evaluator(Visitor):
 
     def visit_call(self, call):
         fn = self.lookup(call.function_name)
+        log.debug(f'Visiting {fn}...')
+        if hasattr(fn, 'param') and fn.param:
+            log.debug(fn.params)
 
         # url()
         self.ignore_colors = 'url' == call.function_name
@@ -424,11 +427,13 @@ class Evaluator(Visitor):
         self.result -= 1
 
         if fn.builtin:
-            # built-in
+            log.debug(f'{fn} is a built-in method.')
             ret = self.invoke_builtin(fn.params, args)
         elif 'function' == fn.node_name:  # user-defined
             # evaluate mixin block
+            log.debug(f'{fn} is a regular method.')
             if call.block:
+                log.debug(f'{fn} is a mixin.')
                 call.block = self.visit(call.block)
             ret = self.invoke_function(fn, args, call.block)
 
@@ -828,6 +833,7 @@ class Evaluator(Visitor):
 
         return nodes[-1] if nodes else null
 
+    # todo: fix this; this is really bad
     def invoke_builtin(self, fn, args):
         """
         :param fn:
