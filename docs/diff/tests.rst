@@ -246,7 +246,7 @@ property-access.siblings.styl                 stylus/cases/properties        ok
 property-access.styl                          stylus/cases/properties        ok
 queries.styl                                  stylus/cases                   ok
 regression.107.lookup-failure.styl            stylus/cases/regressions       ok
-regression.1112.styl                          stylus/cases/regressions       not ok
+regression.1112.styl                          stylus/cases/regressions       ok
 regression.1171.styl                          stylus/cases/regressions       ok
 regression.1173.styl                          stylus/cases/regressions       ok
 regression.1182.styl                          stylus/cases/regressions       ok
