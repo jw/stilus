@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +80% (+283/351)
+Coverage: +80% (+284/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -24,7 +24,7 @@ bifs.cache.at-media.styl                                                     not
 bifs.cache.samename.styl                                                     not implemented yet
 bifs.cache.size.styl                                                         not implemented yet
 bifs.cache.styl                                                              not implemented yet
-bifs.called-from.styl                         stylus/cases/bifs              not ok
+bifs.called-from.styl                         stylus/cases/bifs              ok
 bifs.clone.styl                               stylus/cases/bifs              ok
 bifs.complement.styl                          stylus/cases/bifs              ok
 bifs.components.styl                          stylus/cases/bifs              ok
