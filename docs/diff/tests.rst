@@ -17,7 +17,7 @@ atblock.styl                                  stylus/cases                   ok
 atrules.compressed.styl                       stylus/cases/compress          ok
 atrules.styl                                  stylus/cases                   ok
 atscope.styl                                  stylus/cases                   ok
-bifs.add-property.styl                        stylus/cases                   not ok (needs work)
+bifs.add-property.styl                        stylus/cases                   ok
 bifs.base-convert.styl                        stylus/cases/bifs              ok
 bifs.blend.styl                               stylus/cases/bifs              ok
 bifs.cache.at-media.styl                                                     not implemented yet
