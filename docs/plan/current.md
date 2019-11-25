@@ -16,7 +16,7 @@ The test release, a.k.a. `test, test, test!`
      - [ ] Test bifs (62/67; 92%):
          - 4 cache bifs missing (no cache yet), 
          - bif 'use' is missing (no plugin system yet).
-     - [ ] Test all Stylus regression tests (69/84; 83%)
+     - [ ] Test all Stylus regression tests (73/84; 86%)
      - [x] Test compress (4/4; 100%)
      - [ ] Test css (12/14; 86%)
      - [ ] Test extend (12/14; 86%)
