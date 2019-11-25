@@ -7,6 +7,10 @@ def p(*args, evaluator=None):
         expr = unwrap(arg)
         if not expr:
             return None
-        e = str(expr).replace('(',  '').replace(')', '')
+        e = str(expr)
+        if e.startswith('('):
+            e = e[1:]
+        if e.endswith(')'):
+            e = e[:-1]
         print(f'inspect: {e}')
     return null

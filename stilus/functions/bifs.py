@@ -1,11 +1,12 @@
-from functions import addProperty, adjust, alpha, baseConvert, \
-    basename, blend, blue, clone, contrast, convert, currentMedia, define, \
-    dirname, error, extname, green, hsl, hsla, hue, imageSize, json, length, \
-    lightness, listSeparator, lookup, luminosity, math, math_prop, merge, \
-    operate, oppositePosition, p, pathjoin, pop, prefixClasses, push, range, \
-    red, remove, replace, rgb, rgba, s, saturation, selector, selectorExists, \
-    shift, stilus_slice, stilus_split, substr, tan, trace, transparentify, \
-    type_function, unit, unquote, unshift, url, warn, selectors
+from functions import addProperty, adjust, alpha, baseConvert, basename, \
+    blend, blue, clone, contrast, convert, currentMedia, define, dirname, \
+    error, extname, green, hsl, hsla, hue, imageSize, json, length, \
+    lightness, listSeparator, lookup, luminosity, match, math, math_prop, \
+    merge, operate, oppositePosition, p, pathjoin, pop, prefixClasses, push, \
+    range, red, remove, replace, rgb, rgba, s, saturation, selector, \
+    selectorExists, selectors, shift, stilus_slice, stilus_split, substr, \
+    tan, trace, transparentify, type_function, unit, unquote, unshift, url, \
+    warn
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -38,6 +39,7 @@ bifs = {
     'list-separator': listSeparator.list_separator,
     'luminosity': luminosity.luminosity,
     'lookup': lookup.lookup,
+    'match': match.match,
     'math': math.math,
     'merge': merge.merge,
     'operate': operate.operate,

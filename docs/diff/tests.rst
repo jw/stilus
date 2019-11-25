@@ -265,7 +265,7 @@ regression.153.styl                           stylus/cases/regressions       ok
 regression.154.styl                           stylus/cases/regressions       ok
 regression.156.styl                           stylus/cases/regressions       ok
 regression.1571.styl                          stylus/cases/regressions       ok
-regression.1572.styl                          stylus/cases/regressions       not ok
+regression.1572.styl                          stylus/cases/regressions       not ok /{selector}
 regression.1584.styl                          stylus/cases/regressions       not ok
 regression.1623.styl                          stylus/cases/regressions       not ok
 regression.1727.styl                          stylus/cases/regressions       ok

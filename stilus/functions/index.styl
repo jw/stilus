@@ -271,20 +271,20 @@ prefix-classes(prefix)
 
 // Caching mixin, use inside your functions to enable caching by extending.
 
-//$stylus_mixin_cache = {}
-//cache()
-//  $key = (current-media() or 'no-media') + '__' + called-from[0] + '__' + arguments
-//  if $key in $stylus_mixin_cache
-//    @extend {"$cache_placeholder_for_" + $stylus_mixin_cache[$key]}
-//  else if 'cache' in called-from
-//    {block}
-//  else
-//    $id = length($stylus_mixin_cache)
-//
-//    &,
-//    /$cache_placeholder_for_{$id}
-//      $stylus_mixin_cache[$key] = $id
-//      {block}
+$stylus_mixin_cache = {}
+cache()
+  $key = (current-media() or 'no-media') + '__' + called-from[0] + '__' + arguments
+  if $key in $stylus_mixin_cache
+    @extend {"$cache_placeholder_for_" + $stylus_mixin_cache[$key]}
+  else if 'cache' in called-from
+    {block}
+  else
+    $id = length($stylus_mixin_cache)
+
+    &,
+    /$cache_placeholder_for_{$id}
+      $stylus_mixin_cache[$key] = $id
+      {block}
 
 // Percentage function to convert a number, e.g. ".45", into a percentage, e.g. "45%"
 

@@ -45,7 +45,6 @@ class Stack(list):
     def get_block_frame(self, block: Block):
         """Lookup stack frame for a given block"""
         for frame in self:
-            # print(f'Checking equality between {block} and {frame.block}...')
             if block == frame.block:
                 return frame
         return None

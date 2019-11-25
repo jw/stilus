@@ -1,3 +1,4 @@
+import logging
 from collections import deque
 
 from exceptions import ParseError
@@ -39,6 +40,8 @@ from nodes.supports import Supports
 from nodes.ternary import Ternary
 from nodes.unaryop import UnaryOp
 from units import units
+
+log = logging.getLogger(__name__)
 
 
 class Parser:
@@ -236,7 +239,7 @@ class Parser:
             tok.value.column = tok.column
         self.lineno = tok.lineno
         self.column = tok.column
-        # todo: log this: print(tok)
+        log.debug(f'Returning {tok}.')
         return tok
 
     def __iter__(self):

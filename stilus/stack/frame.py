@@ -44,7 +44,6 @@ class Frame:
         if self._scope:
             return self._scope
         try:
-            # print(f'{self.parent}; type: {type(self.parent)}')
             return self.parent.scope()
         except AttributeError:
             raise TypeError('Cannot read property \'scope\' of undefined')
@@ -59,5 +58,4 @@ class Frame:
         :param name:
         :return:
         """
-        # print(f'FRAME: Lookup of {name} in {self.scope()}...')
         return self.scope().lookup(name)
