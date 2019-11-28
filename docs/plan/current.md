@@ -2,7 +2,7 @@
 
 The test release, a.k.a. `test, test, test!`
 
- - [x] Get to 90%+ coverage.  At 90%!
+ - [x] Get to 90%+ coverage.  At 91%!
  - [ ] Update the binary:
     - [x] add watch changes (watchdog)
     - [x] add out option
