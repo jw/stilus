@@ -1,5 +1,7 @@
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
+import pytest
 from click.testing import CliRunner
 
 import __version__
@@ -84,3 +86,40 @@ def test_cli_out_and_print():
         assert css_file.read_text() == css
         assert result.exit_code == 0
         assert result.output == css
+
+
+def test_fail(capsys):
+    with pytest.raises(SystemExit) as e:
+        cli.fail('Hello there!', code=42)
+    captured = capsys.readouterr()
+    assert 'Hello there!' in captured.out
+    assert e.type == SystemExit
+    assert e.value.code == 42
+
+    with pytest.raises(SystemExit) as e:
+        cli.fail('Hello there!')
+    assert e.type == SystemExit
+    assert e.value.code == -1
+
+
+def test_fancy_output(capsys):
+    cli.fancy_output('Some fancy output')
+    captured = capsys.readouterr()
+    assert 'Some fancy output' in captured.out
+
+    cli.fancy_output('Some fancy output', 'hello')
+    captured = capsys.readouterr()
+    assert 'hello' in captured.out
+    assert 'Some fancy output' in captured.out
+
+
+def test_prepare_watch():
+    with TemporaryDirectory() as td:
+        path = Path(td)
+        with open(path / 'foo.styl', 'w') as f:
+            f.write('foo\n  abc blue\n')
+        with open(path / 'bar.styl', 'w') as f:
+            f.write('bar\n  def red\n')
+        styles = cli.prepare_watch(path, None, [])
+        assert styles == [path / 'foo.styl', path / 'bar.styl']
+        assert list(path.glob('*.css')) == [path / 'foo.css', path / 'bar.css']
