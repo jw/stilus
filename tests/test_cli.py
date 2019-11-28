@@ -121,5 +121,7 @@ def test_prepare_watch():
         with open(path / 'bar.styl', 'w') as f:
             f.write('bar\n  def red\n')
         styles = cli.prepare_watch(path, None, [])
-        assert styles == [path / 'foo.styl', path / 'bar.styl']
-        assert list(path.glob('*.css')) == [path / 'foo.css', path / 'bar.css']
+        assert sorted(styles) == sorted([path / 'foo.styl',
+                                        path / 'bar.styl'])
+        assert sorted(list(path.glob('*.css'))) == sorted([path / 'foo.css',
+                                                           path / 'bar.css'])
