@@ -62,6 +62,9 @@ class Node:
         from visitor.evaluator import Evaluator
         return Evaluator(self).evaluate()
 
+    def one_is_unit(self, other):
+        return self.node_name == 'unit' or other.node_name == 'unit'
+
     # todo: use object.hash(); not hash(object)
     def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
         """Operate on ``right`` with the given ``op``."""
@@ -81,6 +84,8 @@ class Node:
         elif op == '<=':
             return Boolean(self.hash() <= right.hash())
         elif op == '>':
+            if self.one_is_unit(right):
+                return Boolean(float(self.hash()) > float(right.hash()))
             return Boolean(self.hash() > right.hash())
         elif op == '<':
             return Boolean(self.hash() < right.hash())

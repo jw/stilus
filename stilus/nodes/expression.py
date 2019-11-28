@@ -132,7 +132,7 @@ class Expression(Node):
         elif op == 'in':
             return super().operate(op, right, self.value)
         elif op == '!=':
-            return self.operate('==', right, value)
+            return self.operate('==', right, value).negate()
         elif op == '==':
             right = right.to_expression()
             from nodes.boolean import false
