@@ -2,6 +2,7 @@
 
 ### 0.9.0
 
+ - [ ] Check the circle-ci setup
  - [ ] Create logo.
  - [ ] Update the assertions in the built-in functions.
  - [ ] Document using docstrings and Sphinx. 

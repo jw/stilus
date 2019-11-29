@@ -746,6 +746,11 @@ body
   foo: () != ()
 """
 
+    source = """
+textarea, input
+  border 1px solid #eee
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

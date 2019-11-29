@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +83% (292/351)
+Coverage: +83% (293/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -337,7 +337,7 @@ require.index.styl                            stylus/cases                   ok
 require.literal.styl
 reset.styl                                    stylus/cases                   ok
 rule.charset.styl                             stylus/cases                   ok
-rulset.newline.styl
+rulset.newline.styl                           stylus/cases                   ok
 rulset.styl                                   stylus/cases                   ok
 scope.complex.styl                            stylus/cases                   ok
 scope.nested.styl                             stylus/cases                   ok
