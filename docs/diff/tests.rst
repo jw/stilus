@@ -230,7 +230,7 @@ operators.subscript.range.styl                stylus/cases/operators         ok
 operators.subscript.styl
 operators.unary.styl                          stylus/cases/operators         ok
 page.styl                                     stylus/cases                   ok
-parent.complex.styl
+parent.complex.styl                           stylus/cases                   ok
 parent.styl                                   stylus/cases                   ok
 parse.styl                                    stylus/cases                   ok
 prefix.css.selector.interpolation.styl        stylus/cases/prefix            ok
