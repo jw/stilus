@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: 83% (291/351)
+Coverage: +83% (292/351)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -342,7 +342,7 @@ rulset.styl                                   stylus/cases                   ok
 scope.complex.styl                            stylus/cases                   ok
 scope.nested.styl                             stylus/cases                   ok
 scope.styl                                    stylus/cases                   ok
-selector.interpolation.styl                   stylus/cases/selectors         not ok (easy fix?)
+selector.interpolation.styl                   stylus/cases/selectors         ok
 selector.reference.styl                       stylus/cases/selectors         ok
 selectors.complex.styl                        stylus/cases/selectors         ok
 selectors.nested.comma.styl                   stylus/cases/selectors         ok
