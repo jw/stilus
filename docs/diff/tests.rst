@@ -231,7 +231,7 @@ operators.subscript.styl
 operators.unary.styl                          stylus/cases/operators         ok
 page.styl                                     stylus/cases                   ok
 parent.complex.styl
-parent.styl
+parent.styl                                   stylus/cases                   ok
 parse.styl                                    stylus/cases                   ok
 prefix.css.selector.interpolation.styl        stylus/cases/prefix            ok
 prefix.extend.complex.styl                    stylus/cases/prefix            ok
@@ -334,7 +334,7 @@ require.complex.styl                          stylus/cases                   ok
 require.glob.styl                             stylus/cases                   ok
 require.include.styl                          stylus/cases                   ok
 require.index.styl                            stylus/cases                   ok
-require.literal.styl
+require.literal.styl                          stylus/cases                   ok
 reset.styl                                    stylus/cases                   ok
 rule.charset.styl                             stylus/cases                   ok
 rulset.newline.styl                           stylus/cases                   ok
