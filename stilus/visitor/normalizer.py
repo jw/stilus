@@ -99,7 +99,7 @@ class Normalizer(Visitor):
             node = parent.node
             if node.node_name == 'group':
                 return node
-            if not node.block:
+            if not hasattr(node, 'block') or not node.block:
                 parent = False
             elif not node.block.parent:
                 parent = False

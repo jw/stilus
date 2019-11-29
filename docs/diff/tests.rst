@@ -208,7 +208,7 @@ mixins.order.2.styl                           stylus/cases/mixin             ok
 mixins.reset.styl                             stylus/cases/mixin             ok
 mixins.return.styl                            stylus/cases/mixin             not ok
 mixins.root.styl                              stylus/cases/mixin             ok
-moz-document-import.styl
+moz-document-import.styl                      stylus/cases                   ok
 moz-document.styl                             stylus/cases                   ok
 multiline.styl
 object.complex.styl
