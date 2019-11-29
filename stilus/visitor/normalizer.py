@@ -171,7 +171,7 @@ class Normalizer(Visitor):
                     break
                 # replace '\,' with ','
                 if '\\' in selector.value:
-                    re.sub(r'\\,', ',')
+                    selector.value = re.sub(r'\\,', ',', selector.value)
                     normalized = group.nodes
                     break
                 parts = selector.value.split(',')
