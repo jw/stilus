@@ -1,6 +1,6 @@
 import json
 
-from nodes.boolean import false, true, Boolean
+from nodes.boolean import Boolean, false
 from nodes.node import Node
 from nodes.null import null
 
@@ -62,7 +62,6 @@ class ObjectNode(Node):
                 b = right.values[key]
                 if a.operate(op, b).is_false:
                     return false
-                    return true
         elif op == '!=':
             return self.operate('==', right).negate()
         else:

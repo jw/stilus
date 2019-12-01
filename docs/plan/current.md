@@ -11,7 +11,7 @@ The test release, a.k.a. `test, test, test!`
     - [ ] add hoist atrules option
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.
- - [ ] Test 95% of all Stylus tests and document the progress...  At +83% now.
+ - [ ] Test 95% of all Stylus tests and document the progress...  At +88% now.
      - [x] Test prefix (5/5; 100%)
      - [ ] Test bifs (62/67; 92%):
          - 4 cache bifs missing (no cache yet), 

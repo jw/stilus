@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +83% (293/351)
+Coverage: 88% (309/349)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -94,7 +94,7 @@ compress.units.styl                           stylus/compress                ok
 conditional-assignment.styl                   stylus/cases                   ok
 control.blueprint.ie.styl                     stylus/cases                   ok
 control.blueprint.screen.styl                 stylus/cases                   ok
-control.boilerplate.styl
+control.boilerplate.styl                      stylus/cases                   ok
 css.eos.styl                                  stylus/css                     ok
 css.extend.styl                               stylus/css                     ok
 css.functions.single-line.styl                stylus/css                     ok
@@ -132,7 +132,7 @@ for.function.styl                             stylus/cases                   ok
 for.postfix.styl                              stylus/cases                   ok
 for.styl                                      stylus/cases                   ok
 function.arguments.styl
-function.literals.styl
+function.literals.styl                        stylus/cases/functions         ok
 functions.anonymous.styl                      stylus/cases/functions         ok
 functions.arg-calls.styl                      stylus/cases/functions         ok
 functions.call.mixin.styl                     stylus/cases/functions         ok
@@ -154,9 +154,9 @@ hack.star.styl                                stylus/cases                   ok
 hoist.at-rules.styl                           stylus/cases                   ok
 if.else.styl                                  stylus/cases                   ok
 if.mixin.styl
-if.postfix.styl
-if.selectors.styl
-important.styl
+if.postfix.styl                               stylus/cases                   ok
+if.selectors.styl                             stylus/cases                   ok
+important.styl                                stylus/cases                   ok
 import.basic.styl                             stylus/cases/imports           ok
 import.clone.styl                             stylus/cases/imports           ok
 import.comments.styl                          stylus/cases/imports           ok
@@ -182,10 +182,10 @@ import.ordering.styl                          stylus/cases/imports           ok
 interpolation.properties.styl                 stylus/cases/imports           ok
 introspection.styl                            stylus/cases/imports           ok
 jquery.styl                                   stylus/cases                   ok
-keyframes.fabrication.defaults.styl
+keyframes.fabrication.defaults.styl           stylus/cases                   ok
 keyframes.fabrication.styl                    stylus/cases                   ok
-keyframes.newlines.styl
-keyframes.styl
+keyframes.newlines.styl                       stylus/cases                   not ok (0%, 50%, 100%?)
+keyframes.styl                                stylus/cases                   not ok (for loop?)
 kwargs.styl                                   stylus/cases                   ok
 list.styl                                     stylus/cases                   ok
 literal.color.styl                            stylus/cases                   ok

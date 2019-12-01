@@ -1,5 +1,4 @@
 import json
-from math import isnan
 
 from nodes.boolean import Boolean
 from nodes.expression import Expression
@@ -170,10 +169,10 @@ class Unit(Node):
             # keyframes interpretation
             if other.value == '%':
                 return Unit(0, '%')
-            value = float(other.value)
-            if isnan(value):
-                return super().coerce(value)
-            else:
-                return Unit(value)
+            try:
+                value = float(other.value)
+            except ValueError:
+                return super().coerce(other)
+            return Unit(value)
         else:
             return super().coerce(other)

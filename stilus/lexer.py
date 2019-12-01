@@ -85,7 +85,7 @@ class Lexer:
             offset = match.start(0)
             string = match.string
             in_comment = \
-                string.rfind('/*', offset) > string.rfind('*/', offset)
+                string.rfind('/*', 0, offset) > string.rfind('*/', 0, offset)
             comment_index = string.rfind('//', 0, offset)
             i = s.rfind('\n', 0, offset)
             double = 0

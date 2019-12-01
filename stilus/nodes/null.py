@@ -36,6 +36,9 @@ class Null(Node):
     def clone(self, parent=None, node=None):
         return self
 
+    def to_expression(self):
+        return super().to_expression()
+
     def to_boolean(self):
         from nodes.boolean import false
         return false

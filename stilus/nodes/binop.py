@@ -1,6 +1,7 @@
 import json
 
 from nodes.node import Node
+from nodes.null import Null
 
 
 class BinOp(Node):
@@ -35,7 +36,7 @@ class BinOp(Node):
         if self.left:
             clone.left = self.left.clone(parent, node)
         clone.right = None
-        if self.right:
+        if type(self.right) == Null or self.right:
             clone.right = self.right.clone(parent, node)
         clone.lineno = self.lineno
         clone.column = self.column
