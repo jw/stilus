@@ -9,7 +9,7 @@ Implemented
 
 Usage: stilus [OPTIONS] [INPUT] [OUTPUT]
 
-Just like in Stilus, the stdin an stdout streams can be used.
+Just like in Stilus, the stdin and stdout streams can be used.
 
 These options now work:
 

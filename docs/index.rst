@@ -57,6 +57,8 @@ Stilus
    -p, --print         Print out the compiled CSS.
    -I, --include TEXT  Add <path> to lookup paths.
    -o, --out TEXT      Output to <dir> when passing files.
+   -P, --prefix TEXT   Prefix all css classes by <prefix>.
+   --hoist-atrules     Move @import and @charset to the top
    -V, --version       Display the version of Stilus.
    -h, --help          Show this message and exit.
 
@@ -76,7 +78,7 @@ Most of Stylus is implemented in Stilus, but some parts are missing:
 
  - Plugins
  - Caching
- - More tests
+ - More tests (more than 88% of the Stylus tests pass through Stilus)
  - Documentation
 
 All help is appreciated!
