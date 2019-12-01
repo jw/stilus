@@ -122,6 +122,7 @@ def test_cli_hoist_atrules():
                                 '  foo: bar;\n' \
                                 '}\n'
 
+
 def test_fail(capsys):
     with pytest.raises(SystemExit) as e:
         cli.fail('Hello there!', code=42)
