@@ -296,7 +296,10 @@ class Evaluator(Visitor):
         keyframes.value = self.interpolate(keyframes).strip()
         val = self.lookup(keyframes.value)
         if val:
-            keyframes.value = val.first().string  # || val.first().node_name
+            if type(val.first()) == Function:
+                keyframes.value = val.first().function_name
+            else:
+                keyframes.value = val.first().string
         keyframes.block = self.visit(keyframes.block)
 
         if 'official' != keyframes.prefix:
@@ -586,7 +589,7 @@ class Evaluator(Visitor):
             block.index = i
             v = self.visit(block.nodes[i])
             if hasattr(block, 'mixin') and block.mixin:
-                log.debug(f'Not adding mixin [{v}]!')
+                # log.debug(f'Not adding mixin [{v}]!')
                 block.mixin = False
             else:
                 block.nodes[i] = v

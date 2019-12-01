@@ -17,7 +17,7 @@ class Keyframes(Atrule):
         self.block = None
 
     def __str__(self):
-        return f'@keyframes {"".join(self.segments)}'
+        return f'@keyframes {"".join(str(self.segments))}'
 
     def __repr__(self):
         return self.__str__()

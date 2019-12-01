@@ -180,10 +180,10 @@ import.mixins.transparent.styl                stylus/cases/imports           ok
 import.namespace.styl                         stylus/cases/imports           ok
 import.ordering.styl                          stylus/cases/imports           ok
 interpolation.properties.styl                 stylus/cases/imports           ok
-introspection.styl
+introspection.styl                            stylus/cases/imports           ok
 jquery.styl                                   stylus/cases                   ok
 keyframes.fabrication.defaults.styl
-keyframes.fabrication.styl
+keyframes.fabrication.styl                    stylus/cases                   ok
 keyframes.newlines.styl
 keyframes.styl
 kwargs.styl                                   stylus/cases                   ok

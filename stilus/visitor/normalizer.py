@@ -252,7 +252,8 @@ class Normalizer(Visitor):
 
     def visit_keyframes(self, node):
         node.frames = len([n for n in node.block.nodes
-                           if n.block and n.block.has_properties()])
+                           if hasattr(n, 'block') and n.block and
+                           n.block.has_properties()])
         return node
 
     def visit_import(self, node):

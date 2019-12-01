@@ -1,0 +1,80 @@
+
+@-moz-keyframes foo
+  from
+    color: black
+  to
+    color: white
+
+@keyframes foo {
+  from {
+    width: 100%
+  }
+  50% {
+  }
+  to {
+  }
+}
+
+@keyframes bar {
+  from {
+  }
+  to {
+  }
+}
+
+vendors = official
+
+@keyframes active
+  for i in 0..10
+    percent = unit(i * 10, '%')
+    {percent}
+      background-image: radial-gradient(yellow 0%, red percent, black 100%)
+
+foo()
+  0%
+    color: red
+  100%
+    color: yellow
+
+@keyframes foo
+  foo() if true
+
+for i in 1..3
+  name = 'lol' + i
+  @keyframes name
+    for j in 1..10
+      {unit(j * 10, '%')}
+        left: j*10
+
+  @keyframes {'foo' + i}
+    for j in 1..5
+      {j * 5 + '%'}
+        left: j * 5
+
+.foo
+  @keyframes foo
+    0%, 50%
+      color: blue
+    100%
+      color: green
+
+div
+  color: blue
+  @keyframes lol
+    from
+      color: red
+
+@keyframes foo
+{
+  0%
+  {
+    color: red;
+  }
+
+  100%
+  {
+    color: blue;
+  }
+}
+
+@keyframes foo{0%{bar:baz}}
