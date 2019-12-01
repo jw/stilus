@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: 88% (309/349)
+Coverage: +88% (+309/349)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -303,7 +303,7 @@ regression.449.styl                           stylus/cases/regressions       ok
 regression.458.styl                           stylus/cases/regressions       ok
 regression.460.styl                           stylus/cases/regressions       ok
 regression.469.styl                           stylus/cases/regressions       ok
-regression.472.styl                           stylus/cases/regressions       not ok (add-property bif)
+regression.472.styl                           stylus/cases/regressions       ok
 regression.475.styl                           stylus/cases/regressions       ok
 regression.480.styl                           stylus/cases/regressions       ok
 regression.484.styl                           stylus/cases/regressions       ok
