@@ -336,11 +336,8 @@ class Compiler(Visitor):
                     last = i == len(selectors) - 1
 
                     # keyframe bocks (10%, 20% { ... })
-                    # checkme: if (this.keyframe)
-                    # checkme:   selector = i ? selector.trim() :
-                    # checkme:                   selector;
                     if self.keyframe:
-                        selector.strip()
+                        selector = selector.strip() if i else selector
                     try:
                         self.buf += self.out(selector +
                                              ('' if last else comma))

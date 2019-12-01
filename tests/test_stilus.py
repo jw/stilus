@@ -931,6 +931,52 @@ img
   width: unquote('auto');
 """
 
+    source = """
+
+ul
+  li
+    a
+      color: blue
+
+a.button
+input[type=submit]
+  @extends ul li a
+
+html
+  body
+    h1
+      font-size: 22px
+      color: black
+    .title
+      @extends html body h1
+    .huge-title
+      font-size: 33px
+      @extends html body .title
+"""
+
+    source = """
+.bar
+  prop val
+
+.foo
+  @extend .bar
+
+.baz
+  &,
+  > li
+    @extend .foo
+"""
+
+    source = """
+@keyframes tada
+  0%
+    transform: scale(1)
+  10%, 20%
+    transform: scale(.9) rotate(-3deg)
+  from, to
+    background: scale(.5)
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')

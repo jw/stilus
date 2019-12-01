@@ -309,8 +309,8 @@ regression.480.styl                           stylus/cases/regressions       ok
 regression.484.styl                           stylus/cases/regressions       ok
 regression.498.styl                           stylus/cases/regressions       ok
 regression.499.styl                           stylus/cases/regressions       not ok
-regression.503.styl                           stylus/cases/regressions       ok (tada an spaces)
-regression.504.styl                           stylus/cases/regressions       not ok
+regression.503.styl                           stylus/cases/regressions       ok
+regression.504.styl                           stylus/cases/regressions       ok
 regression.524.styl                           stylus/cases/regressions       ok
 regression.535.styl                           stylus/cases/regressions       ok
 regression.536.styl                           stylus/cases/regressions       ok
