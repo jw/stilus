@@ -1,0 +1,32 @@
+@-moz-keyframes foo {
+  from {
+    color: #000;
+  }
+  to {
+    color: #fff;
+  }
+}
+@-webkit-keyframes foo {
+  from {
+    color: #000;
+  }
+  to {
+    color: #fff;
+  }
+}
+@-o-keyframes foo {
+  from {
+    color: #000;
+  }
+  to {
+    color: #fff;
+  }
+}
+@keyframes foo {
+  from {
+    color: #000;
+  }
+  to {
+    color: #fff;
+  }
+}
