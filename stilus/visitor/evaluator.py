@@ -330,7 +330,7 @@ class Evaluator(Visitor):
 
         if fn.function_name in bifs:
             self.warn(f'built-in function "{fn.function_name}" '
-                      f'is already defined [NOT IMPLEMENTED YET!]')
+                      f'is already defined')
 
         return fn
 
@@ -686,7 +686,7 @@ class Evaluator(Visitor):
 
         # mixin conditional statements within
         # a selector group or at-rule
-        if ret and not node.postfix and hasattr(block, 'node') and \
+        if ret and node.postfix is None and hasattr(block, 'node') and \
                 block.node and block.node.node_name \
                 in ['group', 'atrule', 'media',
                     'supports', 'keyframes']:
@@ -1072,7 +1072,7 @@ class Evaluator(Visitor):
                     self._selector = ret
                 return ret
 
-        if node and hasattr(node, 'segments') and node.segments:
+        if node and hasattr(node, 'segments'):
             s = ''
             for segment in node.segments:
                 s += str(to_string(segment))

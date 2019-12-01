@@ -179,8 +179,7 @@ import.mixins.styl                            stylus/cases/imports           ok
 import.mixins.transparent.styl                stylus/cases/imports           ok
 import.namespace.styl                         stylus/cases/imports           ok
 import.ordering.styl                          stylus/cases/imports           ok
-index.styl
-interpolation.properties.styl
+interpolation.properties.styl                 stylus/cases/imports           ok
 introspection.styl
 jquery.styl                                   stylus/cases                   ok
 keyframes.fabrication.defaults.styl
@@ -210,7 +209,7 @@ mixins.return.styl                            stylus/cases/mixin             not
 mixins.root.styl                              stylus/cases/mixin             ok
 moz-document-import.styl                      stylus/cases                   ok
 moz-document.styl                             stylus/cases                   ok
-multiline.styl
+multiline.styl                                stylus/cases                   ok
 object.complex.styl
 object.mixin.styl
 object-prototype-props.styl

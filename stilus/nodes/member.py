@@ -11,7 +11,7 @@ class Member(Node):
         self.left = left
 
     def __str__(self):
-        return f'{self.left}.{self.right})'
+        return f'{self.left} = {self.right}'
 
     def __repr__(self):
         return self.__str__()
@@ -31,7 +31,7 @@ class Member(Node):
         clone = Member(None, None, lineno=self.lineno, column=self.column)
         clone.left = self.left.clone(parent, clone)
         clone.right = self.right.clone(parent, clone)
-        if clone.value:
+        if self.value:
             clone.value = self.value.clone(parent, clone)
         clone.filename = self.filename
         return clone
