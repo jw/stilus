@@ -108,6 +108,20 @@ def test_cli_prefix():
                                 '}\n'
 
 
+def test_cli_hoist_atrules():
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('foo.styl', 'w') as f:
+            f.write('body\n'
+                    '  foo bar\n'
+                    '@charset \'utf-8\'\n')
+        result = runner.invoke(cli.stilus, ['--hoist-atrules', 'foo.styl'])
+        assert result.exit_code == 0
+        assert result.output == '@charset \'utf-8\';\n' \
+                                'body {\n' \
+                                '  foo: bar;\n' \
+                                '}\n'
+
 def test_fail(capsys):
     with pytest.raises(SystemExit) as e:
         cli.fail('Hello there!', code=42)

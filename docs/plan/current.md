@@ -3,13 +3,13 @@
 The test release, a.k.a. `test, test, test!`
 
  - [x] Get to 90%+ coverage.  At 91%!
- - [ ] Update the binary:
+ - [x] Update the binary:
     - [x] add watch changes (watchdog)
     - [x] add out option
     - [x] add include option
     - [x] add prefix option
-    - [ ] add hoist atrules option
-    - [ ] document it
+    - [x] add hoist atrules option
+    - [x] document it
  - [ ] Cleanup of coverall/codecov properties.
  - [ ] Test 95% of all Stylus tests and document the progress...  At +88% now.
      - [x] Test prefix (5/5; 100%)

@@ -66,7 +66,8 @@ def fancy_output(message, prefix=None):
     click.echo(message)
 
 
-def render(source: str, includes=None, compress=False, prefix=None) -> str:
+def render(source: str, includes=None, compress=False, prefix=None,
+           ha=False) -> str:
     """
     Render a source str to css.
     :param source: A Stylus source string.
@@ -77,13 +78,16 @@ def render(source: str, includes=None, compress=False, prefix=None) -> str:
     :type compress: bool, optional
     :param prefix: Prefix to add to each css class..
     :type prefix: Str, optional
+    :param ha: Hoist atrules?  False by default.
+    :type ha: bool, optional
     :return: The resulting css.
     :rtype: str
     """
     if not includes:
         includes = []
     renderer = Renderer(source, {'compress': compress,
-                                 'prefix': prefix})
+                                 'prefix': prefix,
+                                 'hoist atrules': ha})
     for include in includes:
         # todo: check existence?
         renderer.include(include)
@@ -100,7 +104,8 @@ def compile(source: Path,
             path: Path = None,
             includes: Optional[List[Path]] = None,
             compress: bool = False,
-            prefix=None) -> None:
+            prefix=None,
+            ha=False) -> None:
     """
     Compile a source Path.  If path is given compile to that path,
     otherwise compile into the same folder.
@@ -114,13 +119,15 @@ def compile(source: Path,
     :type compress: bool, optional
     :param prefix: Prefix to add to each css class..
     :type prefix: Str, optional
+    :param ha: Hoist atrules?  False by default.
+    :type ha: bool, optional
     """
     if path:
         destination = path / Path(source.name).with_suffix('.css')
     else:
         destination = source.with_suffix('.css')
     # todo: check includes existence here?
-    css = render(source.read_text(), includes, compress, prefix)
+    css = render(source.read_text(), includes, compress, prefix, ha)
     write_result(css, destination)
     fancy_output(str(destination), prefix='  compiled ')
     logging.info(f'Compiled {destination}.')
@@ -129,7 +136,8 @@ def compile(source: Path,
 def prepare_watch(path: Path,
                   include: Optional[List[Path]] = None,
                   compress: bool = False,
-                  prefix: str = None) -> List[Path]:
+                  prefix: str = None,
+                  ha: bool = False) -> List[Path]:
     """
     Compile all Stylus files in the given path and recompile
     automatically when these files change.
@@ -141,6 +149,8 @@ def prepare_watch(path: Path,
     :type compress: bool, optional
     :param prefix: Prefix to add to each css class..
     :type prefix: Str, optional
+    :param ha: Hoist atrules?  False by default.
+    :type ha: bool, optional
     :return: List of paths that are present in the given Path
     :rtype: List[Path]
     """
@@ -151,7 +161,7 @@ def prepare_watch(path: Path,
     logging.info(f'{styles}')
     for styl in styles:
         fancy_output(str(styl), prefix='  watching ')
-        compile(styl, path, include, compress, prefix)
+        compile(styl, path, include, compress, prefix, ha)
     return styles
 
 
@@ -183,17 +193,19 @@ def check_out(out: str) -> None:
 @click.option('-o', '--out',
               help='Output to <dir> when passing files.')
 @click.option('-P', '--prefix', help='Prefix all css classes by <prefix>.')
+@click.option('--hoist-atrules', 'ha', is_flag=True, default=False,
+              help='Move @import and @charset to the top')
 @click.option('--version', '-V', is_flag=True, callback=print_version,
               expose_value=False, is_eager=True,
               help='Display the version of Stilus.')
 def stilus(verbose, watch, compress, print_, include, out, input, output,
-           prefix):
+           prefix, ha):
 
     class StilusHandler(FileSystemEventHandler):
         def on_modified(self, event):
             path = Path(event.src_path)
             if path in styles:
-                compile(path, None, include, compress, prefix)
+                compile(path, None, include, compress, prefix, ha)
 
     if out:
         check_out(out)
@@ -201,7 +213,7 @@ def stilus(verbose, watch, compress, print_, include, out, input, output,
 
     if watch:
         path = Path.cwd()
-        styles = prepare_watch(path, include, compress, prefix)
+        styles = prepare_watch(path, include, compress, prefix, ha)
         event_handler = StilusHandler()
         observer = Observer()
         observer.schedule(event_handler, path=str(path), recursive=False)
@@ -223,7 +235,7 @@ def stilus(verbose, watch, compress, print_, include, out, input, output,
         elif out:
             output = (Path(out) / Path(output.name)).open('w')
             logging.info(f'Writing to {output}.')
-        css = render(input.read(), include, compress, prefix)
+        css = render(input.read(), include, compress, prefix, ha)
         if print_:
             click.echo(css, nl='\n' if compress else '')
         output.write(css)

@@ -25,6 +25,7 @@ option                   description
 --print, -p              Print css even when streaming to output
 --prefix, -P [prefix]    Prefix all css classes by <prefix>
 --include, -I <path>     Add <path> to the lookup paths list
+--hoist-atrules          Move @import and @charset to the top
 --version, -V            Show the version
 ======================== ===========================================
 
@@ -52,7 +53,6 @@ option                   description
 --include-css            Include regular CSS on @import
 -D, --deps               Display dependencies of the compiled file
 --disable-cache          Disable cachi
---hoist-atrules          Move @import and @charset to the top
 -r, --resolve-url        Resolve relative urls inside imports
 --resolve-url-nocheck    Like --resolve-url but without file existence check
 ======================== ===========================================
