@@ -88,6 +88,26 @@ def test_cli_out_and_print():
         assert result.output == css
 
 
+def test_cli_prefix():
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('foo.styl', 'w') as f:
+            f.write('for n in 1 2 3\n'
+                    '  .grid-{n}\n'
+                    '    width: unit(n * 100, \'px\')\n')
+        result = runner.invoke(cli.stilus, ['-P', 'hello-', 'foo.styl'])
+        assert result.exit_code == 0
+        assert result.output == '.hello-grid-1 {\n' \
+                                '  width: 100px;\n' \
+                                '}\n' \
+                                '.hello-grid-2 {\n' \
+                                '  width: 200px;\n' \
+                                '}\n' \
+                                '.hello-grid-3 {\n' \
+                                '  width: 300px;\n' \
+                                '}\n'
+
+
 def test_fail(capsys):
     with pytest.raises(SystemExit) as e:
         cli.fail('Hello there!', code=42)

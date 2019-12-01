@@ -7,7 +7,7 @@ The test release, a.k.a. `test, test, test!`
     - [x] add watch changes (watchdog)
     - [x] add out option
     - [x] add include option
-    - [ ] add prefix option
+    - [x] add prefix option
     - [ ] add hoist atrules option
     - [ ] document it
  - [ ] Cleanup of coverall/codecov properties.

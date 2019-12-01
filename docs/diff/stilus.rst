@@ -23,6 +23,7 @@ option                   description
 --verbose -v             More verbose output
 --watch -w               Watch file(s) and recompile when changed
 --print, -p              Print css even when streaming to output
+--prefix, -P [prefix]    Prefix all css classes by <prefix>
 --include, -I <path>     Add <path> to the lookup paths list
 --version, -V            Show the version
 ======================== ===========================================
@@ -47,7 +48,6 @@ option                   description
 --sourcemap-inline       Inlines sourcemap with full source text in base64 format
 --sourcemap-root <url>   "sourceRoot" property of the generated sourcemap
 --sourcemap-base <path>  Base <path> from which sourcemap and all sources are relative
--P, --prefix [prefix]    prefix all css classes
 --import <file>          Import stylus <file>
 --include-css            Include regular CSS on @import
 -D, --deps               Display dependencies of the compiled file
