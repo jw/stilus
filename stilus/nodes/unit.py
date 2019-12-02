@@ -170,7 +170,7 @@ class Unit(Node):
             if other.value == '%':
                 return Unit(0, '%')
             try:
-                value = float(other.value)
+                value = float(other.value.split()[0])
             except ValueError:
                 return super().coerce(other)
             return Unit(value)

@@ -475,7 +475,7 @@ class Parser:
             while self.lookahead(i).type in ['unit', 'newline']:
                 i += 1
             type = self.lookahead(i).type
-            return 'ident' == type or '{' == type
+            return 'indent' == type or '{' == type
 
     def state_allows_selector(self):
         if self.current_state() in ['root', 'atblock', 'selector',
@@ -618,7 +618,7 @@ class Parser:
             while True:
                 arr = self.selector_parts()
                 if arr is None or len(arr) == 0:
-                    if self.accept(';'):
+                    if self.accept(','):
                         continue
                     else:
                         raise TypeError
@@ -626,7 +626,7 @@ class Parser:
                 selectors.append(sel)
 
                 if self.peek().type != '!':
-                    if self.accept(';'):
+                    if self.accept(','):
                         continue
                     else:
                         raise TypeError

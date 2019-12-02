@@ -85,7 +85,7 @@ bifs.url.styl                                 stylus/cases/bifs              ok
 bifs.use.styl                                                                not implemented yet
 bifs.values.styl                              stylus/cases/bifs              ok
 casting.styl                                  stylus/cases                   ok
-coercion.styl
+coercion.styl                                 stylus/cases                   ok
 colors.styl                                   stylus/cases                   ok
 comments.styl                                 stylus/cases                   ok
 compress.comments.styl                        stylus/compress                ok
@@ -184,7 +184,7 @@ introspection.styl                            stylus/cases/imports           ok
 jquery.styl                                   stylus/cases                   ok
 keyframes.fabrication.defaults.styl           stylus/cases                   ok
 keyframes.fabrication.styl                    stylus/cases                   ok
-keyframes.newlines.styl                       stylus/cases                   not ok (0%, 50%, 100%?)
+keyframes.newlines.styl                       stylus/cases                   ok
 keyframes.styl                                stylus/cases                   not ok (for loop?)
 kwargs.styl                                   stylus/cases                   ok
 list.styl                                     stylus/cases                   ok
