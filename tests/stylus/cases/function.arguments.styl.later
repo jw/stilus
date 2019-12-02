@@ -1,0 +1,40 @@
+
+sum()
+  n = 0
+  for num in arguments
+    n = n + num
+  n
+
+test(a, b)
+  a = b
+  (arguments[0] a)
+
+body
+  padding sum(1,2,3,4,5)
+  padding test(1,2)
+
+foo(p0 = 4px, p1 = 5px)
+  p0 arguments[0]
+  p1 arguments[1]
+
+.foo
+  foo()
+
+color-proxy()
+  return rgba(arguments)
+
+.foo
+  color: color-proxy(0, 0, 0, 1)
+
+semi-transparent()
+  return rgba(arguments, 0.5)
+
+.bar
+  color: semi-transparent(0, 0, 0)
+
+width()
+  push(arguments, !important)
+  {current-property[0]}: arguments;
+
+img
+  width: unquote('auto');

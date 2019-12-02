@@ -36,13 +36,6 @@ def run_test_case(source, destination):
 if __name__ == '__main__':
 
     source = """
-@keyframes something
-  0%
-  50%
-  100%
-    background: white
-  to
-    background: black
 """
 
     # parser = Parser(source, {})

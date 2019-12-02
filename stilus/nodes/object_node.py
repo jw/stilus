@@ -90,7 +90,7 @@ class ObjectNode(Node):
         string = '{'
         for key, value in self.values.items():
             if value.first().node_name == 'objectnode':
-                string += key + ' ' + value.first.to_block()
+                string += key + ' ' + value.first().to_block()
             else:
                 if key == '@charset':
                     string += key + ' ' + str(value.first) + ';'

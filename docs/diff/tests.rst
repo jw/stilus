@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +88% (+309/349)
+Coverage: 89% (313/349) [goal = 333/349]
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -120,18 +120,18 @@ extend.in-media-query.styl                    stylus/cases                   ok
 extend.in-mixin.nested.styl                   stylus/cases                   ok
 extend.in-mixin.styl                          stylus/cases                   ok
 extend.multiple-definitions.styl              stylus/cases/extend            ok
-extend.multiple-selectors.styl                stylus/cases                   not ok
+extend.multiple-selectors.styl                stylus/cases                   ok
 extend.styl                                   stylus/cases/extend            ok
 extend.using-variable.styl                    stylus/cases                   ok
 extend.with.optional.styl                     stylus/cases                   ok
-extend.with.parent.reference.styl             stylus/cases                   not ok
+extend.with.parent.reference.styl             stylus/cases                   ok
 extend.with.placeholders.styl                 stylus/cases                   ok
 fontface.styl                                 stylus/cases                   ok
 for.complex.styl                              stylus/cases                   ok
 for.function.styl                             stylus/cases                   ok
 for.postfix.styl                              stylus/cases                   ok
 for.styl                                      stylus/cases                   ok
-function.arguments.styl
+function.arguments.styl                       stylus/cases/functions         not ok (args unwrap magic required)
 function.literals.styl                        stylus/cases/functions         ok
 functions.anonymous.styl                      stylus/cases/functions         ok
 functions.arg-calls.styl                      stylus/cases/functions         ok
@@ -252,7 +252,7 @@ regression.1182.styl                          stylus/cases/regressions       ok
 regression.1205.styl                          stylus/cases/regressions       ok
 regression.1206.styl                          stylus/cases/regressions       ok
 regression.1214.styl                          stylus/cases/regressions       ok
-regression.1277.styl                          stylus/cases/regressions       not ok
+regression.1277.styl                          stylus/cases/regressions       not ok (@media extras)
 regression.127.styl                           stylus/cases/regressions       ok
 regression.130.styl                           stylus/cases/regressions       ok
 regression.131.styl                           stylus/cases/regressions       ok
@@ -288,7 +288,7 @@ regression.260.styl                           stylus/cases/regressions       ok
 regression.267.styl                           stylus/cases/regressions       ok
 regression.270.styl                           stylus/cases/regressions       ok
 regression.272.styl                           stylus/cases/regressions       not ok (truthiness)
-regression.274.styl                           stylus/cases/regressions       not ok
+regression.274.styl                           stylus/cases/regressions       not ok (equalities)
 regression.292.styl                           stylus/cases/regressions       ok
 regression.360.styl                           stylus/cases/regressions       ok
 regression.368.styl                           stylus/cases/regressions       ok
@@ -308,7 +308,7 @@ regression.475.styl                           stylus/cases/regressions       ok
 regression.480.styl                           stylus/cases/regressions       ok
 regression.484.styl                           stylus/cases/regressions       ok
 regression.498.styl                           stylus/cases/regressions       ok
-regression.499.styl                           stylus/cases/regressions       not ok
+regression.499.styl                           stylus/cases/regressions       not ok (extends issue)
 regression.503.styl                           stylus/cases/regressions       ok
 regression.504.styl                           stylus/cases/regressions       ok
 regression.524.styl                           stylus/cases/regressions       ok
@@ -319,7 +319,7 @@ regression.619.styl                           stylus/cases/regressions       ok
 regression.747.styl                           stylus/cases/regressions       ok
 regression.748.styl                           stylus/cases/regressions       ok
 regression.790-2.styl                         stylus/cases/regressions       ok
-regression.790.styl                           stylus/cases/regressions       not ok
+regression.790.styl                           stylus/cases/regressions       not ok (colon end of comment)
 regression.808.styl                           stylus/cases/regressions       ok
 regression.810.styl                           stylus/cases/regressions       ok
 regression.814.styl                           stylus/cases/regressions       ok

@@ -28,11 +28,13 @@ def unwrap(expression: Expression) -> Node:
     """
     if hasattr(expression, 'preserve') and expression.preserve:
         return expression
-    if expression.node_name not in ['arguments', 'expression']:
+    if hasattr(expression, 'node_name') and \
+            expression.node_name not in ['arguments', 'expression']:
         return expression
     if len(expression) != 1:
         return expression
-    if expression.nodes[0].node_name not in ['arguments', 'expression']:
+    if hasattr(expression, 'nodes') and len(expression.nodes) > 0 and \
+            expression.nodes[0].node_name not in ['arguments', 'expression']:
         return expression
     return unwrap(expression.nodes[0])
 
