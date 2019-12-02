@@ -84,7 +84,7 @@ class Expression(Node):
 
     def operate(self, op, right, value=None):
         if op == '[]=':
-
+            # fixme: this is ugly!  And fails.
             nodes = utils.unwrap(right).nodes
             value = utils.unwrap(value)
             for node in nodes:

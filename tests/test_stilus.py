@@ -35,7 +35,139 @@ def run_test_case(source, destination):
 
 if __name__ == '__main__':
 
+    # if.mixin.styl
     source = """
+test(n)
+  if n < 0
+    got below
+  else
+    got above
+
+test-nested(a, b)
+  if a > 1
+    if unit(-5) == ''
+      got empty
+      yup just lots of empty
+    else
+      got unit(-5px)
+
+test-unless(n = 0)
+  unless n
+    padding 10px
+
+body
+  test(5px)
+  test(-5px)
+  test-nested(5px, -5)
+  test-unless()
+
+foo()
+  $width = 10px
+  .foo
+    if true
+      width: $width
+
+foo()
+
+bar()
+  @font-face
+    font-family foo
+    if true
+      src bar
+
+  @page
+    margin 0
+    if true
+      padding 0
+
+bar()
+"""
+
+    source = """
+
+pad(size = small)
+  if large == size
+    padding 20px
+  if medium == size
+    padding 10px
+  if small == size
+    padding 3px
+
+body
+  pad(large)
+  pad(medium)
+  pad()
+  pad(invalid)
+
+nested(val)
+  if val
+    foo bar
+    bar baz
+    .two
+      level two
+      &:hover
+        level three
+
+form input
+  nested(true)
+  nested(false)
+
+break()
+  foo bar
+  bar baz
+  return
+  baz raz
+
+body
+  break()
+"""
+
+    source = """
+list = 1 2
+list[0] = foo
+list[4] = 'test'
+
+body {
+  foo: list;
+  foo: list[0];
+  foo: list[1];
+  foo: list[2] == null;
+  foo: list[3] == null;
+  foo: list[4] == 'test';
+  foo: length(list);
+}
+
+
+body {
+  list = 1 2
+  list[0] = foo
+  list[1..3] = 'one'
+  foo: list;
+}
+
+body {
+  list = 1
+  list[4..5] = 'two';
+  foo: list;
+}
+
+fn(list)
+  list[2] = asdf
+  list[3] = 'three'
+  list
+
+body {
+  foo: fn(1 2 3);
+}
+
+fn()
+  arguments[2] = asdf
+  arguments[3] = 'three'
+  arguments
+
+body {
+  foo: fn(1 2 3);
+}
 """
 
     # parser = Parser(source, {})
