@@ -224,7 +224,7 @@ operators.in.styl                             stylus/cases/operators         ok
 operators.mixins.styl                         stylus/cases/operators         ok
 operators.precedence.styl                     stylus/cases/operators         ok
 operators.styl                                stylus/cases/operators         ok
-operators.subscript.assign.styl
+operators.subscript.assign.styl               stylus/cases/operators         ok
 operators.subscript.range.styl                stylus/cases/operators         ok
 operators.subscript.styl
 operators.unary.styl                          stylus/cases/operators         ok

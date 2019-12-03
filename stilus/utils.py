@@ -300,3 +300,12 @@ def parse_string(str: String):
     except BaseException:
         result = Literal(str)
     return result
+
+
+def get_value_from_unit(unit):
+    try:
+        f = float(unit.value)
+        v = int(f) if f.is_integer() else f
+    except ValueError:
+        v = unit.value()
+    return v

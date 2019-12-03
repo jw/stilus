@@ -84,22 +84,16 @@ class Expression(Node):
 
     def operate(self, op, right, value=None):
         if op == '[]=':
-            # fixme: this is ugly!  And fails.
             nodes = utils.unwrap(right).nodes
             value = utils.unwrap(value)
             for node in nodes:
                 if node.node_name == 'unit':
-                    i = len(nodes) + value if node.value < 0 else node.value
-                    n = int(i)
-                    while i > len(nodes):
-                        i = i - 1
+                    index = utils.get_value_from_unit(node)
+                    last = len(self.nodes) - 1
+                    for i in range(last, index):
                         from nodes.null import null
-                        self.nodes[i] = null
-                    # FIXME: this is very, very ugly!
-                    if len(self.nodes) <= n:
-                        extra = [None] * (len(self.nodes) - n + 1)
-                        self.nodes.extend(extra)
-                    self.nodes[n] = value
+                        self.nodes.append(null)
+                    self.nodes[index] = value
                 elif node.string:
                     if not self.is_empty() and \
                             self.nodes[0].node_name == 'objectnode':
