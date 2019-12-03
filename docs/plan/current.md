@@ -10,7 +10,6 @@ The test release, a.k.a. `test, test, test!`
     - [x] add prefix option
     - [x] add hoist atrules option
     - [x] document it
- - [ ] Cleanup of coverall/codecov properties.
  - [ ] Test 95% of all Stylus tests and document the progress...  At 89% now.
      - [x] Test prefix (5/5; 100%)
      - [ ] Test bifs (62/67; 92%):
@@ -23,8 +22,8 @@ The test release, a.k.a. `test, test, test!`
      - [ ] Test functions (16/17; 94%)
      - [ ] Test imports (16/22; 73%)
      - [ ] Test mixin (11/14; 78%)
-     - [ ] Test operators (10/13; 76%)
+     - [x] Test operators (13/13; 100%)
      - [x] Test properties (6/6; 100%)
      - [x] Test selectors (8/8; 100%) 
      - [ ] Test the rest :-)
- - [ ] Unit update; value() property: float -> int/string (using raw/value)
+ - [x] Unit update; utils.is_number(node) and utils.get_value(node)

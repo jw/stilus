@@ -101,20 +101,16 @@ class Expression(Node):
             return value
         elif op == '[]':
             expression = Expression()
-
             values = utils.unwrap(self).nodes
             nodes = utils.unwrap(right).nodes
             for node in nodes:
                 n = None
                 if node.node_name == 'unit':
-                    if node.value < 0:
-                        if len(values) <= len(values) + node.value:
-                            n = values[len(values) + node.value]
-                    else:
-                        try:
-                            n = values[int(node.value)]
-                        except IndexError:
-                            n = None
+                    index = utils.get_value(node)
+                    try:
+                        n = values[index]
+                    except IndexError:
+                        pass
                 elif len(values) > 0 and values[0].node_name == 'objectnode':
                     n = values[0].get(node.string)
                 if n:

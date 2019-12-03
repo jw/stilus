@@ -12,6 +12,7 @@
  - [ ] Add tests for `to_json()`, `equal()`, `coerce()`, `clone()` and `operate()` in all nodes?
  - [ ] Other things?
  - [ ] Update site to promote Stilus!
+ - [ ] Cleanup of coverall/codecov properties.
 
 ### 1.0.0
 

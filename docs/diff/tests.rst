@@ -214,7 +214,7 @@ object.complex.styl
 object.mixin.styl                             stylus/cases                   ok
 object-prototype-props.styl                   stylus/cases                   ok
 object.styl
-operator.range.styl
+operator.range.styl                           stylus/cases/operators         ok
 operators.assignment.function.styl            stylus/cases/operators         ok
 operators.assignment.mixin.styl               stylus/cases/operators         ok
 operators.assignment.root.styl                stylus/cases/operators         ok
@@ -226,7 +226,7 @@ operators.precedence.styl                     stylus/cases/operators         ok
 operators.styl                                stylus/cases/operators         ok
 operators.subscript.assign.styl               stylus/cases/operators         ok
 operators.subscript.range.styl                stylus/cases/operators         ok
-operators.subscript.styl
+operators.subscript.styl                      stylus/cases/operators         ok
 operators.unary.styl                          stylus/cases/operators         ok
 page.styl                                     stylus/cases                   ok
 parent.complex.styl                           stylus/cases                   ok

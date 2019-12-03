@@ -83,7 +83,7 @@ bar()
 bar()
 """
 
-    source = """
+    sourced = """
 
 pad(size = small)
   if large == size
