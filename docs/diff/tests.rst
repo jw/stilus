@@ -219,7 +219,7 @@ operators.assignment.function.styl            stylus/cases/operators         ok
 operators.assignment.mixin.styl               stylus/cases/operators         ok
 operators.assignment.root.styl                stylus/cases/operators         ok
 operators.complex.styl                        stylus/cases/operators         ok
-operators.equality.styl
+operators.equality.styl                       stylus/cases/operators         ok
 operators.in.styl                             stylus/cases/operators         ok
 operators.mixins.styl                         stylus/cases/operators         ok
 operators.precedence.styl                     stylus/cases/operators         ok

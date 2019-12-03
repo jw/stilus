@@ -33,8 +33,7 @@ class Boolean(Node):
         return self.value is False
 
     def negate(self):
-        self.value = not self.value
-        return self
+        return Boolean(not self.value)
 
     def to_json(self):
         return json.dumps({'__type': 'Boolean', 'value': self.value})

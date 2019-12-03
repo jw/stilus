@@ -1249,7 +1249,7 @@ class Parser:
             op = self.accept(['==', '!='])
             if op:
                 self.operand = True
-                if not node:
+                if node is None:
                     self.error(f'illegal unary "{op}", '
                                f'missing left-hand operand')
                 node = BinOp(op.type, node, self.inn())
@@ -1377,7 +1377,7 @@ class Parser:
         if op:
             self.operand = True
             node = self.unary()
-            if not node:
+            if node is None:
                 self.error(f'illegal unary "{op}"')
             node = UnaryOp(op.type, node)
             self.operand = False

@@ -88,7 +88,7 @@ class Expression(Node):
             value = utils.unwrap(value)
             for node in nodes:
                 if node.node_name == 'unit':
-                    index = utils.get_value_from_unit(node)
+                    index = utils.get_value(node)
                     last = len(self.nodes) - 1
                     for i in range(last, index):
                         from nodes.null import null
@@ -129,9 +129,8 @@ class Expression(Node):
             return self.operate('==', right, value).negate()
         elif op == '==':
             right = right.to_expression()
-            from nodes.boolean import false
             if len(self.nodes) != len(right.nodes):
-                return false
+                return Boolean(False)
             for i in range(len(self.nodes)):
                 a = self.nodes[i]
                 b = right.nodes[i]

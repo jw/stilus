@@ -47,7 +47,7 @@ class Literal(Node):
         else:
             super().coerce(other)
 
-    def operate(self, op, right):
+    def operate(self, op, right, value=None):
         if op == "+":
             return Literal(self.string + self.coerce(right.first()).string)
         else:

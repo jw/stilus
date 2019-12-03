@@ -76,6 +76,10 @@ class Node:
                 raise Exception(f'"is a" expects a string, '
                                 f'got {right.toString}')
         elif op == '==':
+            import utils
+            if utils.is_number(self) and utils.is_number(right):
+                return Boolean(utils.get_value(self) ==
+                               utils.get_value(right))
             return Boolean(self.hash() == right.hash())
         elif op == '!=':
             return Boolean(self.hash() != right.hash())

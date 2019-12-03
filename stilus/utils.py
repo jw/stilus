@@ -1,6 +1,7 @@
 import json
 import re
 import types
+import unicodedata
 from decimal import Decimal, ROUND_HALF_UP
 from os.path import join
 from pathlib import Path
@@ -302,10 +303,24 @@ def parse_string(str: String):
     return result
 
 
-def get_value_from_unit(unit):
+def get_value(node: Node):
     try:
-        f = float(unit.value)
+        f = float(node.value)
         v = int(f) if f.is_integer() else f
     except ValueError:
-        v = unit.value()
+        v = node.value()
     return v
+
+
+def is_number(node: Node):
+    try:
+        float(node.value)
+        return True
+    except (TypeError, ValueError):
+        pass
+    try:
+        unicodedata.numeric(node.value)
+        return True
+    except (TypeError, ValueError):
+        pass
+    return False
