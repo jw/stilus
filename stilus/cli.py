@@ -179,8 +179,8 @@ def check_out(out: str) -> None:
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('input', type=click.File('r'), required=False)
-@click.argument('output', type=click.File('w'), required=False)
+@click.argument('input', type=click.File('r'), encoding="utf8", required=False)
+@click.argument('output', type=click.File('w'), encoding="utf8", required=False)
 @click.option('-v', '--verbose', count=True, help='Be more verbose.')
 @click.option('-w', '--watch', is_flag=True, default=False,
               help='Watch file(s) for changes and re-compile.')
