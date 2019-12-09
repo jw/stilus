@@ -689,6 +689,7 @@ class Evaluator(Visitor):
 
         # mixin conditional statements within
         # a selector group or at-rule
+        # fixme: make this pythonistic!
         if ret and node.postfix is None and hasattr(block, 'node') and \
                 block.node and block.node.node_name \
                 in ['group', 'atrule', 'media',

@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: 89% (313/349) [goal = 333/349]
+Coverage: +89% (+313/349) [goal = 333/349]
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -153,7 +153,7 @@ functions.variable.styl                       stylus/cases/functions         ok
 hack.star.styl                                stylus/cases                   ok
 hoist.at-rules.styl                           stylus/cases                   ok
 if.else.styl                                  stylus/cases                   ok
-if.mixin.styl
+if.mixin.styl                                 stylus/cases                   ok
 if.postfix.styl                               stylus/cases                   ok
 if.selectors.styl                             stylus/cases                   ok
 important.styl                                stylus/cases                   ok

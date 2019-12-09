@@ -1,0 +1,18 @@
+body {
+  got: above;
+  got: below;
+  got: empty;
+  yup: just lots of empty;
+  padding: 10px;
+}
+.foo {
+  width: 10px;
+}
+@font-face {
+  font-family: foo;
+  src: bar;
+}
+@page {
+  margin: 0;
+  padding: 0;
+}

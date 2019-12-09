@@ -58,7 +58,7 @@ class Atrule(Node):
     def clone(self, parent=None, node=None):
         clone = Atrule(self.type)
         if self.block:
-            clone.block = self.block.clone(parent, node)
+            clone.block = self.block.clone(parent, clone)
         clone.segments = [node.clone(parent, clone) for node in self.segments]
         clone.lineno = self.lineno
         clone.column = self.column
