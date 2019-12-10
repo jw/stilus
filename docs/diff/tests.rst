@@ -68,7 +68,7 @@ bifs.remove-unit.styl                         stylus/cases/bifs              ok
 bifs.replace.styl                             stylus/cases/bifs              ok
 bifs.rgba.styl                                stylus/cases/bifs              ok
 bifs.saturate-desaturate.styl                 stylus/cases/bifs              ok
-bifs.selector.exitsts.styl                    stylus/cases/bifs              ok [with typo :-)]
+bifs.selector.exitsts.styl                    stylus/cases/bifs              ok
 bifs.selectors.styl                           stylus/cases/bifs              ok
 bifs.selector.styl                            stylus/cases/bifs              ok
 bifs.shade.styl                               stylus/cases/bifs              ok
@@ -308,7 +308,7 @@ regression.475.styl                           stylus/cases/regressions       ok
 regression.480.styl                           stylus/cases/regressions       ok
 regression.484.styl                           stylus/cases/regressions       ok
 regression.498.styl                           stylus/cases/regressions       ok
-regression.499.styl                           stylus/cases/regressions       not ok (extends issue)
+regression.499.styl                           stylus/cases/regressions       ok
 regression.503.styl                           stylus/cases/regressions       ok
 regression.504.styl                           stylus/cases/regressions       ok
 regression.524.styl                           stylus/cases/regressions       ok

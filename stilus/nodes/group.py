@@ -22,7 +22,7 @@ class Group(Node):
         return hash(self.value)
 
     def __eq__(self, other):
-        return self.value == other.value
+        return id(self) == id(other)
 
     def append(self, selector: Selector):
         self.nodes.append(selector)
