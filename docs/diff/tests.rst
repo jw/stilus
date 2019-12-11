@@ -323,7 +323,7 @@ regression.790.styl                           stylus/cases/regressions       not
 regression.808.styl                           stylus/cases/regressions       ok
 regression.810.styl                           stylus/cases/regressions       ok
 regression.814.styl                           stylus/cases/regressions       ok
-regression.819.styl                           stylus/cases/regressions       not ok (hard one)
+regression.819.styl                           stylus/cases/regressions       ok
 regression.834.styl                           stylus/cases/regressions       ok
 regression.839.styl                           stylus/cases/regressions       ok
 regression.865.styl                           stylus/cases/regressions       ok
