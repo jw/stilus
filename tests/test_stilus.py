@@ -1,5 +1,5 @@
-from stilus import renderer
 from renderer import Renderer
+from stilus import renderer
 
 
 def test_stylus():
@@ -35,64 +35,16 @@ def run_test_case(source, destination):
 
 if __name__ == '__main__':
 
-    sourced = """
-
-pad(size = small)
-  if large == size
-    padding 20px
-  if medium == size
-    padding 10px
-  if small == size
-    padding 3px
-
-body
-  pad(large)
-  pad(medium)
-  pad()
-  pad(invalid)
-
-nested(val)
-  if val
-    foo bar
-    bar baz
-    .two
-      level two
-      &:hover
-        level three
-
-form input
-  nested(true)
-  nested(false)
-
-break()
-  foo bar
-  bar baz
-  return
-  baz raz
-
-body
-  break()
-"""
-
     source = """
-.tester
-  color #FFF
-
-$tester2
-  font-size 12px
-
-$tester3
-  border-radius 1px
-
-.end
-  @extend .tester !optional, notExist1 !optional, $notExist2 !optional,
-  $tester2 !optional, {'$test' + 'er3'} !optional
-  border #AAA
-"""
-
-    source = """
-@import "import.include.in.function/a";
-func();
+@import url('http://foo.com/foo.css')
+@import url("http://foo.com/foo.css")
+@import url('https://foo.com/foo.css')
+@import url('//foo.com/foo.css')
+@import "http://foo.com/foo.css"
+@import 'https://foo.com/foo.css'
+@import '//foo.com/foo.css'
+@import 'http://foo.com/foo.css'
+@import url('#')
 """
 
     # parser = Parser(source, {})
@@ -108,6 +60,7 @@ func();
     r.include('.')
 
     r.options['include css'] = True
+    # r.define('url', resolver());
     # r.options['compress'] = True
     # r.options['hoist atrules'] = True
 
