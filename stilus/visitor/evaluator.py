@@ -11,6 +11,7 @@ from nodes.node import CoercionError
 from colors import colors
 from exceptions import ParseError, StilusError
 from functions.bifs import bifs, raw_bifs
+from nodes import node as filename_node
 from nodes.arguments import Arguments
 from nodes.block import Block
 from nodes.boolean import Boolean, false
@@ -114,7 +115,7 @@ class Evaluator(Visitor):
 
         # parse the file
         self.import_stack.append(file)
-        # todo?: nodes.filename = file
+        filename_node.current_filename = file
 
         if literal:
             re.sub('\n\n?', '\n', source)
@@ -156,7 +157,7 @@ class Evaluator(Visitor):
         ret = self.visit(block)
         self.import_stack.pop()
 
-        if not self.resolve_url or not self.resolve_url:
+        if not self.resolve_url:  # or not self.resolve_url no_check:
             self.paths.pop()
 
         return ret

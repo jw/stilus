@@ -3,9 +3,13 @@ from typing import Type
 from exceptions import StilusError
 
 
+# todo: move this one to the stilus exceptions
 class CoercionError(Exception):
     """CoercionError"""
     pass
+
+
+current_filename = None  # todo: clean this up
 
 
 class Node:
@@ -13,7 +17,10 @@ class Node:
 
     def __init__(self, value=None, filename=None, lineno=1, column=1):
         self.value = value
-        self.filename = filename
+        if not filename:
+            self.filename = current_filename
+        else:
+            self.filename = filename
         self.lineno = lineno
         self.column = column
         self.node_name = self.__class__.__name__.lower()

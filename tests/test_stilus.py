@@ -85,9 +85,14 @@ $tester3
   border-radius 1px
 
 .end
-  @extend .tester !optional, notExist1 !optional,
-  $notExist2 !optional, $tester2 !optional, {'$test' + 'er3'} !optional
+  @extend .tester !optional, notExist1 !optional, $notExist2 !optional,
+  $tester2 !optional, {'$test' + 'er3'} !optional
   border #AAA
+"""
+
+    source = """
+@import "import.include.in.function/a";
+func();
 """
 
     # parser = Parser(source, {})
@@ -102,7 +107,7 @@ $tester3
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    # r.options['include css'] = True
+    r.options['include css'] = True
     # r.options['compress'] = True
     # r.options['hoist atrules'] = True
 
