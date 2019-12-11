@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: 93% (325/349) [goal = 333/349]
+Coverage: +93% (+325/349) [goal = 333/349]
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -167,7 +167,7 @@ import.include.complex.styl                   stylus/cases/imports           ok
 import.include.function.call.styl             stylus/cases/imports           ok
 import.include.function.styl                  stylus/cases/imports           ok
 import.include.in.function.styl               stylus/cases/imports           ok
-import.include.megacomplex.styl               stylus/cases/imports           not ok
+import.include.megacomplex.styl               stylus/cases/imports           ok
 import.include.resolver.absolute.styl         stylus/cases/imports           not ok
 import.include.resolver.css-file.styl         stylus/cases/imports           not ok
 import.include.resolver.images.styl           stylus/cases/imports           not ok
