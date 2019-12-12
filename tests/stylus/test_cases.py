@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from functions.resolver import get_resolver
 from renderer import Renderer
 
 files = []
@@ -54,6 +55,9 @@ def test_stylus_cases(styl, css):
 
     if 'hoist.' in styl.name:
         renderer.options['hoist atrules'] = True
+
+    if 'resolver.' in styl.name:
+        renderer.define('url', get_resolver({'nocheck': True}), raw=True)
 
     assert renderer.render() == destination
 

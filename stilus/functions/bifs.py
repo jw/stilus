@@ -3,10 +3,10 @@ from functions import addProperty, adjust, alpha, baseConvert, basename, \
     error, extname, green, hsl, hsla, hue, imageSize, json, length, \
     lightness, listSeparator, lookup, luminosity, match, math, math_prop, \
     merge, operate, oppositePosition, p, pathjoin, pop, prefixClasses, push, \
-    range, red, remove, replace, rgb, rgba, s, saturation, selector, \
-    selectorExists, selectors, shift, stilus_slice, stilus_split, substr, \
-    tan, trace, transparentify, type_function, unit, unquote, unshift, url, \
-    warn
+    range, red, remove, replace, rgb, rgba, s, saturation, \
+    selector, selectorExists, selectors, shift, stilus_slice, stilus_split, \
+    substr, tan, trace, transparentify, type_function, unit, unquote, \
+    unshift, url, warn
 
 bifs = {
     '-math-prop': math_prop.math_prop,
@@ -54,6 +54,7 @@ bifs = {
     'red': red.red,
     'remove': remove.remove,
     'replace': replace.replace,
+    # 'resolver': resolver.resolver,
     'rgb': rgb.rgb,
     'rgba': rgba.rgba,
     's': s.s,
@@ -78,5 +79,6 @@ bifs = {
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
             'extend', 'length', 'list_separator', 'merge',
-            'opposite_position', 'p', 'pop', 'push', 'prepend', 's',
-            'selector', 'shift', 'slice', 'unshift']
+            'opposite_position', 'p', 'pop', 'push', 'prepend',
+            # 'resolver'
+            's', 'selector', 'shift', 'slice', 'unshift']

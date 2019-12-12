@@ -47,6 +47,10 @@ class Evaluator(Visitor):
         self.parser = parser
         self.options = options
         self.functions = options.get('functions', {})
+        # making sure that newly defined functions are builtins
+        for name, function in self.functions.items():
+            if name not in bifs.keys():
+                bifs[name] = function
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
@@ -58,7 +62,7 @@ class Evaluator(Visitor):
         self.resolve_url = False
         if 'url' in self.functions:
             url = self.functions['url']
-            if url.name == 'resolver' and url.options:
+            if url.__name__ == 'resolver' and url.options:
                 self.resolve_url = True
 
         filename = Path(options.get('filename', '.'))
@@ -915,7 +919,13 @@ class Evaluator(Visitor):
 
         name = path = path.string
 
-        # todo: absolute URL or hash
+        # absolute URL or hash
+        m = re.match(r'(?:url\s*\(\s*)?[\'\"]?(?:#|(?:https?:)?\/\/)',
+                     path, re.I)
+        if m:
+            if imported.once:
+                raise StilusError('You cannot @require a url')
+            return imported
 
         if path.endswith('.css'):
             literal = True

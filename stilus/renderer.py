@@ -49,15 +49,16 @@ class Renderer:
         self.options['paths'].append(path)
         return self
 
-    def define(self, name, fn, raw=None):
+    def define(self, name, fn, raw=None, options=None):
         fn = coerce(fn, raw)
-        if fn.node_name:
+        if hasattr(fn, 'node_name'):
             self.options['globals'][name] = fn
             return self
 
         self.options['functions'][name] = fn
         if raw:
             fn.raw = raw
+            fn.options = options
         return self
 
     def do_import(self, file):

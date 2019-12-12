@@ -1,3 +1,4 @@
+from functions.resolver import get_resolver
 from renderer import Renderer
 from stilus import renderer
 
@@ -59,8 +60,9 @@ if __name__ == '__main__':
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
+    r.define('url', get_resolver({'nocheck': True}), raw=True)
+
     r.options['include css'] = True
-    # r.define('url', resolver());
     # r.options['compress'] = True
     # r.options['hoist atrules'] = True
 
