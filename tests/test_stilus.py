@@ -48,6 +48,15 @@ if __name__ == '__main__':
 @import url('#')
 """
 
+    source = """
+@import url("foo.css")
+"""
+
+    source = """
+@import "import.include.resolver.nested/b/b"
+extend_a()
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -61,8 +70,8 @@ if __name__ == '__main__':
     r.include('.')
 
     r.define('url', get_resolver({'nocheck': True}), raw=True)
-
     r.options['include css'] = True
+
     # r.options['compress'] = True
     # r.options['hoist atrules'] = True
 

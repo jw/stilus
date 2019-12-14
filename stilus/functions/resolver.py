@@ -42,7 +42,8 @@ def resolver(url, options=None, evaluator=None):
     # check that a file exists
     if options.get('nocheck', True):
         _paths = options.get('paths', [])
-        path = utils.lookup_index(path, _paths.extend(evaluator.paths))
+        _paths.extend(evaluator.paths)
+        path = utils.lookup_index(path, _paths, filename)
         if not path:
             return literal
         else:

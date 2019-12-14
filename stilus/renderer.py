@@ -49,7 +49,7 @@ class Renderer:
         self.options['paths'].append(path)
         return self
 
-    def define(self, name, fn, raw=None, options=None):
+    def define(self, name, fn, raw=True, options=None):
         fn = coerce(fn, raw)
         if hasattr(fn, 'node_name'):
             self.options['globals'][name] = fn
@@ -58,6 +58,7 @@ class Renderer:
         self.options['functions'][name] = fn
         if raw:
             fn.raw = raw
+        if options:
             fn.options = options
         return self
 

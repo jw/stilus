@@ -56,54 +56,7 @@ def test_stylus_cases(styl, css):
     if 'hoist.' in styl.name:
         renderer.options['hoist atrules'] = True
 
-    if 'resolver.' in styl.name:
-        renderer.define('url', get_resolver({'nocheck': True}), raw=True)
+    # if 'resolver.' in styl.name:
+    #     renderer.define('url', get_resolver({'nocheck': True}), raw=True)
 
     assert renderer.render() == destination
-
-
-if __name__ == '__main__':
-    base = Path('/home/jw/python/projects/stilus/tests/stylus/cases')
-    styl = base / 'regressions' / 'regression.1277.styl'
-    css = base / 'regressions' / 'regression.1277.css'
-
-    with styl.open(encoding='utf-8') as f:
-        source = f.read()
-    with css.open(encoding='utf-8') as f:
-        destination = f.read()
-
-    # first create include folders
-    stylus = Path.joinpath(Path.cwd())
-    print(f'stylus: {stylus}')
-    images = stylus / 'images'
-    basics = stylus / 'cases' / 'import.basic'
-    cases = stylus / 'cases'
-    imports = stylus / 'imports'
-
-    renderer = Renderer(source, {'paths': ['.']})
-    renderer.include(images)
-    renderer.include(basics)
-    renderer.include(cases)
-    renderer.include(imports)
-
-    # renderer.options['include css'] = True
-    # if 'compress' in styl.name:
-    #     renderer.options['compress'] = True
-
-    result = renderer.render()
-
-    stylus_path = '/home/jw/python/projects/stilus/tests/stylus'
-    r = Renderer(source, {})
-    r.include(f'{stylus_path}/images')
-    r.include(f'{stylus_path}/cases')
-    r.include(f'{stylus_path}/cases/import.basic')
-    r.include(f'{stylus_path}/imports')
-    r.include('.')
-
-    # r.options['include css'] = True
-    # r.options['compress'] = True
-    # r.options['hoist atrules'] = True
-
-    css = r.render()
-
-    assert result == destination

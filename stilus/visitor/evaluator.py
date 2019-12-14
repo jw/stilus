@@ -62,7 +62,7 @@ class Evaluator(Visitor):
         self.resolve_url = False
         if 'url' in self.functions:
             url = self.functions['url']
-            if url.__name__ == 'resolver' and url.options:
+            if url.__name__ == 'resolver' and hasattr(url, 'options'):
                 self.resolve_url = True
 
         filename = Path(options.get('filename', '.'))
@@ -209,6 +209,7 @@ class Evaluator(Visitor):
             rgba.name = color
             self.common.scope().add(ident)
 
+        # todo: should this be here?
         # self.common.scope().add(Ident('embedurl',
         #                               Function('embedurl', url.fn,
         #                                        lineno=self.parser.lineno,
