@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from functions.resolver import get_resolver
+# from functions.resolver import get_resolver
 from renderer import Renderer
 
 files = []
