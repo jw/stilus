@@ -73,7 +73,7 @@ bifs = {
     'unit': unit.unit,
     'unquote': unquote.unquote,
     'unshift': unshift.unshift,
-    'utl': url.url,
+    'url': url.url,
     'warn': warn.warn,
 }
 
