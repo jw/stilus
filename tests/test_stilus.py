@@ -63,13 +63,13 @@ extend_a()
 
     stylus_path = '/home/jw/python/projects/stilus/tests/stylus'
     r = Renderer(source, {})
-    r.include(f'{stylus_path}/images')
     r.include(f'{stylus_path}/cases')
+    r.include(f'{stylus_path}/images')
     r.include(f'{stylus_path}/cases/import.basic')
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    r.define('url', get_resolver({'nocheck': True}), raw=True)
+    r.define('url', get_resolver(), raw=True, options={'nocheck': True})
     r.options['include css'] = True
 
     # r.options['compress'] = True

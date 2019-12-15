@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-# from functions.resolver import get_resolver
+from functions.resolver import get_resolver
 from renderer import Renderer
 
 files = []
@@ -28,18 +28,18 @@ def test_stylus_cases(styl, css):
     with css.open(encoding='utf-8') as f:
         destination = f.read()
 
-    renderer = Renderer(source, {'paths': ['.']})
-
     # first create include folders
-    stylus = Path.joinpath(Path.cwd(), 'tests', 'stylus')
+    stylus = Path.cwd() / 'tests' / 'stylus'
     images = stylus / 'images'
     basics = stylus / 'cases' / 'import.basic'
     cases = stylus / 'cases'
     imports = cases / 'imports'
 
+    renderer = Renderer(source, {})
+
+    renderer.include(cases)
     renderer.include(images)
     renderer.include(basics)
-    renderer.include(cases)
     renderer.include(imports)
 
     # add options based on the test names
@@ -56,7 +56,15 @@ def test_stylus_cases(styl, css):
     if 'hoist.' in styl.name:
         renderer.options['hoist atrules'] = True
 
-    # if 'resolver.' in styl.name:
-    #     renderer.define('url', get_resolver({'nocheck': True}), raw=True)
+    if 'resolver.' in styl.name:
+        renderer.define('url', get_resolver(),
+                        raw=True, options={'nocheck': True})
+
+    print(f'styl: {styl.name}; '
+          f'include: {"include." in styl.name}; '
+          f'compress: {"compress." in styl.name}; '
+          f'prefix: {"prefix." in styl.name}; '
+          f'hoist: {"hoist." in styl.name}; '
+          f'resolver: {"resolver." in styl.name}.')
 
     assert renderer.render() == destination

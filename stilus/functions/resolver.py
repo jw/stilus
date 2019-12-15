@@ -18,12 +18,9 @@ def resolver(url, options=None, evaluator=None):
     compiler = Compiler(url, options)
     filename = url.filename
     compiler.is_url = True
-    # print(url)
-    url = urlparse(url.value)
-
-    # fixme: make sure that the url is an Expression
-    # ''.join([compiler.visit(node)
-    #                         for node in url.nodes]))
+    print(url)
+    url = urlparse(compiler.visit(url))
+    print(url)
 
     # fixme: dirty hack
     if url.geturl() == '' and v == '#':
@@ -43,7 +40,7 @@ def resolver(url, options=None, evaluator=None):
     if options.get('nocheck', True):
         _paths = options.get('paths', [])
         _paths.extend(evaluator.paths)
-        path = utils.lookup_index(path, _paths, filename)
+        path = utils.lookup(path, _paths)
         if not path:
             return literal
         else:
@@ -63,17 +60,22 @@ def resolver(url, options=None, evaluator=None):
     if dest:
         first = dest.parents[1]
     else:
-        first = evaluator.filename
-    if options.get('nocheck', True):
+        first = Path(evaluator.filename).parent
+    if options.get('nocheck', False):
         other = Path(filename).parent
     else:
         other = path
-    res = first.relative_to(other) + tail
+
+    res = other.relative_to(first.resolve())
+
+    # use the first path of the options['paths'] list as cwd
+    cwd = Path(evaluator.options.get('paths', ['.'])[0])
+    res = f'{res.resolve().relative_to(cwd)}{tail}'
 
     # todo: handle windows separators?
 
     return Literal(f'url("{res}")')
 
 
-def get_resolver(options):
+def get_resolver():
     return resolver
