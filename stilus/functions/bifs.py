@@ -54,7 +54,6 @@ bifs = {
     'red': red.red,
     'remove': remove.remove,
     'replace': replace.replace,
-    # 'resolver': resolver.resolver,
     'rgb': rgb.rgb,
     'rgba': rgba.rgba,
     's': s.s,
@@ -74,11 +73,11 @@ bifs = {
     'unit': unit.unit,
     'unquote': unquote.unquote,
     'unshift': unshift.unshift,
+    'utl': url.url,
     'warn': warn.warn,
 }
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
             'extend', 'length', 'list_separator', 'merge',
             'opposite_position', 'p', 'pop', 'push', 'prepend',
-            # 'resolver'
-            's', 'selector', 'shift', 'slice', 'unshift']
+            's', 'selector', 'shift', 'slice', 'unshift', 'url']
