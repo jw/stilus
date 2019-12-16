@@ -12,18 +12,16 @@ def resolver(url, options=None, evaluator=None):
     if not options:
         options = {}
 
-    v = url.value  # super ugly
+    original = url  # super ugly
 
     # compile the urls nodes and create a url from the result
     compiler = Compiler(url, options)
     filename = url.filename
     compiler.is_url = True
-    print(url)
     url = urlparse(compiler.visit(url))
-    print(url)
 
     # fixme: dirty hack
-    if url.geturl() == '' and v == '#':
+    if url.geturl() == '' and f'{original}' == '(\'#\')':
         literal = Literal('url("#")')
     else:
         # regular call
@@ -70,7 +68,10 @@ def resolver(url, options=None, evaluator=None):
 
     # use the first path of the options['paths'] list as cwd
     cwd = Path(evaluator.options.get('paths', ['.'])[0])
-    res = f'{res.resolve().relative_to(cwd)}{tail}'
+    try:
+        res = f'{res.resolve().relative_to(cwd)}{tail}'
+    except ValueError:
+        res = f'{res}{tail}'
 
     # todo: handle windows separators?
 

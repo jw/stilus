@@ -1,4 +1,5 @@
 # from functions.resolver import get_resolver
+from functions.resolver import get_resolver
 from renderer import Renderer
 from stilus import renderer
 
@@ -58,13 +59,18 @@ extend_a()
 """
 
     source = """
+.embed-with-utf8 {
+  color: #c00;
+  background: embedurl("circle.svg", "utf8");
+}
 
-brown = #462323
+.too-big-no-hash {
+  color: #c00;
+  background: url("tiger.svg");
+}
 
 body
-  background: url(/some/brown/white/icon.png)
-  color: brown
-  color: white
+  foo url('#')
 """
 
     # parser = Parser(source, {})
@@ -79,7 +85,7 @@ body
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    # r.define('url', get_resolver(), raw=True, options={'nocheck': True})
+    r.define('url', get_resolver(), raw=True, options={'nocheck': True})
     r.options['include css'] = True
 
     # r.options['compress'] = True
