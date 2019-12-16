@@ -1,4 +1,4 @@
-from functions.resolver import get_resolver
+# from functions.resolver import get_resolver
 from renderer import Renderer
 from stilus import renderer
 
@@ -57,6 +57,16 @@ if __name__ == '__main__':
 extend_a()
 """
 
+    source = """
+
+brown = #462323
+
+body
+  background: url(/some/brown/white/icon.png)
+  color: brown
+  color: white
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -69,7 +79,7 @@ extend_a()
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    r.define('url', get_resolver(), raw=True, options={'nocheck': True})
+    # r.define('url', get_resolver(), raw=True, options={'nocheck': True})
     r.options['include css'] = True
 
     # r.options['compress'] = True

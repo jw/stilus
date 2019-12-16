@@ -31,6 +31,8 @@ encoding_types = {
 
 # todo: rewrite this; this is terrible!
 # todo: this should be linked with the resolver?
+# note: this is called by the 'embedurl' builtin function.
+# todo: docstring this!
 def url(url, enc=None, evaluator=None):
     _paths = evaluator.options.get('paths', [])
     size_limit = evaluator.options.get('limit', 30000)

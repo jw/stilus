@@ -73,11 +73,11 @@ bifs = {
     'unit': unit.unit,
     'unquote': unquote.unquote,
     'unshift': unshift.unshift,
-    'url': url.url,
+    # 'url': url.url,
     'warn': warn.warn,
 }
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
             'extend', 'length', 'list_separator', 'merge',
             'opposite_position', 'p', 'pop', 'push', 'prepend',
-            's', 'selector', 'shift', 'slice', 'unshift', 'url']
+            's', 'selector', 'shift', 'slice', 'unshift']

@@ -882,7 +882,6 @@ class Evaluator(Visitor):
                 # else: assume remaining parameters are not required
 
         # invoke builtin function
-        print(fn)
         body = utils.coerce(fn(*ret, evaluator=self),
                             False,
                             lineno=self.parser.lineno,
