@@ -1,3 +1,4 @@
+import inspect
 from pathlib import Path
 
 import utils
@@ -9,6 +10,9 @@ from urllib.parse import urlparse
 # todo: check evaluator; could be stilus?
 # fixme: rewrite this
 def resolver(url, options=None, evaluator=None):
+    frame = inspect.stack()[1]
+    module = inspect.getmodule(frame[0])
+    print(f'Called by {module.__file__}')
     print('resolver called!')
     if not options:
         options = {}
