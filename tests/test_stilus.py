@@ -1,5 +1,4 @@
 # from functions.resolver import get_resolver
-from functions.resolver import get_resolver
 from renderer import Renderer
 from stilus import renderer
 
@@ -73,6 +72,49 @@ body
   foo url('#')
 """
 
+    source = """
+
+width(img)
+  return image-size(img)[0]
+
+height(img)
+  return image-size(img)[1]
+
+body
+  foo image-size('gif')
+  foo image-size('gif')[0] == width('gif')
+  foo image-size('gif')[1] == height('gif')
+
+body
+  foo image-size('tux.png')
+  foo image-size('tux.png')
+  bar image-size('flowers.jpeg')
+  bar image-size('flowers_p.jpg')
+  baz image-size('tiger.svg')
+
+body
+  foo image-size('foo.png', true)
+
+// Checking for the file, so we could do a fallback
+body.tux
+  if image-size('tux.png', true)
+    background: url('tux.png')
+  else
+    background: lime
+
+body.foo
+  if image-size('foo.png', true)
+    background: url('foo.png')
+  else
+    background: lime
+"""
+
+    source = """
+@import "a"
+@import url(foo.css)
+@import url('foo.css')
+"""
+
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
@@ -85,7 +127,7 @@ body
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    r.define('url', get_resolver(), raw=True, options={'nocheck': True})
+    # r.define('url', get_resolver(), raw=True, options={'nocheck': True})
     r.options['include css'] = True
 
     # r.options['compress'] = True

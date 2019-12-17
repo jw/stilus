@@ -1,9 +1,13 @@
 from pathlib import Path
 
 import pytest
+import logging
 
 from functions.resolver import get_resolver
 from renderer import Renderer
+
+log = logging.getLogger(__name__)
+
 
 files = []
 path = Path.joinpath(Path.cwd(), 'tests', 'stylus', 'cases')
@@ -65,6 +69,8 @@ def test_stylus_cases(styl, css):
           f'compress: {"compress." in styl.name}; '
           f'prefix: {"prefix." in styl.name}; '
           f'hoist: {"hoist." in styl.name}; '
-          f'resolver: {"resolver." in styl.name}.')
+          f'resolver: {"resolver." in styl.name};'
+          f'options: {renderer.options};'
+          f'functions {renderer.options["functions"]}.')
 
     assert renderer.render() == destination
