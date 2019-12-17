@@ -63,6 +63,7 @@ class Evaluator(Visitor):
         if 'url' in self.functions:
             url = self.functions['url']
             if url.__name__ == 'resolver' and hasattr(url, 'options'):
+                print(f'RESOLVER! {url}')
                 self.resolve_url = True
 
         filename = Path(options.get('filename', '.'))

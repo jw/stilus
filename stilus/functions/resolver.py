@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 # todo: check evaluator; could be stilus?
 # fixme: rewrite this
 def resolver(url, options=None, evaluator=None):
+    print('resolver called!')
     if not options:
         options = {}
 
@@ -47,6 +48,8 @@ def resolver(url, options=None, evaluator=None):
     if evaluator.include_css and path.suffix == '.css':
         return Literal(url.href)
 
+    if url.query or url.fragment:
+        tail += '#'
     if url.query:
         tail += url.query
     if url.fragment:
