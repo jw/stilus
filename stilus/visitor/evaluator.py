@@ -63,7 +63,7 @@ class Evaluator(Visitor):
         if 'url' in self.functions:
             url = self.functions['url']
             if url.__name__ == 'resolver' and hasattr(url, 'options'):
-                print(f'RESOLVER! {url}')
+                print(f'--> RESOLVER! {url}')
                 self.resolve_url = True
 
         filename = Path(options.get('filename', '.'))
@@ -388,9 +388,11 @@ class Evaluator(Visitor):
 
     def visit_call(self, call):
         fn = self.lookup(call.function_name)
+        print(f'Visiting {fn}; {call}...')
         log.debug(f'Visiting {fn}...')
         if hasattr(fn, 'param') and fn.param:
             log.debug(fn.params)
+            print(fn.params)
 
         # url()
         self.ignore_colors = 'url' == call.function_name
@@ -437,6 +439,7 @@ class Evaluator(Visitor):
         self.result -= 1
 
         if fn.builtin:
+            print(f'{fn} is a built-in method.')
             log.debug(f'{fn} is a built-in method.')
             ret = self.invoke_builtin(fn.params, args)
         elif 'function' == fn.node_name:  # user-defined

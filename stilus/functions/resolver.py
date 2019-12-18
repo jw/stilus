@@ -12,8 +12,9 @@ from urllib.parse import urlparse
 def resolver(url, options=None, evaluator=None):
     frame = inspect.stack()[1]
     module = inspect.getmodule(frame[0])
-    print(f'Called by {module.__file__}')
-    print('resolver called!')
+    print(f'Resolver called by {module.__file__}; {frame[0].f_lineno}; ')
+          # f'locals: {frame[0].f_locals}; globals: {frame[0].f_globals}')
+    print(f'Functions: {evaluator.options["functions"]}.')
     if not options:
         options = {}
 

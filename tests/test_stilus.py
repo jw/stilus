@@ -1,4 +1,5 @@
 # from functions.resolver import get_resolver
+from functions.resolver import get_resolver
 from renderer import Renderer
 from stilus import renderer
 
@@ -113,6 +114,8 @@ body.foo
 @import "a"
 @import url(foo.css)
 @import url('foo.css')
+// body
+//   foo lookup(url)
 """
 
     # parser = Parser(source, {})
@@ -127,8 +130,8 @@ body.foo
     r.include(f'{stylus_path}/imports')
     r.include('.')
 
-    # r.define('url', get_resolver(), raw=True, options={'nocheck': True})
-    r.options['include css'] = True
+    r.define('url', get_resolver(), raw=True, options={'nocheck': True})
+    # r.options['include css'] = True
 
     # r.options['compress'] = True
     # r.options['hoist atrules'] = True
