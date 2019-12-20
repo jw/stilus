@@ -1,4 +1,5 @@
 import inspect
+import logging
 from pathlib import Path
 
 import utils
@@ -6,15 +7,17 @@ from nodes.literal import Literal
 from visitor.compiler import Compiler
 from urllib.parse import urlparse
 
+log = logging.getLogger(__name__)
+
 
 # todo: check evaluator; could be stilus?
 # fixme: rewrite this
 def resolver(url, options=None, evaluator=None):
     frame = inspect.stack()[1]
     module = inspect.getmodule(frame[0])
-    print(f'Resolver called by {module.__file__}; {frame[0].f_lineno}; ')
-          # f'locals: {frame[0].f_locals}; globals: {frame[0].f_globals}')
-    print(f'Functions: {evaluator.options["functions"]}.')
+    log.debug(f'Resolver called by {module.__file__} '
+              f'({frame[0].f_lineno}).')
+    log.debug(f'Functions: {evaluator.options["functions"]}.')
     if not options:
         options = {}
 
