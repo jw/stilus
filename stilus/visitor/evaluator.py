@@ -2,12 +2,9 @@ import inspect
 import logging
 import os
 import re
-import utils
 from pathlib import Path
 
-from nodes.node import CoercionError
-
-
+import utils
 from colors import colors
 from exceptions import ParseError, StilusError
 from functions.bifs import bifs, raw_bifs
@@ -23,6 +20,7 @@ from nodes.group import Group
 from nodes.ident import Ident
 from nodes.import_node import Import
 from nodes.literal import Literal
+from nodes.node import CoercionError
 from nodes.null import null
 from nodes.object_node import ObjectNode
 from nodes.return_node import ReturnNode
@@ -1101,6 +1099,7 @@ class Evaluator(Visitor):
 
     def lookup_function(self, name):
         function = self.functions.get(name, self.bifs.get(name, None))
+        log.debug(f'Function: {function}')
         if function:
             return Function(name, function, lineno=self.parser.lineno,
                             column=self.parser.column)

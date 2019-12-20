@@ -109,10 +109,30 @@ body.foo
 """
 
     source = """
+.embed-no-hash {
+  color: #c00;
+  background: embedurl("circle.svg");
+}
 
-@import "foo/bar.css"
-@import 'bar/baz.css'
-@import 'import.literal/import.literal.css.styl'
+.embed-with-hash {
+  color: #c00;
+  background: embedurl("circle.svg#some-id");
+}
+
+.embed-with-utf8 {
+  color: #c00;
+  background: embedurl("circle.svg", "utf8");
+}
+
+.too-big-no-hash {
+  color: #c00;
+  background: url("tiger.svg");
+}
+
+.too-big-with-hash {
+  color: #c00;
+  background: url("tiger.svg#some-id");
+}
 """
 
     # parser = Parser(source, {})
