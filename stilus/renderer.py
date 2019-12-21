@@ -58,6 +58,7 @@ class Renderer:
         self.options['functions'][name] = fn
         if raw:
             fn.raw = raw
+            # todo: add it to the raw_bifs here?
         if options:
             fn.options = options
         return self

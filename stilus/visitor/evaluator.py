@@ -50,6 +50,7 @@ class Evaluator(Visitor):
             if name not in bifs.keys():
                 log.debug(f'Adding extra built-in function: {name}.')
                 raw_bifs.append(name)
+                bifs['name'] = function
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
