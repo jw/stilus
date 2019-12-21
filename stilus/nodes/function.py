@@ -1,6 +1,6 @@
 import json
 
-from functions.bifs import bifs
+from functions.bifs import bifs, raw_bifs
 from nodes.node import Node
 
 

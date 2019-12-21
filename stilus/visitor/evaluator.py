@@ -50,7 +50,7 @@ class Evaluator(Visitor):
             if name not in bifs.keys():
                 log.debug(f'Adding extra built-in function: {name}.')
                 raw_bifs.append(name)
-                bifs['name'] = function
+                bifs[name] = function
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
@@ -436,6 +436,7 @@ class Evaluator(Visitor):
                 args.map[key] = self.visit(args.map[key].clone())
         self.result -= 1
 
+        print('Function: {fn}.')
         if fn.builtin:
             log.debug(f'{fn} is a built-in method.')
             ret = self.invoke_builtin(fn.params, args)
