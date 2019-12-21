@@ -48,7 +48,8 @@ class Evaluator(Visitor):
         # making sure that newly defined functions are builtins
         for name, function in self.functions.items():
             if name not in bifs.keys():
-                bifs[name] = function
+                print(f'Adding extra function: {name}')
+                raw_bifs.append(name)
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
