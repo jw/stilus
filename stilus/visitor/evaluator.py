@@ -48,7 +48,7 @@ class Evaluator(Visitor):
         # making sure that newly defined functions are builtins
         for name, function in self.functions.items():
             if name not in bifs.keys():
-                print(f'Adding extra function: {name}')
+                log.debug(f'Adding extra built-in function: {name}.')
                 raw_bifs.append(name)
         self.stack = Stack()
         self.imports = options.get('imports', [])
@@ -1100,7 +1100,6 @@ class Evaluator(Visitor):
 
     def lookup_function(self, name):
         function = self.functions.get(name, self.bifs.get(name, None))
-        print(f'Function: {name} -> {function} ({self.bifs}).')
         log.debug(f'Function: {name} -> {function}.')
         if hasattr(function, 'params'):
             log.debug(f' > function.params: {function.params}.')
@@ -1185,7 +1184,7 @@ class Evaluator(Visitor):
             expr.append(args)
             args = Arguments.from_expression(expr)
 
-        # arguments loca
+        # arguments
         scope.add(Ident('arguments', args))
 
         # mixin scope introspection

@@ -78,5 +78,5 @@ bifs = {
 
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
             'extend', 'length', 'list_separator', 'merge',
-            'opposite_position', 'p', 'pop', 'push', 'prepend', 'resolver',
+            'opposite_position', 'p', 'pop', 'push', 'prepend',
             's', 'selector', 'shift', 'slice', 'unshift', 'url']
