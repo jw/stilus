@@ -108,33 +108,6 @@ body.foo
     background: lime
 """
 
-    source = """
-.embed-no-hash {
-  color: #c00;
-  background: embedurl("circle.svg");
-}
-
-.embed-with-hash {
-  color: #c00;
-  background: embedurl("circle.svg#some-id");
-}
-
-.embed-with-utf8 {
-  color: #c00;
-  background: embedurl("circle.svg", "utf8");
-}
-
-.too-big-no-hash {
-  color: #c00;
-  background: url("tiger.svg");
-}
-
-.too-big-with-hash {
-  color: #c00;
-  background: url("tiger.svg#some-id");
-}
-"""
-
     # parser = Parser(source, {})
     # ast = parser.parse()
     # print(f'{ast}')
