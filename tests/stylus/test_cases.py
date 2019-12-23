@@ -78,8 +78,8 @@ def test_stylus_cases(styl, css):
 
 if __name__ == '__main__':
     base = Path('/home/jw/python/projects/stilus/tests/stylus/cases')
-    styl = base / 'imports' / 'import.include.resolver.absolute.styl'
-    css = base / 'imports' / 'import.include.resolver.absolute.css'
+    styl = base / 'imports' / 'import.include.resolver.images.styl'
+    css = base / 'imports' / 'import.include.resolver.images.css'
 
     with styl.open(encoding='utf-8') as f:
         source = f.read()

@@ -57,7 +57,11 @@ def resolver(url, options=None, evaluator=None):
         return Literal(url.geturl())
 
     if url.query or url.fragment:
-        tail += '#'
+        # fixme: extend url with a sep!
+        if '#' in f'{original}':
+            tail += '#'
+        else:
+            tail += '?'
     if url.query:
         tail += url.query
     if url.fragment:

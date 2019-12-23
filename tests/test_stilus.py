@@ -38,15 +38,27 @@ if __name__ == '__main__':
 
     source = """
 
-foo = 100px 200px
+op(a, b=a, operator='+')
+  arguments
 
-do-something(a, b)
-  one: a
-  two: b
+body
+  foo: op(1) // 1 1 +
+  foo: op(1, 5) // 1 5 +
+  foo: op(1, 5, '-') // 1 5 -
 
-.selector
-  do-something: 100px 200px
-  do-something: foo[0] foo[1]
+op(a, rest...)
+  arguments
+
+body
+  foo: op(1) // 1
+  foo: op(1, 2) // 1 2
+  foo: op(1, 2, 3) // 1 2 4
+  foo: op(1, 2, 3, 4 5 6) // 1 2 3 4 5 6
+"""
+
+    source = """
+body
+  background url("a.png?ver=2.3")
 """
 
     # parser = Parser(source, {})
