@@ -66,8 +66,7 @@ class Evaluator(Visitor):
         if 'url' in self.functions:
             url = self.functions['url']
             if url.__name__ == 'resolver' and hasattr(url, 'options'):
-                log.debug(f'Using this resolver {url}')
-                print('resolver set!')
+                log.debug(f'Using this resolver: {url}.')
                 self.resolve_url = True
 
         filename = Path(options.get('filename', '.'))
@@ -439,7 +438,8 @@ class Evaluator(Visitor):
                 args.map[key] = self.visit(args.map[key].clone())
         self.result -= 1
 
-        print(f'Function: {fn} (builtin: {fn.builtin}).')
+        log.debug(f'Going to invoke function: {fn} '
+                  f'(builtin: {fn.builtin}).')
         if fn.builtin or (fn.function_name == 'url' and
                           hasattr(fn, 'params') and
                           fn.params.__name__ == 'resolver'):
@@ -1106,20 +1106,14 @@ class Evaluator(Visitor):
             return to_string(node)
 
     def lookup_function(self, name):
-        if name == 'url':
-            print(f' ---> {name} in {self.bifs}: {name in self.bifs.keys()}')
-            print(f' ---> while: {raw_bifs}.')
         function = self.functions.get(name, self.bifs.get(name, None))
-        log.debug(f'Function: {name} -> {function}.')
-        print(f'Function: {name} -> {function}.')
-        if hasattr(function, 'params'):
-            log.debug(f' > function.params: {function.params}.')
-            print(f' > function.params: {function.params}.')
-            print(f' > function\'s name: {function.parans.__name__}')
         if function:
+            log.debug(f'Lookup function for {name} '
+                      f'returned: {function}.')
             return Function(name, function, lineno=self.parser.lineno,
                             column=self.parser.column)
         else:
+            log.debug(f'No function found for {name}.')
             return None
 
     def is_defined(self, node):
