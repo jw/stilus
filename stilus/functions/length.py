@@ -6,7 +6,7 @@ def length(expr, *args, evaluator=None):
     if expr:
         if expr.nodes:
             nodes = utils.unwrap(expr).nodes
-            if len(nodes) == 1 and nodes[0].node_name == 'object':
+            if len(nodes) == 1 and nodes[0].node_name == 'objectnode':
                 return len(nodes[0])
             else:
                 return len(nodes)

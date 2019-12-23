@@ -168,10 +168,10 @@ import.include.function.call.styl             stylus/cases/imports           ok
 import.include.function.styl                  stylus/cases/imports           ok
 import.include.in.function.styl               stylus/cases/imports           ok
 import.include.megacomplex.styl               stylus/cases/imports           ok
-import.include.resolver.absolute.styl         stylus/cases/imports           not ok
-import.include.resolver.css-file.styl         stylus/cases/imports           not ok
-import.include.resolver.images.styl           stylus/cases/imports           not ok
-import.include.resolver.nested.styl           stylus/cases/imports           not ok
+import.include.resolver.absolute.styl         stylus/cases/imports           ok
+import.include.resolver.css-file.styl         stylus/cases/imports           ok
+import.include.resolver.images.styl           stylus/cases/imports           ok
+import.include.resolver.nested.styl           stylus/cases/imports           ok
 import.index.styl                             stylus/cases/imports           ok
 import.literal.styl                           stylus/cases/imports           ok
 import.lookup.styl                            stylus/cases/imports           ok
@@ -210,10 +210,10 @@ mixins.root.styl                              stylus/cases/mixin             ok
 moz-document-import.styl                      stylus/cases                   ok
 moz-document.styl                             stylus/cases                   ok
 multiline.styl                                stylus/cases                   ok
-object.complex.styl
+object.complex.styl                           stylus/cases                   not ok
 object.mixin.styl                             stylus/cases                   ok
 object-prototype-props.styl                   stylus/cases                   ok
-object.styl
+object.styl                                   stylus/cases                   ok
 operator.range.styl                           stylus/cases/operators         ok
 operators.assignment.function.styl            stylus/cases/operators         ok
 operators.assignment.mixin.styl               stylus/cases/operators         ok

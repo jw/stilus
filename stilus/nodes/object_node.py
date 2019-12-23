@@ -55,13 +55,14 @@ class ObjectNode(Node):
             return self.get(right.hash())
         elif op == '==':
             values = self.values
-            if right.node_name != 'objectNode' or len(self) != len(right):
+            if right.node_name != 'objectnode' or len(self) != len(right):
                 return false
             for key in values:
                 a = values[key]
                 b = right.values[key]
-                if a.operate(op, b).is_false:
+                if a.operate(op, b).is_false():
                     return false
+            return Boolean(True)
         elif op == '!=':
             return self.operate('==', right).negate()
         else:
