@@ -287,7 +287,7 @@ regression.252.styl                           stylus/cases/regressions       ok
 regression.260.styl                           stylus/cases/regressions       ok
 regression.267.styl                           stylus/cases/regressions       ok
 regression.270.styl                           stylus/cases/regressions       ok
-regression.272.styl                           stylus/cases/regressions       not ok (function arguments)
+regression.272.styl                           stylus/cases/regressions       ok
 regression.274.styl                           stylus/cases/regressions       ok
 regression.292.styl                           stylus/cases/regressions       ok
 regression.360.styl                           stylus/cases/regressions       ok

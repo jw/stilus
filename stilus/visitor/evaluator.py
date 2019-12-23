@@ -1224,8 +1224,9 @@ class Evaluator(Visitor):
                         column=self.parser.column))
 
         # inject arguments as locals
+        # todo: rewrite this!
         i = 0
-        for node in fn.params.nodes:
+        for index, node in enumerate(fn.params.nodes):
             # rest param support
             if node.rest:
                 node.value = Expression(lineno=self.parser.lineno,
@@ -1240,8 +1241,9 @@ class Evaluator(Visitor):
                 # in dict?
                 arg = args.map.get(node.name)
                 # next node?
-                if not arg and hasattr(args, 'nodes') and i < len(args.nodes):
-                    arg = args.nodes[i]
+                if not arg:
+                    if hasattr(args, 'nodes') and i < len(args.nodes):
+                        arg = args.nodes[i]
                     i += 1
 
                 node = node.clone()

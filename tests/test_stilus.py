@@ -37,25 +37,6 @@ def run_test_case(source, destination):
 if __name__ == '__main__':
 
     source = """
-op(a, b=a, operator='+')
-  arguments
-
-body
-  foo: op(1) // 1 1 +
-  foo: op(1, 5) // 1 5 +
-  foo: op(1, 5, '-') // 1 5 -
-
-op(a, rest...)
-  arguments
-
-body
-  foo: op(1) // 1
-  foo: op(1, 2) // 1 2
-  foo: op(1, 2, 3) // 1 2 4
-  foo: op(1, 2, 3, 4 5 6) // 1 2 3 4 5 6
-"""
-
-    source = """
 @media screen
   .foo
     @media (max-width: 499px)
