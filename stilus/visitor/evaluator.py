@@ -47,12 +47,12 @@ class Evaluator(Visitor):
         self.options = options
         self.functions = options.get('functions', {})
         # making sure that newly defined functions are builtins
-        for name, function in self.functions.items():
-            if name not in self.bifs.keys():
-                log.debug(f'Adding extra built-in function: {name}.')
-                print(f'Adding extra built-in function: {name}: {function}.')
-                raw_bifs.append(name)
-                # self.bifs[name] = function
+        # for name, function in self.functions.items():
+        #     if name not in self.bifs.keys():
+        #         log.debug(f'Adding extra built-in function: {name}.')
+        #         print(f'Adding extra built-in function: {name}: {function}.')
+        #         raw_bifs.append(name)
+        #         self.bifs[name] = function
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
@@ -62,6 +62,7 @@ class Evaluator(Visitor):
         self.include_css = options.get('include css', False)
 
         self.resolve_url = False
+        # todo: why is this done separately from the bifs?
         if 'url' in self.functions:
             url = self.functions['url']
             if url.__name__ == 'resolver' and hasattr(url, 'options'):
@@ -439,7 +440,9 @@ class Evaluator(Visitor):
         self.result -= 1
 
         print(f'Function: {fn} (builtin: {fn.builtin}).')
-        if fn.builtin:
+        if fn.builtin or (fn.function_name == 'url' and
+                          hasattr(fn, 'params') and
+                          fn.params.__name__ == 'resolver'):
             log.debug(f'{fn} is a built-in method ({fn.params}).')
             ret = self.invoke_builtin(fn.params, args)
         elif 'function' == fn.node_name:  # user-defined
