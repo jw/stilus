@@ -1101,6 +1101,8 @@ class Evaluator(Visitor):
             return to_string(node)
 
     def lookup_function(self, name):
+        if name == 'url':
+            print(f' ---> {name} in {bifs}?')
         function = self.functions.get(name, self.bifs.get(name, None))
         log.debug(f'Function: {name} -> {function}.')
         print(f'Function: {name} -> {function}.')
