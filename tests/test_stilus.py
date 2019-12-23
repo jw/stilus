@@ -37,7 +37,6 @@ def run_test_case(source, destination):
 if __name__ == '__main__':
 
     source = """
-
 op(a, b=a, operator='+')
   arguments
 
@@ -57,186 +56,15 @@ body
 """
 
     source = """
-
-obj = {
-  foo: 'bar',
-  bar: 'baz',
-  baz: 'raz'
-  'qux': 'qux'
-}
-
-body
-  // foo: obj.foo.bar
-  foo: obj.foo
-  foo: obj.bar
-  foo: obj.foo obj.baz obj.baz
-  list = obj.foo obj.bar
-  foo: list
-  qux: obj.qux
-  bar: length(obj)
-  str: obj
-
-body
-  foo: type(obj)
-  bar: 'foo' in obj
-  baz: 'something' in obj
-  for prop, value in obj
-    {prop}: obj[prop]
-    {prop}: value
-  if 'bar' in obj
-    color: #c00
-
-sizes = {
-  small: .25em .35
-  medium: .5em .7em
-  large: 1em 1.4em
-}
-
-body
-  foo: sizes.small
-  foo: sizes.small sizes.medium
-  foo: sizes.small[0] sizes.small[1]
-  foo: sizes.small[0] + sizes.small[1]
-  sizes: keys(sizes)
-  sizes: values(sizes)
-
-foo = {
-  bar: {
-    baz: {
-      raz: Wahoo
-    }
-  }
-}
-
-body
-  foo: foo.something == null
-  foo: foo.bar.baz.raz
-
-tobi = { name: Tobi }
-jane = { name: Jane, friend: tobi }
-user = tobi
-another = user
-
-body
-  foo: jane.name
-  foo: user.name
-  foo: another.name
-  foo: jane.friend.name
-  foo: operate('.', jane, 'name')
-  foo: operate('[]', user, 'name')
-  // foo: jane.friend.name.something
-
-body
-  tobi = { name: Tobi, age: 2 }
-  foo: tobi.name, a tobi.age year old ferret
-
-tobi['species'] = { kind: Ferret }
-tobi['food'] = apple potato nuts
-
-body
-  foo: tobi.species.kind
-  bar: tobi['species']['kind']
-  baz: tobi.food[2]
-
-if true {
-  obj = {
-    color: #0c0
-  }
-
-  body {
-    color: obj.color
-  }
-}
-
-for num in 1..3 {
-  obj = {
-    color: num
-  }
-
-  body {
-    color: obj.color
-  }
-}
-
-empty = {}
-
-body
-  if empty
-    color: red
-  else
-    color: blue
-
-bar = {}
-body
-  if true
-    bar[length(bar['baz'])] = 'raz'
-
-obj = {
-  /* margin */
-  foobar: 10px
-
-  /* height */
-  ,bar  : 40px
-
-  ,  baz /* comment */  : 500px
-}
-
-body
-  margin: obj.foobar
-  height: obj.bar
-  width: obj.baz
-
-obj1 = {}
-obj2 = { foo: 1, bar: 2 }
-
-body
-  test: obj1 == obj2
-  test: obj2 != obj1
-  test: obj1 == {}
-  test: obj2 == { foo: 1, bar: 2 }
-
-  obj2.qux = { baz: 1 }
-  test: obj2 == { foo: 1, bar: 2, qux: { baz: 1 } }
-  test: obj == 42
-
-plans = {
-  'free-plan': #673,
-  'freelancer': #669,
-  'small-business': #668,
-  'professional-business': #667,
-  'enterprise': #666
-}
-
-body
-  for plan in free-plan freelancer small-business professional-business enterprise
-    test: plans[plan]
-    plans[plan] = #ccc
-  test: plans
-
-obj = {}
-obj.list = 1, 2, 3
-
-body
-  test: obj.list[0]
-  obj['list'] = 4, 5, 6
-  test: obj.list[0..2]
+@media screen
+  .foo
+    @media (max-width: 499px)
+      width: 200px;
+    @media (min-width: 500px)
+      width: 50%;
+    @media (min-width: 900px)
+      width: 25%;
 """
-
-    source = """
-obj1 = {}
-obj2 = { foo: 1, bar: 2 }
-
-body
-  test: obj1 == obj2
-  test: obj2 != obj1
-  test: obj1 == {}
-  test: obj2 == { foo: 1, bar: 2 }
-
-  obj2.qux = { baz: 1 }
-  test: obj2 == { foo: 1, bar: 2, qux: { baz: 1 } }
-  test: obj == 42
-"""
-
 
     # parser = Parser(source, {})
     # ast = parser.parse()

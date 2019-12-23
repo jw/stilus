@@ -78,7 +78,7 @@ class HSLA(Color):
         return hash(self.__str__())
 
     def hash(self):
-        return str(self)
+        return self.rgba().hash()
 
     def add(self, h, s, l):
         return HSLA(self.hue + h,

@@ -58,11 +58,11 @@ def test_hsla_rgba():
 
 def test_hsla_hash():
     hsla = HSLA(500, 120, 90, 3)
-    assert hsla.hash() == 'hsla(140,100%,90%,1)'
+    assert hsla.hash() == '#cfd'
     hsla = HSLA(-10, -20, 0, 0.3)
-    assert hsla.hash() == 'hsla(350,0%,0%,0.3)'
+    assert hsla.hash() == 'rgba(0,0,0,0.3)'
     hsla = HSLA(42, 42, 42, -42.42)
-    assert hsla.hash() == 'hsla(42,42%,42%,0)'
+    assert hsla.hash() == 'rgba(152,125,62,0)'
 
 
 def test_rgba():
