@@ -74,3 +74,45 @@ def test_stylus_cases(styl, css):
               f'functions {renderer.options["functions"]}.')
 
     assert renderer.render() == destination
+
+
+if __name__ == '__main__':
+    base = Path('/home/jw/python/projects/stilus/tests/stylus/cases')
+    styl = base / 'imports' / 'import.include.resolver.absolute.styl'
+    css = base / 'imports' / 'import.include.resolver.absolute.css'
+
+    with styl.open(encoding='utf-8') as f:
+        source = f.read()
+    with css.open(encoding='utf-8') as f:
+        destination = f.read()
+
+    # first create include folders
+    stylus = Path.joinpath(Path.cwd())
+    images = stylus / 'images'
+    basics = stylus / 'cases' / 'import.basic'
+    cases = stylus / 'cases'
+
+    renderer = Renderer(source, {'paths': ['.']})
+    renderer.include(images)
+    renderer.include(basics)
+    renderer.include(cases)
+
+    if 'include.' in styl.name:
+        renderer.options['include css'] = True
+
+    if 'compress.' in styl.name or 'compressed.' in styl.name:
+        renderer.options['compress'] = True
+
+    if 'prefix.' in styl.name:
+        renderer.options['prefix'] = 'prefix-'
+
+    if 'hoist.' in styl.name:
+        renderer.options['hoist atrules'] = True
+
+    if 'resolver.' in styl.name:
+        renderer.define('url', get_resolver(),
+                        raw=True, options={'nocheck': True})
+
+    result = renderer.render()
+
+    assert result == destination
