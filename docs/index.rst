@@ -24,7 +24,7 @@ Release |version|.
 .. image:: https://img.shields.io/pypi/l/stilus?style=flat-square
     :target: https://pypi.org/project/stilus/
 
-**Stilus** is the Python implementation of `Stylus <http://stylus-lang.com>`_.
+`**Stilus** <https://github.com/jw/stilus>`_ is the Python implementation of `Stylus <http://stylus-lang.com>`_.
 
 Installation
 ------------
@@ -78,8 +78,8 @@ Most of Stylus is implemented in Stilus, but some parts are missing:
 
  - Plugins
  - Caching
- - More tests (more than 88% of the Stylus tests pass through Stilus)
- - Documentation
+ - Documentation: missing an architecture and docstring data
+ - Missing some tests (+95% of the Stylus tests pass through Stilus)
 
 All help is appreciated!
 
