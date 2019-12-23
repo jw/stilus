@@ -54,7 +54,7 @@ def resolver(url, options=None, evaluator=None):
             path = Path(path)
 
     if evaluator.include_css and path.suffix == '.css':
-        return Literal(url.href)
+        return Literal(url.geturl())
 
     if url.query or url.fragment:
         tail += '#'
