@@ -1103,8 +1103,11 @@ class Evaluator(Visitor):
     def lookup_function(self, name):
         function = self.functions.get(name, self.bifs.get(name, None))
         log.debug(f'Function: {name} -> {function}.')
+        print(f'Function: {name} -> {function}.')
         if hasattr(function, 'params'):
             log.debug(f' > function.params: {function.params}.')
+            print(f' > function.params: {function.params}.')
+            print(f' > function\'s name: {function.parans.__name__}')
         if function:
             return Function(name, function, lineno=self.parser.lineno,
                             column=self.parser.column)

@@ -76,7 +76,11 @@ bifs = {
     'warn': warn.warn,
 }
 
+# todo: automate the creation of these (based on the function)
 raw_bifs = ['add_property', 'append', 'base_convert', 'clone', 'embedurl',
             'extend', 'length', 'list_separator', 'merge',
             'opposite_position', 'p', 'pop', 'push', 'prepend',
-            's', 'selector', 'shift', 'slice', 'unshift', 'url']
+            's', 'selector', 'shift', 'slice', 'unshift']
+
+# todo: handle this better
+raw_bifs.extend(['url', 'resolver'])

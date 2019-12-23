@@ -69,8 +69,8 @@ def test_stylus_cases(styl, css):
               f'compress: {"compress." in styl.name}; '
               f'prefix: {"prefix." in styl.name}; '
               f'hoist: {"hoist." in styl.name}; '
-              f'resolver: {"resolver." in styl.name};'
-              f'options: {renderer.options};'
+              f'resolver: {"resolver." in styl.name}; '
+              f'options: {renderer.options}; '
               f'functions {renderer.options["functions"]}.')
 
     assert renderer.render() == destination

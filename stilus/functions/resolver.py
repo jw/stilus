@@ -30,7 +30,7 @@ def resolver(url, options=None, evaluator=None):
     url = urlparse(compiler.visit(url))
 
     # fixme: dirty hack
-    if url.geturl() == '' and f'{original}' == "\'#\'":
+    if url.geturl() == '' and f'{original}' in ['\'#\'', '(\'#\')']:
         literal = Literal('url("#")')
     else:
         # regular call
