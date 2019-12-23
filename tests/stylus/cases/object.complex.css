@@ -1,0 +1,44 @@
+.foo {
+  test: true;
+}
+.foo {
+  background: baz;
+}
+body {
+  test: bar;
+}
+body {
+  test: 'baz';
+  test: 'baz';
+}
+.foo {
+  test: 10px;
+  test: 10px;
+  test: 10px;
+  test: 10px;
+  test: 10px;
+  test: 10px;
+  test: 10px;
+  test: 10px;
+  test: 'some 10px thing';
+  test: 'some 10px thing';
+}
+body {
+  width: 10px;
+}
+body {
+  width: 100px;
+}
+body {
+  width: 400px;
+  height: 100px;
+}
+.foo {
+  width: 10px;
+  height: 20px;
+  width: 100px;
+  height: 200px;
+}
+body {
+  box-shadow: 1px 1px -1px 2px rgba(0,0,0,0.5);
+}

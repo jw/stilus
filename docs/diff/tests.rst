@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +93% (+325/349) [goal = 333/349]
+Coverage: +95% (335/349)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -210,7 +210,7 @@ mixins.root.styl                              stylus/cases/mixin             ok
 moz-document-import.styl                      stylus/cases                   ok
 moz-document.styl                             stylus/cases                   ok
 multiline.styl                                stylus/cases                   ok
-object.complex.styl                           stylus/cases                   not ok
+object.complex.styl                           stylus/cases                   ok
 object.mixin.styl                             stylus/cases                   ok
 object-prototype-props.styl                   stylus/cases                   ok
 object.styl                                   stylus/cases                   ok

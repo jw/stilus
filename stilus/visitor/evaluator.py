@@ -279,10 +279,9 @@ class Evaluator(Visitor):
         return node
 
     def visit_objectnode(self, obj: ObjectNode):
-        new_obj = ObjectNode()
-        for key, value in obj.values.items():
-            new_obj.set(key, self.visit(value))
-        return new_obj
+        for key in obj.values.keys():
+            obj.values[key] = self.visit(obj.values[key])
+        return obj
 
     def visit_member(self, node):
         left = node.left
@@ -297,7 +296,7 @@ class Evaluator(Visitor):
             obj.set(right.name, self.visit(node.value))
             self.result -= 1
 
-        return obj.values.get(right.name, null)
+        return obj.get(right.name)
 
     def visit_keyframes(self, keyframes):
         if keyframes.fabricated:

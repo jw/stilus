@@ -1083,7 +1083,7 @@ class Parser:
                 if self.current_state() in ['for', 'selector']:
                     return self.property()
                 if self.current_state() in ['root', 'atblock', 'atrule']:
-                    if la == ']':
+                    if la == '[':
                         return self.subscript()
                     else:
                         return self.stmt_selector()
