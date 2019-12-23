@@ -52,7 +52,7 @@ class Evaluator(Visitor):
                 log.debug(f'Adding extra built-in function: {name}.')
                 print(f'Adding extra built-in function: {name}: {function}.')
                 raw_bifs.append(name)
-                self.bifs[name] = function
+                # self.bifs[name] = function
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
@@ -66,6 +66,7 @@ class Evaluator(Visitor):
             url = self.functions['url']
             if url.__name__ == 'resolver' and hasattr(url, 'options'):
                 log.debug(f'Using this resolver {url}')
+                print('resolver set!')
                 self.resolve_url = True
 
         filename = Path(options.get('filename', '.'))
@@ -437,9 +438,9 @@ class Evaluator(Visitor):
                 args.map[key] = self.visit(args.map[key].clone())
         self.result -= 1
 
-        print(f'Function: {fn}.')
+        print(f'Function: {fn} (builtin: {fn.builtin}).')
         if fn.builtin:
-            log.debug(f'{fn} is a built-in method.')
+            log.debug(f'{fn} is a built-in method ({fn.params}).')
             ret = self.invoke_builtin(fn.params, args)
         elif 'function' == fn.node_name:  # user-defined
             # evaluate mixin block
