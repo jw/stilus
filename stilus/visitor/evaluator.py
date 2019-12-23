@@ -49,6 +49,7 @@ class Evaluator(Visitor):
         for name, function in self.functions.items():
             if name not in bifs.keys():
                 log.debug(f'Adding extra built-in function: {name}.')
+                print(f'Adding extra built-in function: {name}: {function}.')
                 raw_bifs.append(name)
                 bifs[name] = function
         self.stack = Stack()
@@ -1103,6 +1104,7 @@ class Evaluator(Visitor):
     def lookup_function(self, name):
         if name == 'url':
             print(f' ---> {name} in {bifs}?')
+            print(f' ---> while: {raw_bifs}.')
         function = self.functions.get(name, self.bifs.get(name, None))
         log.debug(f'Function: {name} -> {function}.')
         print(f'Function: {name} -> {function}.')
