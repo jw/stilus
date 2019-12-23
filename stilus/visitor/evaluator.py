@@ -42,16 +42,17 @@ class Evaluator(Visitor):
 
     def __init__(self, root, parser, options: dict):
         super().__init__(root)
+        self.bifs = bifs.copy()
         self.parser = parser
         self.options = options
         self.functions = options.get('functions', {})
         # making sure that newly defined functions are builtins
         for name, function in self.functions.items():
-            if name not in bifs.keys():
+            if name not in self.bifs.keys():
                 log.debug(f'Adding extra built-in function: {name}.')
                 print(f'Adding extra built-in function: {name}: {function}.')
                 raw_bifs.append(name)
-                bifs[name] = function
+                self.bifs[name] = function
         self.stack = Stack()
         self.imports = options.get('imports', [])
         self.commons = options.get('globals', {})
@@ -81,7 +82,6 @@ class Evaluator(Visitor):
         self.current_scope = None
         self.ignore_colors = None
         self.property = None
-        self.bifs = bifs
 
     def vendors(self):
         return [node.string for node in self.lookup('vendors').nodes]
@@ -339,7 +339,7 @@ class Evaluator(Visitor):
             self.warn(f'user-defined function "{fn.function_name}" '
                       f'is already defined')
 
-        if fn.function_name in bifs:
+        if fn.function_name in self.bifs:
             self.warn(f'built-in function "{fn.function_name}" '
                       f'is already defined')
 
@@ -1103,7 +1103,7 @@ class Evaluator(Visitor):
 
     def lookup_function(self, name):
         if name == 'url':
-            print(f' ---> {name} in {bifs}?')
+            print(f' ---> {name} in {self.bifs}: {name in self.bifs.keys()}')
             print(f' ---> while: {raw_bifs}.')
         function = self.functions.get(name, self.bifs.get(name, None))
         log.debug(f'Function: {name} -> {function}.')
