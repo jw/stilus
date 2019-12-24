@@ -72,7 +72,6 @@ class Node:
     def one_is_unit(self, other):
         return self.node_name == 'unit' or other.node_name == 'unit'
 
-    # todo: use object.hash(); not hash(object)
     def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
         """Operate on ``right`` with the given ``op``."""
         from nodes.boolean import Boolean
