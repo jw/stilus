@@ -42,7 +42,7 @@ class Evaluator(Visitor):
 
     def __init__(self, root, parser, options: dict):
         super().__init__(root)
-        self.bifs = bifs.copy()
+        self.bifs = bifs
         self.parser = parser
         self.options = options
         self.functions = options.get('functions', {})
