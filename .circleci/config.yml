@@ -11,8 +11,8 @@ jobs:
           PIPENV_VENV_IN_PROJECT: true
     steps:
       - checkout
-      - run: pip install --upgrade pip
-      - run: pip install --upgrade pipenv
+      - run: sudo pip install --upgrade pip
+      - run: sudo pip install --upgrade pipenv
       - run: pipenv install --dev
       - run: pipenv run flake8 ~/stilus
       - run: pipenv run python setup.py test
