@@ -12,7 +12,7 @@ environment: &test-environment
   PIPENV_VENV_IN_PROJECT: true
   PIPENV_QUIET: true
 jobs:
-  test-3.6: &test-template
+  test-3.6:
     docker:
       - image: circleci/python:3.6
         environment:
@@ -21,23 +21,39 @@ jobs:
       - checkout
       - run: sudo pip install --upgrade pip
       - run: sudo pip install --upgrade pipenv
-      - run: pipenv install --dev
+      - run: pipenv --python 3.6 install --dev
       - run: pipenv run flake8 --exclude=`pipenv --venv` ~/stilus
       - run: pipenv run python setup.py test
       - run: pipenv run coveralls
       - run: pipenv run codecov
   test-3.7:
-    <<: *test-template
     docker:
       - image: circleci/python:3.7
         environment:
           <<: *test-environment
+    steps:
+      - checkout
+      - run: sudo pip install --upgrade pip
+      - run: sudo pip install --upgrade pipenv
+      - run: pipenv --python 3.7 install --dev
+      - run: pipenv run flake8 --exclude=`pipenv --venv` ~/stilus
+      - run: pipenv run python setup.py test
+      - run: pipenv run coveralls
+      - run: pipenv run codecov
   test-3.8:
-    <<: *test-template
     docker:
       - image: circleci/python:3.8
         environment:
           <<: *test-environment
+    steps:
+      - checkout
+      - run: sudo pip install --upgrade pip
+      - run: sudo pip install --upgrade pipenv
+      - run: pipenv --python 3.8 install --dev
+      - run: pipenv run flake8 --exclude=`pipenv --venv` ~/stilus
+      - run: pipenv run python setup.py test
+      - run: pipenv run coveralls
+      - run: pipenv run codecov
 
 # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
 # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
