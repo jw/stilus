@@ -1,10 +1,15 @@
 version: 2
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test-3.6
+      - test-3.7
+      - test-3.8      -
 jobs:
-  build:
-    working_directory: ~/stilus
+  test-3.6: &test-template
     docker:
-      # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
-      - image: circleci/python:3.6.4
+      - image: circleci/python:3.6
         environment:
           PIPENV_IGNORE_VIRTUALENVS: 1
           PYTHONPATH: stilus
@@ -18,26 +23,25 @@ jobs:
       - run: pipenv run python setup.py test
       - run: pipenv run coveralls
       - run: pipenv run codecov
+  test-3.7:
+    <<: *test-template
+    docker:
+      - image: circleci/python:3.7
+  test-3.8:
+    <<: *test-template
+    docker:
+      - image: circleci/python:3.7
 
-#      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
-#      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-#      - run:
-#          command: |
-#            sudo pip install pipenv
-#            pipenv install
-#      - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
+# CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
+# Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+# - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
 #          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 #          paths:
 #            - ".venv"
 #            - "/usr/local/bin"
 #            - "/usr/local/lib/python3.6/site-packages"
-#      - run:
-#          command: |
-#            pipenv run python manage.py test
-#      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+# - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
 #          path: test-results
-#      - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+# - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
 #          path: test-results
 #          destination: tr1
-#
-
