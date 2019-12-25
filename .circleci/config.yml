@@ -14,7 +14,7 @@ jobs:
       - run: sudo pip install --upgrade pip
       - run: sudo pip install --upgrade pipenv
       - run: pipenv install --dev
-      - run: pipenv run flake8 ~/stilus
+      - run: pipenv run flake8 --exclude=~/stilus/.venv ~/stilus
       - run: pipenv run python setup.py test
       - run: pipenv run coveralls
       - run: pipenv run codecov
