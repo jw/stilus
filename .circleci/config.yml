@@ -14,6 +14,7 @@ jobs:
           PIPENV_IGNORE_VIRTUALENVS: 1
           PYTHONPATH: stilus
           PIPENV_VENV_IN_PROJECT: true
+          PIPENV_QUIET: true
     steps:
       - checkout
       - run: sudo pip install --upgrade pip
