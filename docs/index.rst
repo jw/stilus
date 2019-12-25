@@ -24,7 +24,7 @@ Release |version|.
 .. image:: https://img.shields.io/pypi/l/stilus?style=flat-square
     :target: https://pypi.org/project/stilus/
 
-`**Stilus** <https://github.com/jw/stilus>`_ is the Python implementation of `Stylus <http://stylus-lang.com>`_.
+`Stilus <https://github.com/jw/stilus>`_ is the Python implementation of `Stylus <http://stylus-lang.com>`_.
 
 Installation
 ------------

@@ -30,7 +30,6 @@ Some parts of Stylus are not in Stilus yet:
 
  - Caching
  - Plugins
- - Many tests
  - Documentation
 
 All help is appreciated!
