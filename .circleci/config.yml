@@ -6,15 +6,17 @@ workflows:
       - test-3.6
       - test-3.7
       - test-3.8
+environment: &test-environment
+  PIPENV_IGNORE_VIRTUALENVS: 1
+  PYTHONPATH: stilus
+  PIPENV_VENV_IN_PROJECT: true
+  PIPENV_QUIET: true
 jobs:
   test-3.6: &test-template
     docker:
       - image: circleci/python:3.6
         environment:
-          PIPENV_IGNORE_VIRTUALENVS: 1
-          PYTHONPATH: stilus
-          PIPENV_VENV_IN_PROJECT: true
-          PIPENV_QUIET: true
+          <<: *test-environment
     steps:
       - checkout
       - run: sudo pip install --upgrade pip
@@ -28,10 +30,14 @@ jobs:
     <<: *test-template
     docker:
       - image: circleci/python:3.7
+        environment:
+          <<: *test-environment
   test-3.8:
     <<: *test-template
     docker:
       - image: circleci/python:3.7
+        environment:
+          <<: *test-environment
 
 # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
 # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
