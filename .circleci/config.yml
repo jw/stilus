@@ -26,6 +26,12 @@ jobs:
       - run: pipenv run python setup.py test
       - run: pipenv run coveralls
       - run: pipenv run codecov
+
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
+
   test-3.7:
     docker:
       - image: circleci/python:3.7
@@ -40,6 +46,12 @@ jobs:
       - run: pipenv run python setup.py test
       - run: pipenv run coveralls
       - run: pipenv run codecov
+
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
+
   test-3.8:
     docker:
       - image: circleci/python:3.8
@@ -54,6 +66,11 @@ jobs:
       - run: pipenv run python setup.py test
       - run: pipenv run coveralls
       - run: pipenv run codecov
+
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
 
 # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
 # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
