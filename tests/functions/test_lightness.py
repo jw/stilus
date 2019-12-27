@@ -1,6 +1,6 @@
-from functions.lightness import lightness
-from nodes.color import HSLA
-from nodes.unit import Unit
+from stilus.functions.lightness import lightness
+from stilus.nodes.color import HSLA
+from stilus.nodes.unit import Unit
 
 
 def test_lightness():

@@ -1,6 +1,6 @@
-from nodes.color import Color
-from utils import assert_color, assert_string
-from nodes.unit import Unit
+from stilus.nodes.color import Color
+from stilus.utils import assert_color, assert_string
+from stilus.nodes.unit import Unit
 
 component_map = {
     'red': 'r',

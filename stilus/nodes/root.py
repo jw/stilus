@@ -1,7 +1,7 @@
 import json
 
-from nodes.block import Block
-from nodes.node import Node
+from .block import Block
+from .node import Node
 
 
 class Root(Node):

@@ -1,5 +1,5 @@
-from nodes.string import String
-from utils import unwrap
+from stilus.nodes.string import String
+from stilus.utils import unwrap
 
 
 def list_separator(list, evaluator=None):

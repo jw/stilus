@@ -4,36 +4,36 @@ import os
 import re
 from pathlib import Path
 
-import utils
-from colors import colors
-from exceptions import ParseError, StilusError
-from functions.bifs import bifs, raw_bifs
-from nodes import node as filename_node
-from nodes.arguments import Arguments
-from nodes.block import Block
-from nodes.boolean import Boolean, false
-from nodes.call import Call
-from nodes.color import RGBA
-from nodes.expression import Expression
-from nodes.function import Function
-from nodes.group import Group
-from nodes.ident import Ident
-from nodes.import_node import Import
-from nodes.literal import Literal
-from nodes.node import CoercionError
-from nodes.null import null
-from nodes.object_node import ObjectNode
-from nodes.return_node import ReturnNode
-from nodes.root import Root
-from nodes.string import String
-from nodes.unit import Unit
-from parser import Parser
-from stack.frame import Frame
-from stack.scope import Scope
-from stack.stack import Stack
-from units import units
-from utils import unwrap
-from visitor.visitor import Visitor
+from stilus import utils
+from stilus.colors import colors
+from stilus.exceptions import ParseError, StilusError
+from stilus.functions.bifs import bifs, raw_bifs
+from stilus.nodes import node as filename_node
+from stilus.nodes.arguments import Arguments
+from stilus.nodes.block import Block
+from stilus.nodes.boolean import Boolean, false
+from stilus.nodes.call import Call
+from stilus.nodes.color import RGBA
+from stilus.nodes.expression import Expression
+from stilus.nodes.function import Function
+from stilus.nodes.group import Group
+from stilus.nodes.ident import Ident
+from stilus.nodes.import_node import Import
+from stilus.nodes.literal import Literal
+from stilus.nodes.node import CoercionError
+from stilus.nodes.null import null
+from stilus.nodes.object_node import ObjectNode
+from stilus.nodes.return_node import ReturnNode
+from stilus.nodes.root import Root
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
+from stilus.parser import Parser
+from stilus.stack.frame import Frame
+from stilus.stack.scope import Scope
+from stilus.stack.stack import Stack
+from stilus.units import units
+from stilus.utils import unwrap
+from stilus.visitor.visitor import Visitor
 
 log = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import json
 
-from nodes.expression import Expression
+from .expression import Expression
 
 
 class Arguments(Expression):

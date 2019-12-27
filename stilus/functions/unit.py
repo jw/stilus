@@ -1,5 +1,5 @@
-from nodes.unit import Unit
-from utils import assert_string
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_string
 
 
 def unit(unit, type=None, evaluator=None):

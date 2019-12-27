@@ -1,4 +1,4 @@
-from nodes.comment import Comment
+from stilus.nodes.comment import Comment
 
 
 def test_comment():

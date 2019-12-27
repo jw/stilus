@@ -1,7 +1,7 @@
-from exceptions import StilusError
-from nodes.expression import Expression
-from nodes.unit import Unit
-from utils import assert_type
+from stilus.exceptions import StilusError
+from stilus.nodes.expression import Expression
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_type
 
 
 def range_function(start, stop, step=None, evaluator=None):

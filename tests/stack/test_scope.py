@@ -1,7 +1,7 @@
-from nodes.null import null
-from nodes.boolean import true
-from nodes.ident import Ident
-from stack.scope import Scope
+from stilus.nodes.null import null
+from stilus.nodes.boolean import true
+from stilus.nodes.ident import Ident
+from stilus.stack.scope import Scope
 
 
 def test_scope():

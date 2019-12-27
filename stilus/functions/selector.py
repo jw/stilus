@@ -1,10 +1,9 @@
-
-from selector_parser import SelectorParser
-from utils import assert_string, compile_selectors, unwrap
+from stilus.selector_parser import SelectorParser
+from stilus.utils import assert_string, compile_selectors, unwrap
 
 
 def parse(selector):
-    from parser import Parser
+    from stilus.parser import Parser
     parser = Parser(selector, {})
     parser.state.append('selector-parts')
     nodes = parser.stmt_selector()

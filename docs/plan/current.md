@@ -2,8 +2,10 @@
 
 The issues release, a.k.a. `issues, issues everywhere!`
 
- - [ ] Check the circle-ci setup.
+ - [x] Check the circle-ci setup.
+ - [x] Migrate from pipenv to poetry.
+ - [ ] Start using black.
  - [ ] Cleanup of coverall/codecov properties.
- - [ ] Update the assertions in the built-in functions.
- - [ ] Document using docstrings and Sphinx. 
- - [ ] Start using github issues.
+ - [ ] Document using docstrings and Sphinx.
+ - [x] Start using github issues.
+ - [ ] Clear all the issues with a 'test' label.]\

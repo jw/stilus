@@ -1,4 +1,4 @@
-from nodes.keyframes import Keyframes
+from stilus.nodes.keyframes import Keyframes
 
 
 def test_keyframes():

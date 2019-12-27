@@ -1,4 +1,4 @@
-from utils import unwrap
+from stilus.utils import unwrap
 
 
 def push(expr, *args, evaluator=None):

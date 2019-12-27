@@ -1,4 +1,4 @@
-from nodes.color import HSLA, RGBA
+from stilus.nodes.color import HSLA, RGBA
 
 
 def test_hsla():

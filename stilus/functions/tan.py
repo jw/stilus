@@ -1,6 +1,6 @@
 import math as m
-from nodes.unit import Unit
-from utils import assert_type, stilus_round
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_type, stilus_round
 
 
 def tan(angle, evaluator=None):

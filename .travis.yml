@@ -5,19 +5,16 @@ python:
   - "3.7"
   - "3.8"
 
-env:
-  global:
-    - PIPENV_IGNORE_VIRTUALENVS=1
-    - PYTHONPATH=stilus
+before_install:
+  - pip install poetry
 
 install:
-  - pip install pipenv
-  - pipenv install --dev
+  - poetry install -v
 
 script:
-  - pipenv run flake8
-  - pipenv run python setup.py test
+  - poetry run flake8
+  - poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
 
 after_success:
-  - pipenv run coveralls
-  - pipenv run codecov
+  - poetry run coveralls
+  - poetry run codecov

@@ -1,6 +1,6 @@
 import json
 
-from nodes.atrule import Atrule
+from .atrule import Atrule
 
 
 class Supports(Atrule):

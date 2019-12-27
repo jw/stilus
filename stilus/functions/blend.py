@@ -1,5 +1,5 @@
-from nodes.color import RGBA
-from utils import assert_color
+from stilus.nodes.color import RGBA
+from stilus.utils import assert_color
 
 
 def blend(top, bottom=None, evaluator=None):

@@ -1,7 +1,7 @@
 import json
 
-from nodes.expression import Expression
-from nodes.node import Node
+from .expression import Expression
+from .node import Node
 
 
 class ReturnNode(Node, Exception):

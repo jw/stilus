@@ -1,9 +1,9 @@
 import json
 
-import utils
-from nodes.boolean import Boolean
-from nodes.expression import Expression
-from nodes.node import Node
+from stilus import utils
+from .boolean import Boolean
+from .expression import Expression
+from .node import Node
 
 
 class String(Node):
@@ -62,7 +62,7 @@ class String(Node):
             else:
                 args = [right]
             # apply
-            from functions.s import s
+            from stilus.functions.s import s
             if hasattr(args, 'nodes'):
                 return s(expr, *args.nodes)
             else:

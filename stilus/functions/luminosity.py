@@ -1,6 +1,6 @@
-from nodes.color import Color
-from nodes.unit import Unit
-from utils import assert_color
+from stilus.nodes.color import Color
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_color
 
 
 def luminosity(color: Color, evaluator=None):

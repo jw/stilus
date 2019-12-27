@@ -1,7 +1,7 @@
-from nodes.expression import Expression
-from nodes.ident import Ident
-from nodes.string import String
-from utils import assert_string
+from stilus.nodes.expression import Expression
+from stilus.nodes.ident import Ident
+from stilus.nodes.string import String
+from stilus.utils import assert_string
 
 
 def split(delim, value, evaluator=None):

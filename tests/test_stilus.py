@@ -1,5 +1,5 @@
-from functions.resolver import get_resolver
-from renderer import Renderer
+from stilus.functions.resolver import get_resolver
+from stilus.renderer import Renderer
 from stilus import renderer
 
 

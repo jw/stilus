@@ -1,7 +1,7 @@
-import utils
-from nodes.boolean import true
-from nodes.expression import Expression
-from nodes.unit import Unit
+from stilus import utils
+from stilus.nodes.boolean import true
+from stilus.nodes.expression import Expression
+from stilus.nodes.unit import Unit
 
 
 def test_unwrap():

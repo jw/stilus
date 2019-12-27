@@ -1,23 +1,21 @@
 import re
-from os.path import dirname, abspath
+from os.path import abspath, dirname
 
-from exceptions import StilusError
-
-import utils
-
-from nodes.block import Block
-from nodes.boolean import Boolean
-from nodes.call import Call
-from nodes.expression import Expression
-from nodes.group import Group
-from nodes.ident import Ident
-from nodes.media import Media
-from nodes.node import Node
-from nodes.property import Property
-from nodes.root import Root
-from nodes.string import String
-from nodes.unit import Unit, has_many_zeros_and_a_number
-from visitor.visitor import Visitor
+from stilus import utils
+from stilus.exceptions import StilusError
+from stilus.nodes.block import Block
+from stilus.nodes.boolean import Boolean
+from stilus.nodes.call import Call
+from stilus.nodes.expression import Expression
+from stilus.nodes.group import Group
+from stilus.nodes.ident import Ident
+from stilus.nodes.media import Media
+from stilus.nodes.node import Node
+from stilus.nodes.property import Property
+from stilus.nodes.root import Root
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit, has_many_zeros_and_a_number
+from stilus.visitor.visitor import Visitor
 
 
 # fixme: this method should not be called

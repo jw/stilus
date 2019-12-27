@@ -18,5 +18,6 @@ stilus.egg-info/
 coverage.xml
 .coverage
 htmlcov/
+test-reports/
 
 debug.log

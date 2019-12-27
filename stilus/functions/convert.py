@@ -1,4 +1,4 @@
-from utils import assert_string, parse_string
+from stilus.utils import assert_string, parse_string
 
 
 def convert(str, evaluator=None):

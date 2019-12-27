@@ -1,6 +1,6 @@
-from nodes.expression import Expression
-from nodes.string import String
-from selector_parser import SelectorParser
+from stilus.nodes.expression import Expression
+from stilus.nodes.string import String
+from stilus.selector_parser import SelectorParser
 
 
 def selectors(evaluator=None):

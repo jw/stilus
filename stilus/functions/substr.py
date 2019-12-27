@@ -1,6 +1,6 @@
-from nodes.ident import Ident
-from nodes.string import String
-from utils import assert_string, assert_type
+from stilus.nodes.ident import Ident
+from stilus.nodes.string import String
+from stilus.utils import assert_string, assert_type
 
 
 def substr(value, start, length=None, evaluator=None):

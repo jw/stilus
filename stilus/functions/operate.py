@@ -1,4 +1,4 @@
-from utils import assert_present, assert_type
+from stilus.utils import assert_present, assert_type
 
 
 def operate(op=None, left=None, right=None, evaluator=None):

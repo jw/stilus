@@ -1,7 +1,7 @@
-from functions.component import component
-from nodes.color import RGBA, HSLA
-from nodes.string import String
-from nodes.unit import Unit
+from stilus.functions.component import component
+from stilus.nodes.color import RGBA, HSLA
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 
 
 def test_component_hsla_hue():

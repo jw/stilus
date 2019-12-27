@@ -1,6 +1,6 @@
 import json
 
-from nodes.node import Node
+from .node import Node
 
 
 class Null(Node):
@@ -40,7 +40,7 @@ class Null(Node):
         return super().to_expression()
 
     def to_boolean(self):
-        from nodes.boolean import false
+        from .boolean import false
         return false
 
     def to_json(self):

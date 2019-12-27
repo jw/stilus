@@ -1,6 +1,6 @@
-from nodes.ident import Ident
-from nodes.null import null
-from utils import assert_type, unwrap
+from stilus.nodes.ident import Ident
+from stilus.nodes.null import null
+from stilus.utils import assert_type, unwrap
 
 
 def define(name, expr, common=None, evaluator=None):

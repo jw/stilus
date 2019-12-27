@@ -1,7 +1,7 @@
 import json
 
-from nodes.arguments import Arguments
-from nodes.node import Node
+from .arguments import Arguments
+from .node import Node
 
 
 class Call(Node):

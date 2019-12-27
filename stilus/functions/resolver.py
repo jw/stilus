@@ -1,11 +1,11 @@
 import inspect
 import logging
 from pathlib import Path
-
-import utils
-from nodes.literal import Literal
-from visitor.compiler import Compiler
 from urllib.parse import urlparse
+
+from stilus import utils
+from stilus.nodes.literal import Literal
+from stilus.visitor.compiler import Compiler
 
 log = logging.getLogger(__name__)
 

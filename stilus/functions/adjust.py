@@ -1,5 +1,5 @@
-from exceptions import StilusError
-from utils import assert_color, assert_string, assert_type
+from stilus.exceptions import StilusError
+from stilus.utils import assert_color, assert_string, assert_type
 
 
 def adjust(color, prop, amount, evaluator=None):

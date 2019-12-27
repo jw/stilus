@@ -7,15 +7,15 @@ from os.path import join
 from pathlib import Path
 from typing import List
 
-from nodes.boolean import Boolean
-from nodes.expression import Expression
-from nodes.literal import Literal
-from nodes.node import Node
-from nodes.null import null, Null
-from nodes.object_node import ObjectNode
-from nodes.string import String
-from nodes.unit import Unit
-from selector_parser import SelectorParser
+from .nodes.boolean import Boolean
+from .nodes.expression import Expression
+from .nodes.literal import Literal
+from .nodes.node import Node
+from .nodes.null import null, Null
+from .nodes.object_node import ObjectNode
+from .nodes.string import String
+from .nodes.unit import Unit
+from .selector_parser import SelectorParser
 
 
 def unwrap(expression: Expression) -> Node:
@@ -294,7 +294,7 @@ def coerce(value, raw: bool, lineno=1, column=1):
 
 
 def parse_string(str: String):
-    from parser import Parser
+    from stilus.parser import Parser
     try:
         parser = Parser(str, {})
         result = parser.list()
