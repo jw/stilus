@@ -9,12 +9,11 @@ before_install:
   - pip install poetry
 
 install:
-  - poetry install -vv
+  - poetry install -v
 
 script:
   - poetry run flake8
-  - poetry run pytest test
-  - poetry run --cov-report html --cov-report term --cov-report term-missing tests
+  - poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
 
 after_success:
   - poetry run coveralls

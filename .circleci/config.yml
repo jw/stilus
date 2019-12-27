@@ -6,71 +6,34 @@ workflows:
       - test-3.6
       - test-3.7
       - test-3.8
-environment: &test-environment
-  PIPENV_IGNORE_VIRTUALENVS: 1
-  PYTHONPATH: stilus
-  PIPENV_VENV_IN_PROJECT: true
-  PIPENV_QUIET: true
+steps: &stilus-run
+  - checkout
+  - run: sudo pip install --upgrade poetry
+  - run: poetry install -v
+  - run: poetry run flake8
+  - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+  - run: poetry run coveralls
+  - run: poetry run codecov
+  - store_test_results:
+      path: test-reports
+  - store_artifacts:
+      path: test-reports
 jobs:
   test-3.6:
     docker:
       - image: circleci/python:3.6
-        environment:
-          <<: *test-environment
     steps:
-      - checkout
-      - run: sudo pip install --upgrade pip
-      - run: sudo pip install --upgrade pipenv
-      - run: pipenv --python 3.6 install --dev
-      - run: pipenv run flake8 --exclude=`pipenv --venv` ~/stilus
-      - run: pipenv run python setup.py test
-      - run: pipenv run coveralls
-      - run: pipenv run codecov
-
-      - store_test_results:
-          path: test-reports
-      - store_artifacts:
-          path: test-reports
-
+      <<: *stilus-run
   test-3.7:
     docker:
       - image: circleci/python:3.7
-        environment:
-          <<: *test-environment
     steps:
-      - checkout
-      - run: sudo pip install --upgrade pip
-      - run: sudo pip install --upgrade pipenv
-      - run: pipenv --python 3.7 install --dev
-      - run: pipenv run flake8 --exclude=`pipenv --venv` ~/stilus
-      - run: pipenv run python setup.py test
-      - run: pipenv run coveralls
-      - run: pipenv run codecov
-
-      - store_test_results:
-          path: test-reports
-      - store_artifacts:
-          path: test-reports
-
+      <<: *stilus-run
   test-3.8:
     docker:
       - image: circleci/python:3.8
-        environment:
-          <<: *test-environment
     steps:
-      - checkout
-      - run: sudo pip install --upgrade pip
-      - run: sudo pip install --upgrade pipenv
-      - run: pipenv --python 3.8 install --dev
-      - run: pipenv run flake8 --exclude=`pipenv --venv` ~/stilus
-      - run: pipenv run python setup.py test
-      - run: pipenv run coveralls
-      - run: pipenv run codecov
-
-      - store_test_results:
-          path: test-reports
-      - store_artifacts:
-          path: test-reports
+      <<: *stilus-run
 
 # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
 # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
