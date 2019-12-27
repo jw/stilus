@@ -6,34 +6,52 @@ workflows:
       - test-3.6
       - test-3.7
       - test-3.8
-steps: &stilus-run
-  - checkout
-  - run: sudo pip install --upgrade poetry
-  - run: poetry install -v
-  - run: poetry run flake8
-  - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
-  - run: poetry run coveralls
-  - run: poetry run codecov
-  - store_test_results:
-      path: test-reports
-  - store_artifacts:
-      path: test-reports
 jobs:
   test-3.6:
     docker:
       - image: circleci/python:3.6
     steps:
-      <<: *stilus-run
+      - checkout
+      - run: sudo pip install --upgrade poetry
+      - run: poetry install -v
+      - run: poetry run flake8
+      - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+      - run: poetry run coveralls
+      - run: poetry run codecov
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
   test-3.7:
     docker:
       - image: circleci/python:3.7
     steps:
-      <<: *stilus-run
+      - checkout
+      - run: sudo pip install --upgrade poetry
+      - run: poetry install -v
+      - run: poetry run flake8
+      - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+      - run: poetry run coveralls
+      - run: poetry run codecov
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
   test-3.8:
     docker:
       - image: circleci/python:3.8
     steps:
-      <<: *stilus-run
+      - checkout
+      - run: sudo pip install --upgrade poetry
+      - run: poetry install -v
+      - run: poetry run flake8
+      - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+      - run: poetry run coveralls
+      - run: poetry run codecov
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
 
 # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
 # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
