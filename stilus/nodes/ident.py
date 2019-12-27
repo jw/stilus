@@ -1,6 +1,6 @@
 import json
 
-from nodes.node import Node
+from .node import Node
 
 
 class Ident(Node):
@@ -11,7 +11,7 @@ class Ident(Node):
         self.name = name
         self.string = name
         # todo: clean this up
-        from nodes.null import null
+        from stilus.nodes.null import null
         self.value = null if value is None else value
         self.mixin = mixin
         self.property = None
@@ -75,7 +75,7 @@ class Ident(Node):
         value = right.first()
         if op == '-':
             if value.node_name == 'unit':
-                from nodes.expression import Expression
+                from stilus.nodes.expression import Expression
                 expression = Expression()
                 value = value.clone()
                 value.value = -value.value

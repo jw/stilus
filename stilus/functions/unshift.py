@@ -1,4 +1,4 @@
-from utils import unwrap
+from stilus.utils import unwrap
 
 
 def unshift(expr, *args, evaluator=None):

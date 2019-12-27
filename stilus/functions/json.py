@@ -1,11 +1,11 @@
 import json
 
-from exceptions import StilusError
-from nodes.boolean import Boolean
-from nodes.ident import Ident
-from nodes.null import null
-from nodes.object_node import ObjectNode
-from utils import assert_string, coerce, lookup, parse_string
+from stilus.exceptions import StilusError
+from stilus.nodes.boolean import Boolean
+from stilus.nodes.ident import Ident
+from stilus.nodes.null import null
+from stilus.nodes.object_node import ObjectNode
+from stilus.utils import assert_string, coerce, lookup, parse_string
 
 
 # todo: this needs a cleaning

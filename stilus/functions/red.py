@@ -1,8 +1,8 @@
 from typing import Type
 
-from functions.rgba import rgba
-from nodes.color import Color, HSLA
-from nodes.unit import Unit
+from stilus.functions.rgba import rgba
+from stilus.nodes.color import Color, HSLA
+from stilus.nodes.unit import Unit
 
 
 def red(color: Type[Color], value=None, evaluator=None):

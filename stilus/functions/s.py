@@ -1,7 +1,7 @@
-from nodes.null import null
-from nodes.literal import Literal
-from utils import unwrap, assert_string
-from visitor.compiler import Compiler
+from stilus.nodes.literal import Literal
+from stilus.nodes.null import null
+from stilus.utils import assert_string, unwrap
+from stilus.visitor.compiler import Compiler
 
 
 def s(fmt, *args, evaluator=None):
@@ -11,7 +11,7 @@ def s(fmt, *args, evaluator=None):
     result = fmt.string
     results = []
     for arg in args:
-        from visitor.evaluator import Evaluator
+        from stilus.visitor.evaluator import Evaluator
         if not isinstance(arg, Evaluator):
             results.append(Compiler(arg, options).compile())
     for r in results:

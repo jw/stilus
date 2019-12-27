@@ -4,8 +4,8 @@ from tempfile import TemporaryDirectory
 import pytest
 from click.testing import CliRunner
 
-import __version__
-import cli
+from stilus import __version__
+from stilus import cli
 
 
 def test_cli_help():

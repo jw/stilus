@@ -1,5 +1,5 @@
-import utils
-from utils import assert_present, assert_type, unwrap
+from stilus import utils
+from stilus.utils import assert_present, assert_type, unwrap
 
 
 def merge(dest, *args, evaluator=None):

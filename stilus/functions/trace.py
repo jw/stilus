@@ -1,6 +1,6 @@
 import logging
 
-from nodes.null import null
+from stilus.nodes.null import null
 
 log = logging.getLogger(__name__)
 

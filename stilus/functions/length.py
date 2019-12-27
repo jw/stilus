@@ -1,4 +1,4 @@
-import utils
+from stilus import utils
 
 
 # todo: the *args is there due to javascript weirdness.

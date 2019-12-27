@@ -1,5 +1,5 @@
-from parser import Parser
-from visitor.evaluator import Evaluator
+from stilus.parser import Parser
+from stilus.visitor.evaluator import Evaluator
 
 
 def test_evaluator_create():

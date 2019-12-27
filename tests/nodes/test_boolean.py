@@ -1,4 +1,4 @@
-from nodes.boolean import Boolean, true, false
+from stilus.nodes.boolean import Boolean, true, false
 
 
 def test_is_true():

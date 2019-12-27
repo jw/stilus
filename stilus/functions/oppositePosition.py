@@ -1,8 +1,6 @@
-from nodes.literal import Literal
-
-
-import utils
-from exceptions import StilusError
+from stilus import utils
+from stilus.exceptions import StilusError
+from stilus.nodes.literal import Literal
 
 
 def opposite_position(positions, evaluator=None):

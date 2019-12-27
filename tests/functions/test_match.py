@@ -1,6 +1,6 @@
-from functions.match import match
-from nodes.null import null
-from nodes.string import String
+from stilus.functions.match import match
+from stilus.nodes.null import null
+from stilus.nodes.string import String
 
 
 def test_match():

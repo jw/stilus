@@ -5,9 +5,9 @@ import urllib
 from pathlib import Path
 from urllib.parse import urlparse
 
-import utils
-from nodes.literal import Literal
-from visitor.compiler import Compiler
+from stilus import utils
+from stilus.nodes.literal import Literal
+from stilus.visitor.compiler import Compiler
 
 default_mimes = {
     '.gif': 'image/gif',

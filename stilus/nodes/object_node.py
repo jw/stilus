@@ -1,8 +1,8 @@
 import json
 
-from nodes.boolean import Boolean, false
-from nodes.node import Node
-from nodes.null import null
+from .boolean import Boolean, false
+from .node import Node
+from .null import null
 
 
 class ObjectNode(Node):

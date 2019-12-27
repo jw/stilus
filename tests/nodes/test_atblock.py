@@ -1,8 +1,8 @@
-from nodes.atblock import Atblock
-from nodes.block import Block
-from nodes.boolean import true
-from nodes.node import Node
-from nodes.null import null
+from stilus.nodes.atblock import Atblock
+from stilus.nodes.block import Block
+from stilus.nodes.boolean import true
+from stilus.nodes.node import Node
+from stilus.nodes.null import null
 
 
 def test_atblock():

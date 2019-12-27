@@ -1,11 +1,11 @@
-from functions.blend import blend
-from functions.luminosity import luminosity
-from nodes.color import RGBA, Color
-from nodes.literal import Literal
-from nodes.null import Null
-from nodes.object_node import ObjectNode
-from nodes.unit import Unit
-from utils import assert_color, stilus_round
+from stilus.functions.blend import blend
+from stilus.functions.luminosity import luminosity
+from stilus.nodes.color import RGBA, Color
+from stilus.nodes.literal import Literal
+from stilus.nodes.null import Null
+from stilus.nodes.object_node import ObjectNode
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_color, stilus_round
 
 
 def contrast(top: Color = None, bottom: Color = None, evaluator=None):

@@ -1,4 +1,4 @@
-from nodes.media import Media
+from stilus.nodes.media import Media
 
 
 def test_property():

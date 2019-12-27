@@ -1,7 +1,7 @@
 import json
 
-from functions.bifs import bifs
-from nodes.node import Node
+from stilus.functions.bifs import bifs
+from .node import Node
 
 
 class Function(Node):

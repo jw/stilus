@@ -1,6 +1,6 @@
-from functions import addProperty, adjust, alpha, baseConvert, basename, \
-    blend, blue, clone, contrast, convert, currentMedia, define, dirname, \
-    error, extname, green, hsl, hsla, hue, imageSize, json, length, \
+from stilus.functions import addProperty, adjust, alpha, baseConvert, \
+    basename, blend, blue, clone, contrast, convert, currentMedia, define, \
+    dirname, error, extname, green, hsl, hsla, hue, imageSize, json, length, \
     lightness, listSeparator, lookup, luminosity, match, math, math_prop, \
     merge, operate, oppositePosition, p, pathjoin, pop, prefixClasses, push, \
     range, red, remove, replace, rgb, rgba, s, saturation, \

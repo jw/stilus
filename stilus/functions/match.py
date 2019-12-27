@@ -1,7 +1,7 @@
 import re
 
-import utils
-from utils import assert_type
+from stilus import utils
+from stilus.utils import assert_type
 
 
 def get_flags(flags=None):
@@ -23,7 +23,7 @@ def stilus_findall(pattern, string, flags=None):
         m = p.search(string)
         if m:
             return [m.group(0)] + list(m.groups())
-    from nodes.null import null
+    from stilus.nodes.null import null
     return null
 
 

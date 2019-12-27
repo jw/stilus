@@ -1,6 +1,6 @@
-from nodes.color import RGBA
-from nodes.unit import Unit
-from utils import assert_color, assert_type
+from stilus.nodes.color import RGBA
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_color, assert_type
 
 
 def best(top, bottom):

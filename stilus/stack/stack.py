@@ -1,8 +1,8 @@
 from typing import Type
 
-from nodes.block import Block
-from nodes.node import Node
-from stack.frame import Frame
+from stilus.nodes.block import Block
+from stilus.nodes.node import Node
+from stilus.stack.frame import Frame
 
 
 class Stack(list):

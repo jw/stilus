@@ -1,8 +1,8 @@
-from functions.component import component
-from functions.hsla import hsla
-from nodes.color import Color
-from nodes.string import String
-from nodes.unit import Unit
+from stilus.functions.component import component
+from stilus.functions.hsla import hsla
+from stilus.nodes.color import Color
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
 
 
 def saturation(color: Color, value=None, evaluator=None):

@@ -11,8 +11,8 @@ import yaml
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
-from __version__ import __version__
-from renderer import Renderer
+from .__version__ import __version__
+from .renderer import Renderer
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -34,8 +34,12 @@ def setup_logging(default_path='logging.yaml',
         logging.config.dictConfig(config)
         logging.debug(f'Using {p.resolve()} as logging configuration file.')
     else:
-        logging.basicConfig(level=default_level)
-        logging.warning('Using default logging configuration.')
+        # todo: handle these differently to comply with Stylus
+        logging.basicConfig(format='%(message)s', level=default_level)
+        logging.warning(f'Using default logging configuration (level'
+                        f' is {logging.getLevelName(default_level)}).')
+        logging.warning(f'Note: use STILUS_LOGGING_CONFIG to configure'
+                        f' the logging; or create a logging.yaml file.')
 
 
 setup_logging('bin/logging.yaml')
@@ -228,13 +232,13 @@ def stilus(verbose, watch, compress, print_, include, out, input, output,
     else:
         if not input:
             input = click.get_text_stream('stdin')
-            logging.info('Reading from stdin...')
+            logging.debug('Reading from stdin...')
         if not output:
             output = click.get_text_stream('stdout')
-            logging.info('Writing to stdout...')
+            logging.debug('Writing to stdout...')
         elif out:
             output = (Path(out) / Path(output.name)).open('w')
-            logging.info(f'Writing to {output}.')
+            logging.debug(f'Writing to {output}.')
         css = render(input.read(), include, compress, prefix, ha)
         if print_:
             click.echo(css, nl='\n' if compress else '')

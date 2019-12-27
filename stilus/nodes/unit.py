@@ -1,8 +1,8 @@
 import json
 
-from nodes.boolean import Boolean
-from nodes.expression import Expression
-from nodes.node import Node
+from .boolean import Boolean
+from .expression import Expression
+from .node import Node
 
 FACTOR_TABLE = {'mm': {'value': 1, 'label': 'mm'},
                 'cm': {'value': 10, 'label': 'mm'},

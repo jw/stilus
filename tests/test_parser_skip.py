@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
-from lexer import Token
-from parser import Parser
+from stilus.lexer import Token
+from stilus.parser import Parser
 
 
 def test_parser_skip():

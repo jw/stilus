@@ -1,8 +1,8 @@
 import json
 
-from nodes.block import Block
-from nodes.node import Node
-from nodes.selector import Selector
+from .block import Block
+from .node import Node
+from .selector import Selector
 
 
 class Group(Node):

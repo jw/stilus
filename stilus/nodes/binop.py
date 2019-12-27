@@ -1,7 +1,7 @@
 import json
 
-from nodes.node import Node
-from nodes.null import Null
+from .node import Node
+from .null import Null
 
 
 class BinOp(Node):

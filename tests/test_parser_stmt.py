@@ -1,12 +1,12 @@
 from collections import deque
 from unittest.mock import MagicMock
 
-from lexer import Token
-from nodes.group import Group
-from nodes.ident import Ident
-from nodes.literal import Literal
-from nodes.null import null
-from parser import Parser
+from stilus.lexer import Token
+from stilus.nodes.group import Group
+from stilus.nodes.ident import Ident
+from stilus.nodes.literal import Literal
+from stilus.nodes.null import null
+from stilus.parser import Parser
 
 
 def test_parser_selector_parts():

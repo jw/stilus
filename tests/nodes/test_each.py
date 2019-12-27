@@ -1,7 +1,7 @@
-from nodes.block import Block
-from nodes.each import Each
-from nodes.expression import Expression
-from nodes.node import Node
+from stilus.nodes.block import Block
+from stilus.nodes.each import Each
+from stilus.nodes.expression import Expression
+from stilus.nodes.node import Node
 
 
 def test_property():

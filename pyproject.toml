@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "stilus"
+version = "0.8.3"
+description = "A Stylus css compiler in Python."
+license = "GPL-3.0-or-later"
+authors = ["Jan Willems <jw@elevenbits.com>"]
+maintainers = ["Jan Willems <jw@elevenbits.com>"]
+readme = "README.md"
+homepage = "https://github.com/jw/stilus"
+repository = "https://github.com/jw/stilus"
+documentation = "https://stilus.readthedocs.io/en/latest/"
+keywords = ["compiler", "stylus", "css"]
+classifiers = [
+    'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: Implementation :: CPython'
+    # 'Programming Language :: Python :: Implementation :: PyPy'
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+deprecated = "*"
+pyyaml = "*"
+click = "*"
+pillow = "*"
+wheel = "*"
+watchdog = "^0.8.3"
+beautifulsoup4 = "*"
+lxml = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+ipython = "*"
+twine = "*"
+pytest-runner = "*"
+"flake8" = "*"
+pytest-cov = "*"
+sphinx = "*"
+codecov = "*"
+recommonmark = "*"
+commonmark = "*"
+pytest-icdiff = "*"
+coveralls = "*"
+python-coveralls = "*"
+
+[tool.poetry.scripts]
+stilus = "stilus.cli:stilus"
+
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.masonry.api"

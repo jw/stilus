@@ -1,6 +1,6 @@
-from nodes.block import Block
-from nodes.group import Group
-from nodes.selector import Selector
+from stilus.nodes.block import Block
+from stilus.nodes.group import Group
+from stilus.nodes.selector import Selector
 
 
 def test_group():

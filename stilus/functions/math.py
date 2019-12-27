@@ -1,8 +1,8 @@
 import math as m
 
-from nodes.string import String
-from nodes.unit import Unit
-from utils import assert_type, assert_string, stilus_round
+from stilus.nodes.string import String
+from stilus.nodes.unit import Unit
+from stilus.utils import assert_type, assert_string, stilus_round
 
 
 def math(n: Unit, fn: String, evaluator=None):

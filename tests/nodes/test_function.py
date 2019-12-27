@@ -1,4 +1,4 @@
-from nodes.function import Function
+from stilus.nodes.function import Function
 
 
 def test_function():

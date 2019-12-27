@@ -1,5 +1,5 @@
 from stilus import __version__
-from __version__ import VERSION
+from stilus.__version__ import VERSION
 
 
 def test_version():

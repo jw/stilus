@@ -1,5 +1,5 @@
-from nodes.binop import BinOp
-from nodes.expression import Expression
+from stilus.nodes.binop import BinOp
+from stilus.nodes.expression import Expression
 
 
 def test_binop():

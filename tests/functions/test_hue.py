@@ -1,6 +1,6 @@
-from functions.hue import hue
-from nodes.color import HSLA
-from nodes.unit import Unit
+from stilus.functions.hue import hue
+from stilus.nodes.color import HSLA
+from stilus.nodes.unit import Unit
 
 
 def test_hue():

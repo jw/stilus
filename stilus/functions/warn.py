@@ -1,5 +1,5 @@
-from nodes import null
-from utils import assert_type
+from stilus.nodes import null
+from stilus.utils import assert_type
 
 import logging
 log = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
-from parser import Parser
-from visitor.evaluator import Evaluator
-from visitor.normalizer import Normalizer
+from stilus.parser import Parser
+from stilus.visitor.evaluator import Evaluator
+from stilus.visitor.normalizer import Normalizer
 
 
 def test_evaluator_create():

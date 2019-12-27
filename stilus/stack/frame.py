@@ -1,7 +1,7 @@
 from deprecated import deprecated
 
-from nodes.block import Block
-from stack.scope import Scope
+from stilus.nodes.block import Block
+from stilus.stack.scope import Scope
 
 
 # todo: create getter and setter for scope or at least clean this up!

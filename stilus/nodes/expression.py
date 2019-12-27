@@ -1,8 +1,8 @@
 import json
 
-import utils
-from nodes.boolean import Boolean
-from nodes.node import Node
+from stilus import utils
+from .boolean import Boolean
+from .node import Node
 
 
 class Expression(Node):
@@ -55,7 +55,7 @@ class Expression(Node):
         if not self.is_empty():
             return self.nodes[0].first()
         else:
-            from nodes.null import null
+            from .null import null
             return null
 
     def clone(self, parent=None, node=None):
@@ -91,7 +91,7 @@ class Expression(Node):
                     index = utils.get_value(node)
                     last = len(self.nodes) - 1
                     for i in range(last, index):
-                        from nodes.null import null
+                        from stilus.nodes.null import null
                         self.nodes.append(null)
                     self.nodes[index] = value
                 elif node.string:
@@ -115,7 +115,7 @@ class Expression(Node):
                     n = values[0].get(node.string)
                 if n:
                     expression.append(n)
-            from nodes.null import null
+            from .null import null
             return null if expression.is_empty() else utils.unwrap(expression)
         elif op == '||':
             return self if self.to_boolean().value is True else right

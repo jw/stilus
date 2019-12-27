@@ -18,8 +18,8 @@ import sys  # noqa
 
 sys.path.insert(0, os.path.abspath('../stilus'))
 
-from lexer import Lexer  # noqa
-from parser import Parser  # noqa
+from stilus.lexer import Lexer  # noqa
+from stilus.parser import Parser  # noqa
 from __version__ import __version__  # noqa
 
 import recommonmark  # noqa

@@ -1,15 +1,15 @@
 import re
 from collections import defaultdict
 
-import utils
-from nodes.block import Block
-from nodes.group import Group
-from nodes.literal import Literal
-from nodes.node import Node
-from nodes.null import null
-from nodes.root import Root
-from nodes.selector import Selector
-from visitor.visitor import Visitor
+from stilus import utils
+from stilus.nodes.block import Block
+from stilus.nodes.group import Group
+from stilus.nodes.literal import Literal
+from stilus.nodes.node import Node
+from stilus.nodes.null import null
+from stilus.nodes.root import Root
+from stilus.nodes.selector import Selector
+from stilus.visitor.visitor import Visitor
 
 import logging
 log = logging.getLogger(__name__)

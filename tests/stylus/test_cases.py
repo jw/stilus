@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 import logging
 
-from functions.resolver import get_resolver
-from renderer import Renderer
+from stilus.functions.resolver import get_resolver
+from stilus.renderer import Renderer
 
 log = logging.getLogger(__name__)
 

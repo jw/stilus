@@ -1,8 +1,8 @@
-from parser import Parser
-from utils import coerce
-from visitor.compiler import Compiler
-from visitor.evaluator import Evaluator
-from visitor.normalizer import Normalizer
+from .parser import Parser
+from .utils import coerce
+from .visitor.compiler import Compiler
+from .visitor.evaluator import Evaluator
+from .visitor.normalizer import Normalizer
 
 
 class Renderer:

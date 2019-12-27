@@ -1,6 +1,6 @@
-from nodes.boolean import true, false
-from nodes.null import null
-from nodes.root import Root
+from stilus.nodes.boolean import true, false
+from stilus.nodes.null import null
+from stilus.nodes.root import Root
 
 
 def test_root():

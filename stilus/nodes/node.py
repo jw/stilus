@@ -1,6 +1,6 @@
 import json
 from typing import Type
-from exceptions import StilusError
+from stilus.exceptions import StilusError
 
 
 # todo: move this one to the stilus exceptions
@@ -48,14 +48,14 @@ class Node:
         """Return True.
         :return: True
         """
-        from nodes.boolean import Boolean
+        from .boolean import Boolean
         return Boolean(True)
 
     def to_expression(self):
         """Return expression or wrap this node in an expression
         :return:
         """
-        from nodes.expression import Expression
+        from stilus.nodes.expression import Expression
         if self.node_name == 'expression':
             return self
         expression = Expression()
@@ -74,7 +74,7 @@ class Node:
 
     def operate(self, op: str, right: Type['Node'], value=None) -> 'Node':
         """Operate on ``right`` with the given ``op``."""
-        from nodes.boolean import Boolean
+        from .boolean import Boolean
         if op == 'is a':
             if 'string' == right.first().node_name:
                 return Boolean(self.node_name == right.value)
@@ -82,7 +82,7 @@ class Node:
                 raise Exception(f'"is a" expects a string, '
                                 f'got {right.toString}')
         elif op == '==':
-            import utils
+            from stilus import utils
             if utils.is_number(self) and utils.is_number(right):
                 return Boolean(utils.get_value(self) ==
                                utils.get_value(right))
@@ -102,7 +102,7 @@ class Node:
         elif op == '||':
             return self if self.to_boolean().value is True else right
         elif op == 'in':
-            import utils
+            from stilus import utils
             values = utils.unwrap(right).nodes
             if not values:
                 raise StilusError('"in" given invalid right-hand operand, '

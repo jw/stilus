@@ -1,4 +1,4 @@
-from nodes.literal import Literal
+from stilus.nodes.literal import Literal
 
 
 def test_literal():

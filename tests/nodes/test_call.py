@@ -1,4 +1,4 @@
-from nodes.call import Call
+from stilus.nodes.call import Call
 
 
 def test_call():
