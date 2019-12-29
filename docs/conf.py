@@ -16,12 +16,10 @@
 import os  # noqa
 import sys  # noqa
 
-sys.path.insert(0, os.path.abspath('../stilus'))
+sys.path.insert(0, os.path.abspath('..'))
 
-from stilus.lexer import Lexer  # noqa
-from stilus.parser import Parser  # noqa
-from __version__ import __version__  # noqa
-
+import stilus  # noqa
+from stilus.__version__ import __version__  # noqa
 import recommonmark  # noqa
 
 # -- Project information -----------------------------------------------------

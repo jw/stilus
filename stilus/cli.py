@@ -46,6 +46,13 @@ setup_logging('bin/logging.yaml')
 
 
 def print_version(ctx, param, value):
+    """
+    Print the version of Stilus and end the process.
+
+    :param ctx: The click context.
+    :param param: A parameter.
+    :param value: A value
+    """
     if not value or ctx.resilient_parsing:
         return
     click.echo(f'{__version__}')
@@ -57,6 +64,7 @@ def validate_path(ctx, param, value):
 
 
 def fail(message, prefix=None, code=-1):
+    """Show a message and end the process."""
     if not prefix:
         prefix = '     error '
     click.echo(click.style(prefix, fg='red'), nl=False)
@@ -65,6 +73,7 @@ def fail(message, prefix=None, code=-1):
 
 
 def fancy_output(message, prefix=None):
+    """"""
     if prefix:
         click.echo(click.style(prefix, dim=True), nl=False)
     click.echo(message)
@@ -145,13 +154,14 @@ def prepare_watch(path: Path,
     """
     Compile all Stylus files in the given path and recompile
     automatically when these files change.
+
     :param path: A path.
     :type path: Path
     :param includes: List of directories to include.
     :type includes: list, optional
     :param compress: Compress the output?  False by default.
     :type compress: bool, optional
-    :param prefix: Prefix to add to each css class..
+    :param prefix: Prefix to add to each css class.
     :type prefix: Str, optional
     :param ha: Hoist atrules?  False by default.
     :type ha: bool, optional
@@ -172,7 +182,7 @@ def prepare_watch(path: Path,
 def check_out(out: str) -> None:
     """
     Check of the given out str is an existing directory.  Otherwise
-    fiail
+    fail.
     :param out: A possibly existing directory
     :type out: str
     """
@@ -204,6 +214,22 @@ def check_out(out: str) -> None:
               help='Display the version of Stilus.')
 def stilus(verbose, watch, compress, print_, include, out, input, output,
            prefix, ha):
+    """
+    The Stilus binary.
+
+    :param verbose: More verbose output.
+    :param watch: Compile all styl files in a directory and watch that
+                  directory for changes.
+    :param compress: Compress the resuting css.
+    :param print_: Print the output to stdout.
+    :param include:
+    :param out:
+    :param input:
+    :param output:
+    :param prefix:
+    :param ha:
+    :return:
+    """
 
     class StilusHandler(FileSystemEventHandler):
         def on_modified(self, event):

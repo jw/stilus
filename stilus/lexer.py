@@ -14,6 +14,7 @@ from .nodes.literal import Literal
 class Token:
 
     def __init__(self, type, value=None, space=None, lineno=None, column=None):
+        """A token."""
         self.type = type
         self.value = value
         self.space = space
@@ -22,12 +23,14 @@ class Token:
         self.column = column
 
     def __str__(self):
+        """Return the value if available, the tokens type otherwise."""
         if self.value:
             return f'{self.value}'
         else:
             return f'{self.type}'
 
     def __repr__(self):
+        """Return the value if available, the tokens type otherwise."""
         return str(self)
 
     def __key(self):

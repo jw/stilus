@@ -36,7 +36,7 @@ Install Stilus on your machine using pip:
  $ python -m pip install -U stilus
  $ pip install -U stilus
 
-It might be that you'll need to install some extra dev packages. This might help:
+It might be that you'll need to install some extra dev packages. Like this:
 
 .. code-block:: bash
 
@@ -62,24 +62,26 @@ Stilus
    -V, --version       Display the version of Stilus.
    -h, --help          Show this message and exit.
 
-In progress...
---------------
-
-.. toctree::
-   :maxdepth: 1
-
-   diff/stilus.md
-   diff/tests.rst
-
-The Missing Parts
------------------
+Comparison between Stylus and Stilus
+------------------------------------
 
 Most of Stylus is implemented in Stilus, but some parts are missing:
 
  - Plugins
  - Caching
- - Documentation: missing an architecture and docstring data
- - Missing some tests (+95% of the Stylus tests pass through Stilus)
+ - Documentation: missing an architecture document and almost all the docstrings
+ - We are missing a few tests.  Currently more than 95% of the Stylus tests
+   pass successfully through Stilus.
+   `These <https://github.com/jw/stilus/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Atest>`_
+   are missing.
+
+Below you'll find the comparison between Stylus and Stilus.
+
+.. toctree::
+   :maxdepth: 1
+
+   The Stylus binary <diff/stilus.md>
+   The Stylus test cases <diff/tests.rst>
 
 All help is appreciated!
 
@@ -128,12 +130,15 @@ Code
 ----
 
 If you are looking for information on a specific function, class, or method,
-this part of the documentation is for you.  (c) requests ;-)
+this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 1
 
-   code.rst
+   code/lexer_and_parser.rst
+   code/nodes.rst
+   code/cli.rst
+   code/visitors.rst
 
 Indices and tables
 ==================
