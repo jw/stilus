@@ -193,6 +193,12 @@ class Parser:
             raise e
 
     def parse(self) -> Node:
+        """
+        Parse the given source string.
+
+        :return: The root Node.
+        :rtype: Node
+        """
         block = self.parent = self.root
         while 'eos' != self.peek().type:
             self.skip_whitespace()
@@ -293,7 +299,7 @@ class Parser:
             la = self.lookahead(i)
 
     def selector_token(self):
-        """Valid selector tokens"""
+        """Valid selector tokens."""
         if self.is_selector_token(1):
             if '{' == self.peek().type:
 

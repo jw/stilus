@@ -130,12 +130,15 @@ Code
 ----
 
 If you are looking for information on a specific function, class, or method,
-this part of the documentation is for you.  (c) requests ;-)
+this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 1
 
-   code.rst
+   code/lexer_and_parser.rst
+   code/nodes.rst
+   code/cli.rst
+   code/visitors.rst
 
 Indices and tables
 ==================
