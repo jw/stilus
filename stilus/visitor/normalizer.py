@@ -12,15 +12,15 @@ from stilus.nodes.selector import Selector
 from stilus.visitor.visitor import Visitor
 
 import logging
+
 log = logging.getLogger(__name__)
 
 
 class Normalizer(Visitor):
-
     def __init__(self, root, parser, options):
         super().__init__(root)
         self.parser = parser
-        self.hoist = options.get('hoist atrules', False)
+        self.hoist = options.get("hoist atrules", False)
         self.stack = []
         self.selector_map = defaultdict(list)
         self.imports = []
@@ -50,9 +50,9 @@ class Normalizer(Visitor):
         def filter_props(block):
             for node in block.nodes:
                 node = self.visit(node)
-                if node.node_name == 'property':
+                if node.node_name == "property":
                     props.append(node)
-                elif node.node_name == 'block':
+                elif node.node_name == "block":
                     filter_props(node)
                 else:
                     others.append(node)
@@ -60,11 +60,11 @@ class Normalizer(Visitor):
         filter_props(node.block)
 
         if props:
-            selector = Selector([Literal('&')])
+            selector = Selector([Literal("&")])
             selector.lineno = node.lineno
             selector.column = node.column
             selector.filename = node.filename
-            selector.value = '&'
+            selector.value = "&"
 
             group = Group(lineno=self.parser.lineno, column=self.parser.column)
             group.lineno = node.lineno
@@ -95,11 +95,11 @@ class Normalizer(Visitor):
 
     def closest_group(self, block: Block) -> Group:
         parent = block.parent
-        while parent and hasattr(parent, 'node') and parent.node:
+        while parent and hasattr(parent, "node") and parent.node:
             node = parent.node
-            if node.node_name == 'group':
+            if node.node_name == "group":
                 return node
-            if not hasattr(node, 'block') or not node.block:
+            if not hasattr(node, "block") or not node.block:
                 parent = False
             elif not node.block.parent:
                 parent = False
@@ -109,8 +109,13 @@ class Normalizer(Visitor):
     def visit_root(self, block):
         ret = Root()
         for i, node in enumerate(block.nodes):
-            if node.node_name in ['null', 'expression', 'function',
-                                  'unit', 'atblock']:
+            if node.node_name in [
+                "null",
+                "expression",
+                "function",
+                "unit",
+                "atblock",
+            ]:
                 continue
             else:
                 self.root_index = i
@@ -122,12 +127,11 @@ class Normalizer(Visitor):
         return property
 
     def visit_expression(self, expression):
-
         def handle(node):
             # returns `block` literal if mixin's block
             # is used as part of a property value
-            if node.node_name == 'block':
-                literal = Literal('block')
+            if node.node_name == "block":
+                literal = Literal("block")
                 literal.lineno = node.lineno
                 literal.column = node.column
                 return literal
@@ -142,8 +146,14 @@ class Normalizer(Visitor):
             i = 0
             while i < len(block.nodes):
                 node = block.nodes[i]
-                if node.node_name in ['null', 'expression', 'function',
-                                      'group', 'unit', 'atblock']:
+                if node.node_name in [
+                    "null",
+                    "expression",
+                    "function",
+                    "group",
+                    "unit",
+                    "atblock",
+                ]:
                     i += 1
                     continue
                 else:
@@ -166,20 +176,20 @@ class Normalizer(Visitor):
         for selector in group.nodes:
             if selector.value:
                 # do nothing
-                if ',' not in selector.value:
+                if "," not in selector.value:
                     normalized = group.nodes
                     break
                 # replace '\,' with ','
-                if '\\' in selector.value:
-                    selector.value = re.sub(r'\\,', ',', selector.value)
+                if "\\" in selector.value:
+                    selector.value = re.sub(r"\\,", ",", selector.value)
                     normalized = group.nodes
                     break
-                parts = selector.value.split(',')
-                root = True if selector.value[0] == '/' else False
+                parts = selector.value.split(",")
+                root = True if selector.value[0] == "/" else False
                 for i, part in enumerate(parts):
                     part = part.strip()
-                    if root and '&' not in part:
-                        part = '/' + part
+                    if root and "&" not in part:
+                        part = "/" + part
                     s = Selector([Literal(part)])
                     s.value = part
                     s.block = group.block
@@ -208,16 +218,19 @@ class Normalizer(Visitor):
 
         def merge_queries(block):
             for i, node in enumerate(block.nodes):
-                if node.node_name == 'media':
+                if node.node_name == "media":
                     # fixme: what does this do?
                     node.value = media.value.merge(node.value)
                     medias.append(node)
                     block.nodes[i] = null
-                elif node.node_name == 'block':
+                elif node.node_name == "block":
                     merge_queries(node)
                 else:
-                    if hasattr(node, 'block') and \
-                            node.block and node.block.nodes:
+                    if (
+                        hasattr(node, "block")
+                        and node.block
+                        and node.block.nodes
+                    ):
                         merge_queries(node.block)
 
         merge_queries(media.block)
@@ -233,8 +246,9 @@ class Normalizer(Visitor):
                 self.root.nodes.insert(self.root_index, node)
             node = self.visit(node)
             parent = node.block.parent
-            if node.bubbled and \
-                    (not group or parent.node.node_name == 'group'):
+            if node.bubbled and (
+                not group or parent.node.node_name == "group"
+            ):
                 node.group.block = node.block.nodes[0].block
                 node.block.nodes[0] = node.group
             index += 1
@@ -251,9 +265,13 @@ class Normalizer(Visitor):
         return node
 
     def visit_keyframes(self, node):
-        node.frames = len([n for n in node.block.nodes
-                           if hasattr(n, 'block') and n.block and
-                           n.block.has_properties()])
+        node.frames = len(
+            [
+                n
+                for n in node.block.nodes
+                if hasattr(n, "block") and n.block and n.block.has_properties()
+            ]
+        )
         return node
 
     def visit_import(self, node):
@@ -269,13 +287,13 @@ class Normalizer(Visitor):
         parent = self.closest_group(group.block)
 
         for extend in group.extends:
-            groups = selector_map[extend['selector']]
+            groups = selector_map[extend["selector"]]
             if not groups:
-                if extend['optional']:
+                if extend["optional"]:
                     return
-                err = TypeError(f'Failed to @extend \"{extend["selector"]}\"')
-                err.lineno = extend['lineno']
-                err.column = extend['column']
+                err = TypeError(f'Failed to @extend "{extend["selector"]}"')
+                err.lineno = extend["lineno"]
+                err.column = extend["column"]
                 raise TypeError
             for selector in selectors:
                 node = Selector()

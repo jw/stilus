@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Null(Node):
-
     def __init__(self):
         super().__init__()
         self.lineno = 0
@@ -14,7 +13,7 @@ class Null(Node):
         return True
 
     def __str__(self):
-        return 'null'
+        return "null"
 
     def __repr__(self):
         return str(self)
@@ -41,13 +40,18 @@ class Null(Node):
 
     def to_boolean(self):
         from .boolean import false
+
         return false
 
     def to_json(self):
-        return json.dumps({'__type': 'Null',
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Null",
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )
 
 
 null = Null()

@@ -16,4 +16,4 @@ def math_prop(prop: String, evaluator=None):
         lower = prop.string.lower()
         return Unit(getattr(m, lower))
     else:
-        raise ValueError(f'Oops; could not return math.{prop}.')
+        raise ValueError(f"Oops; could not return math.{prop}.")

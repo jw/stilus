@@ -12,7 +12,8 @@ install:
   - poetry install -v
 
 script:
-  - poetry run flake8
+  - poetry run black stilus tests
+  - poetry run flake8 stilus tests
   - poetry run pytest --cov=stilus --cov-report html --cov-report term --cov-report term-missing tests
 
 after_success:

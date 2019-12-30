@@ -25,7 +25,7 @@ def transparentify(top, bottom=None, alpha=None, evaluator=None):
     top = top.rgba()
     if not bottom:
         bottom = RGBA(255, 255, 255, 1)
-    if not alpha and bottom and hasattr(bottom, 'rgba') and not bottom.rgba:
+    if not alpha and bottom and hasattr(bottom, "rgba") and not bottom.rgba:
         alpha = bottom
         bottom = RGBA(255, 255, 255, 1)
     assert_color(bottom)
@@ -34,8 +34,8 @@ def transparentify(top, bottom=None, alpha=None, evaluator=None):
     ba = best_alpha(top, bottom)
 
     if alpha:
-        assert_type(alpha, 'unit', 'aplha')
-        if alpha.type == '%':
+        assert_type(alpha, "unit", "aplha")
+        if alpha.type == "%":
             ba = alpha.value / 100
         elif not alpha.type:
             ba = alpha = alpha.value
@@ -45,7 +45,9 @@ def transparentify(top, bottom=None, alpha=None, evaluator=None):
     if ba == 0:
         return RGBA(bottom.r, bottom.g, bottom.b, round(ba * 100) / 100)
     else:
-        return RGBA(bottom.r + (top.r - bottom.r) / ba,
-                    bottom.g + (top.g - bottom.g) / ba,
-                    bottom.b + (top.b - bottom.b) / ba,
-                    round(ba * 100) / 100)
+        return RGBA(
+            bottom.r + (top.r - bottom.r) / ba,
+            bottom.g + (top.g - bottom.g) / ba,
+            bottom.b + (top.b - bottom.b) / ba,
+            round(ba * 100) / 100,
+        )

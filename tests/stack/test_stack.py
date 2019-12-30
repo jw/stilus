@@ -6,7 +6,7 @@ from stilus.stack.stack import Stack
 
 def test_stack():
     stack = Stack()
-    block = Block(Ident('hello', 'there'), Ident('foo', 'bar'))
+    block = Block(Ident("hello", "there"), Ident("foo", "bar"))
     assert stack.get_block_frame(block) is None
     frame = Frame(block)
     stack.append(frame)
@@ -19,5 +19,5 @@ def test_empty_stack():
     stack = Stack()
     assert len(stack) == 0
     assert stack.current_frame() is None
-    block = Block(Ident('hello', 'there'), Ident('foo', 'bar'))
+    block = Block(Ident("hello", "there"), Ident("foo", "bar"))
     assert stack.get_block_frame(block) is None

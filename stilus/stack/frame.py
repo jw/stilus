@@ -6,9 +6,8 @@ from stilus.stack.scope import Scope
 
 # todo: create getter and setter for scope or at least clean this up!
 class Frame:
-
     def __init__(self, block: Block, parent: Block = None):
-        if hasattr(block, 'scope') and block.scope is False:
+        if hasattr(block, "scope") and block.scope is False:
             self._scope = None
         else:
             self._scope = Scope()
@@ -27,11 +26,11 @@ class Frame:
         return False
 
     def __str__(self):
-        if hasattr(self.block, 'scope') and self.block.scope is False:
-            scope = 'scope-less'
+        if hasattr(self.block, "scope") and self.block.scope is False:
+            scope = "scope-less"
         else:
-            scope = f'{self.scope()}'
-        return f'[Frame {scope}]'
+            scope = f"{self.scope()}"
+        return f"[Frame {scope}]"
 
     def __repr__(self):
         return self.__str__()
@@ -46,7 +45,7 @@ class Frame:
         try:
             return self.parent.scope()
         except AttributeError:
-            raise TypeError('Cannot read property \'scope\' of undefined')
+            raise TypeError("Cannot read property 'scope' of undefined")
 
     @deprecated
     def set_scope(self, scope: Scope):

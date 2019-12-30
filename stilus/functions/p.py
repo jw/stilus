@@ -8,9 +8,9 @@ def p(*args, evaluator=None):
         if not expr:
             return None
         e = str(expr)
-        if e.startswith('('):
+        if e.startswith("("):
             e = e[1:]
-        if e.endswith(')'):
+        if e.endswith(")"):
             e = e[:-1]
-        print(f'inspect: {e}')
+        print(f"inspect: {e}")
     return null

@@ -4,14 +4,13 @@ from .node import Node
 
 
 class Member(Node):
-
     def __init__(self, left, right, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.right = right
         self.left = left
 
     def __str__(self):
-        return f'{self.left} = {self.right}'
+        return f"{self.left} = {self.right}"
 
     def __repr__(self):
         return self.__str__()
@@ -37,9 +36,13 @@ class Member(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Member',
-                           'left': self.left,
-                           'right': self.right,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Member",
+                "left": self.left,
+                "right": self.right,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

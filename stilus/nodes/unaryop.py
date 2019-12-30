@@ -4,14 +4,13 @@ from .node import Node
 
 
 class UnaryOp(Node):
-
     def __init__(self, op, expr, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.op = op
         self.expr = expr
 
     def __str__(self):
-        return f'({self.op},{self.expr})'
+        return f"({self.op},{self.expr})"
 
     def __repr__(self):
         return self.__str__()
@@ -34,9 +33,13 @@ class UnaryOp(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'UnaryOp',
-                           'op': self.op,
-                           'expr': self.expr,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "UnaryOp",
+                "op": self.op,
+                "expr": self.expr,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

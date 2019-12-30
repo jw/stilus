@@ -1,11 +1,10 @@
-COMBINATORS = ['>', '+', '~']
+COMBINATORS = [">", "+", "~"]
 
 
 # TODO: this class is badly migrated - needs work!
 # TODO: this class needs tests!
 # TODO: this class needs proper getter and setters annotations!
 class SelectorParser:
-
     def __init__(self, string: str, stack=None, parts=None):
         self.string = string
         self.stack = stack
@@ -26,7 +25,7 @@ class SelectorParser:
         self.pos += len
 
     def skip_spaces(self):
-        while ' ' == self.string[0]:
+        while " " == self.string[0]:
             self.skip(1)
 
     def advance(self):
@@ -55,14 +54,17 @@ class SelectorParser:
 
     def root(self):
         r"""'/'"""
-        if not self.pos and '/' == self.string[0] and \
-                'deep' != self.string[1:5]:
+        if (
+            not self.pos
+            and "/" == self.string[0]
+            and "deep" != self.string[1:5]
+        ):
             self.nested = False
             self.skip(1)
 
     def relative(self, multi=None):
         r"""'../'"""
-        if (not self.pos or multi) and '../' == self.string[0:3]:
+        if (not self.pos or multi) and "../" == self.string[0:3]:
             self.nested = False
             self.skip(3)
             while self.relative(True):
@@ -75,7 +77,7 @@ class SelectorParser:
 
     def initial(self):
         r"""'~/'"""
-        if not self.pos and '~/' == self.string[0:2]:
+        if not self.pos and "~/" == self.string[0:2]:
             self.nested = False
             self.skip(2)
             if self.stack and len(self.stack) > 0:
@@ -85,21 +87,21 @@ class SelectorParser:
 
     def escaped(self):
         r"""'\' ('&' | '^')"""
-        if self.string and len(self.string) > 0 and '\\' == self.string[0]:
+        if self.string and len(self.string) > 0 and "\\" == self.string[0]:
             char = self.string[1]
-            if char in ['&', '^']:
+            if char in ["&", "^"]:
                 self.skip(2)
                 return char
 
     # fixme: add the raw attribute/function check
     def parent(self):
         r"""'&"""
-        if self.string and len(self.string) > 0 and '&' == self.string[0]:
+        if self.string and len(self.string) > 0 and "&" == self.string[0]:
             self.nested = False
             if not self.pos and (not self.stack or self.raw):
                 i = 0
                 for i, char in enumerate(self.string[1:], start=1):
-                    if char != ' ':
+                    if char != " ":
                         break
                 if self.string[i] in COMBINATORS:
                     self.skip(i + 1)
@@ -112,13 +114,13 @@ class SelectorParser:
 
     def partial(self):
         r"""'^[' range ']'"""
-        if '^[' == self.string[0:2]:
+        if "^[" == self.string[0:2]:
             self.skip(2)
             self.skip_spaces()
             ret = self.range()
             self.skip_spaces()
-            if ']' != self.string[0]:
-                return '^['
+            if "]" != self.string[0]:
+                return "^["
             self.nested = False
             self.skip(1)
             if ret:
@@ -129,8 +131,8 @@ class SelectorParser:
     def number(self):
         r"""'-'? 0-9+"""
         i = 0
-        ret = ''
-        if '-' == self.string[i]:
+        ret = ""
+        if "-" == self.string[i]:
             ret += self.string[i]
             i += 1
 
@@ -147,7 +149,7 @@ class SelectorParser:
         start = self.number()
         ret = None
 
-        if '..' == self.string[0:2]:
+        if ".." == self.string[0:2]:
             self.skip(2)
             end = self.number()
             length = len(self.parts)
@@ -161,7 +163,7 @@ class SelectorParser:
                 start, end = end, start
 
             def selector_value(selector):
-                if selector['nested']:
+                if selector["nested"]:
                     return f" {selector['value']}"
                 else:
                     return f"{selector['value']}"
@@ -173,10 +175,10 @@ class SelectorParser:
 
             if end < length - 1:
                 ret = []
-                for part in self.parts[start:end + 1]:
+                for part in self.parts[start : end + 1]:
                     s = selector(part)
                     ret.append(selector_value(s))
-                return ''.join(ret).strip()
+                return "".join(ret).strip()
 
         else:
             # todo: fix me!
@@ -205,12 +207,12 @@ class SelectorParser:
 
     def parse(self):
         r"""Parses the selector."""
-        value = ''
+        value = ""
         while self.string:
             next = self.advance()
             if next:
                 value += next
             if self.ignore:
-                value = ''
+                value = ""
                 break
-        return {'value': value.rstrip(), 'nested': self.nested}
+        return {"value": value.rstrip(), "nested": self.nested}

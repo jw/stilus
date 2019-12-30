@@ -4,14 +4,13 @@ from .atrule import Atrule
 
 
 class Keyframes(Atrule):
-
-    def __init__(self, segments, prefix='official', lineno=1, column=1):
-        super().__init__('keyframes', lineno=lineno, column=column)
+    def __init__(self, segments, prefix="official", lineno=1, column=1):
+        super().__init__("keyframes", lineno=lineno, column=column)
         self.segments = segments
         if prefix:
             self.prefix = prefix
         else:
-            self.prefix = 'official'
+            self.prefix = "official"
         self.frames = None
         self.fabricated = False
         self.block = None
@@ -42,10 +41,14 @@ class Keyframes(Atrule):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Keyframes',
-                           'segments': self.segments,
-                           'prefix': self.prefix,
-                           'block': self.block,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Keyframes",
+                "segments": self.segments,
+                "prefix": self.prefix,
+                "block": self.block,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

@@ -20,9 +20,7 @@ def blue(color: Color, value: Unit = None, evaluator=None):
     if isinstance(color, HSLA):
         color = color.rgba()
     if value:
-        return rgba(Unit(color.r),
-                    Unit(color.g),
-                    value,
-                    Unit(color.a),
-                    evaluator)
-    return Unit(color.b, '')
+        return rgba(
+            Unit(color.r), Unit(color.g), value, Unit(color.a), evaluator
+        )
+    return Unit(color.b, "")

@@ -1,8 +1,7 @@
-
 class ParseError(Exception):
-
-    def __init__(self, message, filename=None, lineno=None,
-                 column=None, input=None):
+    def __init__(
+        self, message, filename=None, lineno=None, column=None, input=None
+    ):
         super().__init__(message)
         self.message = message
         self.filename = filename
@@ -12,9 +11,9 @@ class ParseError(Exception):
 
 
 class StilusError(Exception):
-
-    def __init__(self, message, filename=None, lineno=None,
-                 column=None, input=None):
+    def __init__(
+        self, message, filename=None, lineno=None, column=None, input=None
+    ):
         super().__init__(message)
         self.message = message
         self.filename = filename
@@ -25,6 +24,6 @@ class StilusError(Exception):
 
     def __str__(self):
         if self.message:
-            return f'Could not compile: {self.message}'
+            return f"Could not compile: {self.message}"
         else:
-            return f'Could not compile.'
+            return f"Could not compile."

@@ -18,10 +18,10 @@ def base_convert(num, base, width=None, evaluator=None):
         base = unwrap(base).nodes[0]
     if width and isinstance(width, Expression):
         width = unwrap(width).nodes[0]
-    assert_type(num, 'unit')
-    assert_type(base, 'unit')
+    assert_type(num, "unit")
+    assert_type(base, "unit")
     if width:
-        assert_type(width, 'unit')
+        assert_type(width, "unit")
     if width:
         width = width.value
     else:
@@ -30,5 +30,5 @@ def base_convert(num, base, width=None, evaluator=None):
     base = int(base.value)
     result = _convert(num, base)
     while len(result) < width:
-        result = '0' + result
+        result = "0" + result
     return Literal(result)

@@ -5,7 +5,7 @@ from stilus.nodes.root import Root
 
 def test_root():
     root = Root()
-    assert root.node_name == 'root'
+    assert root.node_name == "root"
     root.append(null)
     assert root.nodes == [null]
     root.unshift(true)

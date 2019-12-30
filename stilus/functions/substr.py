@@ -4,8 +4,8 @@ from stilus.utils import assert_string, assert_type
 
 
 def substr(value, start, length=None, evaluator=None):
-    assert_string(value, 'val')
-    assert_type(start, 'unit', 'start')
+    assert_string(value, "val")
+    assert_type(start, "unit", "start")
     start = int(start.value)
     if length:
         length = start + int(length.value)

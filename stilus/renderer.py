@@ -6,22 +6,23 @@ from .visitor.normalizer import Normalizer
 
 
 class Renderer:
-
     def __init__(self, s: str, options: dict):
         self.s = s
         self.options = options
-        self.options['globals'] = options.get('globals', {})
-        self.options['functions'] = options.get('functions', {})
-        self.options['use'] = options.get('use', [])
-        if not isinstance(self.options['use'], list):
-            self.options['use'] = list(self.options['use'])
+        self.options["globals"] = options.get("globals", {})
+        self.options["functions"] = options.get("functions", {})
+        self.options["use"] = options.get("use", [])
+        if not isinstance(self.options["use"], list):
+            self.options["use"] = list(self.options["use"])
         # todo: fix me and use pathlib
         from os.path import realpath, dirname, join
-        self.options['imports'] = [join(dirname(realpath(__file__)),
-                                        'functions')]
-        self.options['paths'] = options.get('paths', [])
-        self.options['filename'] = options.get('filename', 'stilus')
-        self.options['Evaluator'] = options.get('Evaluator', Evaluator)
+
+        self.options["imports"] = [
+            join(dirname(realpath(__file__)), "functions")
+        ]
+        self.options["paths"] = options.get("paths", [])
+        self.options["filename"] = options.get("filename", "stilus")
+        self.options["Evaluator"] = options.get("Evaluator", Evaluator)
 
     def render(self):
 
@@ -46,16 +47,16 @@ class Renderer:
         return ast
 
     def include(self, path):
-        self.options['paths'].append(path)
+        self.options["paths"].append(path)
         return self
 
     def define(self, name, fn, raw=True, options=None):
         fn = coerce(fn, raw)
-        if hasattr(fn, 'node_name'):
-            self.options['globals'][name] = fn
+        if hasattr(fn, "node_name"):
+            self.options["globals"][name] = fn
             return self
 
-        self.options['functions'][name] = fn
+        self.options["functions"][name] = fn
         if raw:
             fn.raw = raw
             # todo: add it to the raw_bifs here?
@@ -64,7 +65,7 @@ class Renderer:
         return self
 
     def do_import(self, file):
-        self.options['imports'].append(file)
+        self.options["imports"].append(file)
         return self
 
 

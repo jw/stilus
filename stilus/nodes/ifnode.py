@@ -4,7 +4,6 @@ from .node import Node
 
 
 class If(Node):
-
     def __init__(self, cond=None, negate=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.cond = cond
@@ -21,8 +20,8 @@ class If(Node):
         if self.elses:
             else_string = f' else ({", ".join(self.elses)})'
         else:
-            else_string = ' [no else]'
-        return f'if {self.cond}{else_string}'
+            else_string = " [no else]"
+        return f"if {self.cond}{else_string}"
 
     def __repr__(self):
         return self.__str__()
@@ -51,12 +50,16 @@ class If(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'If',
-                           'cond': self.cond,
-                           'block': self.block,
-                           'elses': self.elses,
-                           'negate': self.negate,
-                           'postfix': self.postfix,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "If",
+                "cond": self.cond,
+                "block": self.block,
+                "elses": self.elses,
+                "negate": self.negate,
+                "postfix": self.postfix,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

@@ -19,20 +19,17 @@ def hsla(hue, saturation=None, lightness=None, alpha=None, evaluator=None):
     if hue and saturation and (lightness is alpha is None):
         assert_color(hue)
         color = hue.hsla()
-        assert_type(saturation, 'unit', 'alpha')
+        assert_type(saturation, "unit", "alpha")
         alpha = saturation.clone()
-        if alpha.type == '%':
+        if alpha.type == "%":
             alpha.value /= 100
         return HSLA(color.hue, color.saturation, color.lightness, alpha.value)
     # color
-    assert_type(hue, 'unit', 'hue')
-    assert_type(saturation, 'unit', 'saturation')
-    assert_type(lightness, 'unit', 'lightness')
-    assert_type(alpha, 'unit', 'alpha')
+    assert_type(hue, "unit", "hue")
+    assert_type(saturation, "unit", "saturation")
+    assert_type(lightness, "unit", "lightness")
+    assert_type(alpha, "unit", "alpha")
     alpha = alpha.clone()
-    if alpha and alpha.type == '%':
+    if alpha and alpha.type == "%":
         alpha.value /= 100
-    return HSLA(hue.value,
-                saturation.value,
-                lightness.value,
-                alpha.value)
+    return HSLA(hue.value, saturation.value, lightness.value, alpha.value)

@@ -4,18 +4,19 @@ from stilus.utils import assert_string, compile_selectors, unwrap
 
 def parse(selector):
     from stilus.parser import Parser
+
     parser = Parser(selector, {})
-    parser.state.append('selector-parts')
+    parser.state.append("selector-parts")
     nodes = parser.stmt_selector()
     for node in nodes:
-        node.value = ''.join([str(segment) for segment in node.segments])
+        node.value = "".join([str(segment) for segment in node.segments])
     return nodes
 
 
 def push_to_stack(selectors, stack):
     for selector in selectors:
         selector = selector.first()
-        assert_string(selector, 'selector')
+        assert_string(selector, "selector")
         stack.append(parse(selector.string))
 
 
@@ -28,9 +29,9 @@ def selector(*args, evaluator=None):
 
         # selector .a
         if length == 1:
-            assert_string(expr.first(), 'selector')
+            assert_string(expr.first(), "selector")
             value = expr.first().string
-            parsed = SelectorParser(value).parse()['value']
+            parsed = SelectorParser(value).parse()["value"]
 
             if parsed == value:
                 return value
@@ -44,7 +45,7 @@ def selector(*args, evaluator=None):
                 push_to_stack(expr.nodes, stack)
             # selector('.a' '.b' '.c')
             else:
-                joined = ' '.join([node.string for node in expr.nodes])
+                joined = " ".join([node.string for node in expr.nodes])
                 stack.append(parse(joined))
 
     # selector('.a', '.b', '.c')
@@ -52,6 +53,6 @@ def selector(*args, evaluator=None):
         push_to_stack(args, stack)
 
     if stack:
-        return ','.join(compile_selectors(stack))
+        return ",".join(compile_selectors(stack))
     else:
-        return '&'
+        return "&"

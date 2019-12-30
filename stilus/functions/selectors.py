@@ -11,19 +11,19 @@ def selectors(evaluator=None):
             if len(group) > 1:
                 selector_values = []
                 for selector in group:
-                    nested = SelectorParser(selector.value).parse()['nested']
+                    nested = SelectorParser(selector.value).parse()["nested"]
                     if nested and i != 0:
-                        selector_values.append(f'& {selector.value}')
+                        selector_values.append(f"& {selector.value}")
                     else:
-                        selector_values.append(f'{selector.value}')
-                expr.append(String(','.join(selector_values)))
+                        selector_values.append(f"{selector.value}")
+                expr.append(String(",".join(selector_values)))
             else:
                 selector = group[0].value
-                nested = SelectorParser(selector).parse()['nested']
+                nested = SelectorParser(selector).parse()["nested"]
                 if nested and i != 0:
-                    expr.append(String(f'& {selector}'))
+                    expr.append(String(f"& {selector}"))
                 else:
-                    expr.append(String(f'{selector}'))
+                    expr.append(String(f"{selector}"))
     else:
-        expr.append(String('&'))
+        expr.append(String("&"))
     return expr

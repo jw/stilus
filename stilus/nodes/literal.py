@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Literal(Node):
-
     def __init__(self, string, css=False, prefixed=False, lineno=1, column=1):
         super().__init__(string, lineno=lineno, column=column)
         self.string = string
@@ -12,7 +11,7 @@ class Literal(Node):
         self.prefixed = prefixed
 
     def __str__(self):
-        return f'{self.value}'
+        return f"{self.value}"
 
     def __repr__(self):
         return self.__str__()
@@ -33,16 +32,20 @@ class Literal(Node):
         return False
 
     def to_json(self):
-        return json.dumps({'__type': 'Literal',
-                           'val': self.value,
-                           'string': self.string,
-                           'prefixed': self.prefixed,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Literal",
+                "val": self.value,
+                "string": self.string,
+                "prefixed": self.prefixed,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )
 
     def coerce(self, other):
-        if other.node_name in ['ident', 'string', 'literal']:
+        if other.node_name in ["ident", "string", "literal"]:
             return Literal(other.string)
         else:
             super().coerce(other)

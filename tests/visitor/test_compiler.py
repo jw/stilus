@@ -5,7 +5,7 @@ from stilus.visitor.normalizer import Normalizer
 
 
 def test_compiler_create():
-    parser = Parser('abc\n  color: red\n', {})
+    parser = Parser("abc\n  color: red\n", {})
     root = parser.parse()
     evaluator = Evaluator(root, parser=parser, options={})
     result = evaluator.evaluate()
@@ -13,4 +13,4 @@ def test_compiler_create():
     result = normalizer.normalize()
     compiler = Compiler(result, options={})
     result = compiler.compile()
-    assert f'{result}' == 'abc {\n  color: #f00;\n}\n'
+    assert f"{result}" == "abc {\n  color: #f00;\n}\n"

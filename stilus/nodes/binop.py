@@ -5,7 +5,6 @@ from .null import Null
 
 
 class BinOp(Node):
-
     def __init__(self, op, left, right=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.op = op
@@ -13,7 +12,7 @@ class BinOp(Node):
         self.right = right
 
     def __str__(self):
-        return f'{self.left} {self.op} {self.right}'
+        return f"{self.left} {self.op} {self.right}"
 
     def __repr__(self):
         return self.__str__()
@@ -46,10 +45,14 @@ class BinOp(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'BinOp',
-                           'left': self.left,
-                           'right': self.right,
-                           'op': self.op,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "BinOp",
+                "left": self.left,
+                "right": self.right,
+                "op": self.op,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

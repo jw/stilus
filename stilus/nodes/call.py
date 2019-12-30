@@ -5,9 +5,9 @@ from .node import Node
 
 
 class Call(Node):
-
-    def __init__(self, function_name, args: Arguments = None,
-                 lineno=1, column=1):
+    def __init__(
+        self, function_name, args: Arguments = None, lineno=1, column=1
+    ):
         super().__init__(lineno=lineno, column=column)
         self.function_name = function_name
         self.block = None
@@ -42,9 +42,13 @@ class Call(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Call',
-                           'node_name': self.node_name,
-                           'args': self.args,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Call",
+                "node_name": self.node_name,
+                "args": self.args,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )
