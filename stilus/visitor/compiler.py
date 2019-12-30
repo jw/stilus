@@ -405,7 +405,8 @@ class Compiler(Visitor):
         if property.name:
             name = property.name
         else:
-            name = ''.join(property.segments)
+            s = [f'{segment}' for segment in property.segments]
+            name = ''.join(s)
         arr = []
         arr.append(self.out(self.indent()))
         arr.append(self.out(name + (':' if self.compress else ': ')))

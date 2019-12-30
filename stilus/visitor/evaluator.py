@@ -763,7 +763,7 @@ class Evaluator(Visitor):
         for item in items:
             checked = False
             media_passed = False
-            if item.node_name == 'return':
+            if item.node_name == 'returnnode':
                 return
             elif item.node_name == 'block':
                 checked = True
