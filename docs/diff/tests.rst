@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +95% (335/349)
+Coverage: +96% (337/349)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -193,7 +193,7 @@ literal.styl                                  stylus/cases                   ok
 media.bubble.styl                             stylus/cases                   ok
 media.complex.styl                            stylus/cases                   ok
 media.styl                                    stylus/cases                   ok
-mixin.conditional.styl                        stylus/cases/mixin             not ok (return)
+mixin.conditional.styl                        stylus/cases/mixin             ok
 mixin.order.conditional.styl                  stylus/cases/mixin             ok
 mixin.order.nested.styl                       stylus/cases/mixin             ok
 mixin.order.styl                              stylus/cases/mixin             ok
@@ -205,7 +205,7 @@ mixins.nested.selectors.styl                  stylus/cases/mixin             ok
 mixins.nested.styl                            stylus/cases/mixin             ok
 mixins.order.2.styl                           stylus/cases/mixin             ok
 mixins.reset.styl                             stylus/cases/mixin             ok
-mixins.return.styl                            stylus/cases/mixin             not ok (return)
+mixins.return.styl                            stylus/cases/mixin             ok
 mixins.root.styl                              stylus/cases/mixin             ok
 moz-document-import.styl                      stylus/cases                   ok
 moz-document.styl                             stylus/cases                   ok
