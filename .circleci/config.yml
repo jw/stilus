@@ -14,8 +14,9 @@ jobs:
       - checkout
       - run: sudo pip install --upgrade poetry
       - run: poetry install -v
-      - run: poetry run flake8
-      - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+      - run: poetry run black stilus tests
+      - run: poetry run flake8 stilus tests
+      - run: poetry run pytest --cov=stilus --cov-report html --cov-report term --cov-report term-missing tests
       - run: poetry run coveralls
       - run: poetry run codecov
       - store_test_results:
@@ -29,8 +30,9 @@ jobs:
       - checkout
       - run: sudo pip install --upgrade poetry
       - run: poetry install -v
-      - run: poetry run flake8
-      - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+      - run: poetry run black stilus tests
+      - run: poetry run flake8 stilus tests
+      - run: poetry run pytest --cov=stilus --cov-report html --cov-report term --cov-report term-missing tests
       - run: poetry run coveralls
       - run: poetry run codecov
       - store_test_results:
@@ -44,8 +46,9 @@ jobs:
       - checkout
       - run: sudo pip install --upgrade poetry
       - run: poetry install -v
-      - run: poetry run flake8
-      - run: poetry run pytest --cov-report html --cov-report term --cov-report term-missing tests
+      - run: poetry run black stilus tests
+      - run: poetry run flake8 stilus tests
+      - run: poetry run pytest --cov=stilus --cov-report html --cov-report term --cov-report term-missing tests
       - run: poetry run coveralls
       - run: poetry run codecov
       - store_test_results:
