@@ -1159,9 +1159,11 @@ class Parser:
             if self._ident == self.peek():
                 return self.id()
             i += 1
-            while "=" != self.lookahead(i).type and self.lookahead(
-                i
-            ).type not in ["[", ",", "newline", "indent", "eos",]:
+            some_tokens = ["[", ",", "newline", "indent", "eos"]
+            while (
+                "=" != self.lookahead(i).type
+                and self.lookahead(i).type not in some_tokens
+            ):
                 i += 1
             if "=" == self.lookahead(i).type:
                 self._ident = self.peek()
