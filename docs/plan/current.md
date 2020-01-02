@@ -8,4 +8,6 @@ The issues release, a.k.a. `issues, issues everywhere!`
  - [x] Cleanup of coverall/codecov properties.
  - [x] Document using docstrings and Sphinx.
  - [x] Start using github issues.
- - [ ] Clear all the issues with a 'test' label.  12 to go.
+ - [ ] Clear all the issues with a 'test' label.  6 to go.
+ - [ ] Document the architecture.
+ - [ ] Explain the ci/development flow.
