@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Block(Node):
-
     def __init__(self, parent, node, scope=True, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.nodes = []
@@ -16,8 +15,10 @@ class Block(Node):
         self.mixin = False
 
     def __str__(self):
-        return f'block [{self.lineno}:{self.column}] | scope: {self.scope}; ' \
-               f'node: {self.node.node_name}'
+        return (
+            f"block [{self.lineno}:{self.column}] | scope: {self.scope}; "
+            f"node: {self.node.node_name}"
+        )
 
     def __repr__(self):
         return self.__str__()
@@ -35,13 +36,13 @@ class Block(Node):
 
     def has_properties(self):
         for node in self.nodes:
-            if node.node_name == 'property':
+            if node.node_name == "property":
                 return True
         return False
 
     def has_media(self):
         for node in self.nodes:
-            if node.node_name == 'media':
+            if node.node_name == "media":
                 return True
         return False
 
@@ -69,9 +70,13 @@ class Block(Node):
         self.nodes.append(node)
 
     def to_json(self):
-        return json.dumps({'__type': 'Block',
-                           'scope': self.scope,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename,
-                           'nodes': self.nodes})
+        return json.dumps(
+            {
+                "__type": "Block",
+                "scope": self.scope,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+                "nodes": self.nodes,
+            }
+        )

@@ -4,24 +4,23 @@ from .node import Node
 
 
 class Query(Node):
-
     def __init__(self, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.nodes = []
-        self.type = ''
-        self.predicate = ''
+        self.type = ""
+        self.predicate = ""
 
     def __str__(self):
         length = len(self.nodes)
-        pred = str(self.predicate) + ' ' if self.predicate else ''
+        pred = str(self.predicate) + " " if self.predicate else ""
         if self.type:
             type = str(self.type)
             if length > 0:
-                type += ' and '
+                type += " and "
         else:
-            type = ''
-        s = ' and '.join([str(e) for e in self.nodes])
-        return f'{pred}{type}{s}'
+            type = ""
+        s = " and ".join([str(e) for e in self.nodes])
+        return f"{pred}{type}{s}"
 
     def __repr__(self):
         return self.__str__()
@@ -42,14 +41,14 @@ class Query(Node):
 
     def resolved_type(self):
         if self.type:
-            if hasattr(self.type, 'node_name'):
+            if hasattr(self.type, "node_name"):
                 return self.type.string
             else:
                 return self.type
 
     def resolved_predicate(self):
         if self.predicate:
-            if hasattr(self.predicate, 'node_name'):
+            if hasattr(self.predicate, "node_name"):
                 return self.predicate.string
             else:
                 return self.predicate
@@ -70,16 +69,16 @@ class Query(Node):
         else:
             t2 = t1
 
-        if p1 and p2 and ('not' == p1 ^ 'not' == p2):
+        if p1 and p2 and ("not" == p1 ^ "not" == p2):
             if t1 == t2:
                 return
-            type = t2 if 'not' == t1 else t1
-            pred = p2 if 'not' == p1 else p1
-        elif p1 and p2 and ('not' == p1 and 'not' == p2):
+            type = t2 if "not" == t1 else t1
+            pred = p2 if "not" == p1 else p1
+        elif p1 and p2 and ("not" == p1 and "not" == p2):
             if t1 != t2:
                 return
             type = t1
-            pred = 'not'
+            pred = "not"
         elif t1 and t2 and t1 != t2:
             return
         else:
@@ -104,10 +103,14 @@ class Query(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Query',
-                           'predicate': self.predicate,
-                           'type': self.type,
-                           'nodes': self.nodes,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Query",
+                "predicate": self.predicate,
+                "type": self.type,
+                "nodes": self.nodes,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

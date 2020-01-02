@@ -5,13 +5,12 @@ from .node import Node
 
 
 class ReturnNode(Node, Exception):
-
     def __init__(self, expression: Expression = None, lineno=1, column=1):
         Node.__init__(self, lineno=lineno, column=column)
         self.expression = expression
 
     def __str__(self):
-        return f'Return[{self.expression}]'
+        return f"Return[{self.expression}]"
 
     def __repr__(self):
         return self.__str__()
@@ -35,8 +34,12 @@ class ReturnNode(Node, Exception):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Return',
-                           'expr': self.expression,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Return",
+                "expr": self.expression,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

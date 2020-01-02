@@ -5,8 +5,8 @@ from stilus.utils import assert_string
 
 
 def split(delim, value, evaluator=None):
-    assert_string(delim, 'delimiter')
-    assert_string(value, 'val')
+    assert_string(delim, "delimiter")
+    assert_string(value, "val")
     words = value.string.split(delim.string)
     expr = Expression()
     for word in words:

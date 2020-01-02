@@ -6,14 +6,13 @@ from .selector import Selector
 
 
 class Group(Node):
-
     def __init__(self, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.nodes = []
         self.extends = []
 
     def __str__(self):
-        return f'{self.nodes}:{self.extends}'
+        return f"{self.nodes}:{self.extends}"
 
     def __repr__(self):
         return self.__str__()
@@ -50,9 +49,13 @@ class Group(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Group',
-                           'nodes': self.nodes,
-                           'block': self.block,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Group",
+                "nodes": self.nodes,
+                "block": self.block,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

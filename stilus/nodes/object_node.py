@@ -6,7 +6,6 @@ from .null import null
 
 
 class ObjectNode(Node):
-
     def __init__(self, values: dict = None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         if values is None:
@@ -18,7 +17,7 @@ class ObjectNode(Node):
         s = []
         for key, value in self.values.items():
             s.append(f'"{key}":"{str(self.values[key])}"')
-        return '{' + ','.join(s) + '}'
+        return "{" + ",".join(s) + "}"
 
     def __repr__(self):
         return self.__str__()
@@ -51,11 +50,11 @@ class ObjectNode(Node):
         return key in self.values
 
     def operate(self, op, right):
-        if op in ['.', '[]']:
+        if op in [".", "[]"]:
             return self.get(right.hash())
-        elif op == '==':
+        elif op == "==":
             values = self.values
-            if right.node_name != 'objectnode' or len(self) != len(right):
+            if right.node_name != "objectnode" or len(self) != len(right):
                 return false
             for key in values:
                 a = values[key]
@@ -63,8 +62,8 @@ class ObjectNode(Node):
                 if a.operate(op, b).is_false():
                     return false
             return Boolean(True)
-        elif op == '!=':
-            return self.operate('==', right).negate()
+        elif op == "!=":
+            return self.operate("==", right).negate()
         else:
             return self.operate(op, right)
 
@@ -75,42 +74,48 @@ class ObjectNode(Node):
 
         # fixme: node.nodes
         def to_string(node):
-            if hasattr(node, 'nodes') and node.nodes:
+            if hasattr(node, "nodes") and node.nodes:
                 strings = []
                 for n in node.nodes:
                     strings.append(to_string(n))
-                if hasattr(node, 'is_list') and node.is_list:
-                    return ','.join(strings)
+                if hasattr(node, "is_list") and node.is_list:
+                    return ",".join(strings)
                 else:
-                    return ' '.join(strings)
-            elif node.node_name == 'literal' and node.value == ',':
-                return '\\,'
+                    return " ".join(strings)
+            elif node.node_name == "literal" and node.value == ",":
+                return "\\,"
             else:
                 return str(node)
 
-        string = '{'
+        string = "{"
         for key, value in self.values.items():
-            if value.first().node_name == 'objectnode':
-                string += key + ' ' + value.first().to_block()
+            if value.first().node_name == "objectnode":
+                string += key + " " + value.first().to_block()
             else:
-                if key == '@charset':
-                    string += key + ' ' + str(value.first) + ';'
+                if key == "@charset":
+                    string += key + " " + str(value.first) + ";"
                 else:
 
-                    string += key + ':' + to_string(value) + ';'
-        string += '}'
+                    string += key + ":" + to_string(value) + ";"
+        string += "}"
         return string
 
     def clone(self, parent=None, node=None):
         clone = ObjectNode(lineno=self.lineno, column=self.column)
         clone.filename = self.filename
-        clone.values = {key: value.clone(parent, clone)
-                        for key, value in self.values.items()}
+        clone.values = {
+            key: value.clone(parent, clone)
+            for key, value in self.values.items()
+        }
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Object',
-                           'vals': self.values,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Object",
+                "vals": self.values,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

@@ -4,13 +4,12 @@ from .atrule import Atrule
 
 
 class Media(Atrule):
-
     def __init__(self, value=None, lineno=1, column=1):
-        super().__init__('media', lineno=lineno, column=column)
+        super().__init__("media", lineno=lineno, column=column)
         self.value = value
 
     def __str__(self):
-        return f'@media {self.value}'
+        return f"@media {self.value}"
 
     def __repr__(self):
         return self.__str__()
@@ -34,8 +33,12 @@ class Media(Atrule):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Media',
-                           'val': self.value,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Media",
+                "val": self.value,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

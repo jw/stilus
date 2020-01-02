@@ -10,7 +10,7 @@ class Nothing(Node):
         super().__init__()
 
     def __str__(self):
-        return f'nothing'
+        return f"nothing"
 
     def __repr__(self):
         return self.__str__()
@@ -27,7 +27,11 @@ class Nothing(Node):
         return hash(self.__key())
 
     def to_json(self):
-        return json.dumps({'__type': 'Nothing',
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Nothing",
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

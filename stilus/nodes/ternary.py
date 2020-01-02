@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Ternary(Node):
-
     def __init__(self, cond, true_expr, false_expr, lineno=1, column=1):
         super().__init__(lineno=lineno, column=1)
         self.cond = cond
@@ -12,7 +11,7 @@ class Ternary(Node):
         self.false_expr = false_expr
 
     def __str__(self):
-        return f'({self.cond},{self.true_expr},{self.false_expr})'
+        return f"({self.cond},{self.true_expr},{self.false_expr})"
 
     def __repr__(self):
         return [n.__str__() for n in self.nodes]
@@ -29,8 +28,9 @@ class Ternary(Node):
         return hash(self.__key())
 
     def clone(self, parent=None, node=None):
-        clone = Ternary(None, None, None,
-                        lineno=self.lineno, column=self.column)
+        clone = Ternary(
+            None, None, None, lineno=self.lineno, column=self.column
+        )
         clone.cond = self.cond.clone(parent, clone)
         clone.true_expr = self.true_expr.clone(parent, clone)
         clone.false_expr = self.false_expr.clone(parent, clone)
@@ -38,9 +38,13 @@ class Ternary(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'UnaryOp',
-                           'op': self.op,
-                           'expr': self.expr,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "UnaryOp",
+                "op": self.op,
+                "expr": self.expr,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

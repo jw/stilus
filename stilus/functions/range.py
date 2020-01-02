@@ -5,13 +5,14 @@ from stilus.utils import assert_type
 
 
 def range_function(start, stop, step=None, evaluator=None):
-    assert_type(start, 'unit', 'start')
-    assert_type(stop, 'unit', 'stop')
+    assert_type(start, "unit", "start")
+    assert_type(stop, "unit", "stop")
     if step:
-        assert_type(step, 'unit', 'step')
+        assert_type(step, "unit", "step")
         if step.value == 0:
-            raise StilusError('ArgumentError: "step" argument '
-                              'must not be zero')
+            raise StilusError(
+                'ArgumentError: "step" argument ' "must not be zero"
+            )
     else:
         step = Unit(1)
     lst = Expression()

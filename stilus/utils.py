@@ -27,15 +27,20 @@ def unwrap(expression: Expression) -> Node:
     :param expression:
     :return:
     """
-    if hasattr(expression, 'preserve') and expression.preserve:
+    if hasattr(expression, "preserve") and expression.preserve:
         return expression
-    if hasattr(expression, 'node_name') and \
-            expression.node_name not in ['arguments', 'expression']:
+    if hasattr(expression, "node_name") and expression.node_name not in [
+        "arguments",
+        "expression",
+    ]:
         return expression
     if len(expression) != 1:
         return expression
-    if hasattr(expression, 'nodes') and len(expression.nodes) > 0 and \
-            expression.nodes[0].node_name not in ['arguments', 'expression']:
+    if (
+        hasattr(expression, "nodes")
+        and len(expression.nodes) > 0
+        and expression.nodes[0].node_name not in ["arguments", "expression"]
+    ):
         return expression
     if isinstance(expression, list) and len(expression) > 0 and \
             not hasattr(expression[0], 'nodes'):
@@ -48,31 +53,35 @@ def assert_present(node: Node, name=None):
         return
     if name:
         raise ValueError(f'"{name}" argument required')
-    raise ValueError('argument missing')
+    raise ValueError("argument missing")
 
 
 def assert_color(node: Node, param=Node):
     assert_present(node, param)
-    if node.node_name not in ['rgba', 'hsla']:
-        raise TypeError(f'TypeError: expected rgba or hsla, but got '
-                        f'{node.node_name}:{node}')
+    if node.node_name not in ["rgba", "hsla"]:
+        raise TypeError(
+            f"TypeError: expected rgba or hsla, but got "
+            f"{node.node_name}:{node}"
+        )
 
 
 def assert_string(node: Node, param):
     assert_present(node, param)
-    if node.node_name in ['string', 'ident', 'literal']:
+    if node.node_name in ["string", "ident", "literal"]:
         return
     else:
-        raise TypeError(f'TypeError: expected string, ident or literal, '
-                        f'but got {node.node_name}:{node}')
+        raise TypeError(
+            f"TypeError: expected string, ident or literal, "
+            f"but got {node.node_name}:{node}"
+        )
 
 
 def assert_type(node: Node, type, param=None):
     assert_present(node, param)
     if node.node_name == type:
         return
-    p = f'{param} to be a ' if param else ''
-    raise TypeError(f'expected {p}{type}, but got {node.node_name}:{node}')
+    p = f"{param} to be a " if param else ""
+    raise TypeError(f"expected {p}{type}, but got {node.node_name}:{node}")
 
 
 def clamp(n, smallest=0, largest=255):
@@ -96,7 +105,7 @@ def clamp_percentage(n, smallest=0, largest=100):
     return max(smallest, min(n, largest))
 
 
-def compile_selectors(arr, leave_hidden=False, indent=''):
+def compile_selectors(arr, leave_hidden=False, indent=""):
     """
     Compile selector strings in `arr` from the bottom-up
     to produce the selector combinations. For example
@@ -125,7 +134,7 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
     def parse(selector, buf):
         parts = [selector.value]
         parents = []
-        string = SelectorParser(parts[0], parents, parts).parse()['value']
+        string = SelectorParser(parts[0], parents, parts).parse()["value"]
 
         if buf:
             for i, part in enumerate(buf):
@@ -134,10 +143,10 @@ def compile_selectors(arr, leave_hidden=False, indent=''):
                 child = SelectorParser(buf[i], parents, parts).parse()
 
                 # todo: fix this
-                if child['nested']:
-                    string += ' ' + child['value']
+                if child["nested"]:
+                    string += " " + child["value"]
                 else:
-                    string = child['value']
+                    string = child["value"]
 
         return string.strip()
 
@@ -171,8 +180,10 @@ def merge(a, b, deep=None):
         if deep and k in a.keys():
             node_a = unwrap(a[k].first())
             node_b = unwrap(b[k].first())
-            if node_a.node_name == 'objectnode' and \
-                    node_b.node_name == 'objectnode':
+            if (
+                node_a.node_name == "objectnode"
+                and node_b.node_name == "objectnode"
+            ):
                 a[k].first().values = merge(node_a.values, node_b.values, deep)
             else:
                 a[k] = b[k]
@@ -182,7 +193,7 @@ def merge(a, b, deep=None):
 
 
 # todo: use libpath
-def lookup(path: Path, paths: List, ignore=''):
+def lookup(path: Path, paths: List, ignore=""):
     if isinstance(path, Path):
         p = path
     else:
@@ -214,7 +225,7 @@ def find(path, paths, ignore):
         if lookup == ignore:
             continue
         # fixme: this is *very* bad
-        if '*' in path:
+        if "*" in path:
             found = sorted(Path(base).glob(path))
             if found:
                 return [str(file) for file in found]
@@ -228,32 +239,33 @@ def find(path, paths, ignore):
 def lookup_index(name, paths, filename, parser=None):
     p = Path(name)
 
-    found = find(join(str(p), 'index.styl'), paths, filename)
+    found = find(join(str(p), "index.styl"), paths, filename)
 
     if not found:
         looking_for = Path(p.name)
-        looking_for = looking_for.with_suffix('.styl')
+        looking_for = looking_for.with_suffix(".styl")
         found = find(join(str(p), str(looking_for)), paths, filename)
 
     def find_in_js_packages(directory):
-        package = lookup(join(directory, 'package.json'), paths, filename)
+        package = lookup(join(directory, "package.json"), paths, filename)
         if not package:
-            if re.search('.styl$', directory, re.IGNORECASE):
+            if re.search(".styl$", directory, re.IGNORECASE):
                 return lookup_index(directory, paths, filename)
             else:
-                return find_in_js_packages(directory + '.styl')
+                return find_in_js_packages(directory + ".styl")
         if parser:
             with open(package) as json_file:
                 data = json.load(json_file)
-                if data['main']:
-                    found = find(join(directory, data['main']),
-                                 paths, filename)
+                if data["main"]:
+                    found = find(
+                        join(directory, data["main"]), paths, filename
+                    )
                 else:
                     found = lookup_index(directory, paths, filename)
         return found
 
-    if not found and 'node_modules' not in name:
-        found = find_in_js_packages(join('node_modules', name))
+    if not found and "node_modules" not in name:
+        found = find_in_js_packages(join("node_modules", name))
 
     return found
 
@@ -290,7 +302,7 @@ def coerce(value, raw: bool, lineno=1, column=1):
         return coerce_list(value, raw, lineno=lineno, column=column)
     elif value is None:
         return null
-    elif hasattr(value, 'node_name'):
+    elif hasattr(value, "node_name"):
         return value
     else:
         coerce_object(value, raw, lineno=lineno, column=column)
@@ -298,6 +310,7 @@ def coerce(value, raw: bool, lineno=1, column=1):
 
 def parse_string(str: String):
     from stilus.parser import Parser
+
     try:
         parser = Parser(str, {})
         result = parser.list()

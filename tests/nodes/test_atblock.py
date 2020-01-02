@@ -7,7 +7,7 @@ from stilus.nodes.null import null
 
 def test_atblock():
     atblock = Atblock()
-    assert atblock.node_name == 'atblock'
+    assert atblock.node_name == "atblock"
     assert atblock.block is None
     assert atblock.nodes == []
     block = Block(Node(), Node())

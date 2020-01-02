@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Selector(Node):
-
     def __init__(self, segments=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.inherits = True
@@ -14,12 +13,12 @@ class Selector(Node):
 
     def __str__(self):
         try:
-            string = ''.join(str(self.segments))
+            string = "".join(str(self.segments))
             if self.optional:
-                string += ' !optional'
+                string += " !optional"
             return string
         except TypeError:
-            return 'n/a'
+            return "n/a"
 
     def __repr__(self):
         return self.__str__()
@@ -34,7 +33,7 @@ class Selector(Node):
         return self.value == other.value
 
     def is_placeholder(self):
-        if self.value and '$' in self.value[0:2]:
+        if self.value and "$" in self.value[0:2]:
             return True
         else:
             return False
@@ -50,11 +49,15 @@ class Selector(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Selector',
-                           'inherits': self.inherits,
-                           'segments': self.segments,
-                           'optional': self.optional,
-                           'val': self.value,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Selector",
+                "inherits": self.inherits,
+                "segments": self.segments,
+                "optional": self.optional,
+                "val": self.value,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

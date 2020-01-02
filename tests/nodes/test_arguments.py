@@ -6,13 +6,13 @@ from stilus.nodes.unit import Unit
 
 def test_arguments():
     arguments = Arguments()
-    assert arguments.node_name == 'arguments'
+    assert arguments.node_name == "arguments"
     assert len(arguments.map) == 0
 
 
 def test_from_expression():
     expression = Expression()
-    expression.append(Unit(10, 'mm'))
+    expression.append(Unit(10, "mm"))
     expression.append(true)
     expression.lineno = 42
     expression.column = 13

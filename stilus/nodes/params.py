@@ -4,13 +4,12 @@ from .node import Node
 
 
 class Params(Node):
-
     def __init__(self, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.nodes = []
 
     def __str__(self):
-        return f'nothing'
+        return f"nothing"
 
     def __repr__(self):
         return self.__str__()
@@ -40,8 +39,12 @@ class Params(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Params',
-                           'nodes': self.nodes,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Params",
+                "nodes": self.nodes,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

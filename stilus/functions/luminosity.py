@@ -14,6 +14,8 @@ def luminosity(color: Color, evaluator=None):
         else:
             return pow((channel + 0.055) / 1.055, 2.4)
 
-    return Unit(0.2126 * process_channel(color.r) +
-                0.7152 * process_channel(color.g) +
-                0.0722 * process_channel(color.b))
+    return Unit(
+        0.2126 * process_channel(color.r)
+        + 0.7152 * process_channel(color.g)
+        + 0.0722 * process_channel(color.b)
+    )

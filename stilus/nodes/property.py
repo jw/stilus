@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Property(Node):
-
     def __init__(self, segments, expr=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.segments = segments
@@ -45,12 +44,16 @@ class Property(Node):
 
     def to_json(self):
         # FIXME: add expr and literal to this dict
-        return json.dumps({'__type': 'Property',
-                           'segments': self.segments,
-                           'name': self.name,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Property",
+                "segments": self.segments,
+                "name": self.name,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )
 
     def operate(self, op, right, value):
         return self.expr.operate(op, right, value)

@@ -4,10 +4,10 @@ from stilus.nodes.ident import Ident
 
 
 def test_feature():
-    foo = Ident('foo')
-    bar = Ident('bar')
+    foo = Ident("foo")
+    bar = Ident("bar")
     feature = Feature([foo, bar])
-    assert feature.node_name == 'feature'
+    assert feature.node_name == "feature"
     assert feature.segments == [foo, bar]
     assert feature.expr is None
     expression = Expression()

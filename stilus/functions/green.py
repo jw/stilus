@@ -9,9 +9,7 @@ def green(color: Type[Color], value=None, evaluator=None):
     if isinstance(color, HSLA):
         color = color.rgba()
     if value:
-        return rgba(Unit(color.r),
-                    value,
-                    Unit(color.b),
-                    Unit(color.a),
-                    evaluator)
-    return Unit(color.g, '')
+        return rgba(
+            Unit(color.r), value, Unit(color.b), Unit(color.a), evaluator
+        )
+    return Unit(color.g, "")

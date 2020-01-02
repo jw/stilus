@@ -4,7 +4,6 @@ from .node import Node
 
 
 class QueryList(Node):
-
     def __init__(self, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.nodes = []
@@ -48,8 +47,12 @@ class QueryList(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'QueryList',
-                           'nodes': self.nodes,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "QueryList",
+                "nodes": self.nodes,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

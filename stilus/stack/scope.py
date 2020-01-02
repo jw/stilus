@@ -5,7 +5,6 @@ from stilus.nodes.node import Node
 
 
 class Scope:
-
     def __init__(self):
         self.commons = {}
 
@@ -19,10 +18,10 @@ class Scope:
 
     def __str__(self):
         if not self.commons:
-            return '[Empty scope]'
+            return "[Empty scope]"
         else:
-            commons = ', '.join(f'@{key}' for key in self.commons.keys())
-            return f'[Scope {commons}]'
+            commons = ", ".join(f"@{key}" for key in self.commons.keys())
+            return f"[Scope {commons}]"
 
     def __repr__(self):
         return self.__str__()

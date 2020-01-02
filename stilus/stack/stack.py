@@ -16,12 +16,12 @@ class Stack(list):
         buffer = []
         for frame in self:
             node = frame.block.node
-            location = f'({node.filename}:{node.lineno}:{node.column})'
-            if node.name == 'function':
-                buffer.append(f'    at {node.node_name}() {location}')
-            elif node.name == 'group':
+            location = f"({node.filename}:{node.lineno}:{node.column})"
+            if node.name == "function":
+                buffer.append(f"    at {node.node_name}() {location}")
+            elif node.name == "group":
                 buffer.append(f'    at "{node.nodes[0].value}" {location}')
-        return '\n'.join(buffer)
+        return "\n".join(buffer)
 
     def __repr__(self):
         return self.__str__()
@@ -66,7 +66,7 @@ class Stack(list):
                 val = frame.lookup(name)
                 if val is not None:  # fixme: use val: (fix __len__)
                     return val
-            if hasattr(block, 'parent'):
+            if hasattr(block, "parent"):
                 block = block.parent
             else:
                 block = None

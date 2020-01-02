@@ -16,7 +16,7 @@ def test_negate():
 
 def test_string():
     boolean = Boolean(False)
-    assert f'{boolean}' == 'false'
+    assert f"{boolean}" == "false"
 
 
 def test_true():
@@ -29,4 +29,4 @@ def test_false():
 
 def test_name():
     boolean = Boolean(False)
-    assert boolean.node_name == 'boolean'
+    assert boolean.node_name == "boolean"

@@ -51,7 +51,7 @@ def test_unwrap_one_than_one():
 
 def test_unwrap_no_expression():
     assert utils.unwrap(true) == true
-    assert utils.unwrap(Unit(50, 'mm')) == Unit(50, 'mm')
+    assert utils.unwrap(Unit(50, "mm")) == Unit(50, "mm")
 
 
 def test_compile_selectors():

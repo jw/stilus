@@ -4,28 +4,33 @@ from .node import Node
 
 
 class Ident(Node):
-
-    def __init__(self, name, value=None, mixin=False,
-                 lineno=1, column=1):
+    def __init__(self, name, value=None, mixin=False, lineno=1, column=1):
         super().__init__(value, lineno=lineno, column=column)
         self.name = name
         self.string = name
         # todo: clean this up
         from stilus.nodes.null import null
+
         self.value = null if value is None else value
         self.mixin = mixin
         self.property = None
         self.rest = False
 
     def __str__(self):
-        return f'{self.string}'
+        return f"{self.string}"
 
     def __repr__(self):
         return self.__str__()
 
     def __key(self):
-        return self.name, self.value, self.mixin, self.property, \
-               self.lineno, self.column
+        return (
+            self.name,
+            self.value,
+            self.mixin,
+            self.property,
+            self.lineno,
+            self.column,
+        )
 
     def __eq__(self, other):
         if isinstance(other, Ident):
@@ -53,29 +58,34 @@ class Ident(Node):
         return self.value is None
 
     def to_json(self):
-        return json.dumps({'__type': 'Ident',
-                           'node_name': self.node_name,
-                           'val': self.value,
-                           'mixin': self.mixin,
-                           'property': self.property,
-                           'rest': self.rest,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Ident",
+                "node_name": self.node_name,
+                "val": self.value,
+                "mixin": self.mixin,
+                "property": self.property,
+                "rest": self.rest,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )
 
     def coerce(self, other):
-        if other.node_name in ['ident', 'string', 'literal']:
+        if other.node_name in ["ident", "string", "literal"]:
             return Ident(other.string)
-        elif other.node_name == 'unit':
+        elif other.node_name == "unit":
             return Ident(other.__str__())
         else:
             return super().coerce(other)
 
     def operate(self, op, right, value=None):
         value = right.first()
-        if op == '-':
-            if value.node_name == 'unit':
+        if op == "-":
+            if value.node_name == "unit":
                 from stilus.nodes.expression import Expression
+
                 expression = Expression()
                 value = value.clone()
                 value.value = -value.value

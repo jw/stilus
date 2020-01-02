@@ -29,28 +29,30 @@ def _handle_weird_deg_value(value, type):
     node.
     """
     result = value
-    if type == 'deg' and re.match(r'[1-9]', value[-1]):
-        match = re.search(r'\.(0*)', value)
+    if type == "deg" and re.match(r"[1-9]", value[-1]):
+        match = re.search(r"\.(0*)", value)
         if match and len(match.groups()) == 1 and len(match.group(1)) == 14:
-            result = value[:-1].rstrip('0').rstrip('.')
+            result = value[:-1].rstrip("0").rstrip(".")
     return result
 
 
 # fixme: this method should not exist!
 def _handle_weird_unit(v, n, unit):
-    if isinstance(n, float) and unit.value is not None \
-            and has_many_zeros_and_a_number(v):
+    if (
+        isinstance(n, float)
+        and unit.value is not None
+        and has_many_zeros_and_a_number(v)
+    ):
         return unit.value
     return v
 
 
 class Compiler(Visitor):
-
     def __init__(self, root, options):
         super().__init__(root)
-        self.compress = options.get('compress', False)
-        self.linenos = options.get('linenos', False)
-        self.spaces = options.get('indent spaces', 2)
+        self.compress = options.get("compress", False)
+        self.linenos = options.get("linenos", False)
+        self.spaces = options.get("indent spaces", 2)
         self.indents = 0
         self.buf = None
         self.last = None
@@ -67,59 +69,71 @@ class Compiler(Visitor):
 
     def indent(self):
         if self.compress:
-            return ''
-        return ' ' * (self.spaces * self.indents)
+            return ""
+        return " " * (self.spaces * self.indents)
 
     def need_brackets(self, node):
         if 0 == self.indents:
             return True
-        if 'atrule' != node.node_name:
+        if "atrule" != node.node_name:
             return True
         if node.has_only_properties():
             return True
         return False
 
     def visit_root(self, root: Root):
-        self.buf = ''
+        self.buf = ""
         for node in root.nodes:
             if self.linenos:
                 self.debug_info(node)
             ret = self.visit(node)
             if ret:
-                self.buf += self.out(ret + '\n', node)
+                self.buf += self.out(ret + "\n", node)
         return self.buf
 
-    def visit_block(self, block: Block):
+    def visit_block(self, block: Block):  # noqa: C901
         if self.compress:
-            separator = ''
+            separator = ""
         else:
-            separator = '\n'
+            separator = "\n"
 
         if block.has_properties() and not block.lacks_rendered_selectors:
 
             last_property_index = 0
             if self.compress:
                 for i, node in reversed(list(enumerate(block.nodes))):
-                    if node.node_name == 'property':
+                    if node.node_name == "property":
                         last_property_index = i
                         break
 
             needs_brackets = self.need_brackets(block.node)
             if needs_brackets:
-                self.buf += self.out('{' if self.compress else ' {\n')
+                self.buf += self.out("{" if self.compress else " {\n")
                 self.indents += 1
 
             for i, node in enumerate(block.nodes):
                 self.last = last_property_index == i
-                if node.node_name in ['null', 'expression', 'function',
-                                      'group', 'block', 'unit', 'media',
-                                      'keyframes', 'atrule', 'supports']:
+                if node.node_name in [
+                    "null",
+                    "expression",
+                    "function",
+                    "group",
+                    "block",
+                    "unit",
+                    "media",
+                    "keyframes",
+                    "atrule",
+                    "supports",
+                ]:
                     continue
-                elif node.node_name == 'comment' and node.inline and \
-                        not self.compress:
+                elif (
+                    node.node_name == "comment"
+                    and node.inline
+                    and not self.compress
+                ):
                     self.buf = self.buf[0:-1]
-                    self.buf += self.out(f' {self.visit(node)}\n', node)
-                elif node.node_name == 'property':
+                    self.buf += self.out(f" {self.visit(node)}\n", node)
+                elif node.node_name == "property":
                     ret = self.visit(node) + separator
                     self.buf += ret if self.compress else self.out(ret, node)
                 else:
@@ -127,38 +141,40 @@ class Compiler(Visitor):
 
             if needs_brackets:
                 self.indents -= 1
-                self.buf += self.out(self.indent() + '}' + separator)
+                self.buf += self.out(self.indent() + "}" + separator)
 
         # nesting
         index = 0
         while index < len(block.nodes):
             node = block.nodes[index]
-            if node.node_name in ['group', 'block', 'keyframes']:
+            if node.node_name in ["group", "block", "keyframes"]:
                 if self.linenos:
                     self.debug_info(node)
                 self.visit(node)
-            elif node.node_name in ['media', 'import', 'atrule', 'supports']:
+            elif node.node_name in ["media", "import", "atrule", "supports"]:
                 self.visit(node)
-            elif node.node_name == 'comment':
+            elif node.node_name == "comment":
                 if not node.suppress:
-                    self.buf += self.out(self.indent() +
-                                         self.visit(node) + '\n', node)
-            elif node.node_name in ['charset', 'literal', 'namespace']:
-                self.buf += self.out(self.visit(node) + '\n', node)
+                    self.buf += self.out(
+                        self.indent() + self.visit(node) + "\n", node
+                    )
+            elif node.node_name in ["charset", "literal", "namespace"]:
+                self.buf += self.out(self.visit(node) + "\n", node)
             index += 1
 
     def visit_keyframes(self, node: Node):
         if not node.frames:
             return
 
-        if node.prefix == 'official':
-            prefix = ''
+        if node.prefix == "official":
+            prefix = ""
         else:
-            prefix = f'-{node.prefix}-'
+            prefix = f"-{node.prefix}-"
 
-        brace = '{' if self.compress else ' {\n'
-        self.buf += self.out(f'@{prefix}keyframes '
-                             f'{self.visit(node.value)}{brace}', node)
+        brace = "{" if self.compress else " {\n"
+        self.buf += self.out(
+            f"@{prefix}keyframes " f"{self.visit(node.value)}{brace}", node
+        )
 
         self.keyframe = True
         self.indents += 1
@@ -166,91 +182,98 @@ class Compiler(Visitor):
         self.indents -= 1
         self.keyframe = False
 
-        brace = '' if self.compress else '\n'
-        self.buf += self.out(f'}}{brace}')
+        brace = "" if self.compress else "\n"
+        self.buf += self.out(f"}}{brace}")
 
     def visit_media(self, media: Media):
         val = media.value
         if not media.has_output() or len(val.nodes) == 0:
             return
 
-        self.buf += self.out('@media ', media)
+        self.buf += self.out("@media ", media)
         self.visit(val)
-        self.buf += self.out('{' if self.compress else ' {\n')
+        self.buf += self.out("{" if self.compress else " {\n")
         self.indents += 1
         self.visit(media.block)
         self.indents -= 1
-        self.buf += self.out('}' if self.compress else '}\n')
+        self.buf += self.out("}" if self.compress else "}\n")
 
     def visit_querylist(self, queries):
         for i, node in enumerate(queries.nodes):
             self.visit(node)
             if len(queries.nodes) - 1 != i:
-                self.buf += self.out(',' if self.compress else ', ')
+                self.buf += self.out("," if self.compress else ", ")
 
     def visit_query(self, node):
         length = len(node.nodes)
         if node.predicate:
-            self.buf += self.out(f'{node.predicate} ')
+            self.buf += self.out(f"{node.predicate} ")
         if node.type:
-            self.buf += self.out(str(node.type) +
-                                 (' and ' if length > 0 else ''))
+            self.buf += self.out(
+                str(node.type) + (" and " if length > 0 else "")
+            )
         for i, node in enumerate(node.nodes):
             self.buf += self.out(self.visit(node))
             if length - 1 != i:
-                self.buf += self.out(' and ')
+                self.buf += self.out(" and ")
 
     def visit_feature(self, node: Node):
         if node.expr is None:
             return node.name
         elif node.expr.is_empty():
-            return '(' + node.name + ')'
+            return "(" + node.name + ")"
         else:
-            return '(' + node.name + (':' if self.compress else ': ') + \
-                   self.visit(node.expr) + ')'
+            return (
+                "("
+                + node.name
+                + (":" if self.compress else ": ")
+                + self.visit(node.expr)
+                + ")"
+            )
 
     def visit_import(self, imported):
-        self.buf += self.out('@import ' + self.visit(imported.path) + ';\n',
-                             imported)
+        self.buf += self.out(
+            "@import " + self.visit(imported.path) + ";\n", imported
+        )
 
     def visit_atrule(self, atrule):
-        newline = '' if self.compress else '\n'
+        newline = "" if self.compress else "\n"
 
-        self.buf += self.out(f'{self.indent()}@{atrule.type}', atrule)
+        self.buf += self.out(f"{self.indent()}@{atrule.type}", atrule)
 
         if atrule.value:
-            self.buf += self.out(f' {atrule.value.strip()}')
+            self.buf += self.out(f" {atrule.value.strip()}")
 
         if atrule.block:
             if atrule.has_only_properties():
                 self.visit(atrule.block)
             else:
-                self.buf += self.out('{' if self.compress else ' {\n')
+                self.buf += self.out("{" if self.compress else " {\n")
                 self.indents += 1
                 self.visit(atrule.block)
                 self.indents -= 1
-                self.buf += self.out(self.indent() + '}' + newline)
+                self.buf += self.out(self.indent() + "}" + newline)
         else:
-            self.buf += self.out(';' + newline)
+            self.buf += self.out(";" + newline)
 
     def visit_supports(self, node):
         if not node.has_output():
             return
 
-        self.buf += self.out(self.indent() + '@supports ', node)
+        self.buf += self.out(self.indent() + "@supports ", node)
         self.is_condition = True
         self.buf += self.out(self.visit(node.condition))
         self.is_condition = False
-        self.buf += self.out('{' if self.compress else ' {\n')
+        self.buf += self.out("{" if self.compress else " {\n")
         self.indents += 1
         self.visit(node.block)
         self.indents -= 1
-        self.buf += self.out(self.indent() + ('}' if self.compress else '}\n'))
+        self.buf += self.out(self.indent() + ("}" if self.compress else "}\n"))
 
     def visit_comment(self, comment):
         if self.compress:
             if comment.suppress:
-                return ''
+                return ""
             else:
                 return comment.value
         else:
@@ -260,16 +283,16 @@ class Compiler(Visitor):
         return fn.function_name
 
     def visit_charset(self, charset):
-        return '@charset ' + self.visit(charset.value) + ';'
+        return "@charset " + self.visit(charset.value) + ";"
 
     def visit_namespace(self, namespace):
-        prefix = self.visit(namespace.prefix) + ' ' if namespace.prefix else ''
-        return f'@namespace {prefix}{self.visit(namespace.value)};'
+        prefix = self.visit(namespace.prefix) + " " if namespace.prefix else ""
+        return f"@namespace {prefix}{self.visit(namespace.value)};"
 
     def visit_literal(self, literal):
         val = literal.value
         if literal.css:
-            val = re.sub(r'^  ', '', val, flags=re.MULTILINE)
+            val = re.sub(r"^  ", "", val, flags=re.MULTILINE)
         return val
 
     def visit_boolean(self, boolean: Boolean):
@@ -282,27 +305,27 @@ class Compiler(Visitor):
         return str(hsla.rgba())
 
     def visit_unit(self, unit: Unit):
-        t = unit.type if unit.type else ''
+        t = unit.type if unit.type else ""
         n = unit.value
         f = isinstance(n, float)
         if self.compress:
             # always return '0' unless the unit is a percentage or time
-            if '%' != t and 's' != t and 'ms' != t and 0 == n:
+            if "%" != t and "s" != t and "ms" != t and 0 == n:
                 return 0
             if f:
                 # remove trailing zeros
-                n = f'{n:.3f}'.rstrip('0').rstrip('.')
+                n = f"{n:.3f}".rstrip("0").rstrip(".")
                 if 1 > float(n) > -1:
                     # omit leading '0' on floats
-                    n = n.replace('0.', '.')
-                return f'{n}{t}'
+                    n = n.replace("0.", ".")
+                return f"{n}{t}"
         if f:
-            v = f'{n:.15f}'.rstrip('0').rstrip('.')
+            v = f"{n:.15f}".rstrip("0").rstrip(".")
             v = _handle_weird_deg_value(v, t)
             v = _handle_weird_unit(v, n, unit)  # fixme: remove this!
-            return f'{v}{t}'
+            return f"{v}{t}"
         else:
-            return f'{n}{t}'
+            return f"{n}{t}"
 
     def visit_group(self, group: Group):
         if self.keyframe:
@@ -311,24 +334,24 @@ class Compiler(Visitor):
             stack = self.stack
 
         if self.compress:
-            comma = ','
+            comma = ","
         else:
-            comma = ',\n'
+            comma = ",\n"
 
         stack.append(group.nodes)
 
         # selectors
         if group.block.has_properties():
-            selectors = utils.compile_selectors(stack,
-                                                leave_hidden=False,
-                                                indent=self.indent())
+            selectors = utils.compile_selectors(
+                stack, leave_hidden=False, indent=self.indent()
+            )
 
             if selectors:
                 if self.keyframe:
                     if self.compress:
-                        comma = ','
+                        comma = ","
                     else:
-                        comma = ', '
+                        comma = ", "
 
                 for i, selector in enumerate(selectors):
                     last = i == len(selectors) - 1
@@ -337,8 +360,9 @@ class Compiler(Visitor):
                     if self.keyframe:
                         selector = selector.strip() if i else selector
                     try:
-                        self.buf += self.out(selector +
-                                             ('' if last else comma))
+                        self.buf += self.out(
+                            selector + ("" if last else comma)
+                        )
                     except BaseException:
                         raise StilusError()
             else:
@@ -354,48 +378,49 @@ class Compiler(Visitor):
         return string.value if self.is_url else str(string)
 
     def visit_null(self, node: Node):
-        return ''
+        return ""
 
     def visit_call(self, call: Call):
-        self.is_url = 'url' == call.function_name
+        self.is_url = "url" == call.function_name
         args = [self.visit(node) for node in call.args.nodes]
         if self.compress:
-            args = ','.join(args)
+            args = ",".join(args)
         else:
-            args = ', '.join(args)
+            args = ", ".join(args)
         if self.is_url:
             args = f'"{args}"'
         self.is_url = False
-        return f'{call.function_name}({args})'
+        return f"{call.function_name}({args})"
 
     def visit_expression(self, expr: Expression):
         buf = []
         length = len(expr.nodes)
         nodes = [self.visit(node) for node in expr.nodes]
 
-        for i, (node, next) in enumerate(zip(nodes, nodes[1:] + ['end'])):
+        for i, (node, next) in enumerate(zip(nodes, nodes[1:] + ["end"])):
             last = i == length - 1
             buf.append(str(node))
-            if '/' == next or '/' == node:
+            if "/" == next or "/" == node:
                 continue
             if last:
                 continue
 
-            if self.is_url or (self.is_condition and
-                               (')' == next or '(' == node)):
-                space = ''
+            if self.is_url or (
+                self.is_condition and (")" == next or "(" == node)
+            ):
+                space = ""
             else:
-                space = ' '
+                space = " "
 
             if expr.is_list:
                 if self.compress:
-                    buf.append(',')
+                    buf.append(",")
                 else:
-                    buf.append(', ')
+                    buf.append(", ")
             else:
                 buf.append(space)
 
-        return ''.join(buf)
+        return "".join(buf)
 
     def visit_arguments(self, arguments):
         return self.visit_expression(arguments)
@@ -405,24 +430,24 @@ class Compiler(Visitor):
         if property.name:
             name = property.name
         else:
-            s = [f'{segment}' for segment in property.segments]
-            name = ''.join(s)
+            s = [f"{segment}" for segment in property.segments]
+            name = "".join(s)
         arr = []
         arr.append(self.out(self.indent()))
-        arr.append(self.out(name + (':' if self.compress else ': ')))
+        arr.append(self.out(name + (":" if self.compress else ": ")))
         arr.append(self.out(val, property.expr))
         if self.last:
-            separator = ''
+            separator = ""
         else:
-            separator = ';'
-        arr.append(self.out(separator if self.compress else ';'))
-        return ''.join(arr)
+            separator = ";"
+        arr.append(self.out(separator if self.compress else ";"))
+        return "".join(arr)
 
     def debug_info(self, node: Node):
-        if node.filename == 'stdin':
-            path = 'stdin'
+        if node.filename == "stdin":
+            path = "stdin"
         else:
             path = dirname(abspath(node.filename))
         line = node.nodes[0].lineno if node.nodes else node.lineno
         if self.linenos:
-            self.buf += f'\n/* line {line} : {path} */\n'
+            self.buf += f"\n/* line {line} : {path} */\n"

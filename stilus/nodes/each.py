@@ -4,7 +4,6 @@ from .node import Node
 
 
 class Each(Node):
-
     def __init__(self, value, key, expr=None, block=None, lineno=1, column=1):
         super().__init__(lineno=lineno, column=column)
         self.value = value
@@ -13,7 +12,7 @@ class Each(Node):
         self.block = block
 
     def __str__(self):
-        return f'{self.value}: {self.key} [{self.expr}] {self.block}'
+        return f"{self.value}: {self.key} [{self.expr}] {self.block}"
 
     def __repr__(self):
         return self.__str__()
@@ -39,11 +38,15 @@ class Each(Node):
         return clone
 
     def to_json(self):
-        return json.dumps({'__type': 'Each',
-                           'val': self.value,
-                           'key': self.key,
-                           'expr': self.expr,
-                           'block': self.block,
-                           'lineno': self.lineno,
-                           'column': self.column,
-                           'filename': self.filename})
+        return json.dumps(
+            {
+                "__type": "Each",
+                "val": self.value,
+                "key": self.key,
+                "expr": self.expr,
+                "block": self.block,
+                "lineno": self.lineno,
+                "column": self.column,
+                "filename": self.filename,
+            }
+        )

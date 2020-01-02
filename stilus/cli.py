@@ -14,12 +14,14 @@ from watchdog.observers import Observer
 from .__version__ import __version__
 from .renderer import Renderer
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
-def setup_logging(default_path='logging.yaml',
-                  default_level=logging.INFO,
-                  env_key='STILUS_LOGGING_CONFIG'):
+def setup_logging(
+    default_path="logging.yaml",
+    default_level=logging.INFO,
+    env_key="STILUS_LOGGING_CONFIG",
+):
     """Setup logging configuration.
     :param default_path: The path to the yaml logging config file.
     :param default_level: The default level is ``logging.INFO``.  Only used
@@ -32,17 +34,21 @@ def setup_logging(default_path='logging.yaml',
         with open(path) as f:
             config = yaml.safe_load(f.read())
         logging.config.dictConfig(config)
-        logging.debug(f'Using {p.resolve()} as logging configuration file.')
+        logging.debug(f"Using {p.resolve()} as logging configuration file.")
     else:
         # todo: handle these differently to comply with Stylus
-        logging.basicConfig(format='%(message)s', level=default_level)
-        logging.warning(f'Using default logging configuration (level'
-                        f' is {logging.getLevelName(default_level)}).')
-        logging.warning(f'Note: use STILUS_LOGGING_CONFIG to configure'
-                        f' the logging; or create a logging.yaml file.')
+        logging.basicConfig(format="%(message)s", level=default_level)
+        logging.warning(
+            f"Using default logging configuration (level"
+            f" is {logging.getLevelName(default_level)})."
+        )
+        logging.warning(
+            f"Note: use STILUS_LOGGING_CONFIG to configure"
+            f" the logging; or create a logging.yaml file."
+        )
 
 
-setup_logging('bin/logging.yaml')
+setup_logging("bin/logging.yaml")
 
 
 def print_version(ctx, param, value):
@@ -55,7 +61,7 @@ def print_version(ctx, param, value):
     """
     if not value or ctx.resilient_parsing:
         return
-    click.echo(f'{__version__}')
+    click.echo(f"{__version__}")
     ctx.exit()
 
 
@@ -66,8 +72,8 @@ def validate_path(ctx, param, value):
 def fail(message, prefix=None, code=-1):
     """Show a message and end the process."""
     if not prefix:
-        prefix = '     error '
-    click.echo(click.style(prefix, fg='red'), nl=False)
+        prefix = "     error "
+    click.echo(click.style(prefix, fg="red"), nl=False)
     click.echo(message)
     sys.exit(code)
 
@@ -79,8 +85,9 @@ def fancy_output(message, prefix=None):
     click.echo(message)
 
 
-def render(source: str, includes=None, compress=False, prefix=None,
-           ha=False) -> str:
+def render(
+    source: str, includes=None, compress=False, prefix=None, ha=False
+) -> str:
     """
     Render a source str to css.
     :param source: A Stylus source string.
@@ -98,9 +105,9 @@ def render(source: str, includes=None, compress=False, prefix=None,
     """
     if not includes:
         includes = []
-    renderer = Renderer(source, {'compress': compress,
-                                 'prefix': prefix,
-                                 'hoist atrules': ha})
+    renderer = Renderer(
+        source, {"compress": compress, "prefix": prefix, "hoist atrules": ha}
+    )
     for include in includes:
         # todo: check existence?
         renderer.include(include)
@@ -109,16 +116,18 @@ def render(source: str, includes=None, compress=False, prefix=None,
 
 def write_result(css, path):
     p = Path(path).resolve()
-    with p.open(mode='w+'):
+    with p.open(mode="w+"):
         p.write_text(css)
 
 
-def compile(source: Path,
-            path: Path = None,
-            includes: Optional[List[Path]] = None,
-            compress: bool = False,
-            prefix=None,
-            ha=False) -> None:
+def compile(
+    source: Path,
+    path: Path = None,
+    includes: Optional[List[Path]] = None,
+    compress: bool = False,
+    prefix=None,
+    ha=False,
+) -> None:
     """
     Compile a source Path.  If path is given compile to that path,
     otherwise compile into the same folder.
@@ -136,21 +145,23 @@ def compile(source: Path,
     :type ha: bool, optional
     """
     if path:
-        destination = path / Path(source.name).with_suffix('.css')
+        destination = path / Path(source.name).with_suffix(".css")
     else:
-        destination = source.with_suffix('.css')
+        destination = source.with_suffix(".css")
     # todo: check includes existence here?
     css = render(source.read_text(), includes, compress, prefix, ha)
     write_result(css, destination)
-    fancy_output(str(destination), prefix='  compiled ')
-    logging.info(f'Compiled {destination}.')
+    fancy_output(str(destination), prefix="  compiled ")
+    logging.info(f"Compiled {destination}.")
 
 
-def prepare_watch(path: Path,
-                  include: Optional[List[Path]] = None,
-                  compress: bool = False,
-                  prefix: str = None,
-                  ha: bool = False) -> List[Path]:
+def prepare_watch(
+    path: Path,
+    include: Optional[List[Path]] = None,
+    compress: bool = False,
+    prefix: str = None,
+    ha: bool = False,
+) -> List[Path]:
     """
     Compile all Stylus files in the given path and recompile
     automatically when these files change.
@@ -170,11 +181,11 @@ def prepare_watch(path: Path,
     """
     if not include:
         include = []
-    logging.info(f'Watching {path}...')
-    styles = list(path.glob('*.styl'))
-    logging.info(f'{styles}')
+    logging.info(f"Watching {path}...")
+    styles = list(path.glob("*.styl"))
+    logging.info(f"{styles}")
     for styl in styles:
-        fancy_output(str(styl), prefix='  watching ')
+        fancy_output(str(styl), prefix="  watching ")
         compile(styl, path, include, compress, prefix, ha)
     return styles
 
@@ -187,33 +198,61 @@ def check_out(out: str) -> None:
     :type out: str
     """
     if not Path(out).exists():
-        fail(f'Directory not found: {out}.')
+        fail(f"Directory not found: {out}.")
     elif not Path(out).is_dir():
-        fail(f'{out} is not a directory.')
+        fail(f"{out} is not a directory.")
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('input', type=click.File('r'), required=False)
-@click.argument('output', type=click.File('w'), required=False)
-@click.option('-v', '--verbose', count=True, help='Be more verbose.')
-@click.option('-w', '--watch', is_flag=True, default=False,
-              help='Watch file(s) for changes and re-compile.')
-@click.option('-c', '--compress', is_flag=True, default=False,
-              help='Compress CSS output.')
-@click.option('-p', '--print', 'print_', is_flag=True, default=False,
-              help='Print out the compiled CSS.')
-@click.option('-I', '--include', multiple=True,
-              help='Add <path> to lookup paths.')
-@click.option('-o', '--out',
-              help='Output to <dir> when passing files.')
-@click.option('-P', '--prefix', help='Prefix all css classes by <prefix>.')
-@click.option('--hoist-atrules', 'ha', is_flag=True, default=False,
-              help='Move @import and @charset to the top')
-@click.option('--version', '-V', is_flag=True, callback=print_version,
-              expose_value=False, is_eager=True,
-              help='Display the version of Stilus.')
-def stilus(verbose, watch, compress, print_, include, out, input, output,
-           prefix, ha):
+@click.argument("input", type=click.File("r"), required=False)
+@click.argument("output", type=click.File("w"), required=False)
+@click.option("-v", "--verbose", count=True, help="Be more verbose.")
+@click.option(
+    "-w",
+    "--watch",
+    is_flag=True,
+    default=False,
+    help="Watch file(s) for changes and re-compile.",
+)
+@click.option(
+    "-c",
+    "--compress",
+    is_flag=True,
+    default=False,
+    help="Compress CSS output.",
+)
+@click.option(
+    "-p",
+    "--print",
+    "print_",
+    is_flag=True,
+    default=False,
+    help="Print out the compiled CSS.",
+)
+@click.option(
+    "-I", "--include", multiple=True, help="Add <path> to lookup paths."
+)
+@click.option("-o", "--out", help="Output to <dir> when passing files.")
+@click.option("-P", "--prefix", help="Prefix all css classes by <prefix>.")
+@click.option(
+    "--hoist-atrules",
+    "ha",
+    is_flag=True,
+    default=False,
+    help="Move @import and @charset to the top",
+)
+@click.option(
+    "--version",
+    "-V",
+    is_flag=True,
+    callback=print_version,
+    expose_value=False,
+    is_eager=True,
+    help="Display the version of Stilus.",
+)
+def stilus(
+    verbose, watch, compress, print_, include, out, input, output, prefix, ha
+):
     """
     The Stilus binary.
 
@@ -239,7 +278,7 @@ def stilus(verbose, watch, compress, print_, include, out, input, output,
 
     if out:
         check_out(out)
-        logging.info(f'Redirecting results to {out}.')
+        logging.info(f"Redirecting results to {out}.")
 
     if watch:
         path = Path.cwd()
@@ -250,26 +289,26 @@ def stilus(verbose, watch, compress, print_, include, out, input, output,
         observer.start()
         try:
             while True:
-                time.sleep(.25)
+                time.sleep(0.25)
         except KeyboardInterrupt:
-            logging.info('Bailing out...')
+            logging.info("Bailing out...")
             observer.stop()
         observer.join()
     else:
         if not input:
-            input = click.get_text_stream('stdin')
-            logging.debug('Reading from stdin...')
+            input = click.get_text_stream("stdin")
+            logging.debug("Reading from stdin...")
         if not output:
-            output = click.get_text_stream('stdout')
-            logging.debug('Writing to stdout...')
+            output = click.get_text_stream("stdout")
+            logging.debug("Writing to stdout...")
         elif out:
-            output = (Path(out) / Path(output.name)).open('w')
-            logging.debug(f'Writing to {output}.')
+            output = (Path(out) / Path(output.name)).open("w")
+            logging.debug(f"Writing to {output}.")
         css = render(input.read(), include, compress, prefix, ha)
         if print_:
-            click.echo(css, nl='\n' if compress else '')
+            click.echo(css, nl="\n" if compress else "")
         output.write(css)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     stilus()

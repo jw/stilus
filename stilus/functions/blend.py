@@ -10,7 +10,9 @@ def blend(top, bottom=None, evaluator=None):
     assert_color(bottom)
     bottom = bottom.rgba()
 
-    return RGBA(top.r * top.a + bottom.r * (1 - top.a),
-                top.g * top.a + bottom.g * (1 - top.a),
-                top.b * top.a + bottom.b * (1 - top.a),
-                top.a + bottom.a - top.a * bottom.a)
+    return RGBA(
+        top.r * top.a + bottom.r * (1 - top.a),
+        top.g * top.a + bottom.g * (1 - top.a),
+        top.b * top.a + bottom.b * (1 - top.a),
+        top.a + bottom.a - top.a * bottom.a,
+    )
