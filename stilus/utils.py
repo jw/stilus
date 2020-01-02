@@ -37,6 +37,9 @@ def unwrap(expression: Expression) -> Node:
     if hasattr(expression, 'nodes') and len(expression.nodes) > 0 and \
             expression.nodes[0].node_name not in ['arguments', 'expression']:
         return expression
+    if isinstance(expression, list) and len(expression) > 0 and \
+            not hasattr(expression[0], 'nodes'):
+        return expression
     return unwrap(expression.nodes[0])
 
 

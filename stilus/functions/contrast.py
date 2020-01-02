@@ -10,7 +10,7 @@ from stilus.utils import assert_color, stilus_round
 
 def contrast(top: Color = None, bottom: Color = None, evaluator=None):
     if not isinstance(top, Color) and not isinstance(bottom, Color):
-        c = '' if isinstance(top, Null) else f'{top}'
+        c = '' if isinstance(top, (Null, type(None))) else f'{top}'
         return Literal(f'contrast({c})')
     result = ObjectNode()
     if not bottom:
