@@ -881,11 +881,15 @@ class Evaluator(Visitor):
                 elif param.name in args.map.keys():
                     # in the map
                     ret.append(args.map[param.name].first())
-                elif i < len(args.nodes):
+                else:
                     # then in the nodes
-                    ret.append(utils.unwrap(args.nodes[i].first()))
+                    all_arguments = []
+                    for nodes in args.nodes:
+                        all_arguments.extend(unwrap(nodes))
+                    if i < len(unwrap(all_arguments)):
+                        ret.append(unwrap(all_arguments)[i].first())
                     i += 1
-                # else: assume remaining parameters are not required
+                    # else: assume remaining parameters are not required
 
         # invoke builtin function
         body = utils.coerce(fn(*ret, evaluator=self),
