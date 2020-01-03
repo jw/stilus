@@ -131,7 +131,7 @@ for.complex.styl                              stylus/cases                   ok
 for.function.styl                             stylus/cases                   ok
 for.postfix.styl                              stylus/cases                   ok
 for.styl                                      stylus/cases                   ok
-function.arguments.styl                       stylus/cases/functions         not ok (args unwrap magic required)
+function.arguments.styl                       stylus/cases/functions         ok
 function.literals.styl                        stylus/cases/functions         ok
 functions.anonymous.styl                      stylus/cases/functions         ok
 functions.arg-calls.styl                      stylus/cases/functions         ok
@@ -266,7 +266,7 @@ regression.156.styl                           stylus/cases/regressions       ok
 regression.1571.styl                          stylus/cases/regressions       ok
 regression.1572.styl                          stylus/cases/regressions       not ok /{selector}
 regression.1584.styl                          stylus/cases/regressions       ok
-regression.1623.styl                          stylus/cases/regressions       not ok
+regression.1623.styl                          stylus/cases/regressions       ok
 regression.1727.styl                          stylus/cases/regressions       ok
 regression.1741.styl                          stylus/cases/regressions       ok
 regression.1882.styl                          stylus/cases/regressions       not ok
