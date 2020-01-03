@@ -10,7 +10,7 @@ from .nodes.binop import BinOp
 from .nodes.block import Block
 from .nodes.boolean import true
 from .nodes.call import Call
-from .nodes.chartset import Charset
+from .nodes.charset import Charset
 from .nodes.each import Each
 from .nodes.expression import Expression
 from .nodes.extend import Extend
