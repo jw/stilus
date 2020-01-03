@@ -9,5 +9,5 @@ The issues release, a.k.a. `issues, issues everywhere!`
  - [x] Document using docstrings and Sphinx.
  - [x] Start using github issues.
  - [ ] Clear all the issues with a 'test' label.  6 to go.
- - [ ] Document the architecture.
+ - [x] Document the architecture.
  - [ ] Explain the ci/development flow.

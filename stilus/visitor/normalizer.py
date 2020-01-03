@@ -238,7 +238,7 @@ class Normalizer(Visitor):
 
         index = 0
         while index < len(medias):
-            node = medias[0]
+            node = medias[index]
             if group:
                 group.block.append(node)
             else:

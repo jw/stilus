@@ -67,12 +67,12 @@ Comparison between Stylus and Stilus
 
 Most of Stylus is implemented in Stilus, but some parts are missing:
 
- - Plugins
- - Caching
+ - Plugins (and tests)
+ - Caching (and tests)
  - Documentation: missing an architecture document and almost all the docstrings
- - We are missing a few tests.  Currently more than 95% of the Stylus tests
+ - We are missing a few tests.  Currently more than 96% of the Stylus tests
    pass successfully through Stilus.
-   `These <https://github.com/jw/stilus/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Atest>`_
+   `These <https://github.com/jw/stilus/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Atest+-label%3Amissing>`_
    are missing.
 
 Below you'll find the comparison between Stylus and Stilus.
@@ -80,7 +80,7 @@ Below you'll find the comparison between Stylus and Stilus.
 .. toctree::
    :maxdepth: 1
 
-   The Stylus binary <diff/stilus.md>
+   The Stylus binary diff <diff/stilus.md>
    The Stylus test cases <diff/tests.rst>
 
 All help is appreciated!
@@ -105,9 +105,9 @@ The development of Stilus, some todo's and thoughts.
 .. toctree::
    :maxdepth: 1
 
-   dev/architecture.md
+   dev/architecture.rst
    dev/thoughts.md
-   dev/codeguidelines.md
+   dev/codeguidelines.rst
    dev/migration.md
    dev/workflow.md
    dev/tools.md
