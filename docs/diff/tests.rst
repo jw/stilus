@@ -5,7 +5,7 @@ Stylus tests
 Below you'll find the tests as run in Stylus, and their status in Stilus.
 Also their locations are specified.
 
-Coverage: +96% (337/349)
+Coverage: +96% (338/349)
 
 ============================================= ============================== =====================
 Stylus test                                   Location                       Status
@@ -269,7 +269,7 @@ regression.1584.styl                          stylus/cases/regressions       ok
 regression.1623.styl                          stylus/cases/regressions       not ok
 regression.1727.styl                          stylus/cases/regressions       ok
 regression.1741.styl                          stylus/cases/regressions       ok
-regression.1882.styl                          stylus/cases/regressions       not ok
+regression.1882.styl                          stylus/cases/regressions       ok
 regression.1995.styl                          stylus/cases/regressions       ok
 regression.1997.styl                          stylus/cases/regressions       ok
 regression.1998.styl                          stylus/cases/regressions       ok

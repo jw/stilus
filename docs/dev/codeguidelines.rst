@@ -1,7 +1,8 @@
 
-## Code Guidelines
+Code Guidelines
+===============
 
-Use ', then "
+Use black.
 
 Use f-strings
 
