@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stilus"
-version = "0.8.3"
+version = "0.9.0"
 description = "A Stylus css compiler in Python."
 license = "GPL-3.0-or-later"
 authors = ["Jan Willems <jw@elevenbits.com>"]
@@ -32,6 +32,7 @@ wheel = "*"
 watchdog = "^0.8.3"
 beautifulsoup4 = "*"
 lxml = "*"
+setuptools = "^44.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

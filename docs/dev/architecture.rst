@@ -34,7 +34,8 @@ The index.styl file
 -------------------
 
 The index.styl file is automatically imported and becomes part of the ast.
-It contains an extra list of builtin functions, but they are styl functions.
+It contains an extra list of builtin functions, while the regular builtin
+functions are written in Python, these are written in Stylus.
 
 The abstract syntax tree
 ------------------------
@@ -60,14 +61,25 @@ and they are processed in this order:
 The Evaluator
 ^^^^^^^^^^^^^
 
-Evaluates the tree.  This is the major visitor.
+Evaluates the tree.  This visitor visits each node and processes it.  For
+example:
+
+ - If it visits an *if* node, it evaluates it and follows the true flow,
+   the false flow is discared.
+ - If it visits a for loop it evaluates its body.
+ - If it visits an *import* node it imports the file into the tree.
+ - If it visits a *call* node to a (builtin or not) function, it calls it.
+
+And so on until all nodes are visited.
+
+This will result in a larger tree (e.g. imported files, for loops,...)
+with lots of nodes which will not be part of the resulting css.
 
 The Normalizer
 ^^^^^^^^^^^^^^
 
-This visitor implements the first stage of the dual-stage compiler, tasked
-with stripping the *garbage* from the evaluated nodes, ditching null rules,
-resolving ruleset selectors et caetera.  This step performs the logic
+This visitor strips the *garbage* from the evaluated nodes, ditching null
+rules, resolving ruleset selectors et caetera.  This step performs the logic
 necessary to facilitate the ``@extend`` functionality, as these must be
 resolved *before* buffering output.
 

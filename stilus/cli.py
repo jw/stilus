@@ -253,23 +253,6 @@ def check_out(out: str) -> None:
 def stilus(
     verbose, watch, compress, print_, include, out, input, output, prefix, ha
 ):
-    """
-    The Stilus binary.
-
-    :param verbose: More verbose output.
-    :param watch: Compile all styl files in a directory and watch that
-                  directory for changes.
-    :param compress: Compress the resuting css.
-    :param print_: Print the output to stdout.
-    :param include:
-    :param out:
-    :param input:
-    :param output:
-    :param prefix:
-    :param ha:
-    :return:
-    """
-
     class StilusHandler(FileSystemEventHandler):
         def on_modified(self, event):
             path = Path(event.src_path)

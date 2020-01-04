@@ -106,6 +106,7 @@ The development of Stilus, some todo's and thoughts.
    :maxdepth: 1
 
    dev/architecture.rst
+   dev/build.rst
    dev/thoughts.md
    dev/codeguidelines.rst
    dev/migration.md
