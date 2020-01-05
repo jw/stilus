@@ -1,13 +1,11 @@
-### Current tasks (0.9.0)
+### Current tasks (0.9.1)
 
-The issues release, a.k.a. `issues, issues everywhere!`
+The publish release, a.k.a. `Stansfield: 'Bring me everyone... EVERYONE!'`
 
- - [x] Check the circle-ci setup.
- - [x] Migrate from pipenv to poetry.
- - [x] Start using black.
- - [x] Cleanup of coverall/codecov properties.
- - [x] Document using docstrings and Sphinx.
- - [x] Start using github issues.
- - [ ] Clear all the issues with a 'test' label.  6 to go.
- - [x] Document the architecture.
- - [ ] Explain the ci/development flow.
+ - [ ] Check windows build.
+ - [ ] Check mac build.
+ - [ ] Check several Linux distros (mint, arch, redhat, opensuse).
+ - [ ] Fix the lasts failing tests.  4 to go.
+ - [ ] Improve the documentation (both docstrings and rsts).
+ - [ ] Inform the Stylus guys of the port.
+ - [ ] Inform the world that we are ready.

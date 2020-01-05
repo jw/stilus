@@ -1,5 +1,13 @@
 ## Future tasks
 
+### 0.9.2
+
+ - [ ] Stuff.
+
+### 0.9.3
+
+ - [ ] More stuff.
+
 ### 0.10.0
 
  - [ ] Create logo.
@@ -10,7 +18,7 @@
  - [ ] Other things?
  - [ ] Update site to promote Stilus!
  - [ ] Clean up the logging; improve the output.
- - [ ] Extra options (--javascript, --stlus,...) can be added
+ - [ ] Extra options (--javascript, --stilus,...) can be added
 
 ### 1.0.0
 

@@ -1,5 +1,19 @@
 ## History
 
+### Current tasks (0.9.0)
+
+The issues release, a.k.a. `issues, issues everywhere!`
+
+ - [x] Check the circle-ci setup.
+ - [x] Migrate from pipenv to poetry.
+ - [x] Start using black.
+ - [x] Cleanup of coverall/codecov properties.
+ - [x] Document using docstrings and Sphinx.
+ - [x] Start using github issues.
+ - [x] Cleared many issues with a 'test' label.  Still 4 to go.
+ - [x] Document the architecture.
+ - [x] Explain the ci/development flow.
+
 ### 0.8.0
 
 The test release, a.k.a. `test, test, test!`
