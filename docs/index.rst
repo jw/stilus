@@ -107,11 +107,9 @@ The development of Stilus, some todo's and thoughts.
 
    dev/architecture.rst
    dev/build.rst
-   dev/thoughts.md
    dev/codeguidelines.rst
-   dev/migration.md
    dev/workflow.md
-   dev/tools.md
+   dev/tools.rst
 
 
 Issues
@@ -123,7 +121,7 @@ handled weirdly.
 .. toctree::
    :maxdepth: 1
 
-   bifs.md
+   bifs.rst
    blocks.rst
 
 

@@ -61,8 +61,8 @@ and they are processed in this order:
 The Evaluator
 ^^^^^^^^^^^^^
 
-Evaluates the tree.  This visitor visits each node and processes it.  For
-example:
+Evaluates the tree.  This visitor visits each node and processes it.  Some
+examples:
 
  - If it visits an *if* node, it evaluates it and follows the true flow,
    the false flow is discared.
@@ -87,7 +87,6 @@ The Compiler
 ^^^^^^^^^^^^
 
 Compile to css, and return a string of CSS.
-
 
 Changes between Stylus and Stilus
 ---------------------------------
