@@ -2,7 +2,7 @@
 
 The publish release, a.k.a. `Stansfield: 'Bring me everyone... EVERYONE!'`
 
- - [ ] Check windows build.
+ - [x] Check windows build.
  - [ ] Check mac build.
  - [x] Check several Linux distros:
    - arch is ok
