@@ -16,6 +16,13 @@ pre-commit
 After installing pre-commit, all the hooks will run automatically
 after each commit.  These hooks will run black on the changed files.
 
+Tests
+-----
+
+Run the all the tests and create a coverage report:
+
+``$ poetry run pytest --cov=stilus --cov-report html --cov-report term --cov-report term-missing tests``
+
 Deploy
 ------
 

@@ -69,7 +69,7 @@ Most of Stylus is implemented in Stilus, but some parts are missing:
 
  - Plugins (and tests)
  - Caching (and tests)
- - Documentation: missing an architecture document and almost all the docstrings
+ - Documentation: missing almost all the docstrings
  - We are missing a few tests.  Currently more than 96% of the Stylus tests
    pass successfully through Stilus.
    `These <https://github.com/jw/stilus/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Atest+-label%3Amissing>`_
