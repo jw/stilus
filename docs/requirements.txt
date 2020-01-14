@@ -1,9 +1,14 @@
 # note: only needed for readthedocs
 # todo: this should not be here
+argh==0.26.2
+beautifulsoup4==4.8.2
 click==7.0
-deprecated==1.2.6
-pyyaml==5.1.1
+deprecated==1.2.7
+lxml==4.4.2
+pathtools==0.1.2
+pillow==6.2.1
+pyyaml==5.2
+soupsieve==1.9.5
+watchdog==0.8.3
+wheel==0.33.6
 wrapt==1.11.2
-beautifulsoup4==4.8.0
-lxml==4.4.1
-pillow==6.2.0
