@@ -4,7 +4,7 @@ Build system
 We use poetry to build Stilus.  This ensures dependency management and
 easy deployment without any hassle with setup.py, setup.cfg and Makefile.
 
-Previously, when we are still using pipenv, life was much harder.
+Previously, when we were still using ``pipenv``, life was much harder.
 
 Below you'll find some information on the Stilus build system and on some
 important build files.
@@ -12,11 +12,14 @@ important build files.
 pyproject.toml
 --------------
 
-The most build file is out toml file.  This is the replacement of
+The most important build file is our toml file.  This is the replacement of
 the regular setup.py and setup.cfg files.  It also contains the dependency
 information for both the production and development environments.
 
-In it you'll also find the configuration for Black.  Black is our code
+See `PEP 517 <https://www.python.org/dev/peps/pep-0517/>`_ and `PEP 518
+<https://www.python.org/dev/peps/pep-0518/>`_ for more information.
+
+In this file you'll also find the configuration for Black.  Black is our code
 formatter.
 
 poetry.lock
@@ -29,8 +32,8 @@ lock file you'll need to use ``poetry update``.
 .pre-commit-config.yaml
 -----------------------
 
-We are using pre-commit to ensure we call black at each commit.  Pre-commit
-is part of the dev dependencies.
+We are using pre-commit to ensure we call black at each commit.  `Pre-commit
+<https://pre-commit.com/>`_ is part of the dev dependencies.
 
 .flake8
 -------
@@ -49,7 +52,7 @@ Call this to run all the tests with coverage:
 Continuous integration
 ----------------------
 
-We are using two systems: travis and circle-ci.  One would suffice, but it is
+Two systems are used: travis and circle-ci.  One would suffice, but it is
 nice to compare, no?
 
 .travis.yml
@@ -64,7 +67,7 @@ When successful, the coverage reporters are informed.
 .circle-ci/config.yml
 ^^^^^^^^^^^^^^^^^^^^^
 
-Uses a ocker Python release to install poetry on Python 3.6, 3.7 and 3.8.
+Uses a Docker Python release to install poetry on Python 3.6, 3.7 and 3.8.
 Then it installs Stilus.   Runs black on it, then flake8 on the result,
 then it runs pytest.
 

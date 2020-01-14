@@ -6,9 +6,9 @@ Some handy tools when you're developing Stilus.
 Sphinx
 ------
 
-To create the latest documentation:
+To create the latest documentation locally (in ``build/html``):
 
-`$ poetry run sphinx-build -b html docs build/html`
+``$ poetry run sphinx-build -b html docs build/html``
 
 pre-commit
 ----------
@@ -21,24 +21,24 @@ Deploy
 
 To deploy, update the version first.  Let's say version x.y.z...
 
-`$ vim stilus/__version__.py  # change the VERSION to (x, y, z)`
+``$ vim stilus/__version__.py  # change the VERSION to (x, y, z)``
 
-`$ poetry version x.y.z`
+``$ poetry version x.y.z``
 
 And commit to the repo:
 
-`$ git commit -m 'Bumped the version'`
+``$ git commit -m 'Bumped the version'``
 
-`$ git push`
+``$ git push``
 
 (This will ensure proper blacking of the code.)
 
 Then create a tag:
 
-`$ git tag -a x.y.z -m 'x.y.z'`
+``$ git tag -a x.y.z -m 'x.y.z'``
 
-`$ git push --follow-tag`
+``$ git push --follow-tag``
 
 Then publish to Pypi:
 
-`$ poetry publish`
+``$ poetry publish``

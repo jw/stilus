@@ -16,7 +16,7 @@
 import os  # noqa
 import sys  # noqa
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath(".."))
 
 import stilus  # noqa
 from stilus.__version__ import __version__  # noqa
@@ -24,9 +24,9 @@ import recommonmark  # noqa
 
 # -- Project information -----------------------------------------------------
 
-project = 'stilus'
-copyright = '2019, Jan Willems'
-author = 'Jan Willems'
+project = "stilus"
+copyright = "2020, Jan Willems"
+author = "Jan Willems"
 
 # -- General configuration ---------------------------------------------------
 
@@ -38,26 +38,24 @@ author = 'Jan Willems'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
-source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser'
-}
+source_parsers = {".md": "recommonmark.parser.CommonMarkParser"}
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = ['.rst', '.md']
+source_suffix = [".rst", ".md"]
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -78,7 +76,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
@@ -89,7 +87,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "alabaster"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -116,7 +114,7 @@ html_static_path = []
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'stilusdoc'
+htmlhelp_basename = "stilusdoc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -125,15 +123,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -143,8 +138,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'stilus.tex', 'stilus Documentation',
-     'Jan Willems', 'manual'),
+    (
+        master_doc,
+        "stilus.tex",
+        "stilus Documentation",
+        "Jan Willems",
+        "manual",
+    ),
 ]
 
 
@@ -152,10 +152,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'stilus', 'stilus Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, "stilus", "stilus Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -164,9 +161,15 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'stilus', 'stilus Documentation',
-     author, 'stilus', 'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc,
+        "stilus",
+        "stilus Documentation",
+        author,
+        "stilus",
+        "One line description of project.",
+        "Miscellaneous",
+    ),
 ]
 
 
@@ -185,7 +188,7 @@ epub_title = project
 # epub_uid = ''
 
 # A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
+epub_exclude_files = ["search.html"]
 
 
 # -- Extension configuration -------------------------------------------------
@@ -193,7 +196,7 @@ epub_exclude_files = ['search.html']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {"https://docs.python.org/": None}
 
 # -- Options for todo extension ----------------------------------------------
 

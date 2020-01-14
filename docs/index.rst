@@ -108,22 +108,8 @@ The development of Stilus, some todo's and thoughts.
    dev/architecture.rst
    dev/build.rst
    dev/codeguidelines.rst
-   dev/workflow.md
+   dev/workflow.rst
    dev/tools.rst
-
-
-Issues
-------
-
-Some built-in functions do not work properly yet; arrays/lists of blocks are
-handled weirdly.
-
-.. toctree::
-   :maxdepth: 1
-
-   bifs.rst
-   blocks.rst
-
 
 Code
 ----
