@@ -12,3 +12,4 @@ soupsieve==1.9.5
 watchdog==0.8.3
 wheel==0.33.6
 wrapt==1.11.2
+setuptools==44.0.0
