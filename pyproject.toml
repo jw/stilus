@@ -32,7 +32,7 @@ wheel = "*"
 watchdog = "^0.8.3"
 beautifulsoup4 = "*"
 lxml = "*"
-setuptools = "^44.0.0"
+setuptools = "^60.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
